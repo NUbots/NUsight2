@@ -2,7 +2,6 @@ import * as React from 'react'
 import {SmoothieChart, TimeSeries} from 'smoothie'
 import * as style from './style.css'
 
-
 const MenuBar = () => {
   return (
       <ul className={style.chart__menu}>
@@ -14,11 +13,13 @@ export class ChartView extends React.Component<any, any> {
 
   private canvas: HTMLCanvasElement
   private smoothie: SmoothieChart
-  private timeseries: TimeSeries
+  private timeseries: TimeSeries[]
   private dataGenerator
 
   constructor(props: any, context: any) {
     super(props, context)
+    
+    this.timeseries = []
   }
 
   public render(): JSX.Element {
@@ -42,8 +43,8 @@ export class ChartView extends React.Component<any, any> {
       this.smoothie.streamTo(this.canvas)
     }
 
-    this.timeseries.append(new TimeSeries())
-    this.timeseries.append(new TimeSeries())
+    this.timeseries.push(new TimeSeries())
+    this.timeseries.push(new TimeSeries())
 
     this.timeseries.forEach(series => {
       this.smoothie.addTimeSeries(series)
@@ -63,11 +64,12 @@ export class ChartView extends React.Component<any, any> {
   }
 
   public componentDidUpdate(): void {
+    this.canvas.width = this.props.width
+    this.canvas.height = this.props.height
     // if (this.props.width != prevProps.width || this.props.height != prevProps.height) {
       // TODO resize the canvas or something
     // }
   }
 }
-
 
 export default ChartView

@@ -4,5 +4,4 @@ node_js:
 script:
     - yarn tslint
     - yarn build
-    - yarn test:ci
     - yarn coverage:ci

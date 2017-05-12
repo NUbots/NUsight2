@@ -5,9 +5,6 @@ module.exports = {
     '**/*.{ts,tsx}',
     '!**/node_modules/**',
     '!**/tests/**',
-    '!**/*.svg',
-    '!conf/**',
-    '!declarations/**',
     '!tools/**'
   ],
   globals: {

@@ -2,4 +2,7 @@ language: node_js
 node_js:
   - "7"
 script:
+    - yarn tslint
+    - yarn build
     - yarn test:ci
+    - yarn coverage:ci

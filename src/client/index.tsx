@@ -6,7 +6,7 @@ import * as ReactDOM from 'react-dom'
 import { browserHistory, IndexRoute, Route, Router } from 'react-router'
 import * as io from 'socket.io-client'
 import { AppView } from './components/app/view'
-import { Chart } from './components/chart/view'
+import { ChartView } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
 import { Dashboard } from './components/dashboard/view'
 import { GameState } from './components/game_state/view'
@@ -87,7 +87,7 @@ ReactDOM.render(
             return <LocalisationView presenter={presenter} localisationStore={stores.localisationStore}/>
           }}/>
           <Route path='/vision' component={Vision}/>
-          <Route path='/chart' component={Chart}/>
+          <Route path='/chart' component={ChartView}/>
           <Route path='/scatter' component={Scatter}/>
           <Route path='/nuclear' component={NUClear}/>
           <Route path='/classifier' component={Classifier}/>

@@ -10,7 +10,7 @@ describe('LocalisationPresenter', () => {
     presenter = new LocalisationPresenter({ model })
   })
 
-  describe('Click hawk eye', () => {
+  describe('clicking the hawk eye button', () => {
     beforeEach(() => {
       presenter.onHawkEyeClick()
     })

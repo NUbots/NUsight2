@@ -26,25 +26,28 @@ const stores = {
   localisationStore: LocalisationModel.of(),
 }
 
-stores.localisationStore.camera.position.set(0, 0.2, 0.5)
+runInAction(() => {
+  stores.localisationStore.camera.position.set(0, 0.2, 0.5)
 
-const colors = [null, 'magenta', null, 'blue', null, 'cyan', null, 'red']
-const numRobots = 8
-const robots = new Array(numRobots).fill(0).map((_, id) => {
-  const robot = RobotModel.of({ id, name: `Robot ${id + 1}`, color: colors[id], heading: 0 })
-  stores.localisationStore.addRobot(robot)
-  return robot
+  const colors = [null, 'magenta', null, 'blue', null, 'cyan', null, 'red']
+  const numRobots = 8
+  new Array(numRobots).fill(0).map((_, id) => {
+    const robot = RobotModel.of({ id, name: `Robot ${id + 1}`, color: colors[id], heading: 0 })
+    stores.localisationStore.robots.push(robot)
+    return robot
+  })
 })
 
 requestAnimationFrame(function update() {
   requestAnimationFrame(update)
   runInAction(() => {
-    robots.forEach((robot, i) => {
+    const numRobots = stores.localisationStore.robots.length;
+    stores.localisationStore.robots.forEach((robot, i) => {
 
       const angle = i * (2 * Math.PI) / numRobots + Date.now() / 4E3
       const distance = Math.cos(Date.now() / 1E3 + 4 * i) * 0.3 + 1
-      robot.position.setX(distance * Math.cos(angle))
-      robot.position.setZ(distance * Math.sin(angle))
+      robot.position.x = distance * Math.cos(angle)
+      robot.position.z = distance * Math.sin(angle)
       robot.heading = -angle - Math.PI / 2
 
       const motorAngle = Math.cos(Date.now() / 1E3 + i) / 2 + 0.5

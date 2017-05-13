@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as Plotly from 'plotly.js/dist/plotly'
+import * as Plotly from 'plotly.js'
 import * as style from './style.css'
 
 export class ScatterplotView extends React.Component<any, any> {

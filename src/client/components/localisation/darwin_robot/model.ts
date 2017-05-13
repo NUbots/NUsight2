@@ -10,7 +10,7 @@ export class RobotModel {
   @observable public motors: DarwinMotorSet
 
   public constructor(opts: RobotModel) {
-    Object.assign(this, opts);
+    Object.assign(this, opts)
   }
 
   public static of(opts: { id: number, name: string, color: string, heading: number}) {
@@ -45,7 +45,7 @@ class DarwinMotorSet {
   @observable public headTilt: DarwinMotor
 
   public constructor(opts: DarwinMotorSet) {
-    Object.assign(this, opts);
+    Object.assign(this, opts)
   }
 
   public static of() {
@@ -78,7 +78,7 @@ class DarwinMotor {
   @observable public angle: number
 
   public constructor(opts: DarwinMotor) {
-    Object.assign(this, opts);
+    Object.assign(this, opts)
   }
 
   public static of() {

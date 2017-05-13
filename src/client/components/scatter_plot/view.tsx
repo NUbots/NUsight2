@@ -45,7 +45,7 @@ export class ScatterplotView extends React.Component<any, any> {
     Plotly.newPlot(this.canvas, data)
 
     this.updateLoopId = setInterval(() => {
-      var update: any = {
+      const update = {
         x: [[Math.floor(Math.random() * 100)], [Math.floor(Math.random() * 100)]],
         y: [[Math.floor(Math.random() * 100)], [Math.floor(Math.random() * 100)]]
       }

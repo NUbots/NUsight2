@@ -15,7 +15,7 @@ import { LocalisationModel } from './components/localisation/model'
 import { LocalisationPresenter } from './components/localisation/presenter'
 import { LocalisationView } from './components/localisation/view'
 import { NUClear } from './components/nuclear/view'
-import { Scatter } from './components/scatter_plot/view'
+import { ScatterplotView } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 
@@ -91,7 +91,7 @@ ReactDOM.render(
           }}/>
           <Route path='/vision' component={Vision}/>
           <Route path='/chart' component={Chart}/>
-          <Route path='/scatter' component={Scatter}/>
+          <Route path='/scatter' component={ScatterplotView}/>
           <Route path='/nuclear' component={NUClear}/>
           <Route path='/classifier' component={Classifier}/>
           <Route path='/subsumption' component={Subsumption}/>

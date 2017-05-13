@@ -1,0 +1,11 @@
+.scatterplot {
+	flex-grow: 1;
+	flex-shrink: 1;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+
+.scatterplot_canvas {
+    flex-grow: 1;
+}

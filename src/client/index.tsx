@@ -45,29 +45,29 @@ requestAnimationFrame(function update() {
       const distance = Math.cos(Date.now() / 1E3 + 4 * i) * 0.3 + 1
       robot.position.setX(distance * Math.cos(angle))
       robot.position.setZ(distance * Math.sin(angle))
-      robot.setHeading(-angle - Math.PI / 2)
+      robot.heading = -angle - Math.PI / 2
 
       const motorAngle = Math.cos(Date.now() / 1E3 + i) / 2 + 0.5
-      robot.motors.rightShoulderPitch.setAngle(motorAngle)
-      robot.motors.leftShoulderPitch.setAngle(motorAngle)
-      robot.motors.rightShoulderRoll.setAngle(motorAngle)
-      robot.motors.leftShoulderRoll.setAngle(motorAngle)
-      robot.motors.rightElbow.setAngle(motorAngle)
-      robot.motors.leftElbow.setAngle(motorAngle)
-      robot.motors.rightHipYaw.setAngle(motorAngle)
-      robot.motors.leftHipYaw.setAngle(motorAngle)
-      robot.motors.rightHipRoll.setAngle(motorAngle)
-      robot.motors.leftHipRoll.setAngle(motorAngle)
-      robot.motors.rightHipPitch.setAngle(motorAngle)
-      robot.motors.leftHipPitch.setAngle(motorAngle)
-      robot.motors.rightKnee.setAngle(motorAngle)
-      robot.motors.leftKnee.setAngle(motorAngle)
-      robot.motors.rightAnklePitch.setAngle(motorAngle)
-      robot.motors.leftAnklePitch.setAngle(motorAngle)
-      robot.motors.rightAnkleRoll.setAngle(motorAngle)
-      robot.motors.leftAnkleRoll.setAngle(motorAngle)
-      // robot.motors.headPan.setAngle(angle)
-      // robot.motors.headTilt.setAngle(angle)
+      robot.motors.rightShoulderPitch.angle = motorAngle
+      robot.motors.leftShoulderPitch.angle = motorAngle
+      robot.motors.rightShoulderRoll.angle = motorAngle
+      robot.motors.leftShoulderRoll.angle = motorAngle
+      robot.motors.rightElbow.angle = motorAngle
+      robot.motors.leftElbow.angle = motorAngle
+      robot.motors.rightHipYaw.angle = motorAngle
+      robot.motors.leftHipYaw.angle = motorAngle
+      robot.motors.rightHipRoll.angle = motorAngle
+      robot.motors.leftHipRoll.angle = motorAngle
+      robot.motors.rightHipPitch.angle = motorAngle
+      robot.motors.leftHipPitch.angle = motorAngle
+      robot.motors.rightKnee.angle = motorAngle
+      robot.motors.leftKnee.angle = motorAngle
+      robot.motors.rightAnklePitch.angle = motorAngle
+      robot.motors.leftAnklePitch.angle = motorAngle
+      robot.motors.rightAnkleRoll.angle = motorAngle
+      robot.motors.leftAnkleRoll.angle = motorAngle
+      // robot.motors.headPan.angle = angle
+      // robot.motors.headTilt.angle = angle
     })
   })
 })

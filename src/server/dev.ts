@@ -16,6 +16,7 @@ sio(server)
 
 app.use(compression())
 app.use(webpackDevMiddleware(compiler, {
+  publicPath: '/',
   index: 'index.html',
   stats: {
     colors: true,
@@ -24,7 +25,6 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(webpackHotMiddleware(compiler))
 const root = `${__dirname}/../../`
 app.use(favicon(`${__dirname}/../assets/favicon.ico`))
-// TODO (Annable): Fix this clobbering SourceMap URLs.
 app.use(fallback('dist/index.html', { root }))
 
 const port = process.env.PORT || 3000

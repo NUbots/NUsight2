@@ -14,7 +14,7 @@ export class ChartView extends React.Component<any, any> {
   private canvas: HTMLCanvasElement
   private smoothie: SmoothieChart
   private timeseries: TimeSeries[]
-  private dataGenerator
+  private dataGenerator: any
 
   constructor(props: any, context: any) {
     super(props, context)
@@ -26,9 +26,11 @@ export class ChartView extends React.Component<any, any> {
     return (
       <div className={style.chart}>
         <MenuBar/>
-        <canvas className={style.chart__canvas} width={1000} height={500} ref={canvas => {
-          this.canvas = canvas
-        }}/>
+        <div className={style.chart__canvasContainer}>
+          <canvas className={style.chart__canvas} ref={canvas => {
+            this.canvas = canvas
+          }}/>
+        </div>
       </div>
     )
   }
@@ -36,39 +38,49 @@ export class ChartView extends React.Component<any, any> {
   public componentDidMount(): void {
 
     if (!this.smoothie) {
-      this.smoothie = new SmoothieChart()
+      this.smoothie = new SmoothieChart({
+        interpolation: 'linear',
+        responsive: true,
+      })
     }
 
     if (this.canvas) {
-      this.smoothie.streamTo(this.canvas)
+      this.smoothie.streamTo(this.canvas, 0)
     }
 
     this.timeseries.push(new TimeSeries())
     this.timeseries.push(new TimeSeries())
+    this.timeseries.push(new TimeSeries())
+    this.timeseries.push(new TimeSeries())
 
+    const colours = [
+      '#e41a1c',
+      '#4daf4a',
+      '#377eb8',
+      '#984ea3',
+      '#ff7f00',
+      '#ffff33',
+      '#a65628',
+      '#f781bf',
+    ]
+
+    let i = 0
     this.timeseries.forEach(series => {
-      this.smoothie.addTimeSeries(series)
+      this.smoothie.addTimeSeries(series, {strokeStyle: colours[i++], lineWidth: 2})
     })
 
     this.dataGenerator = setInterval(() => {
+      let i = 0
       const time = new Date().getTime()
       this.timeseries.forEach(series => {
-        series.append(time, Math.random())
+        series.append(time, i * Math.sin(++i + (time * i)/1000))
       })
-    }, 500)
+    }, 10)
   }
 
   public componentWillUnmount(): void {
     this.smoothie.stop();
     clearInterval(this.dataGenerator)
-  }
-
-  public componentDidUpdate(): void {
-    this.canvas.width = this.props.width
-    this.canvas.height = this.props.height
-    // if (this.props.width != prevProps.width || this.props.height != prevProps.height) {
-      // TODO resize the canvas or something
-    // }
   }
 }
 

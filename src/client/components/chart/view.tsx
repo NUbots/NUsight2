@@ -1,5 +1,7 @@
 import * as React from 'react'
-import {SmoothieChart, TimeSeries} from 'smoothie'
+import { SmoothieChart } from 'smoothie'
+import { TimeSeries } from 'smoothie'
+import Sidebar from 'react-sidebar'
 import * as style from './style.css'
 
 const MenuBar = () => {
@@ -18,18 +20,24 @@ export class ChartView extends React.Component<any, any> {
 
   constructor(props: any, context: any) {
     super(props, context)
-    
+
     this.timeseries = []
   }
 
   public render(): JSX.Element {
+    const sidebarContent = <b>Hello!</b>
     return (
       <div className={style.chart}>
         <MenuBar/>
         <div className={style.chart__canvasContainer}>
-          <canvas className={style.chart__canvas} ref={canvas => {
-            this.canvas = canvas
-          }}/>
+          <Sidebar open={true}
+                   docked={true}
+                   shadow={true}
+                   pullRight={true}>
+            <canvas className={style.chart__canvas} ref={canvas => {
+              this.canvas = canvas
+            }}/>
+          </Sidebar>
         </div>
       </div>
     )
@@ -54,14 +62,18 @@ export class ChartView extends React.Component<any, any> {
     this.timeseries.push(new TimeSeries())
 
     const colours = [
-      '#e41a1c',
-      '#4daf4a',
-      '#377eb8',
-      '#984ea3',
+      '#a6cee3',
+      '#1f78b4',
+      '#b2df8a',
+      '#33a02c',
+      '#fb9a99',
+      '#e31a1c',
+      '#fdbf6f',
       '#ff7f00',
-      '#ffff33',
-      '#a65628',
-      '#f781bf',
+      '#cab2d6',
+      '#6a3d9a',
+      '#ffff99',
+      '#b15928',
     ]
 
     let i = 0

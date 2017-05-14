@@ -1,32 +1,14 @@
-import { Component } from "react";
+/// <reference path="../node_modules/@types/react/index.d.ts"/>
 
-interface Node {
-  label: string
-  value: string | number
-  icon: any
-}
-
-export interface TreeNodeProps {
-    checked: number
-    expanded: boolean
+declare module 'react-checkbox-tree' {
+  interface Node {
     label: string
-    optimisticToggle: boolean
-    showNodeIcon: boolean
-    treeId: string,
-    value: string,
-    onCheck: (checked: Node[]) => void,
-    onExpand: (expanded: Node[]) => void,
+    value: string | number
+    icon: any
+  }
 
-    children?: any,
-    className?: string,
-    icon?: any,
-    // rawChildren?: arrayOf(nodeShape),
-}
-
-export declare class TreeNode  extends Component<TreeNodeProps, {}> {}
-
-
-export interface CheckboxTreeProps {
+  interface CheckboxTreeProps {
+    nodes: any
     checked?: string[]
     expanded?: string[]
     name?: string
@@ -35,8 +17,9 @@ export interface CheckboxTreeProps {
     showNodeIcon?: boolean
     onCheck?: (checked: Node[]) => void,
     onExpand?: (expanded: Node[]) => void,
+  }
+
+  const CheckboxTree: new() => React.Component<CheckboxTreeProps, any>
+
+  export = CheckboxTree
 }
-
-export declare class CheckboxTree extends Component<CheckboxTreeProps, {}> {}
-
-export default CheckboxTree

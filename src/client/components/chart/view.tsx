@@ -2,7 +2,8 @@ import * as React from 'react'
 import { SmoothieChart } from 'smoothie'
 import { TimeSeries } from 'smoothie'
 import Sidebar from 'react-sidebar'
-import CheckboxTree from 'react-checkbox-tree'
+import * as CheckboxTree from 'react-checkbox-tree'
+import 'react-checkbox-tree/lib/react-checkbox-tree.css'
 import * as style from './style.css'
 
 const MenuBar = () => {
@@ -25,21 +26,29 @@ export class ChartView extends React.Component<any, any> {
   }
 
   public render(): JSX.Element {
-    const sidebarContent = <b>Hello!</b>
+    const nodes = [{
+      value: 'mars',
+      label: 'Mars',
+      children: [
+        { value: 'phobos', label: 'Phobos' },
+        { value: 'deimos', label: 'Deimos' },
+      ],
+    }];
+
+    const sidebarContent = <CheckboxTree nodes={nodes}/>
     return (
       <div className={style.chart}>
         <MenuBar/>
-        <div className={style.chart__canvasContainer}>
-          <Sidebar sidebar={sidebarContent}
-                   open={true}
-                   docked={true}
-                   shadow={true}
-                   pullRight={true}>
-            <canvas className={style.chart__canvas} ref={canvas => {
-              this.canvas = canvas
-            }}/>
-          </Sidebar>
-        </div>
+        <Sidebar sidebar={sidebarContent}
+                 open={true}
+                 docked={true}
+                 shadow={true}
+                 contentClassName={style.chart__canvasContainer}
+                 pullRight={true}>
+          <canvas className={style.chart__canvas} ref={canvas => {
+            this.canvas = canvas
+          }}/>
+        </Sidebar>
       </div>
     )
   }

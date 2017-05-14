@@ -5,7 +5,7 @@ import * as style from './style.css'
 export class ScatterplotView extends React.Component<any, any> {
   
   private canvas: HTMLDivElement
-  private updateLoopId
+  private updateLoopId: number
 
   constructor(props: any, context: any) {
     super(props, context)
@@ -13,14 +13,28 @@ export class ScatterplotView extends React.Component<any, any> {
 
   public render(): JSX.Element {
     return (
-      <div className={style.scatterplot} ref={canvas => {
-            this.canvas = canvas
-          }}>
+      <div className={style.scatterplot}>
+        <div className={style.scatterplot_container}>
+          <div className={style.scatterplot_plotly} ref={canvas => {
+                this.canvas = canvas
+              }}>
+          </div>
+        </div>
       </div>
     )
   }
 
+  public updateDimensions(): void {
+    const layout = {
+      width: this.canvas.offsetWidth,
+      height: this.canvas.offsetHeight
+    }
+    Plotly.relayout(this.canvas, layout)
+  }
+
   public componentDidMount(): void {
+    window.addEventListener("resize", this.updateDimensions.bind(this));
+
     var data: any = [
       {
         x: [10, 17, 54],
@@ -44,7 +58,7 @@ export class ScatterplotView extends React.Component<any, any> {
 
     Plotly.newPlot(this.canvas, data)
 
-    this.updateLoopId = setInterval(() => {
+    this.updateLoopId = window.setInterval(() => {
       const update = {
         x: [[Math.floor(Math.random() * 100)], [Math.floor(Math.random() * 100)]],
         y: [[Math.floor(Math.random() * 100)], [Math.floor(Math.random() * 100)]]
@@ -54,7 +68,7 @@ export class ScatterplotView extends React.Component<any, any> {
   }
 
   public componentWillUnmount(): void {
-    clearInterval(this.updateLoopId)
+    window.clearInterval(this.updateLoopId)
   }
 
   public componentDidUpdate(): void {

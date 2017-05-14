@@ -2,6 +2,7 @@ import * as React from 'react'
 import { SmoothieChart } from 'smoothie'
 import { TimeSeries } from 'smoothie'
 import Sidebar from 'react-sidebar'
+import CheckboxTree from 'react-checkbox-tree'
 import * as style from './style.css'
 
 const MenuBar = () => {
@@ -12,7 +13,6 @@ const MenuBar = () => {
 }
 
 export class ChartView extends React.Component<any, any> {
-
   private canvas: HTMLCanvasElement
   private smoothie: SmoothieChart
   private timeseries: TimeSeries[]
@@ -30,7 +30,8 @@ export class ChartView extends React.Component<any, any> {
       <div className={style.chart}>
         <MenuBar/>
         <div className={style.chart__canvasContainer}>
-          <Sidebar open={true}
+          <Sidebar sidebar={sidebarContent}
+                   open={true}
                    docked={true}
                    shadow={true}
                    pullRight={true}>

@@ -50,9 +50,12 @@ export default {
               'awesome-typescript-loader',
             ],
       },
-      // css
+      // local css
       {
         test: /\.css$/,
+        exclude: [
+          path.resolve(__dirname, 'node_modules'),
+        ],
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
@@ -70,6 +73,14 @@ export default {
             },
           ],
         }),
+      },
+      // global css
+      {
+        test: /\.css$/,
+        include: [
+          path.resolve(__dirname, 'node_modules'),
+        ],
+        use: [ 'style-loader', 'css-loader' ],
       },
       {
         test: /\.svg$/,

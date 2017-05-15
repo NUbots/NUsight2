@@ -74,7 +74,10 @@ export default {
           ],
         }),
       },
-      // global css
+      /*
+      External libraries generally do not support css modules so the selector mangling will break external components.
+      This separate simplified loader is used for anything within the node_modules folder instead.
+      */
       {
         test: /\.css$/,
         include: [

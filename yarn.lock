@@ -5494,9 +5494,9 @@ slide@^1.1.5:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/slide/-/slide-1.1.6.tgz#56eb027d65b4d2dce6cb2e2d32c4d4afc9e1d707"
 
-smoothie@^1.29.0:
-  version "1.29.0"
-  resolved "https://registry.yarnpkg.com/smoothie/-/smoothie-1.29.0.tgz#951432c9c8c950d4990b27ba13eb40f76b619283"
+smoothie@^1.29.1:
+  version "1.29.1"
+  resolved "https://registry.yarnpkg.com/smoothie/-/smoothie-1.29.1.tgz#8997a6e59dec002650aebe25e4ea49eeb2abc47e"
 
 sntp@1.x.x:
   version "1.0.9"

@@ -21,6 +21,7 @@ import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { ChartTreeModel } from './components/chart/model'
+import { TimeSeries } from 'smoothie'
 
 // enable MobX strict mode
 useStrict(true)
@@ -30,22 +31,58 @@ const stores = {
   chartStore: ChartModel.of(),
 }
 
-const a = ChartTreeModel.of('darwin1')
-stores.chartStore.tree.push(a)
-
-const b = ChartTreeModel.of('sensors')
-const c = ChartTreeModel.of('battery')
-c.children.push(ChartDataModel.of())
-const d = ChartTreeModel.of('position')
-d.children.push(ChartDataModel.of())
-d.children.push(ChartDataModel.of())
-d.children.push(ChartDataModel.of())
-
-a.children.push(b)
-b.children.push(c)
-b.children.push(d)
-
-stores.chartStore.tree.push()
+stores.chartStore.tree = [
+  {
+    label: 'darwin1',
+    children: [
+      {
+        label: 'sensors',
+        children: [
+          {
+            label: 'position',
+            children: [
+              {
+                enabled: true,
+                series: new TimeSeries(),
+                colour: '#FF0000',
+              },
+              {
+                enabled: true,
+                series: new TimeSeries(),
+                colour: '#00FF00',
+              },
+              {
+                enabled: true,
+                series: new TimeSeries(),
+                colour: '#0000FF',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        label: 'world',
+        children: [
+          {
+            enabled: true,
+            series: new TimeSeries(),
+            colour: '#FFFF00',
+          },
+          {
+            enabled: true,
+            series: new TimeSeries(),
+            colour: '#00FFFF',
+          },
+          {
+            enabled: true,
+            series: new TimeSeries(),
+            colour: '#FF00FF',
+          },
+        ],
+      },
+    ],
+  },
+]
 
 runInAction(() => {
   stores.localisationStore.camera.position.set(0, 0.2, 0.5)

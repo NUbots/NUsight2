@@ -1,38 +1,15 @@
 import { observable } from 'mobx'
 import { TimeSeries } from 'smoothie'
 
-export class ChartDataModel {
-  @observable public enabled: boolean
-  @observable public series: TimeSeries
-  @observable public colour: string
-
-  private constructor(opts: ChartDataModel) {
-    Object.assign(this, opts)
-  }
-
-  public static of(): ChartDataModel {
-    return new ChartDataModel({
-      enabled: false,
-      series: new TimeSeries(),
-      colour: '#FFFFFF',
-    })
-  }
+export interface ChartDataModel {
+  enabled: boolean
+  series: TimeSeries
+  colour: string
 }
 
-export class ChartTreeModel {
-  @observable public label: string
-  @observable public children: Array<ChartTreeModel | ChartDataModel>
-
-  private constructor(opts: ChartTreeModel) {
-    Object.assign(this, opts)
-  }
-
-  public static of(l: string): ChartTreeModel {
-    return new ChartTreeModel({
-      label: l,
-      children: [],
-    })
-  }
+export interface ChartTreeModel {
+  label: string
+  children: Array<ChartTreeModel | ChartDataModel>
 }
 
 export class ChartModel {

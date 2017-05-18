@@ -6,6 +6,8 @@ import * as ReactDOM from 'react-dom'
 import { browserHistory, IndexRoute, Route, Router } from 'react-router'
 import * as io from 'socket.io-client'
 import { AppView } from './components/app/view'
+import { ChartModel } from './components/chart/model'
+import { ChartDataModel } from './components/chart/model'
 import { ChartView } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
 import { Dashboard } from './components/dashboard/view'
@@ -18,13 +20,32 @@ import { NUClear } from './components/nuclear/view'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
+import { ChartTreeModel } from './components/chart/model'
 
 // enable MobX strict mode
 useStrict(true)
 
 const stores = {
   localisationStore: LocalisationModel.of(),
+  chartStore: ChartModel.of(),
 }
+
+const a = ChartTreeModel.of('darwin1')
+stores.chartStore.tree.push(a)
+
+const b = ChartTreeModel.of('sensors')
+const c = ChartTreeModel.of('battery')
+c.children.push(ChartDataModel.of())
+const d = ChartTreeModel.of('position')
+d.children.push(ChartDataModel.of())
+d.children.push(ChartDataModel.of())
+d.children.push(ChartDataModel.of())
+
+a.children.push(b)
+b.children.push(c)
+b.children.push(d)
+
+stores.chartStore.tree.push()
 
 runInAction(() => {
   stores.localisationStore.camera.position.set(0, 0.2, 0.5)
@@ -90,7 +111,9 @@ ReactDOM.render(
             return <LocalisationView presenter={presenter} localisationStore={stores.localisationStore}/>
           }}/>
           <Route path='/vision' component={Vision}/>
-          <Route path='/chart' component={ChartView}/>
+          <Route path='/chart' component={() => {
+            return <ChartView chartStore={stores.chartStore} />
+          }}/>
           <Route path='/scatter' component={Scatter}/>
           <Route path='/nuclear' component={NUClear}/>
           <Route path='/classifier' component={Classifier}/>

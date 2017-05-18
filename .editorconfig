@@ -1,0 +1,10 @@
+# More info: http://EditorConfig.org
+
+# This is the top-most EditorConfig file
+root = true
+
+# Unix-style newlines with indentation of 2 spaces
+[*]
+end_of_line = lf
+indent_style = space
+indent_size = 2

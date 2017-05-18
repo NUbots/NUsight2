@@ -2,7 +2,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import Sidebar from 'react-sidebar'
 import { SmoothieChart } from 'smoothie'
-import { SelectionTree } from './selectiontree/index'
+import { SelectionTree } from './selectiontree'
 import * as style from './style.css'
 
 const MenuBar = () => {

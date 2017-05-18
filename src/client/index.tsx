@@ -8,6 +8,7 @@ import * as io from 'socket.io-client'
 import { AppView } from './components/app/view'
 import { Chart } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
+import { Configuration } from './components/configuration/view'
 import { Dashboard } from './components/dashboard/view'
 import { GameState } from './components/game_state/view'
 import { RobotModel } from './components/localisation/darwin_robot/model'
@@ -96,6 +97,7 @@ ReactDOM.render(
           <Route path='/classifier' component={Classifier}/>
           <Route path='/subsumption' component={Subsumption}/>
           <Route path='/gamestate' component={GameState}/>
+          <Route path='/configuration' component={Configuration}/>
         </Route>
       </Router>
     </Provider >,

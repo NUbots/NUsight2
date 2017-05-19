@@ -20,4 +20,3 @@ export class TimeModel {
     return this.time - this.lastRenderTime
   }
 }
-

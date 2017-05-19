@@ -23,10 +23,12 @@ const devMiddleware = webpackDevMiddleware(compiler, {
 })
 
 app.use(compression())
-// See https://github.com/webpack/webpack-dev-middleware/pull/44
-app.use(history())
+// We need to wrap the fallback history API with two instances of the dev middleware to handle the initial raw request
+// and the following rewritten request.
+// Refer to: https://github.com/webpack/webpack-dev-middleware/pull/44#issuecomment-170462282
 app.use(devMiddleware)
 app.use(history())
+app.use(devMiddleware)
 app.use(webpackHotMiddleware(compiler))
 app.use(favicon(`${__dirname}/../assets/favicon.ico`))
 

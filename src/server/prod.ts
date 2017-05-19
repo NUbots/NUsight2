@@ -6,11 +6,11 @@ import * as favicon from 'serve-favicon'
 import * as sio from 'socket.io'
 
 const app = express()
-app.use(history())
 const server = http.createServer(app)
 sio(server)
 
 const root = `${__dirname}/../../dist`
+app.use(history())
 app.use(compression())
 app.use(express.static(root))
 app.use(favicon(`${__dirname}/../assets/favicon.ico`))

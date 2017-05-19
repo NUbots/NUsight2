@@ -37,7 +37,7 @@ export class LocalisationModel {
   @observable public locked: boolean
   @observable public controls: ControlsModel
   @observable public viewMode: ViewMode
-  @observable public target: RobotModel | null
+  @observable public target?: RobotModel
   @observable public time: TimeModel
 
   constructor(opts: LocalisationModel) {
@@ -53,7 +53,6 @@ export class LocalisationModel {
       locked: false,
       controls: ControlsModel.of(),
       viewMode: ViewMode.NO_CLIP,
-      target: null,
       time: TimeModel.of(),
     })
   }

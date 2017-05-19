@@ -6,12 +6,11 @@ import { Geometry } from 'three'
 import { Material } from 'three'
 
 export function geometryAndMaterial(config: any, color?: string) {
-  const { geometry, materials } = parseConfig(config)
-  if (materials == null) {
-    throw new Error('No materials found for config')
+  let { geometry, materials } = parseConfig(config)
+  if (materials !== undefined) {
+    materials = materials.map(material => coloredMaterial(material, color))
   }
-  const newMaterials = materials.map(material => coloredMaterial(material, color))
-  return { geometry, materials: newMaterials }
+  return { geometry, materials: materials }
 }
 
 const coloredMaterial = (material: Material, color?: string) => {

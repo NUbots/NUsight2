@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "target": "es5",
+    "target": "es6",
     "jsx": "react",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -19,9 +19,12 @@
       "dom"
     ]
   },
+  "include": [
+    "declarations",
+    "src"
+  ],
   "exclude": [
     "dist",
-    "build",
     "node_modules"
   ],
   "awesomeTypescriptLoaderOptions": {

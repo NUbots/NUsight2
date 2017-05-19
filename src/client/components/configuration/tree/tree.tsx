@@ -8,16 +8,16 @@ import FolderIcon from './folder.svg'
 import * as style from './style.css'
 
 export interface Node {
-  label: string,
-  expanded: boolean,
-  leaf: boolean,
-  selected: boolean,
+  label: string
+  expanded: boolean
+  leaf: boolean
+  selected: boolean
   children?: Node[]
 }
 
 export interface TreeProps {
-  data: Node,
-  level?: number,
+  data: Node
+  level?: number
   onClick(node: Node): void
 }
 

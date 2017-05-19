@@ -1,49 +1,49 @@
 .treenode {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .treenode__header {
-    display: flex;
-    align-items: center;
-    height: 28px;
-    padding: 4px 8px;
-    cursor: pointer;
-    user-select: none;
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 4px 8px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .treenode__header:hover {
-    background-color: #EEE;
-    color: #1976D2;
+  background-color: #EEE;
+  color: #1976D2;
 }
 
 .treenode__icon {
-    margin-right: 4px;
+  margin-right: 4px;
 }
 
 .treenode__icon svg {
-    display: block;
-    width: 18px;
-    height: 18px;
+  display: block;
+  width: 18px;
+  height: 18px;
 }
 
 .treenode__label {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .treenode__children {
-    display: none;
+  display: none;
 }
 
 .treenode--expanded > .treenode__children {
-    display: block;
+  display: block;
 }
 
 .treenode--selected > .treenode__header {
-    color: white;
-    background-color: #2196F3;
+  color: white;
+  background-color: #2196F3;
 }
 
 .treenode--selected > .treenode__header svg {
-    fill: rgba(255, 255, 255, 0.75);
+  fill: rgba(255, 255, 255, 0.75);
 }

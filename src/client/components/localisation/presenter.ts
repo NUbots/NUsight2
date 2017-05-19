@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { HIP_TO_FOOT } from './darwin_robot/view_model'
 import { KeyCode } from './keycodes'
 import { LocalisationModel } from './model'
-import { Vector3 } from './model'
+import { Vector3 } from './model/vector'
 import { ViewMode } from './model'
 import { LocalisationView } from './view'
 

@@ -14,7 +14,7 @@
     "tslint:fix": "tslint -c tslint.json 'src/**/*.ts' --fix",
     "start": "nodemon ./src/server/dev.ts",
     "prod": "ts-node -F ./src/server/prod.ts",
-    "build": "yarn run clean:build && webpack -p --progress --colors",
+    "build": "yarn clean:build && webpack -p --progress --colors",
     "clean": "yarn clean:build && yarn clean:coverage",
     "clean:build": "rimraf build",
     "clean:coverage": "rimraf coverage",

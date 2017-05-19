@@ -64,5 +64,3 @@ export class Tree extends React.Component<TreeProps, any> {
     this.props.onClick(this.props.data)
   }
 }
-
-export default Tree

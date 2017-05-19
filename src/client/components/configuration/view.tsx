@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as style from './style.css'
 import { Node, Tree } from './tree/tree'
-import TreeStore from './tree_store'
+import { TreeStore } from './tree_store'
 
 const store = new TreeStore({
     label: 'root',
@@ -67,5 +67,3 @@ export const Configuration = () => (
     </div>
   </div>
 )
-
-export default Configuration

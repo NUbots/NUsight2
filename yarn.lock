@@ -100,6 +100,12 @@
     "@types/history" "^3"
     "@types/react" "*"
 
+"@types/react-sidebar@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@types/react-sidebar/-/react-sidebar-2.2.0.tgz#dbfbb79d4eab6d7d258c1ae8ca880478e36421b3"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@^15.0.12":
   version "15.0.23"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.23.tgz#f3facbef5290610f54242f00308759d3a3c27346"
@@ -4900,7 +4906,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.6, prop-types@^15.5.7, prop-types@~15.5.7:
+prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@~15.5.7:
   version "15.5.8"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
   dependencies:
@@ -4996,6 +5002,15 @@ rc@^1.0.1, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-checkbox-tree@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/react-checkbox-tree/-/react-checkbox-tree-0.6.1.tgz#e8cba312d9d27d0a295ff948035d7d79f7665cb0"
+  dependencies:
+    classnames "^2.2.5"
+    lodash "^4.17.4"
+    prop-types "^15.5.8"
+    shortid "^2.2.6"
+
 react-dom@^15.4.2:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.5.4.tgz#ba0c28786fd52ed7e4f2135fe0288d462aef93da"
@@ -5027,6 +5042,10 @@ react-router@^3.0.2:
     loose-envify "^1.2.0"
     prop-types "^15.5.6"
     warning "^3.0.0"
+
+react-sidebar@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/react-sidebar/-/react-sidebar-2.3.2.tgz#ec140bea8a6f5fa3d8ea7a56479665b44cf4f9cf"
 
 react-svg-loader@^1.1.1:
   version "1.1.1"
@@ -5442,6 +5461,10 @@ shellwords@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.0.tgz#66afd47b6a12932d9071cbfd98a52e785cd0ba14"
 
+shortid@^2.2.6:
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/shortid/-/shortid-2.2.8.tgz#033b117d6a2e975804f6f0969dbe7d3d0b355131"
+
 signal-exit@^3.0.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
@@ -5470,6 +5493,10 @@ slash@^1.0.0:
 slide@^1.1.5:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/slide/-/slide-1.1.6.tgz#56eb027d65b4d2dce6cb2e2d32c4d4afc9e1d707"
+
+smoothie@^1.29.1:
+  version "1.29.1"
+  resolved "https://registry.yarnpkg.com/smoothie/-/smoothie-1.29.1.tgz#8997a6e59dec002650aebe25e4ea49eeb2abc47e"
 
 sntp@1.x.x:
   version "1.0.9"

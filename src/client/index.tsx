@@ -6,7 +6,8 @@ import * as ReactDOM from 'react-dom'
 import { browserHistory, IndexRoute, Route, Router } from 'react-router'
 import * as io from 'socket.io-client'
 import { AppView } from './components/app/view'
-import { Chart } from './components/chart/view'
+import { ChartModel } from './components/chart/model'
+import { ChartView } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
 import { Dashboard } from './components/dashboard/view'
 import { GameState } from './components/game_state/view'
@@ -18,13 +19,68 @@ import { NUClear } from './components/nuclear/view'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
+import { TimeSeries } from 'smoothie'
 
 // enable MobX strict mode
 useStrict(true)
 
 const stores = {
   localisationStore: LocalisationModel.of(),
+  chartStore: ChartModel.of(),
 }
+
+stores.chartStore.tree = [
+  {
+    label: 'darwin1',
+    children: [
+      {
+        label: 'sensors',
+        children: [
+          {
+            label: 'position',
+            children: [
+              {
+                enabled: true,
+                series: new TimeSeries(),
+                colour: '#FF0000',
+              },
+              {
+                enabled: true,
+                series: new TimeSeries(),
+                colour: '#00FF00',
+              },
+              {
+                enabled: true,
+                series: new TimeSeries(),
+                colour: '#0000FF',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        label: 'world',
+        children: [
+          {
+            enabled: true,
+            series: new TimeSeries(),
+            colour: '#FFFF00',
+          },
+          {
+            enabled: true,
+            series: new TimeSeries(),
+            colour: '#00FFFF',
+          },
+          {
+            enabled: true,
+            series: new TimeSeries(),
+            colour: '#FF00FF',
+          },
+        ],
+      },
+    ],
+  },
+]
 
 runInAction(() => {
   stores.localisationStore.camera.position.set(0, 0.2, 0.5)
@@ -90,7 +146,9 @@ ReactDOM.render(
             return <LocalisationView presenter={presenter} localisationStore={stores.localisationStore}/>
           }}/>
           <Route path='/vision' component={Vision}/>
-          <Route path='/chart' component={Chart}/>
+          <Route path='/chart' component={() => {
+            return <ChartView chartStore={stores.chartStore} />
+          }}/>
           <Route path='/scatter' component={Scatter}/>
           <Route path='/nuclear' component={NUClear}/>
           <Route path='/classifier' component={Classifier}/>

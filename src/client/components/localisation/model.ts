@@ -37,7 +37,7 @@ export class LocalisationModel {
   @observable public locked: boolean
   @observable public controls: ControlsModel
   @observable public viewMode: ViewMode
-  @observable public target?: RobotModel
+  @observable public target: RobotModel | null
   @observable public time: TimeModel
 
   constructor(opts: LocalisationModel) {

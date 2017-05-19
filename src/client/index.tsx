@@ -32,7 +32,7 @@ runInAction(() => {
   const colors = [null, 'magenta', null, 'blue', null, 'cyan', null, 'red']
   const numRobots = 8
   new Array(numRobots).fill(0).map((_, id) => {
-    const robot = RobotModel.of({ id, name: `Robot ${id + 1}`, color: colors[id], heading: 0 })
+    const robot = RobotModel.of({ id, name: `Robot ${id + 1}`, color: colors[id] || undefined, heading: 0 })
     stores.localisationStore.robots.push(robot)
     return robot
   })

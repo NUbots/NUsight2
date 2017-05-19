@@ -9,7 +9,7 @@ const app = express()
 const server = http.createServer(app)
 sio(server)
 
-const root = `${__dirname}/../../dist`
+const root = `${__dirname}/../../build`
 app.use(compression())
 app.use(express.static(root))
 app.use(favicon(`${__dirname}/../assets/favicon.ico`))

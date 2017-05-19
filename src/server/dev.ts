@@ -25,7 +25,7 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(webpackHotMiddleware(compiler))
 const root = `${__dirname}/../../`
 app.use(favicon(`${__dirname}/../assets/favicon.ico`))
-app.use(fallback('dist/index.html', { root }))
+app.use(fallback('build/index.html', { root }))
 
 const port = process.env.PORT || 3000
 server.listen(port, () => {

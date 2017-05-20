@@ -5,15 +5,17 @@ import * as ReactDOM from 'react-dom'
 import { browserHistory, IndexRoute, Route, Router } from 'react-router'
 import * as io from 'socket.io-client'
 import { container } from '../inversify.config'
+import { AppModel } from './components/app/model'
 import { AppView } from './components/app/view'
 import { Chart } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
 import { Dashboard } from './components/dashboard/view'
 import { GameState } from './components/game_state/view'
-import { RobotModel } from './components/localisation/darwin_robot/model'
+import { RobotModel as DarwinRobotModel } from './components/localisation/darwin_robot/model'
 import { LocalisationModel } from './components/localisation/model'
 import { LocalisationView } from './components/localisation/view'
 import { NUClear } from './components/nuclear/view'
+import { RobotModel } from './components/robot/model'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
@@ -22,15 +24,21 @@ import { Vision } from './components/vision/view'
 useStrict(true)
 
 // TODO (Annable): Replace all this code with real networking + simulator
+const appModel = container.get(AppModel)
 const localisationModel = container.get(LocalisationModel)
 
 runInAction(() => {
+  appModel.robots.push([
+    RobotModel.of({ name: 'Robot 1', host: 'localhost' }),
+    RobotModel.of({ name: 'Robot 2', host: 'localhost' }),
+    RobotModel.of({ name: 'Robot 3', host: 'localhost' }),
+  ])
   localisationModel.camera.position.set(0, 0.2, 0.5)
 
   const colors = [undefined, 'magenta', undefined, 'blue', undefined, 'cyan', undefined, 'red']
   const numRobots = 8
   new Array(numRobots).fill(0).map((_, id) => {
-    const robot = RobotModel.of({ id, name: `Robot ${id + 1}`, color: colors[id] || undefined, heading: 0 })
+    const robot = DarwinRobotModel.of({ id, name: `Robot ${id + 1}`, color: colors[id] || undefined, heading: 0 })
     localisationModel.robots.push(robot)
     return robot
   })

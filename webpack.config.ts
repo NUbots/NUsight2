@@ -6,7 +6,7 @@ import * as webpack from 'webpack'
 
 const isProduction = process.argv.indexOf('-p') >= 0
 const sourcePath = path.join(__dirname, './src')
-const outPath = path.join(__dirname, './dist')
+const outPath = path.join(__dirname, './build')
 
 export default {
   context: sourcePath,
@@ -18,12 +18,15 @@ export default {
       'webpack-hot-middleware/client',
     ]),
     vendor: [
-      'react',
-      'react-dom',
-      'react-router',
+      'classnames',
       'mobx',
       'mobx-react',
       'mobx-react-router',
+      'react',
+      'react-dom',
+      'react-router',
+      'socket.io-client',
+      'three',
     ],
   },
   output: {
@@ -143,14 +146,6 @@ export default {
   ].concat(isProduction ? [] : [
     new webpack.HotModuleReplacementPlugin(),
   ]),
-  devServer: {
-    contentBase: sourcePath,
-    inline: true,
-    hot: true,
-    stats: {
-      warnings: false,
-    },
-  },
   node: {
     // workaround for webpack-dev-server issue
     // https://github.com/webpack/webpack-dev-server/issues/60#issuecomment-103411179

@@ -34,25 +34,25 @@ export class Tree extends React.Component<TreeProps, void> {
     const headerInlineStyle = { paddingLeft: 8 + (level * 22) + 'px' }
 
     return (
-      <div className={classes}>
-        <div className={style.treenode__header} onClick={this.onClick} style={headerInlineStyle}>
-          <div className={style.treenode__icon}>
-            {
-              hasChildren ?
-                (this.props.data.expanded ? <FolderIconOpen /> : <FolderIcon />) :
-                <FileIcon />
-            }
+      <ul className={classes}>
+        <li>
+          <div className={style.treenode__header} onClick={this.onClick} style={headerInlineStyle}>
+            <div className={style.treenode__icon}>
+              {
+                hasChildren ?
+                  (this.props.data.expanded ? <FolderIconOpen /> : <FolderIcon />) :
+                  <FileIcon />
+              }
+            </div>
+
+            <div className={style.treenode__label}>{ this.props.data.label }</div>
           </div>
 
-          <div className={style.treenode__label}>{ this.props.data.label }</div>
-        </div>
-
-        {this.props.data.expanded &&
-          <div className={style.treenode__children}>
-            { children.map((child, i) => <Tree key={i} data={child} level={level + 1} onClick={this.props.onClick} />) }
-          </div>
-        }
-      </div>
+          {this.props.data.expanded &&
+            children.map((child, i) => <Tree key={i} data={child} level={level + 1} onClick={this.props.onClick} />)
+          }
+        </li>
+      </ul>
     )
   }
 

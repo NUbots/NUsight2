@@ -1,6 +1,9 @@
 .treenode {
   display: flex;
   flex-direction: column;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 .treenode__header {
@@ -14,7 +17,7 @@
 
 .treenode__header:hover {
   background-color: #EEE;
-  color: #1976D2;
+  color: #1197d3;
 }
 
 .treenode__icon {
@@ -33,7 +36,7 @@
 
 .treenode--selected .treenode__header {
   color: white;
-  background-color: #2196F3;
+  background-color: #1197d3;
 }
 
 .treenode--selected .treenode__header svg {

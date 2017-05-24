@@ -1,65 +1,40 @@
 import * as React from 'react'
 import * as style from './style.css'
 
+import { ConfigurationController } from './controller'
+import { ConfigurationModel } from './model'
 import { Panel } from './panel/panel'
 import { Node, Tree } from './tree/tree'
-import { TreeModel } from './tree_model'
 import { View } from './view/view'
 
-const model = new TreeModel({
-    label: 'root',
-    expanded: true,
-    leaf: false,
-    selected: false,
-    children: [
-        {
-            label: 'parent',
-            expanded: false,
-            leaf: false,
-            selected: false,
-            children: [
-                { label: 'child1', expanded: false, leaf: true, selected: false },
-                { label: 'child2', expanded: false, leaf: true, selected: false },
-            ],
-        },
-        {
-            label: 'parent',
-            expanded: false,
-            leaf: false,
-            selected: false,
-            children: [
-                {
-                    label: 'nested parent',
-                    expanded: false,
-                    leaf: false,
-                    selected: false,
-                    children: [
-                        { label: 'nested child 1', expanded: false, leaf: true, selected: false },
-                        { label: 'nested child 2', expanded: false, leaf: true, selected: false },
-                    ],
-                },
-            ],
-        },
-        {
-            label: 'Some file here',
-            expanded: true,
-            leaf: true,
-            selected: false,
-            children: [] as Node[],
-        },
-    ],
-})
+interface ConfigurationViewProps {
+  controller: ConfigurationController
+  model: ConfigurationModel
+}
 
-export const Configuration = () => (
-  <View title='Configuration' className={style.configuration} bodyClassName={style.configuration__body}>
-    <Panel title='Files' className={style.configuration__sidebar}>
-      <Tree onClick={model.onNodeClick} data={model.data} />
-    </Panel>
+export class ConfigurationView extends React.Component<ConfigurationViewProps, void> {
+  private model: ConfigurationModel
+  private controller: ConfigurationController
 
-    <div className={style.configuration__content}>
-      <div className={style.configuration__contentPlaceholder}>
-        Select a file to edit
-      </div>
-    </div>
-  </View>
-)
+  public constructor(props: ConfigurationViewProps, context: any) {
+    super(props, context)
+    this.model = this.props.model
+    this.controller = this.props.controller
+  }
+
+  public render(): JSX.Element {
+    return (
+      <View title='Configuration' className={style.configuration} bodyClassName={style.configuration__body}>
+        <Panel title='Files' className={style.configuration__sidebar}>
+          <Tree onClick={this.controller.onNodeClick} data={this.model.files} />
+        </Panel>
+
+        <div className={style.configuration__content}>
+          <div className={style.configuration__contentPlaceholder}>
+            Select a file to edit
+          </div>
+        </div>
+      </View>
+    )
+  }
+}

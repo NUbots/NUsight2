@@ -8,7 +8,10 @@ import * as io from 'socket.io-client'
 import { AppView } from './components/app/view'
 import { Chart } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
-import { Configuration } from './components/configuration/view'
+import { ConfigurationController } from './components/configuration/controller'
+import { configurationData } from './components/configuration/data'
+import { ConfigurationModel } from './components/configuration/model'
+import { ConfigurationView } from './components/configuration/view'
 import { Dashboard } from './components/dashboard/view'
 import { GameState } from './components/game_state/view'
 import { RobotModel } from './components/localisation/darwin_robot/model'
@@ -23,18 +26,19 @@ import { Vision } from './components/vision/view'
 // enable MobX strict mode
 useStrict(true)
 
-const stores = {
+const models = {
   localisationStore: LocalisationModel.of(),
+  configurationModel: ConfigurationModel.of({ files: configurationData }),
 }
 
 runInAction(() => {
-  stores.localisationStore.camera.position.set(0, 0.2, 0.5)
+  models.localisationStore.camera.position.set(0, 0.2, 0.5)
 
   const colors = [undefined, 'magenta', undefined, 'blue', undefined, 'cyan', undefined, 'red']
   const numRobots = 8
   new Array(numRobots).fill(0).map((_, id) => {
     const robot = RobotModel.of({ id, name: `Robot ${id + 1}`, color: colors[id] || undefined, heading: 0 })
-    stores.localisationStore.robots.push(robot)
+    models.localisationStore.robots.push(robot)
     return robot
   })
 })
@@ -42,8 +46,8 @@ runInAction(() => {
 requestAnimationFrame(function update() {
   requestAnimationFrame(update)
   runInAction(() => {
-    const numRobots = stores.localisationStore.robots.length;
-    stores.localisationStore.robots.forEach((robot, i) => {
+    const numRobots = models.localisationStore.robots.length
+    models.localisationStore.robots.forEach((robot, i) => {
 
       const angle = i * (2 * Math.PI) / numRobots + Date.now() / 4E3
       const distance = Math.cos(Date.now() / 1E3 + 4 * i) * 0.3 + 1
@@ -80,15 +84,15 @@ io.connect(document.location.origin)
 
 // render react DOM
 ReactDOM.render(
-    <Provider {...stores} >
+    <Provider {...models} >
       <Router history={browserHistory}>
         <Route path='/' component={AppView}>
           <IndexRoute component={Dashboard}/>
           <Route path='/localisation' component={() => {
             const presenter = LocalisationPresenter.of({
-              model: stores.localisationStore,
+              model: models.localisationStore,
             })
-            return <LocalisationView presenter={presenter} localisationStore={stores.localisationStore}/>
+            return <LocalisationView presenter={presenter} localisationStore={models.localisationStore}/>
           }}/>
           <Route path='/vision' component={Vision}/>
           <Route path='/chart' component={Chart}/>
@@ -97,7 +101,10 @@ ReactDOM.render(
           <Route path='/classifier' component={Classifier}/>
           <Route path='/subsumption' component={Subsumption}/>
           <Route path='/gamestate' component={GameState}/>
-          <Route path='/configuration' component={Configuration}/>
+          <Route path='/configuration' component={() => {
+            const controller = ConfigurationController.of({ model: models.configurationModel })
+            return <ConfigurationView controller={controller} model={models.configurationModel} />
+          }} />
         </Route>
       </Router>
     </Provider >,

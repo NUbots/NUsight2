@@ -4,6 +4,7 @@ import * as style from './style.css'
 import { Panel } from './panel/panel'
 import { Node, Tree } from './tree/tree'
 import { TreeModel } from './tree_model'
+import { View } from './view/view'
 
 const model = new TreeModel({
     label: 'root',
@@ -50,21 +51,15 @@ const model = new TreeModel({
 })
 
 export const Configuration = () => (
-  <div className={style.configuration}>
-    <div className={style.configuration__header}>
-      <h1 className={style.configuration__headerTitle}>Configuration</h1>
-    </div>
+  <View title='Configuration' className={style.configuration} bodyClassName={style.configuration__body}>
+    <Panel title='Files' className={style.configuration__sidebar}>
+      <Tree onClick={model.onNodeClick} data={model.data} />
+    </Panel>
 
-    <div className={style.configuration__body}>
-      <Panel title='Files' className={style.configuration__sidebar}>
-        <Tree onClick={model.onNodeClick} data={model.data} />
-      </Panel>
-
-      <div className={style.configuration__content}>
-        <div className={style.configuration__contentPlaceholder}>
-          Select a file to edit
-        </div>
+    <div className={style.configuration__content}>
+      <div className={style.configuration__contentPlaceholder}>
+        Select a file to edit
       </div>
     </div>
-  </div>
+  </View>
 )

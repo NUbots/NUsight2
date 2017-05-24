@@ -1,0 +1,33 @@
+.view {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.view__header {
+  align-items: center;
+  border-bottom: 1px solid #DDD;
+  display: flex;
+  flex-shrink: 0;
+  height: 61px;
+  padding: 0 8px;
+}
+
+.view__title {
+  font-size: 18px;
+  margin-right: 12px;
+}
+
+.view__leftMenu {
+
+}
+
+.view__rightMenu {
+  margin-left: auto;
+}
+
+.view__body {
+  flex-grow: 1;
+  position: relative;
+}

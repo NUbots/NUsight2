@@ -1,9 +1,11 @@
 import * as React from 'react'
 import * as style from './style.css'
-import { Node, Tree } from './tree/tree'
-import { TreeStore } from './tree_store'
 
-const store = new TreeStore({
+import { Panel } from './panel/panel'
+import { Node, Tree } from './tree/tree'
+import { TreeModel } from './tree_model'
+
+const model = new TreeModel({
     label: 'root',
     expanded: true,
     leaf: false,
@@ -54,10 +56,9 @@ export const Configuration = () => (
     </div>
 
     <div className={style.configuration__body}>
-      <div className={style.configuration__sidebar}>
-        <div className={style.configuration__sidebarHeader}>Files</div>
-        <Tree onClick={store.onNodeClick} data={store.data} />
-      </div>
+      <Panel title='Files' className={style.configuration__sidebar}>
+        <Tree onClick={model.onNodeClick} data={model.data} />
+      </Panel>
 
       <div className={style.configuration__content}>
         <div className={style.configuration__contentPlaceholder}>

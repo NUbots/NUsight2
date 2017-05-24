@@ -1,0 +1,21 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel__header {
+  background-color: #EEE;
+  border-bottom: 1px solid #DDD;
+  padding: 4px 8px;
+  flex-shrink: 0;
+}
+
+.panel__title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.panel__body {
+  flex-grow: 1;
+  overflow: auto;
+}

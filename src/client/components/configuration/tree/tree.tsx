@@ -31,6 +31,9 @@ export class Tree extends React.Component<TreeProps, void> {
       style.treenode,
       { [style['treenode--selected']]: this.props.data.selected },
     )
+
+    // We're using inline padding-left to indent so that the hover and selected indicators
+    // are full width. Indentation is the default 8px plus the level's indent of 22px.
     const headerInlineStyle = { paddingLeft: 8 + (level * 22) + 'px' }
 
     return (

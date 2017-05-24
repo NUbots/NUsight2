@@ -1,7 +1,7 @@
 import { action, observable } from 'mobx'
 import { Node } from './tree/tree'
 
-export class TreeStore {
+export class TreeModel {
   @observable
   public data: Node
 

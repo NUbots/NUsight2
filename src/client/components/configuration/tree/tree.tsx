@@ -29,7 +29,6 @@ export class Tree extends React.Component<TreeProps, void> {
     const level = this.props.level || 0
     const classes = classnames(
       style.treenode,
-      { [style['treenode--expanded']]: this.props.data.expanded },
       { [style['treenode--selected']]: this.props.data.selected },
     )
     const headerInlineStyle = { paddingLeft: 8 + (level * 22) + 'px' }

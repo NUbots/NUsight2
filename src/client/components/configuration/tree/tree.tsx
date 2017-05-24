@@ -22,12 +22,7 @@ export interface TreeProps {
 }
 
 @observer
-export class Tree extends React.Component<TreeProps, any> {
-  constructor(props: any, context: any) {
-    super(props, context)
-    this.onClick = this.onClick.bind(this)
-  }
-
+export class Tree extends React.Component<TreeProps, void> {
   public render(): JSX.Element {
     const children = this.props.data.children || []
     const hasChildren = children.length > 0
@@ -53,9 +48,11 @@ export class Tree extends React.Component<TreeProps, any> {
           <div className={style.treenode__label}>{ this.props.data.label }</div>
         </div>
 
-        <div className={style.treenode__children}>
-          { children.map((child, i) => <Tree key={i} data={child} level={level + 1} onClick={this.props.onClick} />) }
-        </div>
+        {this.props.data.expanded &&
+          <div className={style.treenode__children}>
+            { children.map((child, i) => <Tree key={i} data={child} level={level + 1} onClick={this.props.onClick} />) }
+          </div>
+        }
       </div>
     )
   }

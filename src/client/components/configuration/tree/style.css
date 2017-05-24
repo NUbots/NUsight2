@@ -31,19 +31,11 @@
   flex-grow: 1;
 }
 
-.treenode__children {
-  display: none;
-}
-
-.treenode--expanded > .treenode__children {
-  display: block;
-}
-
-.treenode--selected > .treenode__header {
+.treenode--selected .treenode__header {
   color: white;
   background-color: #2196F3;
 }
 
-.treenode--selected > .treenode__header svg {
+.treenode--selected .treenode__header svg {
   fill: rgba(255, 255, 255, 0.75);
 }

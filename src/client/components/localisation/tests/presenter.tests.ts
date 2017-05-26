@@ -8,12 +8,12 @@ describe('LocalisationPresenter', () => {
 
   beforeEach(() => {
     model = LocalisationModel.of()
-    presenter = new LocalisationPresenter({ model })
+    presenter = new LocalisationPresenter()
   })
 
   describe('clicking the hawk eye button', () => {
     beforeEach(() => {
-      presenter.onHawkEyeClick()
+      presenter.onHawkEyeClick(model)
     })
 
     it('resets yaw to 0', () => {

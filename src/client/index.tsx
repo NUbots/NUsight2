@@ -26,6 +26,8 @@ const stores = {
   localisationStore: LocalisationModel.of(),
 }
 
+const localisationPresenter = LocalisationPresenter.of()
+
 runInAction(() => {
   stores.localisationStore.camera.position.set(0, 0.2, 0.5)
 
@@ -84,10 +86,7 @@ ReactDOM.render(
         <Route path='/' component={AppView}>
           <IndexRoute component={Dashboard}/>
           <Route path='/localisation' component={() => {
-            const presenter = LocalisationPresenter.of({
-              model: stores.localisationStore,
-            })
-            return <LocalisationView presenter={presenter} localisationStore={stores.localisationStore}/>
+            return <LocalisationView presenter={localisationPresenter} model={stores.localisationStore}/>
           }}/>
           <Route path='/vision' component={Vision}/>
           <Route path='/chart' component={Chart}/>

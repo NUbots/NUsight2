@@ -1,16 +1,21 @@
 import { autorun, IReactionDisposer } from 'mobx'
 import { runInAction } from 'mobx'
-import { inject, observer } from 'mobx-react'
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import { WebGLRenderer } from 'three'
 import { LocalisationModel } from './model'
 import { ViewMode } from './model'
+import { LocalisationPresenter } from './presenter'
 import * as style from './style.css'
 import { LocalisationViewModel } from './view_model'
 
-@inject('localisationStore')
+interface LocalisationViewProps {
+  model: LocalisationModel,
+  presenter: LocalisationPresenter
+}
+
 @observer
-export class LocalisationView extends React.Component<any, any> {
+export class LocalisationView extends React.Component<LocalisationViewProps, any> {
   private canvas: HTMLCanvasElement
   private renderer: WebGLRenderer
   private stopAutorun: IReactionDisposer
@@ -47,7 +52,6 @@ export class LocalisationView extends React.Component<any, any> {
   }
 
   public render(): JSX.Element {
-    const model = this.props.localisationStore as LocalisationModel
     return (
         <div className={style.localisation}>
           <MenuBar onHawkEyeClick={this.onHawkEyeClick}/>
@@ -56,7 +60,7 @@ export class LocalisationView extends React.Component<any, any> {
               this.canvas = canvas
             }}/>
           </div>
-          <StatusBar model={model}/>
+          <StatusBar model={this.props.model}/>
         </div>
     )
   }
@@ -67,59 +71,58 @@ export class LocalisationView extends React.Component<any, any> {
 
   private onAnimationFrame = (time: number) => {
     this.rafId = requestAnimationFrame(this.onAnimationFrame)
-    this.props.presenter.onAnimationFrame(time)
+    this.props.presenter.onAnimationFrame(this.props.model, time)
   }
 
   private renderScene(): void {
     const canvas = this.canvas
-    const model = this.props.localisationStore
 
     if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
       this.renderer.setSize(canvas.clientWidth, canvas.clientHeight, false)
-      runInAction(() => model.aspect = canvas.clientWidth / canvas.clientHeight)
+      runInAction(() => this.props.model.aspect = canvas.clientWidth / canvas.clientHeight)
     }
 
-    const viewModel = LocalisationViewModel.of(model)
+    const viewModel = LocalisationViewModel.of(this.props.model)
 
     this.renderer.render(viewModel.scene, viewModel.camera)
 
-    runInAction(() => model.time.lastRenderTime = model.time.time)
+    runInAction(() => this.props.model.time.lastRenderTime = this.props.model.time.time)
   }
 
   private onClick = (e: MouseEvent) => {
     if (e.button === 0) {
-      this.props.presenter.onLeftClick(this)
+      this.props.presenter.onLeftClick(this.props.model, this)
     } else if (e.button === 2) {
-      this.props.presenter.onRightClick(this)
+      this.props.presenter.onRightClick(this.props.model)
     }
   }
 
   private onPointerLockChange = () => {
-    this.props.presenter.onPointerLockChange(document.pointerLockElement === this.canvas)
+    this.props.presenter.onPointerLockChange(this.props.model, document.pointerLockElement === this.canvas)
   }
 
   private onMouseMove = (e: MouseEvent) => {
-    this.props.presenter.onMouseMove(e.movementX, e.movementY)
+    this.props.presenter.onMouseMove(this.props.model, e.movementX, e.movementY)
   }
 
   private onKeyDown = (e: KeyboardEvent) => {
-    this.props.presenter.onKeyDown(e.keyCode, {
+    this.props.presenter.onKeyDown(this.props.model, e.keyCode, {
       shiftKey: e.shiftKey,
       ctrlKey: e.ctrlKey,
     })
   }
 
   private onKeyUp = (e: KeyboardEvent) => {
-    this.props.presenter.onKeyUp(e.keyCode)
+    this.props.presenter.onKeyUp(this.props.model, e.keyCode)
   }
 
   private onHawkEyeClick = () => {
-    this.props.presenter.onHawkEyeClick()
+    this.props.presenter.onHawkEyeClick(this.props.model)
   }
 
   private onWheel = (e: WheelEvent) => {
     e.preventDefault()
-    this.props.presenter.onWheel(e.deltaY)
+    this.props.presenter.onWheel(this.props.model, e.deltaY)
   }
 }
 

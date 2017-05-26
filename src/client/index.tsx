@@ -12,7 +12,6 @@ import { Dashboard } from './components/dashboard/view'
 import { GameState } from './components/game_state/view'
 import { RobotModel } from './components/localisation/darwin_robot/model'
 import { LocalisationModel } from './components/localisation/model'
-import { LocalisationPresenter } from './components/localisation/presenter'
 import { LocalisationView } from './components/localisation/view'
 import { NUClear } from './components/nuclear/view'
 import { Scatter } from './components/scatter_plot/view'
@@ -25,8 +24,6 @@ useStrict(true)
 const stores = {
   localisationStore: LocalisationModel.of(),
 }
-
-const localisationPresenter = LocalisationPresenter.of()
 
 runInAction(() => {
   stores.localisationStore.camera.position.set(0, 0.2, 0.5)
@@ -86,7 +83,7 @@ ReactDOM.render(
         <Route path='/' component={AppView}>
           <IndexRoute component={Dashboard}/>
           <Route path='/localisation' component={() => {
-            return <LocalisationView presenter={localisationPresenter} model={stores.localisationStore}/>
+            return <LocalisationView model={stores.localisationStore}/>
           }}/>
           <Route path='/vision' component={Vision}/>
           <Route path='/chart' component={Chart}/>

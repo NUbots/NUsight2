@@ -17,7 +17,7 @@ interface LocalisationViewProps {
 @observer
 export class LocalisationView extends React.Component<LocalisationViewProps, any> {
   @inject(LocalisationController)
-  private presenter: LocalisationController
+  private controller: LocalisationController
 
   private canvas: HTMLCanvasElement
   private renderer: WebGLRenderer
@@ -74,7 +74,7 @@ export class LocalisationView extends React.Component<LocalisationViewProps, any
 
   private onAnimationFrame = (time: number) => {
     this.rafId = requestAnimationFrame(this.onAnimationFrame)
-    this.presenter.onAnimationFrame(this.props.model, time)
+    this.controller.onAnimationFrame(this.props.model, time)
   }
 
   private renderScene(): void {
@@ -94,38 +94,38 @@ export class LocalisationView extends React.Component<LocalisationViewProps, any
 
   private onClick = (e: MouseEvent) => {
     if (e.button === 0) {
-      this.presenter.onLeftClick(this.props.model, this)
+      this.controller.onLeftClick(this.props.model, this)
     } else if (e.button === 2) {
-      this.presenter.onRightClick(this.props.model)
+      this.controller.onRightClick(this.props.model)
     }
   }
 
   private onPointerLockChange = () => {
-    this.presenter.onPointerLockChange(this.props.model, document.pointerLockElement === this.canvas)
+    this.controller.onPointerLockChange(this.props.model, document.pointerLockElement === this.canvas)
   }
 
   private onMouseMove = (e: MouseEvent) => {
-    this.presenter.onMouseMove(this.props.model, e.movementX, e.movementY)
+    this.controller.onMouseMove(this.props.model, e.movementX, e.movementY)
   }
 
   private onKeyDown = (e: KeyboardEvent) => {
-    this.presenter.onKeyDown(this.props.model, e.keyCode, {
+    this.controller.onKeyDown(this.props.model, e.keyCode, {
       shiftKey: e.shiftKey,
       ctrlKey: e.ctrlKey,
     })
   }
 
   private onKeyUp = (e: KeyboardEvent) => {
-    this.presenter.onKeyUp(this.props.model, e.keyCode)
+    this.controller.onKeyUp(this.props.model, e.keyCode)
   }
 
   private onHawkEyeClick = () => {
-    this.presenter.onHawkEyeClick(this.props.model)
+    this.controller.onHawkEyeClick(this.props.model)
   }
 
   private onWheel = (e: WheelEvent) => {
     e.preventDefault()
-    this.presenter.onWheel(this.props.model, e.deltaY)
+    this.controller.onWheel(this.props.model, e.deltaY)
   }
 }
 

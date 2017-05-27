@@ -3,6 +3,7 @@ import { runInAction } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { WebGLRenderer } from 'three'
+import { inject } from '../../../inversify.config'
 import { LocalisationModel } from './model'
 import { ViewMode } from './model'
 import { LocalisationPresenter } from './presenter'
@@ -10,12 +11,14 @@ import * as style from './style.css'
 import { LocalisationViewModel } from './view_model'
 
 interface LocalisationViewProps {
-  model: LocalisationModel,
-  presenter: LocalisationPresenter
+  model: LocalisationModel
 }
 
 @observer
 export class LocalisationView extends React.Component<LocalisationViewProps, any> {
+  @inject(LocalisationPresenter)
+  private presenter: LocalisationPresenter
+
   private canvas: HTMLCanvasElement
   private renderer: WebGLRenderer
   private stopAutorun: IReactionDisposer
@@ -71,7 +74,7 @@ export class LocalisationView extends React.Component<LocalisationViewProps, any
 
   private onAnimationFrame = (time: number) => {
     this.rafId = requestAnimationFrame(this.onAnimationFrame)
-    this.props.presenter.onAnimationFrame(this.props.model, time)
+    this.presenter.onAnimationFrame(this.props.model, time)
   }
 
   private renderScene(): void {
@@ -91,38 +94,38 @@ export class LocalisationView extends React.Component<LocalisationViewProps, any
 
   private onClick = (e: MouseEvent) => {
     if (e.button === 0) {
-      this.props.presenter.onLeftClick(this.props.model, this)
+      this.presenter.onLeftClick(this.props.model, this)
     } else if (e.button === 2) {
-      this.props.presenter.onRightClick(this.props.model)
+      this.presenter.onRightClick(this.props.model)
     }
   }
 
   private onPointerLockChange = () => {
-    this.props.presenter.onPointerLockChange(this.props.model, document.pointerLockElement === this.canvas)
+    this.presenter.onPointerLockChange(this.props.model, document.pointerLockElement === this.canvas)
   }
 
   private onMouseMove = (e: MouseEvent) => {
-    this.props.presenter.onMouseMove(this.props.model, e.movementX, e.movementY)
+    this.presenter.onMouseMove(this.props.model, e.movementX, e.movementY)
   }
 
   private onKeyDown = (e: KeyboardEvent) => {
-    this.props.presenter.onKeyDown(this.props.model, e.keyCode, {
+    this.presenter.onKeyDown(this.props.model, e.keyCode, {
       shiftKey: e.shiftKey,
       ctrlKey: e.ctrlKey,
     })
   }
 
   private onKeyUp = (e: KeyboardEvent) => {
-    this.props.presenter.onKeyUp(this.props.model, e.keyCode)
+    this.presenter.onKeyUp(this.props.model, e.keyCode)
   }
 
   private onHawkEyeClick = () => {
-    this.props.presenter.onHawkEyeClick(this.props.model)
+    this.presenter.onHawkEyeClick(this.props.model)
   }
 
   private onWheel = (e: WheelEvent) => {
     e.preventDefault()
-    this.props.presenter.onWheel(this.props.model, e.deltaY)
+    this.presenter.onWheel(this.props.model, e.deltaY)
   }
 }
 

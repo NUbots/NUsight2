@@ -4,6 +4,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { WebGLRenderer } from 'three'
 import { inject } from '../../../inversify.config'
+import { MenuBar } from '../menu_bar/view'
 import { LocalisationController } from './controller'
 import { LocalisationModel } from './model'
 import { ViewMode } from './model'
@@ -57,7 +58,7 @@ export class LocalisationView extends React.Component<LocalisationViewProps, any
   public render(): JSX.Element {
     return (
         <div className={style.localisation}>
-          <MenuBar onHawkEyeClick={this.onHawkEyeClick}/>
+          <LocalisationMenuBar onHawkEyeClick={this.onHawkEyeClick}/>
           <div className={style.localisation__canvasContainer}>
             <canvas className={style.localisation__canvas} ref={canvas => {
               this.canvas = canvas
@@ -129,17 +130,19 @@ export class LocalisationView extends React.Component<LocalisationViewProps, any
   }
 }
 
-interface MenuBarProps {
+interface LocalisationMenuBarProps {
   onHawkEyeClick(): void
 }
 
-const MenuBar = observer((props: MenuBarProps) => {
+const LocalisationMenuBar = observer((props: LocalisationMenuBarProps) => {
   return (
+    <MenuBar>
       <ul className={style.localisation__menu}>
         <li className={style.localisation__menuItem}>
           <button className={style.localisation__menuButton} onClick={props.onHawkEyeClick}>Hawk Eye</button>
         </li>
       </ul>
+    </MenuBar>
   )
 })
 

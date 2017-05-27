@@ -13,7 +13,7 @@ export default {
   devtool: isProduction ? false : 'inline-source-map',
   entry: {
     main: [
-      './client/include.ts',
+      'reflect-metadata',
       './client/index.tsx',
     ].concat(isProduction ? [] : [
       'webpack-hot-middleware/client',

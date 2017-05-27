@@ -6,7 +6,6 @@ import { KeyCode } from './keycodes'
 import { LocalisationModel } from './model'
 import { Vector3 } from './model'
 import { ViewMode } from './model'
-import { LocalisationView } from './view'
 
 interface KeyModifiers {
   shiftKey: boolean
@@ -22,9 +21,9 @@ export class LocalisationController {
   }
 
   @action
-  public onLeftClick(model: LocalisationModel, view: LocalisationView) {
+  public onLeftClick(model: LocalisationModel, requestPointerLock: () => void) {
     if (!model.locked) {
-      view.requestPointerLock()
+      requestPointerLock()
     } else {
       model.target = this.getNextTarget(model)
     }

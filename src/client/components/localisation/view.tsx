@@ -94,7 +94,7 @@ export class LocalisationView extends React.Component<LocalisationViewProps, any
 
   private onClick = (e: MouseEvent) => {
     if (e.button === 0) {
-      this.controller.onLeftClick(this.props.model, this)
+      this.controller.onLeftClick(this.props.model, () => this.requestPointerLock)
     } else if (e.button === 2) {
       this.controller.onRightClick(this.props.model)
     }

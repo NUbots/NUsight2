@@ -179,7 +179,7 @@ export class LocalisationController {
       movement.x = movement.x + actualSpeed
     }
 
-    // TODO (Annable): remove THREE dependency from presenter.
+    // TODO (Annable): remove THREE dependency from controller.
     const temp = new THREE.Vector3(movement.x, movement.y, movement.z)
     temp.applyEuler(new THREE.Euler(model.controls.pitch, model.controls.yaw, 0, 'YXZ'))
     movement.set(temp.x, temp.y, temp.z)

@@ -14,7 +14,7 @@ interface KeyModifiers {
 }
 
 @injectable()
-export class LocalisationPresenter {
+export class LocalisationController {
   @action
   public onAnimationFrame(model: LocalisationModel, time: number) {
     model.time.time = time / 1000

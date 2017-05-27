@@ -1,9 +1,9 @@
 import { Container } from 'inversify'
 import getDecorators from 'inversify-inject-decorators'
-import { LocalisationPresenter } from './client/components/localisation/presenter'
+import { LocalisationController } from './client/components/localisation/controller'
 
 export const container = new Container()
 
-container.bind(LocalisationPresenter).to(LocalisationPresenter).inSingletonScope()
+container.bind(LocalisationController).to(LocalisationController).inSingletonScope()
 
 export const inject = getDecorators(container).lazyInject

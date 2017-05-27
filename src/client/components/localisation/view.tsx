@@ -2,6 +2,7 @@ import { autorun, IReactionDisposer } from 'mobx'
 import { runInAction } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
+import { HTMLProps } from 'react'
 import { WebGLRenderer } from 'three'
 import { inject } from '../../../inversify.config'
 import { LocalisationController } from './controller'
@@ -11,7 +12,7 @@ import * as style from './style.css'
 import { LocalisationViewModel } from './view_model'
 
 @observer
-export class LocalisationView extends React.Component<{}, any> {
+export class LocalisationView extends React.Component<HTMLProps<JSX.Element>, void> {
   @inject(LocalisationController)
   private controller: LocalisationController
 
@@ -22,10 +23,6 @@ export class LocalisationView extends React.Component<{}, any> {
   private renderer: WebGLRenderer
   private stopAutorun: IReactionDisposer
   private rafId: number
-
-  constructor(props: any, context: any) {
-    super(props, context)
-  }
 
   public componentDidMount(): void {
     this.renderer = new WebGLRenderer({

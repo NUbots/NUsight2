@@ -3,7 +3,7 @@ import { runInAction } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { WebGLRenderer } from 'three'
-import { lazyInject } from '../../../inversify.config'
+import { inject } from '../../../inversify.config'
 import { LocalisationModel } from './model'
 import { ViewMode } from './model'
 import { LocalisationPresenter } from './presenter'
@@ -16,7 +16,7 @@ interface LocalisationViewProps {
 
 @observer
 export class LocalisationView extends React.Component<LocalisationViewProps, any> {
-  @lazyInject(LocalisationPresenter)
+  @inject(LocalisationPresenter)
   private presenter: LocalisationPresenter
 
   private canvas: HTMLCanvasElement

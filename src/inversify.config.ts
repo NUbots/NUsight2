@@ -6,4 +6,4 @@ export const container = new Container()
 
 container.bind(LocalisationPresenter).to(LocalisationPresenter).inSingletonScope()
 
-export const { lazyInject } = getDecorators(container)
+export const inject = getDecorators(container).lazyInject

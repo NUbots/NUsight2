@@ -8,24 +8,16 @@
 	background-color: #0a2938;
 }
 
-.header__logoContainer {
-	background-color: #fff;
-	display: flex;
-	align-items: center;
-	height: 60px;
-}
-
-.header__logo {
-	width: 40px;
-	height: 40px;
-	margin: 8px;
-}
-
 .header__title {
-	margin-right: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  background-color: #fff;
+  height: 60px;
 	font-size: 1.2rem;
-	color: #000;
-	font-weight: 400;
+	color: #1197d3;
+  font-weight: 500;
 }
 
 .header__list {

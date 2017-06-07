@@ -53,15 +53,15 @@ export class LocalisationView extends React.Component<HTMLProps<JSX.Element>, vo
 
   public render(): JSX.Element {
     return (
-        <div className={style.localisation}>
-          <LocalisationMenuBar onHawkEyeClick={this.onHawkEyeClick}/>
-          <div className={style.localisation__canvasContainer}>
-            <canvas className={style.localisation__canvas} ref={canvas => {
-              this.canvas = canvas
-            }}/>
-          </div>
-          <StatusBar model={this.model}/>
+      <div className={style.localisation}>
+        <LocalisationMenuBar onHawkEyeClick={this.onHawkEyeClick}/>
+        <div className={style.localisation__canvasContainer}>
+          <canvas className={style.localisation__canvas} ref={canvas => {
+            this.canvas = canvas
+          }}/>
         </div>
+        <StatusBar model={this.model}/>
+      </div>
     )
   }
 
@@ -149,12 +149,12 @@ interface StatusBarProps {
 const StatusBar = observer((props: StatusBarProps) => {
   const target = props.model.viewMode !== ViewMode.NO_CLIP && props.model.target ? props.model.target.name : 'No Target'
   return (
-      <div className={style.localisation__status}>
-        <span className={style.localisation__info}>&#160;</span>
-        <span
-            className={style.localisation__target}>{target}</span>
-        <span className={style.localisation__viewMode}>{viewModeString(props.model.viewMode)}</span>
-      </div>
+    <div className={style.localisation__status}>
+      <span className={style.localisation__info}>&#160;</span>
+      <span
+        className={style.localisation__target}>{target}</span>
+      <span className={style.localisation__viewMode}>{viewModeString(props.model.viewMode)}</span>
+    </div>
   )
 })
 

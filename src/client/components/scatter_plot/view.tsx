@@ -3,7 +3,7 @@ import * as Plotly from 'plotly.js'
 import * as style from './style.css'
 
 export class ScatterplotView extends React.Component<any, any> {
-  
+
   private canvas: HTMLDivElement
   private updateLoopId: number
 
@@ -74,6 +74,3 @@ export class ScatterplotView extends React.Component<any, any> {
   public componentDidUpdate(): void {
   }
 }
-
-
-export default ScatterplotView

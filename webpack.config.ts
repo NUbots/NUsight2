@@ -6,24 +6,31 @@ import * as webpack from 'webpack'
 
 const isProduction = process.argv.indexOf('-p') >= 0
 const sourcePath = path.join(__dirname, './src')
-const outPath = path.join(__dirname, './dist')
+const outPath = path.join(__dirname, './build')
 
 export default {
   context: sourcePath,
   devtool: isProduction ? false : 'inline-source-map',
   entry: {
     main: [
+      'reflect-metadata',
       './client/index.tsx',
     ].concat(isProduction ? [] : [
       'webpack-hot-middleware/client',
     ]),
     vendor: [
-      'react',
-      'react-dom',
-      'react-router',
+      'classnames',
+      'inversify',
+      'inversify-inject-decorators',
       'mobx',
       'mobx-react',
       'mobx-react-router',
+      'react',
+      'react-dom',
+      'react-router',
+      'reflect-metadata',
+      'socket.io-client',
+      'three',
     ],
   },
   output: {
@@ -53,9 +60,12 @@ export default {
               'awesome-typescript-loader',
             ],
       },
-      // css
+      // local css
       {
         test: /\.css$/,
+        exclude: [
+          path.resolve(__dirname, 'node_modules'),
+        ],
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
@@ -73,6 +83,17 @@ export default {
             },
           ],
         }),
+      },
+      /*
+      External libraries generally do not support css modules so the selector mangling will break external components.
+      This separate simplified loader is used for anything within the node_modules folder instead.
+      */
+      {
+        test: /\.css$/,
+        include: [
+          path.resolve(__dirname, 'node_modules'),
+        ],
+        use: [ 'style-loader', 'css-loader' ],
       },
       {
         test: /\.svg$/,
@@ -132,14 +153,6 @@ export default {
   ].concat(isProduction ? [] : [
     new webpack.HotModuleReplacementPlugin(),
   ]),
-  devServer: {
-    contentBase: sourcePath,
-    inline: true,
-    hot: true,
-    stats: {
-      warnings: false,
-    },
-  },
   node: {
     // workaround for webpack-dev-server issue
     // https://github.com/webpack/webpack-dev-server/issues/60#issuecomment-103411179

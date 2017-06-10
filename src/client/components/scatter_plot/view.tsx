@@ -1,5 +1,5 @@
-import * as React from 'react'
 import * as Plotly from 'plotly.js'
+import * as React from 'react'
 import * as style from './style.css'
 
 export class ScatterplotView extends React.Component<any, any> {
@@ -27,23 +27,23 @@ export class ScatterplotView extends React.Component<any, any> {
   public updateDimensions(): void {
     const layout = {
       width: this.canvas.offsetWidth,
-      height: this.canvas.offsetHeight
+      height: this.canvas.offsetHeight,
     }
     Plotly.relayout(this.canvas, layout)
   }
 
   public componentDidMount(): void {
-    window.addEventListener("resize", this.updateDimensions.bind(this));
+    window.addEventListener('resize', this.updateDimensions.bind(this))
 
-    var data: any = [
+    const data: any = [
       {
         x: [10, 17, 54],
         y: [20, 14, 23],
         type: 'scattergl',
         mode: 'markers',
         marker: {
-          size: 10
-        }
+          size: 10,
+        },
       },
       {
         x: [5, 8, 12],
@@ -51,17 +51,17 @@ export class ScatterplotView extends React.Component<any, any> {
         type: 'scattergl',
         mode: 'markers',
         marker: {
-          size: 10
-        }
-      }
-    ];
+          size: 10,
+        },
+      },
+    ]
 
     Plotly.newPlot(this.canvas, data)
 
     this.updateLoopId = window.setInterval(() => {
       const update = {
         x: [[Math.floor(Math.random() * 100)], [Math.floor(Math.random() * 100)]],
-        y: [[Math.floor(Math.random() * 100)], [Math.floor(Math.random() * 100)]]
+        y: [[Math.floor(Math.random() * 100)], [Math.floor(Math.random() * 100)]],
       }
       Plotly.extendTraces(this.canvas, update, [0, 1], 100)
     }, 1000 / 30)
@@ -69,8 +69,5 @@ export class ScatterplotView extends React.Component<any, any> {
 
   public componentWillUnmount(): void {
     window.clearInterval(this.updateLoopId)
-  }
-
-  public componentDidUpdate(): void {
   }
 }

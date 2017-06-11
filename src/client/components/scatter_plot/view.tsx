@@ -1,5 +1,9 @@
+import { observer } from 'mobx-react'
 import * as Plotly from 'plotly.js'
 import * as React from 'react'
+import { inject } from '../../../inversify.config'
+import { MenuBar } from '../menu_bar/view'
+import { ScatterplotController } from './controller'
 import * as style from './style.css'
 
 interface Trace {
@@ -19,7 +23,11 @@ interface DataPoint {
   values: number[]
 }
 
+@observer
 export class ScatterplotView extends React.Component<any, any> {
+
+  @inject(ScatterplotController)
+  private controller: ScatterplotController
 
   private canvas: HTMLDivElement
   private updateLoopId: number
@@ -46,6 +54,7 @@ export class ScatterplotView extends React.Component<any, any> {
   public render(): JSX.Element {
     return (
       <div className={style.scatterplot}>
+        <ScatterplotMenuBar onScatterplot2d={this.onScatterplot2d} onScatterplot3d={this.onScatterplot3d}/>
         <div className={style.scatterplot_container}>
           <div className={style.scatterplot_plotly} ref={canvas => {
                 this.canvas = canvas
@@ -208,7 +217,7 @@ export class ScatterplotView extends React.Component<any, any> {
 
       this.onDataPoint({
         label: 'Testing 2',
-        values: [sine * 4 , cosine * 4],
+        values: [sine * 4 , cosine * 4, sine * 2],
       })
     }, 1000 / this.fps)
   }
@@ -216,4 +225,32 @@ export class ScatterplotView extends React.Component<any, any> {
   public componentWillUnmount(): void {
     window.clearInterval(this.updateLoopId)
   }
+
+  private onScatterplot2d = () => {
+    this.controller.onScatterplot2d(this.canvas)
+  }
+
+  private onScatterplot3d = () => {
+    this.controller.onScatterplot3d(this.canvas)
+  }
 }
+
+interface ScatterplotMenuBarProps {
+  onScatterplot2d(): void
+  onScatterplot3d(): void
+}
+
+const ScatterplotMenuBar = observer((props: ScatterplotMenuBarProps) => {
+  return (
+    <MenuBar>
+      <ul className={style.scatterplot__menu}>
+        <li className={style.scatterplot__menuItem}>
+          <button className={style.scatterplot__menuButton} onClick={props.onScatterplot2d}>Scatterplot 2D</button>
+        </li>
+        <li className={style.scatterplot__menuItem}>
+          <button className={style.scatterplot__menuButton} onClick={props.onScatterplot3d}>Scatterplot 3D</button>
+        </li>
+      </ul>
+    </MenuBar>
+  )
+})

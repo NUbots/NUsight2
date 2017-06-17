@@ -1,10 +1,10 @@
 import 'reflect-metadata'
-import { GlobalNetwork } from '../global_network'
-import Socket = SocketIOClient.Socket
-import { message } from '../../../shared/proto/messages'
-import { RawSocket } from '../raw_socket'
-import Sensors = message.input.Sensors
 import { createMockInstance } from '../../../shared/common/testing/create_mock_instance'
+import { message } from '../../../shared/proto/messages'
+import { GlobalNetwork } from '../global_network'
+import { RawSocket } from '../raw_socket'
+import Socket = SocketIOClient.Socket
+import Sensors = message.input.Sensors
 
 describe('GlobalNetwork', () => {
   let network: GlobalNetwork

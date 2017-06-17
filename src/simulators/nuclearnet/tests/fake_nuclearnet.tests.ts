@@ -73,6 +73,9 @@ describe('FakeNUClearNet', () => {
     const eveOnFoo = jest.fn()
     eve.on('foo', eveOnFoo)
 
+    const bobOnFoo = jest.fn()
+    bob.on('foo', bobOnFoo)
+
     const payload = new Buffer(8)
     bob.send({ type: 'foo', payload })
 
@@ -83,5 +86,6 @@ describe('FakeNUClearNet', () => {
 
     expect(aliceOnFoo).toHaveBeenCalledWith(expectedPacket)
     expect(eveOnFoo).toHaveBeenCalledWith(expectedPacket)
+    expect(bobOnFoo).toHaveBeenCalledWith(expectedPacket)
   })
 })

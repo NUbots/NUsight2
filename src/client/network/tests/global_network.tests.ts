@@ -1,4 +1,4 @@
-// import { createStubInstance, spy, stub } from 'sinon'
+import 'reflect-metadata'
 import { GlobalNetwork } from '../global_network'
 import Socket = SocketIOClient.Socket
 import { message } from '../../../shared/proto/messages'

@@ -25,7 +25,7 @@ export class FakeNUClearNetServer extends EventEmitter {
     if (typeof opts.type === 'string') {
       const packet = {
         peer,
-        payload: opts.payload
+        payload: opts.payload,
       }
       // TODO (Annable): Support opts.target
       this.emit(opts.type, packet)

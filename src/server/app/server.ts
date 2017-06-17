@@ -3,8 +3,8 @@ import { NUClearNet } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { Client } from './client'
 import Socket = SocketIO.Socket
-import { Robot } from './robot'
 import { FakeNUClearNet } from '../../simulators/nuclearnet/fake_nuclearnet'
+import { Robot } from './robot'
 
 export class NUSightServer {
   private clients: Client[]

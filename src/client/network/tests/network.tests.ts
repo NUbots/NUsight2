@@ -14,7 +14,7 @@ describe('Network', () => {
     helper = new Network(network)
   })
 
-  it('dsaf', () => {
+  it('off() automatically unregisters all callbacks', () => {
     const cb1 = jest.fn()
     const cb2 = jest.fn()
     helper.on(Sensors, cb1)

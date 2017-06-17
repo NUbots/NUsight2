@@ -49,7 +49,6 @@ export class GlobalNetwork {
   }
 
   private onPacket(messageType: MessageType<Message>, buffer: ArrayBuffer) {
-    // TODO (Annable)
     const message = messageType.decode(new Uint8Array(buffer).slice(9))
     const listeners = this.listeners.get(messageType)
     if (listeners) {

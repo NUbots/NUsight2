@@ -16,11 +16,6 @@ describe('GlobalNetwork', () => {
   })
 
   describe('event handling', () => {
-    // it('connects socket on first listen', () => {
-    //   network.on(Sensors, jest.fn())
-    //   expect(fakeSocket.connect).toHaveBeenCalledTimes(1)
-    // })
-
     it('starts listening event', () => {
       network.on(Sensors, jest.fn())
       expect(fakeSocket.listen).toHaveBeenCalledWith('message.input.Sensors')

@@ -1,3 +1,4 @@
+import { injectable } from 'inversify'
 import { action, observable } from 'mobx'
 import { computed } from 'mobx'
 import { RobotModel } from './darwin_robot/model'
@@ -29,6 +30,7 @@ export enum ViewMode {
   ThirdPerson,
 }
 
+@injectable()
 export class LocalisationModel {
   @observable public aspect: number
   @observable public robots: RobotModel[]

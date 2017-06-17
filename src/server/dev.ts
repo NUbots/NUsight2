@@ -13,7 +13,9 @@ import { FakeNUClearNet } from '../simulators/nuclearnet/fake_nuclearnet'
 import { RobotSimulator } from '../simulators/robot_simulator'
 import { SimulatorStatus } from '../simulators/robot_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
+import { NUSightServer } from './app/server'
 import { NodeSystemClock } from './time/node_clock'
+
 const compiler = webpack(webpackConfig)
 
 const args = minimist(process.argv.slice(2))
@@ -21,7 +23,7 @@ const withSimulators = args['with-simulators'] || false
 
 const app = express()
 const server = http.createServer(app)
-sio(server)
+const network = sio(server)
 
 const devMiddleware = webpackDevMiddleware(compiler, {
   publicPath: '/',
@@ -59,3 +61,5 @@ if (withSimulators) {
   robotSimulator.simulateWithFrequency(60)
   SimulatorStatus.of(robotSimulator).statusEvery(60)
 }
+
+NUSightServer.of(network).connect()

@@ -1,8 +1,10 @@
-import { message } from '../../shared/proto/messages'
-import Sensors = message.input.Sensors
 import { inject } from 'inversify'
+import { injectable } from 'inversify'
+import { message } from '../../shared/proto/messages'
 import { RawSocket } from './raw_socket'
+import Sensors = message.input.Sensors
 
+@injectable()
 export class GlobalNetwork {
   private listeners: Map<MessageType<Message>, Set<MessageCallback<Message>>>
   private packetListeners: Map<string, (messageType: MessageType<Message>, buffer: ArrayBuffer) => void>
@@ -64,7 +66,8 @@ function getMessageTypeName(messageType: MessageType<Message>) {
   throw new Error(`Unknown type given ${messageType}`)
 }
 
-export interface Message {}
+export interface Message {
+}
 
 export interface MessageType<T extends Message> {
   new(...args: any[]): T

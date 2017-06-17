@@ -16,6 +16,8 @@ import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { container } from './inversify.config'
+import { LocalisationController } from './components/localisation/controller'
+import { LocalisationNetwork } from './components/localisation/network'
 
 // enable MobX strict mode
 useStrict(true)
@@ -55,7 +57,12 @@ ReactDOM.render(
   <Router history={browserHistory}>
     <Route path='/' component={AppView}>
       <IndexRoute component={Dashboard}/>
-      <Route path='/localisation' component={() => LocalisationView.of()}/>
+      <Route path='/localisation' component={() => {
+        const controller = container.get(LocalisationController)
+        const model = container.get(LocalisationModel)
+        const network = container.get(LocalisationNetwork)
+        return <LocalisationView controller={controller} model={model} network={network}/>
+      }}/>
       <Route path='/vision' component={Vision}/>
       <Route path='/chart' component={Chart}/>
       <Route path='/scatter' component={Scatter}/>

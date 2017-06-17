@@ -1,6 +1,8 @@
 import * as io from 'socket.io-client'
 import Socket = SocketIOClient.Socket
+import { injectable } from 'inversify'
 
+@injectable()
 export class RawSocket {
   private socket: Socket
 

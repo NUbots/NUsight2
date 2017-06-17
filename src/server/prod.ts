@@ -12,13 +12,14 @@ import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import { getContainer } from './inversify.config'
 import { ClockType } from './time/clock'
 import { Clock } from './time/clock'
+import { NUSightServer } from './app/server'
 
 const args = minimist(process.argv.slice(2))
 const withSimulators = args['with-simulators'] || false
 
 const app = express()
 const server = http.createServer(app)
-sio(server)
+const sioNetwork = sio(server)
 
 const root = `${__dirname}/../../build`
 app.use(history())
@@ -47,3 +48,5 @@ if (withSimulators) {
   )
   robotSimulator.simulateWithFrequency(60)
 }
+
+new NUSightServer(container.get<NUClearNet>(NUClearNet), sioNetwork).connect()

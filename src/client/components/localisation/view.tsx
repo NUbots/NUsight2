@@ -5,7 +5,6 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { HTMLProps } from 'react'
 import { WebGLRenderer } from 'three'
-import { container } from '../../inversify.config'
 import { MenuBar } from '../menu_bar/view'
 import { LocalisationController } from './controller'
 import { LocalisationModel } from './model'
@@ -26,13 +25,6 @@ export class LocalisationView extends React.Component<LocalisationViewProps, voi
   private renderer: WebGLRenderer
   private stopAutorun: IReactionDisposer
   private rafId: number
-
-  public static of() {
-    const controller = container.get(LocalisationController)
-    const model = container.get(LocalisationModel)
-    const network = container.get(LocalisationNetwork)
-    return <LocalisationView controller={controller} model={model} network={network}/>
-  }
 
   public componentDidMount(): void {
     this.renderer = new WebGLRenderer({

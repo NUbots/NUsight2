@@ -4,10 +4,12 @@ import { LocalisationModel } from './components/localisation/model'
 import { LocalisationNetwork } from './components/localisation/network'
 import { GlobalNetwork } from './network/global_network'
 import { Network } from './network/network'
+import { RawSocket } from './network/raw_socket'
 
 export const container = new Container()
 
-container.bind(GlobalNetwork).toConstantValue(GlobalNetwork.of())
+container.bind(RawSocket).to(RawSocket).inTransientScope()
+container.bind(GlobalNetwork).to(GlobalNetwork).inSingletonScope()
 container.bind(Network).to(Network).inTransientScope()
 container.bind(LocalisationNetwork).to(LocalisationNetwork).inTransientScope()
 container.bind(LocalisationController).to(LocalisationController).inSingletonScope()

@@ -3,7 +3,6 @@ import { runInAction } from 'mobx'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { browserHistory, IndexRoute, Route, Router } from 'react-router'
-import { message } from '../shared/proto/messages'
 import { AppView } from './components/app/view'
 import { Chart } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
@@ -17,7 +16,6 @@ import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { container } from './inversify.config'
-import Sensors = message.input.Sensors
 
 // enable MobX strict mode
 useStrict(true)

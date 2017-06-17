@@ -39,7 +39,7 @@ export class RightArmViewModel {
     const { geometry, materials } = this.rightUpperArmGeometryAndMaterial
     const mesh = new Mesh(geometry, new MultiMaterial(materials))
     mesh.position.set(0, -0.016, 0)
-    mesh.rotation.set(0, 0, -this.model.motors.rightShoulderRoll.angle)
+    mesh.rotation.set(0, 0, this.model.motors.rightShoulderRoll.angle)
     mesh.add(this.rightLowerArm)
     return mesh
   }

@@ -9,7 +9,7 @@ import * as favicon from 'serve-favicon'
 import * as sio from 'socket.io'
 import { RobotSimulator } from '../simulators/robot_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
-import { container } from './inversify.config'
+import { getContainer } from './inversify.config'
 import { ClockType } from './time/clock'
 import { Clock } from './time/clock'
 
@@ -31,6 +31,8 @@ server.listen(port, () => {
   /* tslint:disable no-console */
   console.log(`NUsight server started at http://localhost:${port}`)
 })
+
+const container = getContainer({ fakeNetworking: withSimulators })
 
 if (withSimulators) {
   const robotSimulator = new RobotSimulator(

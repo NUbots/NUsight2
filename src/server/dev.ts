@@ -15,7 +15,7 @@ import { RobotSimulator } from '../simulators/robot_simulator'
 import { SimulatorStatus } from '../simulators/robot_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import { NUSightServer } from './app/server'
-import { container } from './inversify.config'
+import { getContainer } from './inversify.config'
 import { Clock } from './time/clock'
 import { ClockType } from './time/clock'
 import CloseTo = Chai.CloseTo
@@ -52,6 +52,8 @@ server.listen(port, () => {
   /* tslint:disable no-console */
   console.log(`NUsight server started at http://localhost:${port}`)
 })
+
+const container = getContainer({ fakeNetworking: withSimulators })
 
 if (withSimulators) {
   const robotSimulator = new RobotSimulator(

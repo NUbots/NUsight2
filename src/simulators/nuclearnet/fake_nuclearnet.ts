@@ -1,11 +1,11 @@
+import { injectable } from 'inversify'
+import { inject } from 'inversify'
 import { NUClearNet } from 'nuclearnet.js'
 import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { FakeNUClearNetServer } from './fake_nuclearnet_server'
-import { injectable } from 'inversify'
-import { inject } from 'inversify'
 
 type PacketListener = (packet: NUClearNetPacket) => void
 type EventListener = (peer: NUClearNetPeer) => void

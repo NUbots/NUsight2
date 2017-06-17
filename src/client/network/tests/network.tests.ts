@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import { message } from '../../../shared/proto/messages'
 import { Network } from '../network'
 import Sensors = message.input.Sensors
-import { createMockInstance } from '../../../shared/common/testing/create_mock_instances'
+import { createMockInstance } from '../../../shared/common/testing/create_mock_instance'
 import { GlobalNetwork } from '../global_network'
 
 describe('Network', () => {

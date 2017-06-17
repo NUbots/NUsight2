@@ -4,7 +4,7 @@ import Socket = SocketIOClient.Socket
 import { message } from '../../../shared/proto/messages'
 import { RawSocket } from '../raw_socket'
 import Sensors = message.input.Sensors
-import { createMockInstance } from '../../../shared/common/testing/create_mock_instances'
+import { createMockInstance } from '../../../shared/common/testing/create_mock_instance'
 
 describe('GlobalNetwork', () => {
   let network: GlobalNetwork

@@ -1,6 +1,4 @@
 import { message } from '../../src/shared/proto/messages'
-import { RobotSimulator } from './robot_simulator'
-import { SimulatorStatus } from './robot_simulator'
 import { Simulator } from './simulator'
 import { Message } from './simulator'
 import Sensors = message.input.Sensors
@@ -45,19 +43,4 @@ export class SensorDataSimulator implements Simulator {
 
     return [ message ]
   }
-}
-
-function main() {
-  const robotSimulator = RobotSimulator.of({
-    name: 'Sensors Simulator',
-    simulators: [
-      SensorDataSimulator.of(),
-    ],
-  })
-  SimulatorStatus.of(robotSimulator).statusEvery(2)
-  robotSimulator.simulateWithFrequency(60)
-}
-
-if (require.main === module) {
-  main()
 }

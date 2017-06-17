@@ -3,18 +3,22 @@ import * as history from 'connect-history-api-fallback'
 import * as express from 'express'
 import * as http from 'http'
 import * as minimist from 'minimist'
+import { NUClearNet } from 'nuclearnet.js'
+import 'reflect-metadata'
 import * as favicon from 'serve-favicon'
 import * as sio from 'socket.io'
 import * as webpack from 'webpack'
 import * as webpackDevMiddleware from 'webpack-dev-middleware'
 import * as webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackConfig from '../../webpack.config'
-import { FakeNUClearNet } from '../simulators/nuclearnet/fake_nuclearnet'
 import { RobotSimulator } from '../simulators/robot_simulator'
 import { SimulatorStatus } from '../simulators/robot_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import { NUSightServer } from './app/server'
-import { NodeSystemClock } from './time/node_clock'
+import { container } from './inversify.config'
+import { Clock } from './time/clock'
+import { ClockType } from './time/clock'
+import CloseTo = Chai.CloseTo
 
 const compiler = webpack(webpackConfig)
 
@@ -23,7 +27,7 @@ const withSimulators = args['with-simulators'] || false
 
 const app = express()
 const server = http.createServer(app)
-const network = sio(server)
+const sioNetwork = sio(server)
 
 const devMiddleware = webpackDevMiddleware(compiler, {
   publicPath: '/',
@@ -50,16 +54,18 @@ server.listen(port, () => {
 })
 
 if (withSimulators) {
-  const robotSimulator = new RobotSimulator({
-    name: 'Sensors Simulator',
-    network: FakeNUClearNet.of(),
-    clock: NodeSystemClock,
-    simulators: [
-      SensorDataSimulator.of(),
-    ],
-  })
+  const robotSimulator = new RobotSimulator(
+    container.get<NUClearNet>(NUClearNet),
+    container.get<Clock>(ClockType),
+    {
+      name: 'Sensors Simulator',
+      simulators: [
+        SensorDataSimulator.of(),
+      ],
+    },
+  )
   robotSimulator.simulateWithFrequency(60)
-  SimulatorStatus.of(robotSimulator).statusEvery(60)
+  new SimulatorStatus(container.get<Clock>(ClockType), robotSimulator).statusEvery(60)
 }
 
-NUSightServer.of(network).connect()
+new NUSightServer(container.get<NUClearNet>(NUClearNet), sioNetwork).connect()

@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import { NUClearNet } from 'nuclearnet.js'
 import { FakeNUClearNet } from '../fake_nuclearnet'
 import { FakeNUClearNetServer } from '../fake_nuclearnet_server'

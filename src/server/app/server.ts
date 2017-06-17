@@ -1,27 +1,23 @@
 import Server = SocketIO.Server
+import { inject } from 'inversify'
 import { NUClearNet } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { Client } from './client'
-import Socket = SocketIO.Socket
-import { FakeNUClearNet } from '../../simulators/nuclearnet/fake_nuclearnet'
 import { Robot } from './robot'
+import Socket = SocketIO.Socket
 
 export class NUSightServer {
   private clients: Client[]
   private robots: Robot[]
 
-  public constructor(private nuclearNetwork: NUClearNet, private sioNetwork: Server) {
+  public constructor(@inject(NUClearNet) private nuclearNetwork: NUClearNet,
+                     private sioNetwork: Server) {
     this.clients = []
     this.robots = []
 
     this.nuclearNetwork.on('nuclear_join', this.onNUClearJoin)
     this.nuclearNetwork.on('nuclear_leave', this.onNUClearLeave)
     this.sioNetwork.on('connection', this.onClientConnection)
-  }
-
-  public static of(sioNetwork: Server): NUSightServer {
-    const nuclearNetwork = FakeNUClearNet.of()
-    return new NUSightServer(nuclearNetwork, sioNetwork)
   }
 
   public connect() {

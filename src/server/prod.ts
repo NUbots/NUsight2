@@ -3,12 +3,15 @@ import * as history from 'connect-history-api-fallback'
 import * as express from 'express'
 import * as http from 'http'
 import * as minimist from 'minimist'
+import { NUClearNet } from 'nuclearnet.js'
+import 'reflect-metadata'
 import * as favicon from 'serve-favicon'
 import * as sio from 'socket.io'
-import { FakeNUClearNet } from '../simulators/nuclearnet/fake_nuclearnet'
 import { RobotSimulator } from '../simulators/robot_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
-import { NodeSystemClock } from './time/node_clock'
+import { container } from './inversify.config'
+import { ClockType } from './time/clock'
+import { Clock } from './time/clock'
 
 const args = minimist(process.argv.slice(2))
 const withSimulators = args['with-simulators'] || false
@@ -30,13 +33,15 @@ server.listen(port, () => {
 })
 
 if (withSimulators) {
-  const robotSimulator = new RobotSimulator({
-    name: 'Sensors Simulator',
-    network: FakeNUClearNet.of(),
-    clock: NodeSystemClock,
-    simulators: [
-      SensorDataSimulator.of(),
-    ],
-  })
+  const robotSimulator = new RobotSimulator(
+    container.get<NUClearNet>(NUClearNet),
+    container.get<Clock>(ClockType),
+    {
+      name: 'Sensors Simulator',
+      simulators: [
+        SensorDataSimulator.of(),
+      ],
+    },
+  )
   robotSimulator.simulateWithFrequency(60)
 }

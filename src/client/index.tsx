@@ -8,16 +8,16 @@ import { Chart } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
 import { Dashboard } from './components/dashboard/view'
 import { GameState } from './components/game_state/view'
+import { LocalisationController } from './components/localisation/controller'
 import { RobotModel } from './components/localisation/darwin_robot/model'
 import { LocalisationModel } from './components/localisation/model'
+import { LocalisationNetwork } from './components/localisation/network'
 import { LocalisationView } from './components/localisation/view'
 import { NUClear } from './components/nuclear/view'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { container } from './inversify.config'
-import { LocalisationController } from './components/localisation/controller'
-import { LocalisationNetwork } from './components/localisation/network'
 
 // enable MobX strict mode
 useStrict(true)

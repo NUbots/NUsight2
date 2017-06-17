@@ -9,10 +9,10 @@ import * as favicon from 'serve-favicon'
 import * as sio from 'socket.io'
 import { RobotSimulator } from '../simulators/robot_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
+import { NUSightServer } from './app/server'
 import { getContainer } from './inversify.config'
 import { ClockType } from './time/clock'
 import { Clock } from './time/clock'
-import { NUSightServer } from './app/server'
 
 const args = minimist(process.argv.slice(2))
 const withSimulators = args['with-simulators'] || false

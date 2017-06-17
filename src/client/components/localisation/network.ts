@@ -19,6 +19,7 @@ export class LocalisationNetwork {
 
   @action
   private onSensors = (sensors: Sensors) => {
+    // TODO (Annable): Remove hardcoded values.
     const robot = this.model.robots[0]
     robot.motors.rightShoulderPitch.angle = Number(sensors.servo[0].presentPosition)
     robot.motors.leftShoulderPitch.angle = Number(sensors.servo[1].presentPosition)

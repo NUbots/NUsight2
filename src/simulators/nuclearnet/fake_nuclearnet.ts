@@ -68,6 +68,6 @@ export class FakeNUClearNet implements NUClearNet {
   }
 
   public send(options: NUClearNetSend): void {
-    this.server.send(options)
+    this.server.send(this.peer, options)
   }
 }

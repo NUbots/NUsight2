@@ -57,6 +57,15 @@ export class LocalisationViewModel {
 
   @computed
   private get skybox() {
+    const skybox = new Object3D()
+    skybox.add(this.skyboxSky)
+    skybox.add(this.skyboxGround)
+    skybox.add((this.skyboxSun))
+    return skybox
+  }
+
+  @computed
+  private get skyboxSky() {
     return SkyboxViewModel.of(this.model.skybox).skybox
   }
 

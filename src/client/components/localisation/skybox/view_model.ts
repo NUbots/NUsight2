@@ -6,10 +6,10 @@ import { SphereBufferGeometry } from 'three'
 import { MeshBasicMaterial } from 'three'
 import { PlaneBufferGeometry } from 'three'
 import { ShaderMaterial } from 'three'
-import { UniformsUtils } from 'three'
 import { Vector3 } from 'three'
 import { SkyboxModel } from './model'
-import { SkyShader } from './sky_shader'
+import * as SkyboxFrag from './skybox.frag'
+import * as SkyboxVert from './skybox.vert'
 
 export class SkyboxViewModel {
 
@@ -23,25 +23,23 @@ export class SkyboxViewModel {
   @computed
   public get skybox() {
     // reference: http://threejs.org/examples/#webgl_shaders_sky
-    const shader = new SkyShader()
-    const uniforms = UniformsUtils.clone(shader.uniforms)
     const geo = new SphereBufferGeometry( 40, 32, 15 )
     const mat = new ShaderMaterial({
-      fragmentShader: shader.fragmentShader,
-      vertexShader: shader.vertexShader,
-      uniforms,
+      fragmentShader: String(SkyboxFrag),
+      vertexShader: String(SkyboxVert),
+      uniforms: {
+        luminance: {value: this.model.luminance},
+        turbidity: {value: this.model.turbidity},
+        rayleigh: {value: this.model.rayleigh},
+        mieCoefficient: {value: this.model.mieCoefficient},
+        mieDirectionalG: {value: this.model.mieDirectionalG},
+        sunPosition: {value: this.sunPosition},
+      },
       side: BackSide,
     })
 
     const mesh = new Mesh(geo, mat)
     mesh.name = 'skyboxSky'
-
-    uniforms.turbidity.value = this.model.turbidity
-    uniforms.rayleigh.value = this.model.rayleigh
-    uniforms.luminance.value = this.model.luminance
-    uniforms.mieCoefficient.value = this.model.mieCoefficient
-    uniforms.mieDirectionalG.value = this.model.mieDirectionalG
-    uniforms.sunPosition.value.copy(this.sunPosition)
 
     return mesh
   }

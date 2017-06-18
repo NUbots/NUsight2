@@ -11,6 +11,19 @@
     },
     "curly": true,
     "eofline": true,
+    "block-spacing": [
+      true,
+      "never"
+    ],
+    "array-bracket-spacing": [
+      true,
+      "never"
+    ],
+    "new-parens": true,
+    "ter-max-len": [
+      true,
+      120
+    ],
     "ter-arrow-spacing": [
       true,
       {

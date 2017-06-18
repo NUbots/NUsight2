@@ -1,3 +1,4 @@
+// https://github.com/mrdoob/three.js/blob/dev/examples/js/SkyShader.js
 uniform vec3 sunPosition;
 uniform float rayleigh;
 uniform float turbidity;

@@ -23,11 +23,10 @@ export class LocalisationViewModel {
     const scene = new Scene()
     this.robots.forEach(robot => scene.add(robot))
 
-    const sky = this.skybox
     scene.add(this.field)
-    scene.add(sky.sky)
-    scene.add(sky.sun)
-    scene.add(sky.ground)
+    scene.add(this.skybox)
+    scene.add(this.skyboxGround)
+    scene.add(this.skyboxSun)
     scene.add(this.hemisphereLight)
     scene.add(this.pointLight)
     return scene
@@ -59,6 +58,16 @@ export class LocalisationViewModel {
   @computed
   private get skybox() {
     return SkyboxViewModel.of(this.model.skybox).skybox
+  }
+
+  @computed
+  private get skyboxGround() {
+    return SkyboxViewModel.of(this.model.skybox).ground
+  }
+
+  @computed
+  private get skyboxSun() {
+    return SkyboxViewModel.of(this.model.skybox).sun
   }
 
   @computed

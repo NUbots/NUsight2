@@ -25,8 +25,6 @@ export class LocalisationViewModel {
 
     scene.add(this.field)
     scene.add(this.skybox)
-    scene.add(this.skyboxGround)
-    scene.add(this.skyboxSun)
     scene.add(this.hemisphereLight)
     scene.add(this.pointLight)
     return scene
@@ -60,7 +58,7 @@ export class LocalisationViewModel {
     const skybox = new Object3D()
     skybox.add(this.skyboxSky)
     skybox.add(this.skyboxGround)
-    skybox.add((this.skyboxSun))
+    skybox.add(this.skyboxSun)
     return skybox
   }
 

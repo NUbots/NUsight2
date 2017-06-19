@@ -1,10 +1,10 @@
+import { inject } from 'inversify'
+import { injectable } from 'inversify'
 import { action } from 'mobx'
 import { message } from '../../../shared/proto/messages'
 import { Network } from '../../network/network'
 import { LocalisationModel } from './model'
 import Sensors = message.input.Sensors
-import { inject } from 'inversify'
-import { injectable } from 'inversify'
 
 @injectable()
 export class LocalisationNetwork {

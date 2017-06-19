@@ -80,7 +80,6 @@ export class SkyboxViewModel {
 
     sunSphere.name = 'skyboxSun'
     sunSphere.position.copy(this.sunPosition)
-    sunSphere.visible = this.model.showSun
 
     return sunSphere
   }

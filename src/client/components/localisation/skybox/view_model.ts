@@ -4,6 +4,7 @@ import { BackSide } from 'three'
 import { Mesh } from 'three'
 import { SphereBufferGeometry } from 'three'
 import { MeshBasicMaterial } from 'three'
+import { Object3D } from 'three'
 import { PlaneBufferGeometry } from 'three'
 import { ShaderMaterial } from 'three'
 import { Vector3 } from 'three'
@@ -23,17 +24,31 @@ export class SkyboxViewModel {
   @computed
   public get skybox() {
     // reference: http://threejs.org/examples/#webgl_shaders_sky
-    const geo = new SphereBufferGeometry( 40, 32, 15 )
+    const skybox = new Object3D()
+
+    skybox.add(this.sky)
+    skybox.add(this.ground)
+
+    if (this.model.showSun) {
+      skybox.add(this.sun)
+    }
+
+    return skybox
+  }
+
+  @computed
+  private get sky() {
+    const geo = new SphereBufferGeometry(40, 32, 15)
     const mat = new ShaderMaterial({
       fragmentShader: String(SkyboxFrag),
       vertexShader: String(SkyboxVert),
       uniforms: {
-        luminance: {value: this.model.luminance},
-        turbidity: {value: this.model.turbidity},
-        rayleigh: {value: this.model.rayleigh},
-        mieCoefficient: {value: this.model.mieCoefficient},
-        mieDirectionalG: {value: this.model.mieDirectionalG},
-        sunPosition: {value: this.sunPosition},
+        luminance: { value: this.model.luminance },
+        turbidity: { value: this.model.turbidity },
+        rayleigh: { value: this.model.rayleigh },
+        mieCoefficient: { value: this.model.mieCoefficient },
+        mieDirectionalG: { value: this.model.mieDirectionalG },
+        sunPosition: { value: this.sunPosition },
       },
       side: BackSide,
     })
@@ -45,29 +60,27 @@ export class SkyboxViewModel {
   }
 
   @computed
-  public get ground() {
-    const groundGeo = new PlaneBufferGeometry( 40, 40 )
-    const groundMat = new MeshBasicMaterial( { color: 0x613610 } )
-    const ground = new Mesh( groundGeo, groundMat )
+  private get ground() {
+    const groundGeo = new PlaneBufferGeometry(40, 40)
+    const groundMat = new MeshBasicMaterial({ color: 0x613610 })
+    const ground = new Mesh(groundGeo, groundMat)
     ground.name = 'skyboxGround'
     ground.position.y = -0.01
-    ground.rotation.x = - Math.PI / 2
+    ground.rotation.x = -Math.PI / 2
 
     return ground
   }
 
   @computed
-  public get sun() {
+  private get sun() {
     const sunSphere = new Mesh(
-      new SphereBufferGeometry( 40, 16, 8 ),
-      new MeshBasicMaterial( { color: 0xffffff } ),
+      new SphereBufferGeometry(40, 16, 8),
+      new MeshBasicMaterial({ color: 0xffffff }),
     )
 
-    sunSphere.position.y = - 49
-    sunSphere.visible = false
     sunSphere.name = 'skyboxSun'
     sunSphere.position.copy(this.sunPosition)
-    sunSphere.visible = this.model.sun
+    sunSphere.visible = this.model.showSun
 
     return sunSphere
   }
@@ -79,9 +92,9 @@ export class SkyboxViewModel {
     const theta = Math.PI * ( this.model.inclination - 0.5 )
     const phi = 2 * Math.PI * ( this.model.azimuth - 0.5 )
 
-    position.x = distance * Math.cos( phi )
-    position.y = distance * Math.sin( phi ) * Math.sin( theta )
-    position.z = distance * Math.sin( phi ) * Math.cos( theta )
+    position.x = distance * Math.cos(phi)
+    position.y = distance * Math.sin(phi) * Math.sin(theta)
+    position.z = distance * Math.sin(phi) * Math.cos(theta)
 
     return position
   }

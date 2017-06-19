@@ -9,17 +9,10 @@ export class SkyboxModel {
   @observable public luminance: number
   @observable public inclination: number // elevation / inclination
   @observable public azimuth: number // Facing front,
-  @observable public sun: boolean
+  @observable public showSun: boolean
 
-  public constructor(opts: SkyboxModelOpts) {
-    this.turbidity = opts.turbidity
-    this.rayleigh = opts.rayleigh
-    this.mieCoefficient = opts.mieCoefficient
-    this.mieDirectionalG = opts.mieDirectionalG
-    this.luminance = opts.luminance
-    this.inclination = opts.inclination
-    this.azimuth = opts.azimuth
-    this.sun = opts.sun
+  public constructor(opts: SkyboxModel) {
+    Object.assign(this, opts)
   }
 
   public static of() {
@@ -31,18 +24,7 @@ export class SkyboxModel {
       luminance: 0.5,
       inclination: 0.49, // elevation / inclination
       azimuth: 0.25, // Facing front,
-      sun: ! true,
+      showSun: false,
     })
   }
-}
-
-interface SkyboxModelOpts {
-  turbidity: number
-  rayleigh: number
-  mieCoefficient: number
-  mieDirectionalG: number
-  luminance: number
-  inclination: number
-  azimuth: number
-  sun: boolean
 }

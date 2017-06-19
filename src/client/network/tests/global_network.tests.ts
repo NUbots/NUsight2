@@ -10,20 +10,20 @@ import Mocked = jest.Mocked
 
 describe('GlobalNetwork', () => {
   let network: GlobalNetwork
-  let fakeSocket: Mocked<RawSocket>
-  let fakeMessageTypePath: Mocked<MessageTypePath>
+  let mockedRawSocket: Mocked<RawSocket>
+  let mockedMessageTypePath: Mocked<MessageTypePath>
 
   beforeEach(() => {
-    fakeSocket = createMockInstance(RawSocket)
-    fakeMessageTypePath = createMockInstance(MessageTypePath)
-    fakeMessageTypePath.getPath.mockReturnValue('message.input.Sensors')
-    network = new GlobalNetwork(fakeSocket, fakeMessageTypePath)
+    mockedRawSocket = createMockInstance(RawSocket)
+    mockedMessageTypePath = createMockInstance(MessageTypePath)
+    mockedMessageTypePath.getPath.mockReturnValue('message.input.Sensors')
+    network = new GlobalNetwork(mockedRawSocket, mockedMessageTypePath)
   })
 
   describe('event handling', () => {
     it('starts listening event', () => {
       network.on(Sensors, jest.fn())
-      expect(fakeSocket.listen).toHaveBeenCalledWith('message.input.Sensors')
+      expect(mockedRawSocket.listen).toHaveBeenCalledWith('message.input.Sensors')
     })
 
     it('stops listening to event', () => {
@@ -31,13 +31,13 @@ describe('GlobalNetwork', () => {
       network.on(Sensors, cb)
 
       network.off(Sensors, cb)
-      expect(fakeSocket.unlisten).toHaveBeenCalledWith('message.input.Sensors')
+      expect(mockedRawSocket.unlisten).toHaveBeenCalledWith('message.input.Sensors')
     })
 
     it('only sends listening event once', () => {
       network.on(Sensors, jest.fn())
       network.on(Sensors, jest.fn())
-      expect(fakeSocket.listen).toHaveBeenCalledTimes(1)
+      expect(mockedRawSocket.listen).toHaveBeenCalledTimes(1)
     })
 
     it('stops listening to type after all listeners have unsubscribed', () => {
@@ -47,10 +47,10 @@ describe('GlobalNetwork', () => {
       network.on(Sensors, cb2)
 
       network.off(Sensors, cb1)
-      expect(fakeSocket.unlisten).not.toHaveBeenCalled()
+      expect(mockedRawSocket.unlisten).not.toHaveBeenCalled()
 
       network.off(Sensors, cb2)
-      expect(fakeSocket.unlisten).toHaveBeenLastCalledWith('message.input.Sensors')
+      expect(mockedRawSocket.unlisten).toHaveBeenLastCalledWith('message.input.Sensors')
     })
   })
 })

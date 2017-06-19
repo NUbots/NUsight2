@@ -5,14 +5,19 @@ import { GlobalNetwork } from '../global_network'
 import { RawSocket } from '../raw_socket'
 import Socket = SocketIOClient.Socket
 import Sensors = message.input.Sensors
+import { MessageTypePath } from '../message_type_names'
+import Mocked = jest.Mocked
 
 describe('GlobalNetwork', () => {
   let network: GlobalNetwork
-  let fakeSocket: RawSocket
+  let fakeSocket: Mocked<RawSocket>
+  let fakeMessageTypePath: Mocked<MessageTypePath>
 
   beforeEach(() => {
     fakeSocket = createMockInstance(RawSocket)
-    network = new GlobalNetwork(fakeSocket)
+    fakeMessageTypePath = createMockInstance(MessageTypePath)
+    fakeMessageTypePath.getPath.mockReturnValue('message.input.Sensors')
+    network = new GlobalNetwork(fakeSocket, fakeMessageTypePath)
   })
 
   describe('event handling', () => {

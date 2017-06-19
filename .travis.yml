@@ -6,7 +6,10 @@ node_js:
   - '6'
   - '7'
   - '8'
-cache: yarn
+cache:
+  yarn: true
+  directories:
+    - node_modules
 env:
   - CXX=g++-4.9
 addons:

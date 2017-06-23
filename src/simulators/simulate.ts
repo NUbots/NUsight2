@@ -10,6 +10,7 @@ function main() {
 
   const simulators = getSimulators(args)
   const robotSimulator = RobotSimulator.of({
+    fakeNetworking: false,
     name: 'Robot Simulator',
     simulators,
   })

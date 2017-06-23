@@ -31,6 +31,7 @@ server.listen(port, () => {
 
 if (withSimulators) {
   const robotSimulator = RobotSimulator.of({
+    fakeNetworking: true,
     name: 'Sensors Simulator',
     simulators: [
       SensorDataSimulator.of(),

@@ -14,7 +14,8 @@ export class RobotSimulator {
   public constructor(private network: NUClearNet,
                      private clock: Clock,
                      opts: { name: string, simulators: Simulator[] }) {
-    Object.assign(this, opts)
+    this.name = opts.name
+    this.simulators = opts.simulators
 
     this.messagesSent = 0
   }

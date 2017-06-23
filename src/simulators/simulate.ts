@@ -5,7 +5,7 @@ import { RobotSimulator } from './robot_simulator'
 import { SensorDataSimulator } from './sensor_data_simulator'
 import { Simulator } from './simulator'
 import { NodeSystemClock } from '../server/time/node_clock'
-import { FakeNUClearNet } from './nuclearnet/fake_nuclearnet'
+import { NUClearNet } from 'nuclearnet.js'
 
 function main() {
   const args = minimist(process.argv.slice(2))
@@ -13,7 +13,7 @@ function main() {
   const simulators = getSimulators(args)
   const clock = NodeSystemClock
   const robotSimulator = new RobotSimulator(
-    FakeNUClearNet.of(),
+    new NUClearNet(),
     clock,
     {
       name: 'Robot Simulator',

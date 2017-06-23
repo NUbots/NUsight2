@@ -1,5 +1,4 @@
 import * as minimist from 'minimist'
-import 'reflect-metadata'
 import { SimulatorStatus } from './robot_simulator'
 import { RobotSimulator } from './robot_simulator'
 import { SensorDataSimulator } from './sensor_data_simulator'

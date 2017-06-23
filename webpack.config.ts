@@ -13,7 +13,6 @@ export default {
   devtool: isProduction ? 'source-map' : 'inline-source-map',
   entry: {
     main: [
-      'reflect-metadata',
       './client/index.tsx',
     ].concat(isProduction ? [] : [
       'webpack-hot-middleware/client',
@@ -26,7 +25,6 @@ export default {
       'react',
       'react-dom',
       'react-router',
-      'reflect-metadata',
       'socket.io-client',
       'three',
     ],

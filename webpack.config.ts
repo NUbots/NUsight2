@@ -20,8 +20,6 @@ export default {
     ]),
     vendor: [
       'classnames',
-      'inversify',
-      'inversify-inject-decorators',
       'mobx',
       'mobx-react',
       'mobx-react-router',

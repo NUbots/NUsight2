@@ -18,13 +18,11 @@ import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { GlobalNetwork } from './network/global_network'
-import { MessageTypePath } from './network/message_type_names'
 
 // enable MobX strict mode
 useStrict(true)
 
-const messageTypePath = new MessageTypePath()
-const globalNetwork = GlobalNetwork.of(messageTypePath)
+const globalNetwork = GlobalNetwork.of()
 
 // TODO (Annable): Replace all this code with real networking + simulator
 const localisationModel = LocalisationModel.of()

@@ -13,8 +13,9 @@ export class GlobalNetwork {
     this.packetListeners = new Map()
   }
 
-  public static of(messageTypePath: MessageTypePath) {
-    const socket = new RawSocket()
+  public static of() {
+    const messageTypePath = MessageTypePath.of()
+    const socket = RawSocket.of()
     return new GlobalNetwork(socket, messageTypePath)
   }
 

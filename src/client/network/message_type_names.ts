@@ -11,9 +11,15 @@ export class MessageTypePath {
     this.cache = new Map()
   }
 
-  public static of(): MessageTypePath {
-    return new MessageTypePath()
-  }
+  public static of = (() => {
+    let instance: MessageTypePath
+    return (): MessageTypePath => {
+      if (!instance) {
+        instance = new MessageTypePath()
+      }
+      return instance
+    }
+  })()
 
   public getPath(messageType: MessageType<Message>): string {
     if (!this.cache.has(messageType)) {

@@ -19,8 +19,8 @@ export class RobotSimulator {
     this.messagesSent = 0
   }
 
-  public static of(opts: { name: string; simulators: Simulator[] }): RobotSimulator {
-    const network = FakeNUClearNet.of()
+  public static of(opts: { fakeNetworking?: boolean, name: string; simulators: Simulator[] }): RobotSimulator {
+    const network = opts.fakeNetworking ? FakeNUClearNet.of() : new NUClearNet()
     const clock = NodeSystemClock
     return new RobotSimulator(network, clock, opts)
   }

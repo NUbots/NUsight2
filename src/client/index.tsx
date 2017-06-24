@@ -62,12 +62,12 @@ ReactDOM.render(
     <AppView>
       <Switch>
         <Route exact path='/' component={Dashboard}/>
-        <Route path='/localisation' component={() => {
-          const model = localisationModel
-          const controller = LocalisationController.of()
-          const network = LocalisationNetwork.of(globalNetwork, model)
-          return <LocalisationView controller={controller} model={model} network={network}/>
-        }}/>
+          <Route path='/localisation' render={() => {
+            const model = localisationModel
+            const controller = LocalisationController.of()
+            const network = LocalisationNetwork.of(globalNetwork, model)
+            return <LocalisationView controller={controller} model={model} network={network}/>
+          }}/>
         <Route path='/vision' component={Vision}/>
         <Route path='/chart' component={Chart}/>
         <Route path='/scatter' component={Scatter}/>

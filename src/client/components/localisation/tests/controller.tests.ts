@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { LocalisationController } from '../controller'
 import { LocalisationModel } from '../model'
 import { ViewMode } from '../model'
@@ -30,7 +29,7 @@ describe('LocalisationController', () => {
     })
 
     it('resets viewing mode to no clip', () => {
-      expect(model.viewMode).toEqual(ViewMode.NO_CLIP)
+      expect(model.viewMode).toEqual(ViewMode.FreeCamera)
     })
   })
 })

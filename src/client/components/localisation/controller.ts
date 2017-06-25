@@ -1,4 +1,3 @@
-import { injectable } from 'inversify'
 import { action } from 'mobx'
 import * as THREE from 'three'
 import { HIP_TO_FOOT } from './darwin_robot/view_model'
@@ -12,8 +11,11 @@ interface KeyModifiers {
   ctrlKey: boolean
 }
 
-@injectable()
 export class LocalisationController {
+  public static of(): LocalisationController {
+    return new LocalisationController()
+  }
+
   @action
   public onAnimationFrame(model: LocalisationModel, time: number) {
     model.time.time = time / 1000
@@ -41,7 +43,7 @@ export class LocalisationController {
     model.controls.pitch = -Math.PI / 2
     model.controls.yaw = 0
     model.camera.position.set(0, 5, 0)
-    model.viewMode = ViewMode.NO_CLIP
+    model.viewMode = ViewMode.FreeCamera
     this.updatePosition(model)
   }
 
@@ -52,7 +54,7 @@ export class LocalisationController {
 
   @action
   public onMouseMove(model: LocalisationModel, movementX: number, movementY: number): void {
-    if (!model.locked || model.viewMode === ViewMode.FIRST_PERSON) {
+    if (!model.locked || model.viewMode === ViewMode.FirstPerson) {
       return
     }
 
@@ -93,10 +95,10 @@ export class LocalisationController {
           model.viewMode = this.getNextViewMode(model)
 
           // TODO (Annable): move this somewhere.
-          if (model.viewMode === ViewMode.NO_CLIP) {
+          if (model.viewMode === ViewMode.FreeCamera) {
             model.controls.pitch = model.camera.pitch
             model.controls.yaw = model.camera.yaw
-          } else if (model.viewMode === ViewMode.FIRST_PERSON) {
+          } else if (model.viewMode === ViewMode.FirstPerson) {
             model.controls.pitch = 0
             model.controls.yaw = 0
           }
@@ -142,13 +144,13 @@ export class LocalisationController {
 
   private updatePosition(model: LocalisationModel) {
     switch (model.viewMode) {
-      case ViewMode.NO_CLIP:
+      case ViewMode.FreeCamera:
         this.updatePositionNoClip(model)
         return
-      case ViewMode.FIRST_PERSON:
+      case ViewMode.FirstPerson:
         this.updatePositionFirstPerson(model)
         return
-      case ViewMode.THIRD_PERSON:
+      case ViewMode.ThirdPerson:
         this.updatePositionThirdPerson(model)
         return
       default:
@@ -236,9 +238,9 @@ export class LocalisationController {
     const yaw = model.controls.yaw
     const pitch = -model.controls.pitch + Math.PI / 2
     const offset = new Vector3(
-        Math.sin(pitch) * Math.cos(yaw),
-        Math.cos(pitch),
-        Math.sin(pitch) * Math.sin(yaw),
+      Math.sin(pitch) * Math.cos(yaw),
+      Math.cos(pitch),
+      Math.sin(pitch) * Math.sin(yaw),
     ).multiplyScalar(distance)
     const cameraPosition = targetPosition.clone().add(offset)
 
@@ -249,12 +251,12 @@ export class LocalisationController {
 
   private getNextViewMode(model: LocalisationModel) {
     switch (model.viewMode) {
-      case ViewMode.NO_CLIP:
-        return ViewMode.FIRST_PERSON
-      case ViewMode.FIRST_PERSON:
-        return ViewMode.THIRD_PERSON
-      case ViewMode.THIRD_PERSON:
-        return ViewMode.NO_CLIP
+      case ViewMode.FreeCamera:
+        return ViewMode.FirstPerson
+      case ViewMode.FirstPerson:
+        return ViewMode.ThirdPerson
+      case ViewMode.ThirdPerson:
+        return ViewMode.FreeCamera
       default:
         throw new Error(`No next view mode defined for ${model.viewMode}`)
     }

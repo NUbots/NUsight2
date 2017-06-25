@@ -1,10 +1,32 @@
 language: node_js
 dist: trusty
 node_js:
+  - '4'
+  - '5'
+  - '6'
   - '7'
+  - '8'
+
+# Cache yarn to speed up the build
+cache:
+  yarn: true
+
+# We need to set this so our compiler is g++-4.9 for NUClearNet.js
+env:
+  - CXX=g++-4.9
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.9
+
+# Only build the master branch, PRs will build also due to settings in the web ui
 branches:
   only:
     - 'master'
+
+# Don't spam people with emails
 notifications:
   email: false
   slack:

@@ -5,17 +5,19 @@ import * as ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import { Switch } from 'react-router-dom'
+import { AppModel } from './components/app/model'
 import { AppView } from './components/app/view'
 import { Chart } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
 import { Dashboard } from './components/dashboard/view'
 import { GameState } from './components/game_state/view'
 import { LocalisationController } from './components/localisation/controller'
-import { RobotModel } from './components/localisation/darwin_robot/model'
+import { RobotModel as LocalisationRobotModel } from './components/localisation/darwin_robot/model'
 import { LocalisationModel } from './components/localisation/model'
 import { LocalisationNetwork } from './components/localisation/network'
 import { LocalisationView } from './components/localisation/view'
 import { NUClear } from './components/nuclear/view'
+import { RobotModel } from './components/robot/model'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
@@ -28,6 +30,7 @@ const globalNetwork = GlobalNetwork.of()
 
 // TODO (Annable): Replace all this code with real networking + simulator
 const localisationModel = LocalisationModel.of()
+const appModel = AppModel.of()
 
 runInAction(() => {
   localisationModel.camera.position.set(0, 0.2, 0.5)
@@ -35,10 +38,16 @@ runInAction(() => {
   const colors = [undefined, 'magenta', undefined, 'blue', undefined, 'cyan', undefined, 'red']
   const numRobots = 8
   new Array(numRobots).fill(0).map((_, id) => {
-    const robot = RobotModel.of({ id, name: `Robot ${id + 1}`, color: colors[id] || undefined, heading: 0 })
+    const robot = LocalisationRobotModel.of({ id, name: `Robot ${id + 1}`, color: colors[id] || undefined, heading: 0 })
     localisationModel.robots.push(robot)
     return robot
   })
+  
+  appModel.robots.push(
+    RobotModel.of({ name: 'Robot 1', host: 'localhost' }),
+    RobotModel.of({ name: 'Robot 2', host: 'localhost' }),
+    RobotModel.of({ name: 'Robot 3', host: 'localhost' }),
+  )
 })
 
 requestAnimationFrame(function update() {

@@ -28,23 +28,6 @@ export class ScatterplotModel {
   }
 
   @action
-  private createTrace(label: string): Trace {
-    const trace: Trace = {
-      mode: 'markers',
-      type: 'scattergl',
-      hoverinfo: 'x+y',
-      marker: { size: 12 },
-      name: label,
-      xVal: 0,
-      id: -1,
-      display: true, // TODO: set this to false, and create a config panel to enable it
-      addTrace: true, // TODO: set this to false, and create a config panel to enable it
-    }
-
-    return trace
-  }
-
-  @action
   public getGraphUpdateX(id: number): number[] {
     let graph: number[]
 
@@ -105,6 +88,23 @@ export class ScatterplotModel {
     let id = this.nextTraceId
     this.nextTraceId += 1
     return id
+  }
+
+  @action
+  private createTrace(label: string): Trace {
+    const trace: Trace = {
+      mode: 'markers',
+      type: 'scattergl',
+      hoverinfo: 'x+y',
+      marker: { size: 12 },
+      name: label,
+      xVal: 0,
+      id: -1,
+      display: true, // TODO: set this to false, and create a config panel to enable it
+      addTrace: true, // TODO: set this to false, and create a config panel to enable it
+    }
+
+    return trace
   }
 }
 

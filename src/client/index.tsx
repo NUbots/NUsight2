@@ -17,6 +17,7 @@ import { LocalisationNetwork } from './components/localisation/network'
 import { LocalisationView } from './components/localisation/view'
 import { NUClear } from './components/nuclear/view'
 import { ScatterplotController } from './components/scatter_plot/controller'
+import { ScatterplotModel } from './components/scatter_plot/model'
 import { ScatterplotView } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
@@ -72,8 +73,9 @@ ReactDOM.render(
         <Route path='/vision' component={Vision}/>
         <Route path='/chart' component={Chart}/>
         <Route path='/scatter' render={() => {
+          const model = ScatterplotModel.of()
           const controller = ScatterplotController.of()
-          return <ScatterplotView controller={controller}/>
+          return <ScatterplotView controller={controller} model={model}/>
         }}/>
         <Route path='/nuclear' component={NUClear}/>
         <Route path='/classifier' component={Classifier}/>

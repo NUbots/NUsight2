@@ -1,22 +1,11 @@
 import { observer } from 'mobx-react'
+import { ScatterplotModel } from './model'
 import * as Plotly from 'plotly.js'
 import * as React from 'react'
 import { HTMLProps } from 'react'
 import { MenuBar } from '../menu_bar/view'
 import { ScatterplotController } from './controller'
 import * as style from './style.css'
-
-interface Trace {
-  mode: string
-  type: string
-  hoverinfo: string
-  marker: Plotly.ShortMarker
-  name: string
-  xVal: number
-  id: number
-  display: boolean
-  addTrace: boolean
-}
 
 interface DataPoint {
   label: string
@@ -25,33 +14,18 @@ interface DataPoint {
 
 interface ScatterplotViewProps extends HTMLProps<JSX.Element> {
   controller: ScatterplotController
+  model: ScatterplotModel
 }
 
 @observer
 export class ScatterplotView extends React.Component<ScatterplotViewProps> {
 
-  private controller: ScatterplotController
-
   private canvas: HTMLDivElement
   private updateLoopId: number
 
-  private traces: Map<string, Trace>
-  private nextTraceId: number = 0
-
-  private graphUpdateX: Map<number, number[]>
-  private graphUpdateY: Map<number, number[]>
-  private graphUpdateZ: Map<number, number[]>
-
-  // config settings
-  private maxPoints: number = 100
-  private fps: number = 30
 
   constructor(props: any, context: any) {
     super(props, context)
-    this.traces = new Map<string, Trace>()
-    this.graphUpdateX = new Map<number, number[]>()
-    this.graphUpdateY = new Map<number, number[]>()
-    this.graphUpdateZ = new Map<number, number[]>()
   }
 
   public render(): JSX.Element {
@@ -71,44 +45,22 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
   }
 
   public onDataPoint(data: DataPoint): void {
-    let trace = this.traces.get(data.label)
-
-    // if the DataPoint's label has never been seen before, create a new trace
-    if (trace == null) {
-      trace = this.createTrace(data.label)
-      this.traces.set(data.label, trace)
-    }
+    let trace = this.props.model.getTrace(data.label)
 
     // if we should add the trace info to plotly
     if (trace.addTrace) {
       trace.addTrace = false
 
-      trace.id = this.nextTraceId
-      this.nextTraceId += 1
+      trace.id = this.props.model.getNextTraceID()
 
       this.addTrace(trace.name)
     }
 
     // if we are currently updating the plotly trace
     if (trace.display) {
-      let updateX = this.graphUpdateX.get(trace.id)
-      let updateY = this.graphUpdateY.get(trace.id)
-      let updateZ = this.graphUpdateZ.get(trace.id)
-
-      // if no updates to the trace has been made since the last graph update
-      // add it to the update lists
-      if (updateX == null) {
-        updateX = []
-        this.graphUpdateX.set(trace.id, updateX)
-      }
-      if (updateY == null) {
-        updateY = []
-        this.graphUpdateY.set(trace.id, updateY)
-      }
-      if (updateZ == null) {
-        updateZ = []
-        this.graphUpdateZ.set(trace.id, updateZ)
-      }
+      let updateX: number[] = this.props.model.getGraphUpdateX(trace.id)
+      let updateY: number[] = this.props.model.getGraphUpdateY(trace.id)
+      let updateZ: number[] = this.props.model.getGraphUpdateZ(trace.id)
 
       // append our new data to the update lists
       if (data.values.length === 1) {
@@ -144,21 +96,6 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
     Plotly.addTraces(this.canvas, newTrace)
   }
 
-  public createTrace(label: string): Trace {
-    const trace: Trace = {
-      mode: 'markers',
-      type: 'scattergl',
-      hoverinfo: 'x+y',
-      marker: { size: 12 },
-      name: label,
-      xVal: 0,
-      id: -1,
-      display: true, // TODO: set this to false, and create a config panel to enable it
-      addTrace: true, // TODO: set this to false, and create a config panel to enable it
-    }
-    return trace
-  }
-
   public updateDimensions(): void {
     const layout = {
       width: this.canvas.offsetWidth,
@@ -179,32 +116,22 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
 
     this.updateLoopId = window.setInterval(() => {
       const update = {
-        x: Array.from(me.graphUpdateX.values()),
-        y: Array.from(me.graphUpdateY.values()),
-        z: Array.from(me.graphUpdateZ.values()),
+        x: Array.from(me.props.model.graphUpdateX.values()),
+        y: Array.from(me.props.model.graphUpdateY.values()),
+        z: Array.from(me.props.model.graphUpdateZ.values()),
       }
 
-      Plotly.extendTraces(this.canvas, update, Array.from(me.graphUpdateX.keys()), me.maxPoints)
+      Plotly.extendTraces(this.canvas, update, Array.from(me.props.model.graphUpdateX.keys()), me.props.model.maxPoints)
 
-      me.graphUpdateX.clear()
-      me.graphUpdateY.clear()
-      me.graphUpdateZ.clear()
-    }, 1000 / this.fps)
+      me.props.model.graphUpdateX.clear()
+      me.props.model.graphUpdateY.clear()
+      me.props.model.graphUpdateZ.clear()
+    }, 1000 / this.props.model.fps)
 
     this.simulateData()
   }
 
   public simulateData(): void {
-
-    this.onDataPoint({
-      label: 'Testing 1',
-      values: [0, 0],
-    })
-
-    this.onDataPoint({
-      label: 'Testing 2',
-      values: [0, 0],
-    })
 
     const me = this
 
@@ -224,7 +151,7 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
         label: 'Testing 2',
         values: [sine * 4 , cosine * 4, sine * 2],
       })
-    }, 1000 / this.fps)
+    }, 1000 / this.props.model.fps)
   }
 
   public componentWillUnmount(): void {

@@ -10,25 +10,21 @@ const outPath = path.join(__dirname, './build')
 
 export default {
   context: sourcePath,
-  devtool: isProduction ? false : 'inline-source-map',
+  devtool: isProduction ? 'source-map' : 'inline-source-map',
   entry: {
     main: [
-      'reflect-metadata',
       './client/index.tsx',
     ].concat(isProduction ? [] : [
       'webpack-hot-middleware/client',
     ]),
     vendor: [
       'classnames',
-      'inversify',
-      'inversify-inject-decorators',
       'mobx',
       'mobx-react',
-      'mobx-react-router',
       'react',
       'react-dom',
       'react-router',
-      'reflect-metadata',
+      'react-router-dom',
       'socket.io-client',
       'three',
     ],
@@ -120,6 +116,8 @@ export default {
       { test: /\.html$/, use: 'html-loader' },
       { test: /\.png$/, use: 'url-loader?limit=10000' },
       { test: /\.jpg$/, use: 'file-loader' },
+      { test: /\.vert$/, use: 'raw-loader' },
+      { test: /\.frag$/, use: 'raw-loader' },
     ],
   },
   plugins: [

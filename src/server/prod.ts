@@ -2,12 +2,19 @@ import * as compression from 'compression'
 import * as history from 'connect-history-api-fallback'
 import * as express from 'express'
 import * as http from 'http'
+import * as minimist from 'minimist'
 import * as favicon from 'serve-favicon'
 import * as sio from 'socket.io'
+import { RobotSimulator } from '../simulators/robot_simulator'
+import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
+import { NUSightServer } from './app/server'
+
+const args = minimist(process.argv.slice(2))
+const withSimulators = args['with-simulators'] || false
 
 const app = express()
 const server = http.createServer(app)
-sio(server)
+const sioNetwork = sio(server)
 
 const root = `${__dirname}/../../build`
 app.use(history())
@@ -20,3 +27,16 @@ server.listen(port, () => {
   /* tslint:disable no-console */
   console.log(`NUsight server started at http://localhost:${port}`)
 })
+
+if (withSimulators) {
+  const robotSimulator = RobotSimulator.of({
+    fakeNetworking: true,
+    name: 'Sensors Simulator',
+    simulators: [
+      SensorDataSimulator.of(),
+    ],
+  })
+  robotSimulator.simulateWithFrequency(60)
+}
+
+NUSightServer.of(withSimulators, sioNetwork).connect()

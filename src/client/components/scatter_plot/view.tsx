@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
 import * as Plotly from 'plotly.js'
 import * as React from 'react'
-import { inject } from '../../../inversify.config'
+import { HTMLProps } from 'react'
 import { MenuBar } from '../menu_bar/view'
 import { ScatterplotController } from './controller'
 import * as style from './style.css'
@@ -23,10 +23,13 @@ interface DataPoint {
   values: number[]
 }
 
-@observer
-export class ScatterplotView extends React.Component<any, any> {
+interface ScatterplotViewProps extends HTMLProps<JSX.Element> {
+  controller: ScatterplotController
+}
 
-  @inject(ScatterplotController)
+@observer
+export class ScatterplotView extends React.Component<ScatterplotViewProps> {
+
   private controller: ScatterplotController
 
   private canvas: HTMLDivElement
@@ -57,8 +60,10 @@ export class ScatterplotView extends React.Component<any, any> {
         <ScatterplotMenuBar onScatterplot2d={this.onScatterplot2d} onScatterplot3d={this.onScatterplot3d}/>
         <div className={style.scatterplot_container}>
           <div className={style.scatterplot_plotly} ref={canvas => {
-                this.canvas = canvas
-              }}>
+            if (canvas) {
+              this.canvas = canvas
+            }
+          }}>
           </div>
         </div>
       </div>
@@ -144,7 +149,7 @@ export class ScatterplotView extends React.Component<any, any> {
       mode: 'markers',
       type: 'scattergl',
       hoverinfo: 'x+y',
-      marker: {size: 12},
+      marker: { size: 12 },
       name: label,
       xVal: 0,
       id: -1,
@@ -227,11 +232,11 @@ export class ScatterplotView extends React.Component<any, any> {
   }
 
   private onScatterplot2d = () => {
-    this.controller.onScatterplot2d(this.canvas)
+    this.props.controller.onScatterplot2d(this.canvas)
   }
 
   private onScatterplot3d = () => {
-    this.controller.onScatterplot3d(this.canvas)
+    this.props.controller.onScatterplot3d(this.canvas)
   }
 }
 

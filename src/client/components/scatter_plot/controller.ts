@@ -1,9 +1,11 @@
-import { injectable } from 'inversify'
 import { action, observable } from 'mobx'
 import * as Plotly from 'plotly.js'
 
-@injectable()
 export class ScatterplotController {
+
+  public static of(): ScatterplotController {
+    return new ScatterplotController()
+  }
 
   @action
   public onScatterplot2d(canvas: HTMLDivElement) {

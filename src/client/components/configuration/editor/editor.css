@@ -1,0 +1,8 @@
+.editor {
+  padding-top: 18px;
+}
+
+.editor,
+.editor * {
+  font-family: monospace;
+}

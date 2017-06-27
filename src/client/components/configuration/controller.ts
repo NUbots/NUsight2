@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx'
 import { ConfigurationModel } from './model'
-import { Node } from './tree/tree'
+import { TreeNode } from './model'
 
 export class ConfigurationController {
   private model: ConfigurationModel
@@ -14,7 +14,7 @@ export class ConfigurationController {
   }
 
   @action
-  public onNodeClick = (node: Node): void => {
+  public onNodeClick = (node: TreeNode): void => {
     if (node.leaf) {
       this.selectNode(node)
     } else {
@@ -23,7 +23,7 @@ export class ConfigurationController {
   }
 
   @action
-  public selectNode = (node: Node) => {
+  public selectNode = (node: TreeNode) => {
     if (this.model.selectedFile) {
       this.model.selectedFile.selected = false
     }
@@ -33,7 +33,12 @@ export class ConfigurationController {
   }
 
   @action
-  public toggleNodeExpansion = (node: Node) => {
+  public toggleNodeExpansion = (node: TreeNode) => {
     node.expanded = !node.expanded
+  }
+
+  @action
+  public onEditorChange = () => {
+    // console.log('Editor field changed')
   }
 }

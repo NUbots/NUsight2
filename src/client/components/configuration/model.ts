@@ -1,18 +1,26 @@
 import { action, observable } from 'mobx'
-import { Node } from './tree/tree'
+
+export interface TreeNode {
+  label: string
+  expanded: boolean
+  leaf: boolean
+  selected: boolean
+  data?: any
+  children?: TreeNode[]
+}
 
 export class ConfigurationModel {
   @observable
-  public files: Node
+  public files: TreeNode
 
   @observable
-  public selectedFile: Node
+  public selectedFile: TreeNode | null = null
 
-  constructor(opts: { files: Node }) {
+  constructor(opts: { files: TreeNode }) {
     Object.assign(this, opts)
   }
 
-  public static of(opts: { files: Node }) {
+  public static of(opts: { files: TreeNode }) {
     return new ConfigurationModel(opts)
   }
 }

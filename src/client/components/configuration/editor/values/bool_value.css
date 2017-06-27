@@ -1,0 +1,12 @@
+.boolValue {
+  display: flex;
+  align-items: center;
+}
+
+.boolValue__input {
+
+}
+
+.boolValue__value {
+  color: #008080;
+}

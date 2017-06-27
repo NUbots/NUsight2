@@ -1,0 +1,27 @@
+.scalarField {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.scalarField:last-child {
+  margin-bottom: 0;
+}
+
+.scalarField__label {
+  margin-right: 8px;
+  color: #63a35c;
+}
+
+.scalarField__label::after {
+  display: inline-block;
+  content: ':';
+}
+
+.scalarField__input {
+  background-color: #EEE;
+  border: none;
+  color: #183691;
+  min-width: 212px;
+  padding: 2px 4px;
+}

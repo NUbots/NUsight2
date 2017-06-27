@@ -1,10 +1,12 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import * as style from './style.css'
 
 import { ConfigurationController } from './controller'
+import { Editor } from './editor/editor'
 import { ConfigurationModel } from './model'
 import { Panel } from './panel/panel'
-import { Node, Tree } from './tree/tree'
+import { Tree } from './tree/tree'
 import { View } from './view/view'
 
 interface ConfigurationViewProps {
@@ -12,6 +14,7 @@ interface ConfigurationViewProps {
   model: ConfigurationModel
 }
 
+@observer
 export class ConfigurationView extends React.Component<ConfigurationViewProps, void> {
   private model: ConfigurationModel
   private controller: ConfigurationController
@@ -30,9 +33,12 @@ export class ConfigurationView extends React.Component<ConfigurationViewProps, v
         </Panel>
 
         <div className={style.configuration__content}>
-          <div className={style.configuration__contentPlaceholder}>
-            Select a file to edit
-          </div>
+          { this.model.selectedFile === null ?
+            <div className={style.configuration__contentPlaceholder}>Select a file to edit</div> :
+            <Panel title={this.model.selectedFile.data.path}>
+              <Editor data={this.model.selectedFile.data} onChange={this.controller.onEditorChange} />
+            </Panel>
+          }
         </div>
       </View>
     )

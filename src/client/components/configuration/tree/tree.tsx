@@ -1,24 +1,17 @@
 import * as classnames from 'classnames'
 import { observer } from 'mobx-react'
 import * as React from 'react'
+import { TreeNode } from '../model'
 
 import FileIcon from './file.svg'
 import FolderIconOpen from './folder-open.svg'
 import FolderIcon from './folder.svg'
 import * as style from './style.css'
 
-export interface Node {
-  label: string
-  expanded: boolean
-  leaf: boolean
-  selected: boolean
-  children?: Node[]
-}
-
 export interface TreeProps {
-  data: Node
+  data: TreeNode
   level?: number
-  onClick(node: Node): void
+  onClick(node: TreeNode): void
 }
 
 @observer

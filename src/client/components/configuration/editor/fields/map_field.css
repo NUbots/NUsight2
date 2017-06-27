@@ -1,0 +1,18 @@
+.mapField {
+
+}
+
+.mapField__header {
+  color: #63a35c;
+  margin-bottom: 8px;
+  cursor: default;
+}
+
+.mapField__header::after {
+  display: inline-block;
+  content: ':';
+}
+
+.mapField__subFields {
+  padding-left: 22px;
+}

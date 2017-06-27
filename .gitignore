@@ -9,3 +9,6 @@ build
 
 # Jest coverage report
 /coverage
+
+# error files
+yarn-error.log

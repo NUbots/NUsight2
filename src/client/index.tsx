@@ -16,7 +16,10 @@ import { LocalisationModel } from './components/localisation/model'
 import { LocalisationNetwork } from './components/localisation/network'
 import { LocalisationView } from './components/localisation/view'
 import { NUClear } from './components/nuclear/view'
-import { Scatter } from './components/scatter_plot/view'
+import { ScatterplotController } from './components/scatter_plot/controller'
+import { ScatterplotModel } from './components/scatter_plot/model'
+import { ScatterplotNetwork } from './components/scatter_plot/network'
+import { ScatterplotView } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { GlobalNetwork } from './network/global_network'
@@ -62,15 +65,20 @@ ReactDOM.render(
     <AppView>
       <Switch>
         <Route exact path='/' component={Dashboard}/>
-          <Route path='/localisation' render={() => {
-            const model = localisationModel
-            const controller = LocalisationController.of()
-            const network = LocalisationNetwork.of(globalNetwork, model)
-            return <LocalisationView controller={controller} model={model} network={network}/>
-          }}/>
+        <Route path='/localisation' render={() => {
+          const model = localisationModel
+          const controller = LocalisationController.of()
+          const network = LocalisationNetwork.of(globalNetwork, model)
+          return <LocalisationView controller={controller} model={model} network={network}/>
+        }}/>
         <Route path='/vision' component={Vision}/>
         <Route path='/chart' component={Chart}/>
-        <Route path='/scatter' component={Scatter}/>
+        <Route path='/scatter' render={() => {
+          const model = ScatterplotModel.of()
+          const controller = ScatterplotController.of()
+          const network = ScatterplotNetwork.of(globalNetwork, model)
+          return <ScatterplotView controller={controller} model={model} network={network}/>
+        }}/>
         <Route path='/nuclear' component={NUClear}/>
         <Route path='/classifier' component={Classifier}/>
         <Route path='/subsumption' component={Subsumption}/>

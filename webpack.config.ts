@@ -36,6 +36,9 @@ export default {
   },
   target: 'web',
   resolve: {
+    alias: {
+      'plotly.js': path.resolve(__dirname, 'node_modules/plotly.js/dist/plotly.js')
+    },
     extensions: ['.js', '.ts', '.tsx'],
     // Fix webpack's default behavior to not load packages with jsnext:main module
     // (jsnext:main directs not usually distributable es6 format, but es6 sources)

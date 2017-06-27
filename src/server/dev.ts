@@ -12,7 +12,9 @@ import webpackConfig from '../../webpack.config'
 import { RobotSimulator } from '../simulators/robot_simulator'
 import { SimulatorStatus } from '../simulators/robot_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
+import { ChartSimulator } from '../simulators/chart_simulator'
 import { NUSightServer } from './app/server'
+import { Chart } from '../client/components/chart/view'
 
 const compiler = webpack(webpackConfig)
 
@@ -53,6 +55,7 @@ if (withSimulators) {
     name: 'Sensors Simulator',
     simulators: [
       SensorDataSimulator.of(),
+      ChartSimulator.of(),
     ],
   })
   robotSimulator.simulateWithFrequency(60)

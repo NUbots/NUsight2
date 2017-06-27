@@ -8,7 +8,6 @@ import { HTMLProps } from 'react'
 import { MenuBar } from '../menu_bar/view'
 import { ScatterplotController } from './controller'
 import * as style from './style.css'
-import { computed } from 'mobx'
 import { ScatterplotNetwork } from './network'
 
 interface DataPoint {
@@ -50,42 +49,6 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
     )
   }
 
-  public onDataPoint(data: DataPoint): void {
-    // let trace = this.props.model.getTrace(data.label)
-    //
-    // // if we should add the trace info to plotly
-    // if (trace.addTrace) {
-    //   trace.addTrace = false
-    //
-    //   trace.id = this.props.model.getNextTraceID()
-    //
-    //   this.addTrace(trace.name)
-    // }
-    //
-    // // if we are currently updating the plotly trace
-    // if (trace.display) {
-    //   let updateX: number[] = this.props.model.getGraphUpdateX(trace.id)
-    //   let updateY: number[] = this.props.model.getGraphUpdateY(trace.id)
-    //   let updateZ: number[] = this.props.model.getGraphUpdateZ(trace.id)
-    //
-    //   // append our new data to the update lists
-    //   if (data.values.length === 1) {
-    //     trace.xVal += 1
-    //     updateX.push(trace.xVal)
-    //     updateY.push(data.values[0])
-    //     updateZ.push(0)
-    //   } else if (data.values.length === 2) {
-    //     updateX.push(data.values[0])
-    //     updateY.push(data.values[1])
-    //     updateZ.push(0)
-    //   } else if (data.values.length >= 3) { // TODO: work out how to deal with data points with more then 3 values
-    //     updateX.push(data.values[0])
-    //     updateY.push(data.values[1])
-    //     updateZ.push(data.values[2])
-    //   }
-    // }
-  }
-
   public updateDimensions(): void {
     const layout = {
       width: this.canvas.offsetWidth,
@@ -124,31 +87,6 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
       me.props.model.graphUpdateX.clear()
       me.props.model.graphUpdateY.clear()
       me.props.model.graphUpdateZ.clear()
-    }, 1000 / this.props.model.fps)
-
-    this.simulateData()
-  }
-
-  public simulateData(): void {
-
-    const me = this
-
-    window.setInterval(() => {
-      const now = Date.now()
-      const period = 1000 * 10
-      const theta = 2 * Math.PI * now / period
-      const sine = Math.sin(theta)
-      const cosine = Math.cos(theta)
-
-      this.onDataPoint({
-        label: 'Testing 1',
-        values: [sine, cosine],
-      })
-
-      this.onDataPoint({
-        label: 'Testing 2',
-        values: [sine * 4 , cosine * 4, sine * 2],
-      })
     }, 1000 / this.props.model.fps)
   }
 

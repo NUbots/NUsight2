@@ -5,11 +5,13 @@ export class ScatterplotModel {
 
   @observable public fps: number
   @observable public maxPoints: number
+  @observable public graphType: string
 
   public traces: Map<string, Trace>
   public graphUpdateX: Map<number, number[]>
   public graphUpdateY: Map<number, number[]>
   public graphUpdateZ: Map<number, number[]>
+  public plotlyCanvas: HTMLDivElement
   private nextTraceId: number = 0
 
   public constructor(opts: ScatterplotModelProps) {
@@ -18,12 +20,13 @@ export class ScatterplotModel {
 
   public static of() {
     return new ScatterplotModel({
-      fps: 10,
+      fps: 30,
       maxPoints: 100,
       traces: new Map<string, Trace>(),
       graphUpdateX: new Map<number, number[]>(),
       graphUpdateY: new Map<number, number[]>(),
       graphUpdateZ: new Map<number, number[]>(),
+      graphType: 'scatterplotgl',
     })
   }
 
@@ -91,6 +94,11 @@ export class ScatterplotModel {
   }
 
   @action
+  public setPlotlyCanvas(plotlyCanvas: HTMLDivElement): void {
+    this.plotlyCanvas = plotlyCanvas
+  }
+
+  @action
   private createTrace(label: string): Trace {
     const trace: Trace = {
       mode: 'markers',
@@ -127,4 +135,5 @@ interface ScatterplotModelProps {
   graphUpdateX: Map<number, number[]>
   graphUpdateY: Map<number, number[]>
   graphUpdateZ: Map<number, number[]>
+  graphType: string
 }

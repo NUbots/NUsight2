@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx'
-import * as Plotly from 'plotly.js'
+import { ScatterplotModel } from './model'
 
 export class ScatterplotController {
 
@@ -8,18 +8,12 @@ export class ScatterplotController {
   }
 
   @action
-  public onScatterplot2d(canvas: HTMLDivElement) {
-    const update = {
-      type: 'scatterplotgl',
-    }
-    Plotly.restyle(canvas, update)
+  public onScatterplot2d(model: ScatterplotModel) {
+    model.graphType = 'scatterplotgl'
   }
 
   @action
-  public onScatterplot3d(canvas: HTMLDivElement) {
-    const update = {
-      type: 'scatter3d',
-    }
-    Plotly.restyle(canvas, update)
+  public onScatterplot3d(model: ScatterplotModel) {
+    model.graphType = 'scatter3d'
   }
 }

@@ -1,3 +1,5 @@
+import { autorun } from 'mobx'
+import { IReactionDisposer } from 'mobx'
 import { observer } from 'mobx-react'
 import { ScatterplotModel } from './model'
 import * as Plotly from 'plotly.js'
@@ -6,6 +8,8 @@ import { HTMLProps } from 'react'
 import { MenuBar } from '../menu_bar/view'
 import { ScatterplotController } from './controller'
 import * as style from './style.css'
+import { computed } from 'mobx'
+import { ScatterplotNetwork } from './network'
 
 interface DataPoint {
   label: string
@@ -15,6 +19,7 @@ interface DataPoint {
 interface ScatterplotViewProps extends HTMLProps<JSX.Element> {
   controller: ScatterplotController
   model: ScatterplotModel
+  network: ScatterplotNetwork
 }
 
 @observer
@@ -22,7 +27,7 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
 
   private canvas: HTMLDivElement
   private updateLoopId: number
-
+  private stopAutorunGraph: IReactionDisposer
 
   constructor(props: any, context: any) {
     super(props, context)
@@ -36,6 +41,7 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
           <div className={style.scatterplot_plotly} ref={canvas => {
             if (canvas) {
               this.canvas = canvas
+              this.props.model.setPlotlyCanvas(canvas)
             }
           }}>
           </div>
@@ -45,55 +51,39 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
   }
 
   public onDataPoint(data: DataPoint): void {
-    let trace = this.props.model.getTrace(data.label)
-
-    // if we should add the trace info to plotly
-    if (trace.addTrace) {
-      trace.addTrace = false
-
-      trace.id = this.props.model.getNextTraceID()
-
-      this.addTrace(trace.name)
-    }
-
-    // if we are currently updating the plotly trace
-    if (trace.display) {
-      let updateX: number[] = this.props.model.getGraphUpdateX(trace.id)
-      let updateY: number[] = this.props.model.getGraphUpdateY(trace.id)
-      let updateZ: number[] = this.props.model.getGraphUpdateZ(trace.id)
-
-      // append our new data to the update lists
-      if (data.values.length === 1) {
-        trace.xVal += 1
-        updateX.push(trace.xVal)
-        updateY.push(data.values[0])
-        updateZ.push(0)
-      } else if (data.values.length === 2) {
-        updateX.push(data.values[0])
-        updateY.push(data.values[1])
-        updateZ.push(0)
-      } else if (data.values.length >= 3) { // TODO: work out how to deal with data points with more then 3 values
-        updateX.push(data.values[0])
-        updateY.push(data.values[1])
-        updateZ.push(data.values[2])
-      }
-    }
-  }
-
-  public addTrace(label: string): void {
-    const newTrace: Plotly.ShortData = {
-      x: [],
-      y: [],
-      z: [],
-      mode: 'markers',
-      type: 'scattergl',
-      marker: {
-        size: 10,
-      },
-      name: label,
-    }
-
-    Plotly.addTraces(this.canvas, newTrace)
+    // let trace = this.props.model.getTrace(data.label)
+    //
+    // // if we should add the trace info to plotly
+    // if (trace.addTrace) {
+    //   trace.addTrace = false
+    //
+    //   trace.id = this.props.model.getNextTraceID()
+    //
+    //   this.addTrace(trace.name)
+    // }
+    //
+    // // if we are currently updating the plotly trace
+    // if (trace.display) {
+    //   let updateX: number[] = this.props.model.getGraphUpdateX(trace.id)
+    //   let updateY: number[] = this.props.model.getGraphUpdateY(trace.id)
+    //   let updateZ: number[] = this.props.model.getGraphUpdateZ(trace.id)
+    //
+    //   // append our new data to the update lists
+    //   if (data.values.length === 1) {
+    //     trace.xVal += 1
+    //     updateX.push(trace.xVal)
+    //     updateY.push(data.values[0])
+    //     updateZ.push(0)
+    //   } else if (data.values.length === 2) {
+    //     updateX.push(data.values[0])
+    //     updateY.push(data.values[1])
+    //     updateZ.push(0)
+    //   } else if (data.values.length >= 3) { // TODO: work out how to deal with data points with more then 3 values
+    //     updateX.push(data.values[0])
+    //     updateY.push(data.values[1])
+    //     updateZ.push(data.values[2])
+    //   }
+    // }
   }
 
   public updateDimensions(): void {
@@ -104,6 +94,13 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
     Plotly.relayout(this.canvas, layout)
   }
 
+  public changeGraph(): void {
+    const update = {
+      type: this.props.model.graphType,
+    }
+    Plotly.restyle(this.canvas, update)
+  }
+
   public componentDidMount(): void {
     window.addEventListener('resize', this.updateDimensions.bind(this))
 
@@ -111,6 +108,8 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
     ]
 
     Plotly.newPlot(this.canvas, data)
+
+    this.stopAutorunGraph = autorun(() => this.changeGraph())
 
     const me = this
 
@@ -120,7 +119,6 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
         y: Array.from(me.props.model.graphUpdateY.values()),
         z: Array.from(me.props.model.graphUpdateZ.values()),
       }
-
       Plotly.extendTraces(this.canvas, update, Array.from(me.props.model.graphUpdateX.keys()), me.props.model.maxPoints)
 
       me.props.model.graphUpdateX.clear()
@@ -156,14 +154,16 @@ export class ScatterplotView extends React.Component<ScatterplotViewProps> {
 
   public componentWillUnmount(): void {
     window.clearInterval(this.updateLoopId)
+    this.stopAutorunGraph()
+    this.props.network.destroy()
   }
 
   private onScatterplot2d = () => {
-    this.props.controller.onScatterplot2d(this.canvas)
+    this.props.controller.onScatterplot2d(this.props.model)
   }
 
   private onScatterplot3d = () => {
-    this.props.controller.onScatterplot3d(this.canvas)
+    this.props.controller.onScatterplot3d(this.props.model)
   }
 }
 

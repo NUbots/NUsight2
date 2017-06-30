@@ -1,6 +1,7 @@
 import { action, observable } from 'mobx'
 import { ConfigurationModel } from './model'
 import { TreeNode } from './model'
+import { ConfigurationField } from './editor/editor'
 
 export class ConfigurationController {
   private model: ConfigurationModel
@@ -38,7 +39,11 @@ export class ConfigurationController {
   }
 
   @action
-  public onEditorChange = () => {
-    // console.log('Editor field changed')
+  public onEditorChange = (field: ConfigurationField, newValue: any, e: any) => {
+    field.value = newValue
+
+    // TODO (Paye):
+    // If in live (auto save) mode, send new value of field to robot, else
+    // save it in the list of changes and send in all changes when the user clicks "Save"
   }
 }

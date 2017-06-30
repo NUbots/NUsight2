@@ -6,7 +6,7 @@ export interface PanelProps {
   className?: string
 }
 
-export class Panel extends React.Component<PanelProps, void> {
+export class Panel extends React.Component<PanelProps> {
   public static defaultProps: Partial<PanelProps> = {
     className: '',
   }

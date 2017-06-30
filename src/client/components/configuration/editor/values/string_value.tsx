@@ -5,7 +5,7 @@ import * as style from './string_value.css'
 import { FieldProps } from '../editor'
 
 @observer
-export class StringValue extends React.Component<FieldProps, void> {
+export class StringValue extends React.Component<FieldProps> {
   public render(): JSX.Element {
     return (
       <div className={style.stringValue}>
@@ -13,9 +13,15 @@ export class StringValue extends React.Component<FieldProps, void> {
           className={style.stringValue__input}
           type='text'
           value={this.props.data.value}
-          onChange={this.props.onChange}
+          onChange={this.onChange}
         />
       </div>
     )
+  }
+
+  public onChange = (e: any) => {
+    if (this.props.onChange) {
+      this.props.onChange(this.props.data, e.target.value, e)
+    }
   }
 }

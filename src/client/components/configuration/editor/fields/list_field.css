@@ -1,11 +1,12 @@
 .listField {
   padding: 0;
   list-style: none;
+  margin: 0;
+  width: 100%;
 }
 
 .listField__header {
   color: #63a35c;
-  margin-bottom: 8px;
   cursor: default;
 }
 
@@ -18,18 +19,10 @@
   padding-left: 22px;
 }
 
-.listField__subFields li {
-  margin-bottom: 8px;
-  display: flex;
-}
-
-.listField__subFields li:last-child {
-  margin-bottom: 0;
-}
-
-.listField__subFields li::before {
+.listField__subFields .listField__subField::before {
   display: inline-block;
   content: '-';
   margin-right: 8px;
   color: rgba(0,0,0,0.5);
+  align-self: flex-start;
 }

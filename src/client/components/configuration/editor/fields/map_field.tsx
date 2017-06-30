@@ -1,18 +1,19 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import * as style from './map_field.css'
+import * as editorStyle from '../editor.css'
 
 import { ConfigurationField, FieldProps } from '../editor'
 import { ListField } from './list_field'
 import { ScalarField } from './scalar_field'
 
 @observer
-export class MapField extends React.Component<FieldProps, void> {
+export class MapField extends React.Component<FieldProps> {
   public render(): JSX.Element {
     return (
       <div className={style.mapField}>
         { this.props.data.name &&
-          <div className={style.mapField__header}>{ this.props.data.name }</div>
+          <div className={style.mapField__header + ' ' + editorStyle.editorLine}>{ this.props.data.name }</div>
         }
 
         <div className={style.mapField__subFields}>

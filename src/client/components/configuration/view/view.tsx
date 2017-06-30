@@ -10,7 +10,7 @@ export interface ViewProps {
   rightMenu?: JSX.Element
 }
 
-export class View extends React.Component<ViewProps, void> {
+export class View extends React.Component<ViewProps> {
   public static defaultProps: Partial<ViewProps> = {
     className: '',
     headerClassName: '',

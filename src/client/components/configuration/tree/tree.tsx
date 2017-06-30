@@ -15,7 +15,7 @@ export interface TreeProps {
 }
 
 @observer
-export class Tree extends React.Component<TreeProps, void> {
+export class Tree extends React.Component<TreeProps> {
   public render(): JSX.Element {
     const children = this.props.data.children || []
     const hasChildren = children.length > 0

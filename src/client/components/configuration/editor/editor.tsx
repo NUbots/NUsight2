@@ -22,16 +22,16 @@ export interface ConfigurationFile {
 
 export interface FieldProps {
   data: ConfigurationField,
-  onChange?(data: any): void
+  onChange?(field: ConfigurationField, newValue: any, e: any): void
 }
 
 export interface EditorProps {
   data: ConfigurationFile,
-  onChange?(data: any): void
+  onChange?(field: ConfigurationField, newValue: any, e: any): void
 }
 
 @observer
-export class Editor extends React.Component<EditorProps, void> {
+export class Editor extends React.Component<EditorProps> {
   public render(): JSX.Element {
     const field = this.props.data.content
     return (

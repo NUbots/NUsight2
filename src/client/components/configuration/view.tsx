@@ -15,7 +15,7 @@ interface ConfigurationViewProps {
 }
 
 @observer
-export class ConfigurationView extends React.Component<ConfigurationViewProps, void> {
+export class ConfigurationView extends React.Component<ConfigurationViewProps> {
   private model: ConfigurationModel
   private controller: ConfigurationController
 

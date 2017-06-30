@@ -1,11 +1,5 @@
 .scalarField {
-  display: flex;
-  margin-bottom: 10px;
-  align-items: center;
-}
 
-.scalarField:last-child {
-  margin-bottom: 0;
 }
 
 .scalarField__label {

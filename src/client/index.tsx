@@ -8,6 +8,10 @@ import { Switch } from 'react-router-dom'
 import { AppView } from './components/app/view'
 import { Chart } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
+import { ConfigurationController } from './components/configuration/controller'
+import { ConfigurationModel } from './components/configuration/model'
+import { configurationData } from './components/configuration/data'
+import { ConfigurationView } from './components/configuration/view'
 import { Dashboard } from './components/dashboard/view'
 import { GameState } from './components/game_state/view'
 import { LocalisationController } from './components/localisation/controller'
@@ -75,6 +79,12 @@ ReactDOM.render(
         <Route path='/classifier' component={Classifier}/>
         <Route path='/subsumption' component={Subsumption}/>
         <Route path='/gamestate' component={GameState}/>
+        <Route path='/configuration' render={() => {
+          // TODO (Paye): Use the network/simulator for the model data
+          const configurationModel = ConfigurationModel.of({ files: configurationData })
+          const configurationController = ConfigurationController.of({ model: configurationModel })
+          return <ConfigurationView controller={configurationController} model={configurationModel} />
+        }}/>
       </Switch>
     </AppView>
   </BrowserRouter>,

@@ -7,7 +7,7 @@ export class RobotPickerController {
   private model: RobotPickerModel
   private network: Network
 
-  constructor(model: RobotPickerModel, network: Network ) {
+  constructor(model: RobotPickerModel, network: Network) {
     this.model = model
     this.network = network
 

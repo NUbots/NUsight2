@@ -7,7 +7,7 @@ import * as style from './style.css'
 export interface SwitchProps {
   on: boolean
   disabled?: boolean
-  onChange: (event: ChangeEvent<HTMLInputElement>, on: boolean) => void
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
 export const Switch: StatelessComponent<SwitchProps> = (props: SwitchProps) => {
@@ -22,10 +22,13 @@ export const Switch: StatelessComponent<SwitchProps> = (props: SwitchProps) => {
   })
   return (
     <span className={style.switch}>
-      <input type="checkbox" checked={on} disabled={disabled} className={style.nativeControl}
-        onChange={this.onChange} />
-      <span role="thumb" className={thumbClassName}/>
-      <span className={trackClassName}/>
+      <input type="checkbox"
+        checked={on}
+        disabled={disabled}
+        className={style.nativeControl}
+        onChange={props.onChange} />
+      <span className={trackClassName} />
+      <span role="thumb" className={thumbClassName} />
     </span>
   )
 }

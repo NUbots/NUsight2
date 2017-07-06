@@ -1,6 +1,7 @@
 import * as EventEmitter from 'events'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
+import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
 
 export class FakeNUClearNetServer extends EventEmitter {
   private peers: NUClearNetPeer[]
@@ -11,15 +12,9 @@ export class FakeNUClearNetServer extends EventEmitter {
     this.peers = []
   }
 
-  public static of = (() => {
-    let instance: FakeNUClearNetServer
-    return (): FakeNUClearNetServer => {
-      if (!instance) {
-        instance = new FakeNUClearNetServer()
-      }
-      return instance
-    }
-  })()
+  public static of = createSingletonFactory(() => {
+    return new FakeNUClearNetServer()
+  })
 
   public connect(peer: NUClearNetPeer): void {
     this.emit('nuclear_join', peer)

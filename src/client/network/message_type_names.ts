@@ -1,3 +1,4 @@
+import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
 import { message } from '../../shared/proto/messages'
 import { MessageType } from './global_network'
 import { Message } from './global_network'
@@ -11,15 +12,9 @@ export class MessageTypePath {
     this.cache = new Map()
   }
 
-  public static of = (() => {
-    let instance: MessageTypePath
-    return (): MessageTypePath => {
-      if (!instance) {
-        instance = new MessageTypePath()
-      }
-      return instance
-    }
-  })()
+  public static of = createSingletonFactory(() => {
+    return new MessageTypePath()
+  })
 
   public getPath(messageType: MessageType<Message>): string {
     if (!this.cache.has(messageType)) {

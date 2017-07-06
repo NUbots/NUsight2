@@ -5,13 +5,13 @@ import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_types'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_types'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_types'
 
-export class NUClearNetDirectSocket implements NUClearNetClient {
+export class DirectNUClearNetClient implements NUClearNetClient {
   public constructor(private nuclearNetwork: NUClearNet) {
   }
 
-  public static of(): NUClearNetDirectSocket {
+  public static of(): DirectNUClearNetClient {
     const nuclearNetwork = new NUClearNet()
-    return new NUClearNetDirectSocket(nuclearNetwork)
+    return new DirectNUClearNetClient(nuclearNetwork)
   }
 
   public connect(options: NUClearNetOptions): () => void {

@@ -6,7 +6,7 @@ import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_types'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_types'
 import SocketIOSocket = SocketIOClient.Socket
 
-export class NUClearNetWebSocketProxyClient implements NUClearNetClient {
+export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
   private sioSocket: SocketIOSocket
   private nextMessageId: number
 
@@ -15,7 +15,7 @@ export class NUClearNetWebSocketProxyClient implements NUClearNetClient {
   }
 
   public static of() {
-    return new NUClearNetWebSocketProxyClient()
+    return new WebSocketProxyNUClearNetClient()
   }
 
   public connect(options: NUClearNetOptions): () => void {

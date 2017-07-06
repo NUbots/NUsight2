@@ -1,8 +1,8 @@
 import Namespace = SocketIO.Namespace
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_types'
-import { NUClearNetDirectSocket } from '../nuclearnet/nuclearnet_direct_socket'
-import { NUClearNetFakeSocket } from '../nuclearnet/nuclearnet_fake_socket'
+import { DirectNUClearNetClient } from '../nuclearnet/direct_nuclearnet_client'
+import { FakeNUClearNetClient } from '../nuclearnet/fake_nuclearnet_client'
 import { Client } from './client'
 import { Robot } from './robot'
 import Socket = SocketIO.Socket
@@ -22,7 +22,7 @@ export class NUSightServer {
   }
 
   public static of(fakeNetworking: boolean, sioNetwork: Namespace): NUSightServer {
-    const nuclearClient: NUClearNetClient = fakeNetworking ? NUClearNetFakeSocket.of() : NUClearNetDirectSocket.of()
+    const nuclearClient: NUClearNetClient = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     return new NUSightServer(nuclearClient, sioNetwork)
   }
 

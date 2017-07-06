@@ -1,8 +1,8 @@
 import { NUClearNetOptions } from 'nuclearnet.js'
 import * as SocketIO from 'socket.io'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_types'
-import { NUClearNetDirectSocket } from './nuclearnet_direct_socket'
-import { NUClearNetFakeSocket } from './nuclearnet_fake_socket'
+import { DirectNUClearNetClient } from './direct_nuclearnet_client'
+import { FakeNUClearNetClient } from './fake_nuclearnet_client'
 import SocketIOServer = SocketIO.Server
 import SocketIOSocket = SocketIO.Socket
 import Namespace = SocketIO.Namespace
@@ -11,14 +11,14 @@ type Options = {
   fakeNetworking: boolean
 }
 
-export class NUClearNetWebSocketProxyServer {
+export class WebSocketProxyNUClearNetServer {
 public constructor(private server: Namespace, private nuclearnetClient: NUClearNetClient) {
     server.on('connection', this.onClientConnection)
   }
 
-  public static of(server: Namespace, opts: Options): NUClearNetWebSocketProxyServer {
-    const nuclearnetClient: NUClearNetClient = opts.fakeNetworking ? NUClearNetFakeSocket.of() : NUClearNetDirectSocket.of()
-    return new NUClearNetWebSocketProxyServer(server, nuclearnetClient)
+  public static of(server: Namespace, opts: Options): WebSocketProxyNUClearNetServer {
+    const nuclearnetClient: NUClearNetClient = opts.fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+    return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
   }
 
   private onClientConnection = (socket: SocketIOSocket) => {

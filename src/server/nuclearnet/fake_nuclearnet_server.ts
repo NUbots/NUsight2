@@ -3,7 +3,7 @@ import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
 import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
 
-export class NUClearNetFakeServer extends EventEmitter {
+export class FakeNUClearNetServer extends EventEmitter {
   private peers: NUClearNetPeer[]
 
   public constructor() {
@@ -13,7 +13,7 @@ export class NUClearNetFakeServer extends EventEmitter {
   }
 
   public static of = createSingletonFactory(() => {
-    return new NUClearNetFakeServer()
+    return new FakeNUClearNetServer()
   })
 
   public connect(peer: NUClearNetPeer): void {

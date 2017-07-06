@@ -3,14 +3,14 @@ import { NUClearNetSend } from 'nuclearnet.js'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_types'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_types'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_types'
-import { NUClearNetFakeServer } from './nuclearnet_fake_server'
+import { FakeNUClearNetServer } from './fake_nuclearnet_server'
 
-export class NUClearNetFakeSocket implements NUClearNetClient {
-  public constructor(private server: NUClearNetFakeServer) {
+export class FakeNUClearNetClient implements NUClearNetClient {
+  public constructor(private server: FakeNUClearNetServer) {
   }
 
-  public static of(): NUClearNetFakeSocket {
-    return new NUClearNetFakeSocket(NUClearNetFakeServer.of())
+  public static of(): FakeNUClearNetClient {
+    return new FakeNUClearNetClient(FakeNUClearNetServer.of())
   }
 
   public connect(options: NUClearNetOptions): () => void {

@@ -21,11 +21,12 @@ import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { GlobalNetwork } from './network/global_network'
 import { NUClearNetClient } from '../shared/network/nuclearnet_client'
+import { NUClearNetWebSocketProxyClient } from '../shared/network/nuclearnet_web_socket_proxy_client'
 
 // enable MobX strict mode
 useStrict(true)
 
-const nuclearnetClient = NUClearNetClient.createWebSocketProxy()
+const nuclearnetClient = NUClearNetClient.of(NUClearNetWebSocketProxyClient.of())
 
 const globalNetwork = GlobalNetwork.of()
 

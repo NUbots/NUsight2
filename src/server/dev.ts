@@ -13,6 +13,7 @@ import { RobotSimulator } from '../simulators/robot_simulator'
 import { SimulatorStatus } from '../simulators/robot_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import { NUSightServer } from './app/server'
+import { NUClearNetWebSocketProxyServer } from '../shared/network/nuclearnet_web_socket_proxy_server'
 
 const compiler = webpack(webpackConfig)
 
@@ -60,3 +61,5 @@ if (withSimulators) {
 }
 
 NUSightServer.of(withSimulators, sioNetwork).connect()
+
+NUClearNetWebSocketProxyServer.of(server);

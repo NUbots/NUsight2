@@ -20,9 +20,12 @@ import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { GlobalNetwork } from './network/global_network'
+import { NUClearNetClient } from '../shared/network/nuclearnet_client'
 
 // enable MobX strict mode
 useStrict(true)
+
+const nuclearnetClient = NUClearNetClient.createWebSocketProxy()
 
 const globalNetwork = GlobalNetwork.of()
 

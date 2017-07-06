@@ -1,6 +1,6 @@
 import { NUClearNet } from 'nuclearnet.js'
 import { FakeNUClearNet } from '../fake_nuclearnet'
-import { FakeNUClearNetServer } from '../fake_nuclearnet_server'
+import { FakeNUClearNetServer } from '../../../shared/network/fake_nuclearnet_server'
 
 describe('FakeNUClearNet', () => {
   let server: FakeNUClearNetServer

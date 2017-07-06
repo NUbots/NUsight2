@@ -1,7 +1,6 @@
 import Server = SocketIO.Server
-import { NUClearNet } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
-import { FakeNUClearNet } from '../../simulators/nuclearnet/fake_nuclearnet'
+import { NUClearNetClient } from '../../shared/network/nuclearnet_client'
 import { Client } from './client'
 import { Robot } from './robot'
 import Socket = SocketIO.Socket
@@ -10,23 +9,23 @@ export class NUSightServer {
   private clients: Client[]
   private robots: Robot[]
 
-  public constructor(private nuclearNetwork: NUClearNet,
+  public constructor(private nuclearnetClient: NUClearNetClient,
                      private sioNetwork: Server) {
     this.clients = []
     this.robots = []
 
-    this.nuclearNetwork.on('nuclear_join', this.onNUClearJoin)
-    this.nuclearNetwork.on('nuclear_leave', this.onNUClearLeave)
+    this.nuclearnetClient.onJoin(this.onNUClearJoin)
+    this.nuclearnetClient.onLeave(this.onNUClearLeave)
     this.sioNetwork.on('connection', this.onClientConnection)
   }
 
   public static of(fakeNetworking: boolean, sioNetwork: Server): NUSightServer {
-    const nuclearNetwork = fakeNetworking ? FakeNUClearNet.of() : new NUClearNet()
-    return new NUSightServer(nuclearNetwork, sioNetwork)
+    const nuclearClient = fakeNetworking ? NUClearNetClient.createFake() : NUClearNetClient.createDirect()
+    return new NUSightServer(nuclearClient, sioNetwork)
   }
 
-  public connect() {
-    this.nuclearNetwork.connect({ name: 'nusight' })
+  public connect(): () => void {
+    return this.nuclearnetClient.connect({ name: 'nusight' })
   }
 
   private onNUClearJoin = (peer: NUClearNetPeer) => {
@@ -52,7 +51,7 @@ export class NUSightServer {
     // tslint:disable-next-line no-console
     console.log(`Client "${sioSocket.id}" from ${address} connected (Total: ${this.clients.length + 1})`)
     const client = Client.of({
-      nuclearNetwork: this.nuclearNetwork,
+      nuclearnetClient: this.nuclearnetClient,
       sioSocket,
       onDisconnectCallback: () => {
         this.clients.splice(this.clients.indexOf(client), 1)

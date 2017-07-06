@@ -4,20 +4,21 @@ import * as SocketIO from 'socket.io-client'
 import { NUClearNetSocket } from './nuclearnet_types'
 import { NUClearPacketListener } from './nuclearnet_types'
 import { NUClearEventListener } from './nuclearnet_types'
+import { SOCKET_IO_PATH } from './nuclearnet_web_socket_proxy_server'
 import SocketIOSocket = SocketIOClient.Socket
 
-export class NUClearNetWebSocketProxy implements NUClearNetSocket {
+export class NUClearNetWebSocketProxyClient implements NUClearNetSocket {
   private sioSocket: SocketIOSocket
 
   public constructor() {
   }
 
   public static of() {
-    return new NUClearNetWebSocketProxy()
+    return new NUClearNetWebSocketProxyClient()
   }
 
   public connect(options: NUClearNetOptions): () => void {
-    const opts = { upgrade: false, transports: ['websocket'] }
+    const opts = { path: SOCKET_IO_PATH, upgrade: false, transports: ['websocket'] }
     this.sioSocket = SocketIO.connect(opts)
     return () => this.sioSocket.disconnect()
   }

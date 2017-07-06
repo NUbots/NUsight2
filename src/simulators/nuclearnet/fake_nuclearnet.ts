@@ -3,7 +3,7 @@ import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
-import { FakeNUClearNetServer } from './fake_nuclearnet_server'
+import { FakeNUClearNetServer } from '../../shared/network/fake_nuclearnet_server'
 
 type PacketListener = (packet: NUClearNetPacket) => void
 type EventListener = (peer: NUClearNetPeer) => void

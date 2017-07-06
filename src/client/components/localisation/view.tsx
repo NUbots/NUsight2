@@ -38,7 +38,7 @@ export class LocalisationView extends React.Component<LocalisationViewProps> {
     document.addEventListener('keydown', this.onKeyDown, false)
     document.addEventListener('keyup', this.onKeyUp, false)
     document.addEventListener('wheel', this.onWheel, false)
-    //this.rafId = requestAnimationFrame(this.onAnimationFrame)
+    this.rafId = requestAnimationFrame(this.onAnimationFrame)
   }
 
   public componentWillUnmount(): void {

@@ -12,12 +12,12 @@ type Options = {
 }
 
 export class WebSocketProxyNUClearNetServer {
-public constructor(private server: Namespace, private nuclearnetClient: NUClearNetClient) {
+  public constructor(private server: Namespace, private nuclearnetClient: NUClearNetClient) {
     server.on('connection', this.onClientConnection)
   }
 
-  public static of(server: Namespace, opts: Options): WebSocketProxyNUClearNetServer {
-    const nuclearnetClient: NUClearNetClient = opts.fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+  public static of(server: Namespace, { fakeNetworking }: Options): WebSocketProxyNUClearNetServer {
+    const nuclearnetClient: NUClearNetClient = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
   }
 

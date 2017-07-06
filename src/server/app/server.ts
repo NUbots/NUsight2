@@ -1,6 +1,6 @@
 import Namespace = SocketIO.Namespace
 import { NUClearNetPeer } from 'nuclearnet.js'
-import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_types'
+import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { DirectNUClearNetClient } from '../nuclearnet/direct_nuclearnet_client'
 import { FakeNUClearNetClient } from '../nuclearnet/fake_nuclearnet_client'
 import { Client } from './client'

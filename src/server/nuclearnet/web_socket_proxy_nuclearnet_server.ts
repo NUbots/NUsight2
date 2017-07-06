@@ -1,6 +1,6 @@
 import { NUClearNetOptions } from 'nuclearnet.js'
 import * as SocketIO from 'socket.io'
-import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_types'
+import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { DirectNUClearNetClient } from './direct_nuclearnet_client'
 import { FakeNUClearNetClient } from './fake_nuclearnet_client'
 import SocketIOServer = SocketIO.Server

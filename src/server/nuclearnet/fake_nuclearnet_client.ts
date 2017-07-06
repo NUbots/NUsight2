@@ -1,8 +1,8 @@
 import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
-import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_types'
-import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_types'
-import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_types'
+import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
+import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
+import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { FakeNUClearNetServer } from './fake_nuclearnet_server'
 
 export class FakeNUClearNetClient implements NUClearNetClient {

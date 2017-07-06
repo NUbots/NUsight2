@@ -1,10 +1,12 @@
 import { useStrict } from 'mobx'
 import { runInAction } from 'mobx'
 import * as React from 'react'
+import { ComponentType } from 'react'
 import * as ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import { Switch } from 'react-router-dom'
+import { AppController } from './components/app/controller'
 import { AppModel } from './components/app/model'
 import { AppView } from './components/app/view'
 import { Chart } from './components/chart/view'
@@ -16,8 +18,11 @@ import { RobotModel as LocalisationRobotModel } from './components/localisation/
 import { LocalisationModel } from './components/localisation/model'
 import { LocalisationNetwork } from './components/localisation/network'
 import { LocalisationView } from './components/localisation/view'
+import { MenuBar } from './components/menu_bar/view'
+import { MenuBarProps } from './components/menu_bar/view'
 import { NUClear } from './components/nuclear/view'
 import { RobotModel } from './components/robot/model'
+import { RobotSelector } from './components/robot_selector/view'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
@@ -30,7 +35,13 @@ const globalNetwork = GlobalNetwork.of()
 
 // TODO (Annable): Replace all this code with real networking + simulator
 const localisationModel = LocalisationModel.of()
-const appModel = AppModel.of()
+const appModel = AppModel.of({
+  robots: [
+    RobotModel.of({ name: 'Robot 1', host: 'localhost' }),
+    RobotModel.of({ name: 'Robot 2', host: 'localhost' }),
+    RobotModel.of({ name: 'Robot 3', host: 'localhost' }),
+  ],
+})
 
 runInAction(() => {
   localisationModel.camera.position.set(0, 0.2, 0.5)
@@ -42,12 +53,6 @@ runInAction(() => {
     localisationModel.robots.push(robot)
     return robot
   })
-  
-  appModel.robots.push(
-    RobotModel.of({ name: 'Robot 1', host: 'localhost' }),
-    RobotModel.of({ name: 'Robot 2', host: 'localhost' }),
-    RobotModel.of({ name: 'Robot 3', host: 'localhost' }),
-  )
 })
 
 requestAnimationFrame(function update() {
@@ -65,18 +70,26 @@ requestAnimationFrame(function update() {
   })
 })
 
-// render react DOM
+const appController = AppController.of()
+const robotSelector = () => <RobotSelector robots={appModel.robots} selectRobot={appController.toggleRobot} />
+
+function withRobotSelector(robotSelector: ComponentType<{}>) {
+  return (props: MenuBarProps) => (<MenuBar robotSelector={robotSelector}>{props.children}</MenuBar>)
+}
+
+const menu = withRobotSelector(robotSelector)
+
 ReactDOM.render(
   <BrowserRouter>
     <AppView>
       <Switch>
         <Route exact path='/' component={Dashboard}/>
         <Route path='/localisation' render={() => {
-            const model = localisationModel
-            const controller = LocalisationController.of()
-            const network = LocalisationNetwork.of(globalNetwork, model)
-            return <LocalisationView controller={controller} model={model} network={network}/>
-          }}/>
+          const model = localisationModel
+          const controller = LocalisationController.of()
+          const network = LocalisationNetwork.of(globalNetwork, model)
+          return <LocalisationView controller={controller} menu={menu} model={model} network={network}/>
+        }}/>
         <Route path='/vision' component={Vision}/>
         <Route path='/chart' component={Chart}/>
         <Route path='/scatter' component={Scatter}/>

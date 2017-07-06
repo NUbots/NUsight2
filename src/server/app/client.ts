@@ -1,6 +1,6 @@
 import Socket = SocketIO.Socket
 import { NUClearNetPacket } from 'nuclearnet.js'
-import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
+import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_types'
 
 interface ClientOpts {
   nuclearnetClient: NUClearNetClient

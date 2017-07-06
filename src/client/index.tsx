@@ -1,10 +1,12 @@
 import { useStrict } from 'mobx'
 import { runInAction } from 'mobx'
+import { NUClearNetPeer } from 'nuclearnet.js'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import { Switch } from 'react-router-dom'
+import { NUClearNetClient } from '../shared/nuclearnet/nuclearnet_types'
 import { AppView } from './components/app/view'
 import { Chart } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
@@ -20,14 +22,12 @@ import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { GlobalNetwork } from './network/global_network'
-import { NUClearNetClient } from '../shared/nuclearnet/nuclearnet_client'
 import { NUClearNetWebSocketProxyClient } from './nuclearnet/nuclearnet_web_socket_proxy_client'
-import { NUClearNetPeer } from 'nuclearnet.js'
 
 // enable MobX strict mode
 useStrict(true)
 
-const nuclearnetClient = NUClearNetClient.of(NUClearNetWebSocketProxyClient.of())
+const nuclearnetClient: NUClearNetClient = NUClearNetWebSocketProxyClient.of()
 nuclearnetClient.connect({ name: 'nusight' })
 nuclearnetClient.onJoin((peer: NUClearNetPeer) => {
   console.log('nuclear_join', peer)
@@ -74,12 +74,12 @@ ReactDOM.render(
     <AppView>
       <Switch>
         <Route exact path='/' component={Dashboard}/>
-          <Route path='/localisation' render={() => {
-            const model = localisationModel
-            const controller = LocalisationController.of()
-            const network = LocalisationNetwork.of(globalNetwork, model)
-            return <LocalisationView controller={controller} model={model} network={network}/>
-          }}/>
+        <Route path='/localisation' render={() => {
+          const model = localisationModel
+          const controller = LocalisationController.of()
+          const network = LocalisationNetwork.of(globalNetwork, model)
+          return <LocalisationView controller={controller} model={model} network={network}/>
+        }}/>
         <Route path='/vision' component={Vision}/>
         <Route path='/chart' component={Chart}/>
         <Route path='/scatter' component={Scatter}/>

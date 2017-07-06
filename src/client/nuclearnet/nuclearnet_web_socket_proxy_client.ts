@@ -1,12 +1,12 @@
 import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
 import * as SocketIO from 'socket.io-client'
-import { NUClearNetSocket } from '../../shared/nuclearnet/nuclearnet_types'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_types'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_types'
+import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_types'
 import SocketIOSocket = SocketIOClient.Socket
 
-export class NUClearNetWebSocketProxyClient implements NUClearNetSocket {
+export class NUClearNetWebSocketProxyClient implements NUClearNetClient {
   private sioSocket: SocketIOSocket
   private nextMessageId: number
 

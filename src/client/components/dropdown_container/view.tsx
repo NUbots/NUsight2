@@ -20,7 +20,7 @@ export const dropdownContainer = (WrappedComponent: ComponentType<any>) => {
       super(props)
     }
 
-    componentDidMount() {
+    public componentDidMount() {
       const onClick = (event: MouseEvent) => this.onDocumentClick(event)
       document.addEventListener('click', onClick)
       this.removeClickListener = () => {
@@ -28,7 +28,7 @@ export const dropdownContainer = (WrappedComponent: ComponentType<any>) => {
       }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
       if (this.removeClickListener) {
         this.removeClickListener()
       }

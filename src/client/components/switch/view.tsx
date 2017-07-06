@@ -22,13 +22,13 @@ export const Switch: StatelessComponent<SwitchProps> = (props: SwitchProps) => {
   })
   return (
     <span className={style.switch}>
-      <input type="checkbox"
+      <input type='checkbox'
         checked={on}
         disabled={disabled}
         className={style.nativeControl}
         onChange={props.onChange} />
       <span className={trackClassName} />
-      <span role="thumb" className={thumbClassName} />
+      <span role='thumb' className={thumbClassName} />
     </span>
   )
 }

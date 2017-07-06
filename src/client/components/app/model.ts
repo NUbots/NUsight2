@@ -1,5 +1,5 @@
 import { observable } from 'mobx'
-import { RobotModel } from '../robot/model';
+import { RobotModel } from '../robot/model'
 
 export class AppModel {
   @observable public robots: RobotModel[]

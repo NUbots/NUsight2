@@ -1,4 +1,4 @@
-import { createMockInstance } from '../../../shared/common/testing/create_mock_instance'
+import { createMockInstance } from '../../../shared/base/testing/create_mock_instance'
 import { message } from '../../../shared/proto/messages'
 import { GlobalNetwork } from '../global_network'
 import { RawSocket } from '../raw_socket'

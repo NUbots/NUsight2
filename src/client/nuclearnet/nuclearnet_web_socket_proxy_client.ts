@@ -1,14 +1,14 @@
+import { NUClearNetOptions } from 'nuclearnet.js'
+import { NUClearNetSend } from 'nuclearnet.js'
 import * as SocketIO from 'socket.io-client'
 import { NUClearNetSocket } from '../../shared/nuclearnet/nuclearnet_types'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_types'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_types'
-import { NUClearNetOptions } from '../../shared/nuclearnet/nuclearnet_types'
-import { NUClearNetSend } from '../../shared/nuclearnet/nuclearnet_types'
 import SocketIOSocket = SocketIOClient.Socket
 
 export class NUClearNetWebSocketProxyClient implements NUClearNetSocket {
   private sioSocket: SocketIOSocket
-  private nextMessageId: number;
+  private nextMessageId: number
 
   public constructor() {
     this.nextMessageId = 0
@@ -21,7 +21,7 @@ export class NUClearNetWebSocketProxyClient implements NUClearNetSocket {
   public connect(options: NUClearNetOptions): () => void {
     this.sioSocket = SocketIO.connect(`${document.location.origin}/nuclearnet`, {
       upgrade: false,
-      transports: ['websocket']
+      transports: ['websocket'],
     })
     this.sioSocket.emit('nuclear_connect', options)
     return () => {

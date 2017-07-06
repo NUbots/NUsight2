@@ -1,11 +1,11 @@
 import * as SocketIO from 'socket.io'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
-import { NUClearNetOptions } from '../../shared/nuclearnet/nuclearnet_types'
 import { NUClearNetDirectSocket } from './nuclearnet_direct_socket'
 import { NUClearNetFakeSocket } from './nuclearnet_fake_socket'
 import SocketIOServer = SocketIO.Server
 import SocketIOSocket = SocketIO.Socket
 import Namespace = SocketIO.Namespace
+import { NUClearNetOptions } from 'nuclearnet.js'
 
 type Options = {
   fakeNetworking: boolean

@@ -22,7 +22,7 @@ import { Vision } from './components/vision/view'
 import { GlobalNetwork } from './network/global_network'
 import { NUClearNetClient } from '../shared/nuclearnet/nuclearnet_client'
 import { NUClearNetWebSocketProxyClient } from './nuclearnet/nuclearnet_web_socket_proxy_client'
-import { NUClearNetPeer } from '../shared/nuclearnet/nuclearnet_types'
+import { NUClearNetPeer } from 'nuclearnet.js'
 
 // enable MobX strict mode
 useStrict(true)

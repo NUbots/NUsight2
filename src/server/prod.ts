@@ -39,4 +39,4 @@ if (withSimulators) {
   robotSimulator.simulateWithFrequency(60)
 }
 
-NUSightServer.of(withSimulators, sioNetwork).connect()
+NUSightServer.of(withSimulators, sioNetwork.of('/nusight')).connect()

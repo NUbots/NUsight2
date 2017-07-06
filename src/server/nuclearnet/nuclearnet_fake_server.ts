@@ -1,9 +1,9 @@
 import * as EventEmitter from 'events'
-import { createSingletonFactory } from '../base/create_singleton_factory'
-import { NUClearNetPeer } from './nuclearnet_types'
-import { NUClearNetSend } from './nuclearnet_types'
+import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
+import { NUClearNetPeer } from '../../shared/nuclearnet/nuclearnet_types'
+import { NUClearNetSend } from '../../shared/nuclearnet/nuclearnet_types'
 
-export class FakeNUClearNetServer extends EventEmitter {
+export class NUClearNetFakeServer extends EventEmitter {
   private peers: NUClearNetPeer[]
 
   public constructor() {
@@ -13,7 +13,7 @@ export class FakeNUClearNetServer extends EventEmitter {
   }
 
   public static of = createSingletonFactory(() => {
-    return new FakeNUClearNetServer()
+    return new NUClearNetFakeServer()
   })
 
   public connect(peer: NUClearNetPeer): void {

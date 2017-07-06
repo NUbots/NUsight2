@@ -1,16 +1,16 @@
-import { FakeNUClearNetServer } from './fake_nuclearnet_server'
-import { NUClearNetSocket } from './nuclearnet_types'
-import { NUClearEventListener } from './nuclearnet_types'
-import { NUClearPacketListener } from './nuclearnet_types'
-import { NUClearNetOptions } from './nuclearnet_types'
-import { NUClearNetSend } from './nuclearnet_types'
+import { NUClearNetFakeServer } from './nuclearnet_fake_server'
+import { NUClearNetSocket } from '../../shared/nuclearnet/nuclearnet_types'
+import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_types'
+import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_types'
+import { NUClearNetOptions } from '../../shared/nuclearnet/nuclearnet_types'
+import { NUClearNetSend } from '../../shared/nuclearnet/nuclearnet_types'
 
 export class NUClearNetFakeSocket implements NUClearNetSocket {
-  public constructor(private server: FakeNUClearNetServer) {
+  public constructor(private server: NUClearNetFakeServer) {
   }
 
   public static of(): NUClearNetFakeSocket {
-    return new NUClearNetFakeSocket(FakeNUClearNetServer.of())
+    return new NUClearNetFakeSocket(NUClearNetFakeServer.of())
   }
 
   public connect(options: NUClearNetOptions): () => void {

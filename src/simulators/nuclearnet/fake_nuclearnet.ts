@@ -3,7 +3,7 @@ import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
-import { FakeNUClearNetServer } from '../../shared/network/fake_nuclearnet_server'
+import { NUClearNetFakeServer } from '../../server/nuclearnet/nuclearnet_fake_server'
 
 type PacketListener = (packet: NUClearNetPacket) => void
 type EventListener = (peer: NUClearNetPeer) => void
@@ -15,13 +15,13 @@ export class FakeNUClearNet implements NUClearNet {
   private listeners: Map<Listener, Listener>
   private connected: boolean
 
-  public constructor(private server: FakeNUClearNetServer) {
+  public constructor(private server: NUClearNetFakeServer) {
     this.listeners = new Map()
     this.connected = false
   }
 
   public static of(): FakeNUClearNet {
-    return new FakeNUClearNet(FakeNUClearNetServer.of())
+    return new FakeNUClearNet(NUClearNetFakeServer.of())
   }
 
   public on(event: EventMessage, callback: EventListener): this

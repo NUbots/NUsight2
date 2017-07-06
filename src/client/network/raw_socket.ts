@@ -33,7 +33,7 @@ export class RawSocket {
 
   private connectIfNotConnected() {
     if (!this.socket) {
-      this.socket = io.connect()
+      this.socket = io.connect('/nusight')
     }
   }
 }

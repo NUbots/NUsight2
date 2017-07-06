@@ -1,15 +1,15 @@
 import { NUClearNet } from 'nuclearnet.js'
 import { FakeNUClearNet } from '../fake_nuclearnet'
-import { FakeNUClearNetServer } from '../../../shared/network/fake_nuclearnet_server'
+import { NUClearNetFakeServer } from '../../../server/nuclearnet/nuclearnet_fake_server'
 
 describe('FakeNUClearNet', () => {
-  let server: FakeNUClearNetServer
+  let server: NUClearNetFakeServer
   let alice: NUClearNet
   let bob: NUClearNet
   let eve: NUClearNet
 
   beforeEach(() => {
-    server = new FakeNUClearNetServer()
+    server = new NUClearNetFakeServer()
     alice = new FakeNUClearNet(server)
     bob = new FakeNUClearNet(server)
     eve = new FakeNUClearNet(server)

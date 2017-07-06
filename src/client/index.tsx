@@ -20,13 +20,21 @@ import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { GlobalNetwork } from './network/global_network'
-import { NUClearNetClient } from '../shared/network/nuclearnet_client'
-import { NUClearNetWebSocketProxyClient } from '../shared/network/nuclearnet_web_socket_proxy_client'
+import { NUClearNetClient } from '../shared/nuclearnet/nuclearnet_client'
+import { NUClearNetWebSocketProxyClient } from './nuclearnet/nuclearnet_web_socket_proxy_client'
+import { NUClearNetPeer } from '../shared/nuclearnet/nuclearnet_types'
 
 // enable MobX strict mode
 useStrict(true)
 
 const nuclearnetClient = NUClearNetClient.of(NUClearNetWebSocketProxyClient.of())
+nuclearnetClient.connect({ name: 'nusight' })
+nuclearnetClient.onJoin((peer: NUClearNetPeer) => {
+  console.log('nuclear_join', peer)
+})
+nuclearnetClient.onLeave((peer: NUClearNetPeer) => {
+  console.log('nuclear_leave', peer)
+})
 
 const globalNetwork = GlobalNetwork.of()
 

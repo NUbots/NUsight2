@@ -1,9 +1,9 @@
-import { NUClearNetOptions } from 'nuclearnet.js'
-import { NUClearNetSend } from 'nuclearnet.js'
 import { NUClearNet } from 'nuclearnet.js'
 import { NUClearNetSocket } from './nuclearnet_types'
 import { NUClearPacketListener } from './nuclearnet_types'
 import { NUClearEventListener } from './nuclearnet_types'
+import { NUClearNetOptions } from './nuclearnet_types'
+import { NUClearNetSend } from './nuclearnet_types'
 
 export class NUClearNetDirectSocket implements NUClearNetSocket {
   public constructor(private nuclearNetwork: NUClearNet) {

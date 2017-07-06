@@ -1,9 +1,9 @@
-import { NUClearNetOptions } from 'nuclearnet.js'
-import { NUClearNetSend } from 'nuclearnet.js'
 import { FakeNUClearNetServer } from './fake_nuclearnet_server'
 import { NUClearNetSocket } from './nuclearnet_types'
 import { NUClearEventListener } from './nuclearnet_types'
 import { NUClearPacketListener } from './nuclearnet_types'
+import { NUClearNetOptions } from './nuclearnet_types'
+import { NUClearNetSend } from './nuclearnet_types'
 
 export class NUClearNetFakeSocket implements NUClearNetSocket {
   public constructor(private server: FakeNUClearNetServer) {

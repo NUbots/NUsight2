@@ -1,7 +1,7 @@
 import * as EventEmitter from 'events'
-import { NUClearNetPeer } from 'nuclearnet.js'
-import { NUClearNetSend } from 'nuclearnet.js'
 import { createSingletonFactory } from '../base/create_singleton_factory'
+import { NUClearNetPeer } from './nuclearnet_types'
+import { NUClearNetSend } from './nuclearnet_types'
 
 export class FakeNUClearNetServer extends EventEmitter {
   private peers: NUClearNetPeer[]

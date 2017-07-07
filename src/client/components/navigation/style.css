@@ -8,18 +8,6 @@
   background-color: #0a2938;
 }
 
-.header__title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  background-color: #fff;
-  height: 60px;
-  font-size: 1.2rem;
-  color: #1197d3;
-  font-weight: 500;
-}
-
 .header__list {
   list-style-type: none;
   margin: 0;

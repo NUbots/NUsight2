@@ -6,6 +6,7 @@ import CubeIcon from './icons/cube.svg'
 import EyeIcon from './icons/eye.svg'
 import MapIcon from './icons/map.svg'
 import NUClearIcon from './icons/nuclear.svg'
+import NUsightIcon from './icons/nusight.svg'
 import OrderingIcon from './icons/ordering.svg'
 import ScatterIcon from './icons/scatter.svg'
 import SpeedometerIcon from './icons/speedometer.svg'
@@ -29,7 +30,8 @@ const NavigationItemView = ({ exact = false, url, Icon, children = undefined }: 
 
 export const NavigationView = () => (
   <header className={style.header}>
-    <h1 className={style.header__title}>NUsight</h1>
+    <NUsightIcon width={60} height={60}/>
+
     <ul className={style.header__list}>
       <NavigationItemView exact url='/' Icon={SpeedometerIcon}>Dashboard</NavigationItemView>
       <NavigationItemView url='/localisation' Icon={MapIcon}>Localisation</NavigationItemView>

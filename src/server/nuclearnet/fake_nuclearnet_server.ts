@@ -55,6 +55,6 @@ export class FakeNUClearNetServer {
 
   public on(event: string, listener: NUClearPacketListener) {
     this.events.on(event, listener)
-    return () => this.events.off(event, listener)
+    return () => this.events.removeListener(event, listener)
   }
 }

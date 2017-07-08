@@ -1,32 +1,30 @@
 import { NUClearNetOptions } from 'nuclearnet.js'
-import * as SocketIO from 'socket.io'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { DirectNUClearNetClient } from './direct_nuclearnet_client'
 import { FakeNUClearNetClient } from './fake_nuclearnet_client'
-import SocketIOServer = SocketIO.Server
-import SocketIOSocket = SocketIO.Socket
-import Namespace = SocketIO.Namespace
+import { WebSocketServer } from './web_socket_server'
+import { WebSocket } from './web_socket_server'
 
 type Options = {
   fakeNetworking: boolean
 }
 
 export class WebSocketProxyNUClearNetServer {
-  public constructor(private server: Namespace, private nuclearnetClient: NUClearNetClient) {
-    server.on('connection', this.onClientConnection)
+  public constructor(private server: WebSocketServer, private nuclearnetClient: NUClearNetClient) {
+    server.onConnection(this.onClientConnection)
   }
 
-  public static of(server: Namespace, { fakeNetworking }: Options): WebSocketProxyNUClearNetServer {
+  public static of(server: WebSocketServer, { fakeNetworking }: Options): WebSocketProxyNUClearNetServer {
     const nuclearnetClient: NUClearNetClient = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
   }
 
-  private onClientConnection = (socket: SocketIOSocket) => {
+  private onClientConnection = (socket: WebSocket) => {
     const listeners = new Map()
 
-    const offJoin = this.nuclearnetClient.onJoin(peer => socket.emit('nuclear_join', peer))
+    const offJoin = this.nuclearnetClient.onJoin(peer => socket.send('nuclear_join', peer))
 
-    const offLeave = this.nuclearnetClient.onLeave(peer => socket.emit('nuclear_leave', peer))
+    const offLeave = this.nuclearnetClient.onLeave(peer => socket.send('nuclear_leave', peer))
 
     socket.on('nuclear_connect', (options: NUClearNetOptions) => {
       const disconnect = this.nuclearnetClient.connect(options)
@@ -34,7 +32,7 @@ export class WebSocketProxyNUClearNetServer {
     })
 
     socket.on('listen', (event: string, messageId: string) => {
-      const off = this.nuclearnetClient.on(event, packet => socket.emit('nuclear_message', event, packet))
+      const off = this.nuclearnetClient.on(event, packet => socket.send('nuclear_message', event, packet))
 
       let listenerIds = listeners.get(event)
       if (!listenerIds) {

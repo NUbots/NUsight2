@@ -1,5 +1,5 @@
 import { createMockEventHandler } from '../../../shared/base/testing/create_mock_event_handler'
-import { FakeEventHandler } from '../../../shared/base/testing/create_mock_event_handler'
+import { MockEventHandler } from '../../../shared/base/testing/create_mock_event_handler'
 import { createMockInstance } from '../../../shared/base/testing/create_mock_instance'
 import { FakeNUClearNetClient } from '../fake_nuclearnet_client'
 import { FakeNUClearNetServer } from '../fake_nuclearnet_server'
@@ -9,7 +9,7 @@ import { WebSocket } from '../web_socket_server'
 import Mocked = jest.Mocked
 
 describe('WebSocketProxyNUClearNetServer', () => {
-  let onClientConnection: FakeEventHandler<(socket: WebSocket) => void>
+  let onClientConnection: MockEventHandler<(socket: WebSocket) => void>
   let webSocketServer: Mocked<WebSocketServer>
   let nuclearnetServer: FakeNUClearNetServer
   let nuclearnetClient: FakeNUClearNetClient
@@ -30,7 +30,7 @@ describe('WebSocketProxyNUClearNetServer', () => {
 
   it('forwards NUClearNet network join events to socket', () => {
     const webSocket = createMockInstance(WebSocket)
-    onClientConnection.fakeEvent(webSocket)
+    onClientConnection.mockEvent(webSocket)
 
     const alice = new FakeNUClearNetClient(nuclearnetServer)
     alice.connect({ name: 'alice' })
@@ -42,7 +42,7 @@ describe('WebSocketProxyNUClearNetServer', () => {
 
   it('forwards NUClearNet network leave events to socket', () => {
     const webSocket = createMockInstance(WebSocket)
-    onClientConnection.fakeEvent(webSocket)
+    onClientConnection.mockEvent(webSocket)
 
     const alice = new FakeNUClearNetClient(nuclearnetServer)
     const disconnect = alice.connect({ name: 'alice' })

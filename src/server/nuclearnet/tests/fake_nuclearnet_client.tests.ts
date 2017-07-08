@@ -1,9 +1,8 @@
-import { FakeNUClearNetClient } from '../../../server/nuclearnet/fake_nuclearnet_client'
-import { FakeNUClearNetServer } from '../../../server/nuclearnet/fake_nuclearnet_server'
+import { FakeNUClearNetClient } from '../fake_nuclearnet_client'
+import { FakeNUClearNetServer } from '../fake_nuclearnet_server'
 import { NUClearNetClient } from '../../../shared/nuclearnet/nuclearnet_client'
-import { FakeNUClearNet } from '../fake_nuclearnet'
 
-describe('FakeNUClearNet', () => {
+describe('FakeNUClearNetClient', () => {
   let server: FakeNUClearNetServer
   let alice: NUClearNetClient
   let bob: NUClearNetClient

@@ -4,11 +4,13 @@ import { WebSocket } from '../web_socket_server'
 import { createMockInstance } from '../../../shared/base/testing/create_mock_instance'
 import Mocked = jest.Mocked
 import { FakeNUClearNetClient } from '../fake_nuclearnet_client'
+import { FakeNUClearNetServer } from '../fake_nuclearnet_server'
 
 describe('WebSocketProxyNUClearNetServer', () => {
   let onClientConnectionListener: (socket: WebSocket) => void
   let webSocketServer: Mocked<WebSocketServer>
   let webSocket: WebSocket
+  let nuclearnetServer: FakeNUClearNetServer
   let nuclearnetClient: FakeNUClearNetClient
   let server: WebSocketProxyNUClearNetServer
 
@@ -18,7 +20,8 @@ describe('WebSocketProxyNUClearNetServer', () => {
     webSocketServer.onConnection.mockImplementation((listener: (socket: WebSocket) => void) => {
       onClientConnectionListener = listener
     })
-    nuclearnetClient = FakeNUClearNetClient.of()
+    nuclearnetServer = new FakeNUClearNetServer()
+    nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
     server = new WebSocketProxyNUClearNetServer(webSocketServer, nuclearnetClient)
   })
 
@@ -28,7 +31,8 @@ describe('WebSocketProxyNUClearNetServer', () => {
 
   it('asdfklasdj', () => {
     onClientConnectionListener(webSocket)
-    const alice = FakeNUClearNetClient.of()
+
+    const alice = new FakeNUClearNetClient(nuclearnetServer)
     alice.connect({ name: 'alice'})
 
     expect(webSocket.send).toHaveBeenCalledWith('nuclear_join', {

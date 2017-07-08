@@ -33,7 +33,7 @@ describe('WebSocketProxyNUClearNetServer', () => {
     onClientConnectionListener(webSocket)
 
     const alice = new FakeNUClearNetClient(nuclearnetServer)
-    alice.connect({ name: 'alice'})
+    alice.connect({ name: 'alice' })
 
     expect(webSocket.send).toHaveBeenLastCalledWith('nuclear_join', expect.objectContaining({
       name: 'alice',

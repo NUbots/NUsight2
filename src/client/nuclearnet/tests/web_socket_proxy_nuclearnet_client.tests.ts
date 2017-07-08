@@ -26,7 +26,7 @@ describe('WebSocketProxyNUClearNetClient', () => {
     expect(mockWebSocket.send).toHaveBeenCalledWith('nuclear_disconnect')
   })
 
-  describe('when connected', () =>{
+  describe('when connected', () => {
     beforeEach(() => {
       client.connect({ name: 'bob' })
     })

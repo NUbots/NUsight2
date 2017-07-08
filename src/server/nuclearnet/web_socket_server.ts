@@ -8,17 +8,17 @@ export class WebSocketServer {
     return new WebSocketServer()
   }
 
-  onConnection(cb: (socket: WebSocket) => void) {
+  public onConnection(cb: (socket: WebSocket) => void) {
     throw new Error('Not implemented')
   }
 }
 
 export class WebSocket {
-  on(event: string, cb: (...args: any[]) => void) {
+  public on(event: string, cb: (...args: any[]) => void) {
     throw new Error('Not implemented')
   }
 
-  send(event: string, ...args: any[]) {
+  public send(event: string, ...args: any[]) {
     throw new Error('Not implemented')
   }
 }

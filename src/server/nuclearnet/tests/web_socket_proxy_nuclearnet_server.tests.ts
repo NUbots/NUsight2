@@ -39,4 +39,16 @@ describe('WebSocketProxyNUClearNetServer', () => {
       name: 'alice',
     }))
   })
+
+  it('forwards NUClearNet network leaves to socket', () => {
+    onClientConnectionListener(webSocket)
+
+    const alice = new FakeNUClearNetClient(nuclearnetServer)
+    const disconnect = alice.connect({ name: 'alice' })
+    disconnect()
+
+    expect(webSocket.send).toHaveBeenLastCalledWith('nuclear_leave', expect.objectContaining({
+      name: 'alice',
+    }))
+  })
 })

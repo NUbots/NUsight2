@@ -1,18 +1,19 @@
-import { NUClearNet } from 'nuclearnet.js'
-import { FakeNUClearNet } from '../fake_nuclearnet'
+import { FakeNUClearNetClient } from '../../../server/nuclearnet/fake_nuclearnet_client'
 import { FakeNUClearNetServer } from '../../../server/nuclearnet/fake_nuclearnet_server'
+import { NUClearNetClient } from '../../../shared/nuclearnet/nuclearnet_client'
+import { FakeNUClearNet } from '../fake_nuclearnet'
 
 describe('FakeNUClearNet', () => {
   let server: FakeNUClearNetServer
-  let alice: NUClearNet
-  let bob: NUClearNet
-  let eve: NUClearNet
+  let alice: NUClearNetClient
+  let bob: NUClearNetClient
+  let eve: NUClearNetClient
 
   beforeEach(() => {
     server = new FakeNUClearNetServer()
-    alice = new FakeNUClearNet(server)
-    bob = new FakeNUClearNet(server)
-    eve = new FakeNUClearNet(server)
+    alice = new FakeNUClearNetClient(server)
+    bob = new FakeNUClearNetClient(server)
+    eve = new FakeNUClearNetClient(server)
   })
 
   it('calls nuclear_join event handlers on connect', () => {
@@ -20,17 +21,17 @@ describe('FakeNUClearNet', () => {
     eve.connect({ name: 'eve' })
 
     const aliceOnJoin = jest.fn()
-    alice.on('nuclear_join', aliceOnJoin)
+    alice.onJoin(aliceOnJoin)
 
     const eveOnJoin = jest.fn()
-    eve.on('nuclear_join', eveOnJoin)
+    eve.onJoin(eveOnJoin)
 
     const bobOnJoin = jest.fn()
-    bob.on('nuclear_join', bobOnJoin)
+    bob.onJoin(bobOnJoin)
 
     bob.connect({ name: 'bob' })
 
-    const expectedPeer = { name: 'bob', address: '127.0.0.1', port: 7447 }
+    const expectedPeer = expect.objectContaining({ name: 'bob' })
 
     expect(aliceOnJoin).toHaveBeenCalledWith(expectedPeer)
     expect(eveOnJoin).toHaveBeenCalledWith(expectedPeer)
@@ -42,19 +43,19 @@ describe('FakeNUClearNet', () => {
     eve.connect({ name: 'eve' })
 
     const aliceOnLeave = jest.fn()
-    alice.on('nuclear_leave', aliceOnLeave)
+    alice.onLeave(aliceOnLeave)
 
     const eveOnLeave = jest.fn()
-    eve.on('nuclear_leave', eveOnLeave)
+    eve.onLeave(eveOnLeave)
 
     const bobOnLeave = jest.fn()
-    bob.on('nuclear_leave', bobOnLeave)
+    bob.onLeave(bobOnLeave)
 
-    bob.connect({ name: 'bob' })
+    const bobDisconnect = bob.connect({ name: 'bob' })
 
-    const expectedPeer = { name: 'bob', address: '127.0.0.1', port: 7447 }
+    const expectedPeer = expect.objectContaining({ name: 'bob' })
 
-    bob.disconnect()
+    bobDisconnect()
 
     expect(aliceOnLeave).toHaveBeenCalledWith(expectedPeer)
     expect(eveOnLeave).toHaveBeenCalledWith(expectedPeer)
@@ -80,7 +81,7 @@ describe('FakeNUClearNet', () => {
 
     const expectedPacket = {
       payload,
-      peer: { name: 'bob', address: '127.0.0.1', port: 7447 },
+      peer: expect.objectContaining({ name: 'bob' }),
     }
 
     expect(aliceOnFoo).toHaveBeenCalledWith(expectedPacket)

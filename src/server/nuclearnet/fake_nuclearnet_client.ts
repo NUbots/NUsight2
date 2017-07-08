@@ -5,8 +5,10 @@ import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { FakeNUClearNetServer } from './fake_nuclearnet_server'
 import { NUClearNetPeer } from 'nuclearnet.js'
+import { NUClearNetPacket } from 'nuclearnet.js'
 
 export class FakeNUClearNetClient implements NUClearNetClient {
+  private connected: boolean
   private peer: NUClearNetPeer
 
   public constructor(private server: FakeNUClearNetServer) {
@@ -19,29 +21,46 @@ export class FakeNUClearNetClient implements NUClearNetClient {
   public connect(options: NUClearNetOptions): () => void {
     this.peer = {
       name: options.name,
-      address: 'localhost',
-      port: 1234,
+      address: '127.0.0.1',
+      port: 7447,
     }
     this.server.connect(this.peer)
+    this.connected = true
 
     return () => {
+      this.connected = false
       this.server.disconnect(this.peer)
     }
   }
 
   public onJoin(cb: NUClearEventListener): () => void {
-    return this.server.onJoin(cb)
+    const listener = (peer: NUClearNetPeer) => {
+      if (this.connected) {
+        cb(peer)
+      }
+    }
+    return this.server.onJoin(listener)
   }
 
   public onLeave(cb: NUClearEventListener): () => void {
-    return this.server.onLeave(cb)
+    const listener = (peer: NUClearNetPeer) => {
+      if (this.connected) {
+        cb(peer)
+      }
+    }
+    return this.server.onLeave(listener)
   }
 
   public on(event: string, cb: NUClearPacketListener): () => void {
-    throw new Error('Not implemented')
+    const listener = (packet: NUClearNetPacket) => {
+      if (this.connected) {
+        cb(packet)
+      }
+    }
+    return this.server.on(event, listener)
   }
 
   public send(options: NUClearNetSend): void {
-    throw new Error('Not implemented')
+    this.server.send(this.peer, options)
   }
 }

@@ -3,6 +3,7 @@ import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
 import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
+import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
 
 export class FakeNUClearNetServer {
   private events: EventEmitter
@@ -50,5 +51,10 @@ export class FakeNUClearNetServer {
       // TODO (Annable): Support opts.target
       this.events.emit(opts.type, packet)
     }
+  }
+
+  public on(event: string, listener: NUClearPacketListener) {
+    this.events.on(event, listener)
+    return () => this.events.off(event, listener)
   }
 }

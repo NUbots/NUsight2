@@ -9,8 +9,8 @@ import { WebSocket } from '../web_socket_server'
 import Mocked = jest.Mocked
 
 describe('WebSocketProxyNUClearNetServer', () => {
-  let onClientConnection: MockEventHandler<(socket: WebSocket) => void>
   let webSocketServer: Mocked<WebSocketServer>
+  let onClientConnection: MockEventHandler<(socket: WebSocket) => void>
   let nuclearnetServer: FakeNUClearNetServer
   let nuclearnetClient: FakeNUClearNetClient
   let server: WebSocketProxyNUClearNetServer

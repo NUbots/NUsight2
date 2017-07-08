@@ -14,16 +14,22 @@ describe('createMockEventHandler', () => {
     const cb2 = jest.fn()
     testMock.onTestEvent(cb2)
 
+    const cb3 = jest.fn()
+    const off = testMock.onTestEvent(cb3)
+    off()
+
     onTestEvent.mockEvent('foo', 2)
 
     expect(cb1).toHaveBeenCalledWith('foo', 2)
     expect(cb2).toHaveBeenCalledWith('foo', 2)
+    expect(cb3).not.toHaveBeenCalled()
   })
 })
 
 type TestEventListener = (str: string, num: number) => void
 
 class TestClass {
-  public onTestEvent(callback: TestEventListener) {
+  public onTestEvent(callback: TestEventListener): () => void {
+    return () => {}
   }
 }

@@ -29,7 +29,7 @@ describe('WebSocketProxyNUClearNetServer', () => {
     expect(webSocketServer.onConnection).toHaveBeenCalledTimes(1)
   })
 
-  it('asdfklasdj', () => {
+  it('forwards NUClearNet network joins to socket', () => {
     onClientConnectionListener(webSocket)
 
     const alice = new FakeNUClearNetClient(nuclearnetServer)
@@ -38,9 +38,5 @@ describe('WebSocketProxyNUClearNetServer', () => {
     expect(webSocket.send).toHaveBeenLastCalledWith('nuclear_join', expect.objectContaining({
       name: 'alice',
     }))
-  })
-
-  it('forwards NUClearNet network joins to socket', () => {
-
   })
 })

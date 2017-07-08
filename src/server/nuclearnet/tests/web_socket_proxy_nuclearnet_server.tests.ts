@@ -21,6 +21,7 @@ describe('WebSocketProxyNUClearNetServer', () => {
     webSocketServer.onConnection = onClientConnection
     nuclearnetServer = new FakeNUClearNetServer()
     nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
+    nuclearnetClient.connect({ name: 'bob' })
     server = new WebSocketProxyNUClearNetServer(webSocketServer, nuclearnetClient)
   })
 

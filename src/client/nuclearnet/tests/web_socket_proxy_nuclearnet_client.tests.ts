@@ -1,5 +1,5 @@
 import { createMockInstance } from '../../../shared/base/testing/create_mock_instance'
-import { WebSocketClient } from '../socket_io_client'
+import { WebSocketClient } from '../web_socket_client'
 import { WebSocketProxyNUClearNetClient } from '../web_socket_proxy_nuclearnet_client'
 import Mocked = jest.Mocked
 

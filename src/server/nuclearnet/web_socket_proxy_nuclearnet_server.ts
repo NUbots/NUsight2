@@ -29,12 +29,12 @@ export class WebSocketProxyNUClearNetServer {
 class WebSocketServerClient {
   private offJoin: () => void
   private offLeave: () => void
-  private offMap: Map<string, () => void>
+  private offListenMap: Map<string, () => void>
 
   public constructor(private nuclearnetClient: NUClearNetClient, private socket: WebSocket) {
     this.offJoin = this.nuclearnetClient.onJoin(this.onJoin)
     this.offLeave = this.nuclearnetClient.onLeave(this.onLeave)
-    this.offMap = new Map()
+    this.offListenMap = new Map()
 
     this.socket.on('listen', this.onListen)
     this.socket.on('unlisten', this.onUnlisten)
@@ -62,12 +62,12 @@ class WebSocketServerClient {
   private onListen = (event: string, messageId: string) => {
     console.log('listen', event, messageId)
     const off = this.nuclearnetClient.on(event, this.onPacket.bind(this, event))
-    this.offMap.set(messageId, off)
+    this.offListenMap.set(messageId, off)
   }
 
   private onUnlisten = (event: string, messageId: string) => {
     console.log('unlisten', event, messageId)
-    const off = this.offMap.get(messageId)
+    const off = this.offListenMap.get(messageId)
     if (off) {
       off()
     }

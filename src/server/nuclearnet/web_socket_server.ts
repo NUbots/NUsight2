@@ -4,7 +4,7 @@ import SocketIOSocket = SocketIO.Socket
 import Namespace = SocketIO.Namespace
 
 export class WebSocketServer {
-  constructor(private sioServer: SocketIO.Namespace) {
+  public constructor(private sioServer: SocketIO.Namespace) {
   }
 
   public static of(server: Namespace) {
@@ -20,7 +20,7 @@ export class WebSocketServer {
 }
 
 export class WebSocket {
-  public constructor(private socket: SocketIO.Socket) {
+  public constructor(private sioSocket: SocketIO.Socket) {
   }
 
   public static of(socket: SocketIO.Socket) {
@@ -28,10 +28,10 @@ export class WebSocket {
   }
 
   public on(event: string, cb: (...args: any[]) => void) {
-    this.socket.on(event, cb)
+    this.sioSocket.on(event, cb)
   }
 
   public send(event: string, ...args: any[]) {
-    this.socket.emit(event, ...args)
+    this.sioSocket.emit(event, ...args)
   }
 }

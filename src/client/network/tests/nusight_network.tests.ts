@@ -22,7 +22,7 @@ describe('NUsightNetwork', () => {
   describe('event handling', () => {
     it('starts listening event', () => {
       network.onNUClearMessage(Sensors, jest.fn())
-      expect(mockedNUClearNetClient.on).toHaveBeenCalledWith('message.input.Sensors', expect.any(Function))
+      expect(mockedNUClearNetClient.on).toHaveBeenCalledWith('NUsight<message.input.Sensors>', expect.any(Function))
     })
 
     it('stops listening to event', () => {

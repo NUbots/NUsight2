@@ -20,7 +20,7 @@ export class WebSocketProxyNUClearNetServer {
   }
 
   private onClientConnection = (socket: WebSocket) => {
-    const listeners = new Map()
+    const listeners: Map<string, Map<string, () => void>> = new Map()
 
     const offJoin = this.nuclearnetClient.onJoin(peer => socket.send('nuclear_join', peer))
 
@@ -32,7 +32,7 @@ export class WebSocketProxyNUClearNetServer {
     })
 
     socket.on('listen', (event: string, messageId: string) => {
-      const off = this.nuclearnetClient.on(event, packet => socket.send('nuclear_message', event, packet))
+      const off = this.nuclearnetClient.on(event, packet => socket.send(event, packet))
 
       let listenerIds = listeners.get(event)
       if (!listenerIds) {
@@ -55,7 +55,7 @@ export class WebSocketProxyNUClearNetServer {
     socket.on('disconnect', () => {
       offJoin()
       offLeave()
-      for (const listenerIds of listeners) {
+      for (const listenerIds of listeners.values()) {
         for (const off of listenerIds.values()) {
           off()
         }

@@ -4,6 +4,7 @@ import { WebSocketProxyNUClearNetClient } from '../nuclearnet/web_socket_proxy_n
 import { MessageTypePath } from './message_type_names'
 import Sensors = message.input.Sensors
 import { NUClearNetPacket } from 'nuclearnet.js'
+import { NUClearNetOptions } from 'nuclearnet.js'
 
 export class NUsightNetwork {
   public constructor(private nuclearnetClient: NUClearNetClient,
@@ -14,6 +15,10 @@ export class NUsightNetwork {
     const messageTypePath = MessageTypePath.of()
     const nuclearnetClient: NUClearNetClient = WebSocketProxyNUClearNetClient.of()
     return new NUsightNetwork(nuclearnetClient, messageTypePath)
+  }
+
+  public connect(opts: NUClearNetOptions) {
+    return this.nuclearnetClient.connect(opts)
   }
 
   public onNUClearMessage<T extends Message>(messageType: MessageType<T>, cb: MessageCallback<T>) {

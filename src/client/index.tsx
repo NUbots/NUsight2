@@ -22,21 +22,22 @@ import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { NUsightNetwork } from './network/nusight_network'
-import { WebSocketProxyNUClearNetClient } from './nuclearnet/web_socket_proxy_nuclearnet_client'
+// import { WebSocketProxyNUClearNetClient } from './nuclearnet/web_socket_proxy_nuclearnet_client'
 
 // enable MobX strict mode
 useStrict(true)
 
-const nuclearnetClient: NUClearNetClient = WebSocketProxyNUClearNetClient.of()
-nuclearnetClient.connect({ name: 'nusight' })
-nuclearnetClient.onJoin((peer: NUClearNetPeer) => {
-  console.log('nuclear_join', peer)
-})
-nuclearnetClient.onLeave((peer: NUClearNetPeer) => {
-  console.log('nuclear_leave', peer)
-})
+// const nuclearnetClient: NUClearNetClient = WebSocketProxyNUClearNetClient.of()
+// nuclearnetClient.connect({ name: 'nusight' })
+// nuclearnetClient.onJoin((peer: NUClearNetPeer) => {
+//   console.log('nuclear_join', peer)
+// })
+// nuclearnetClient.onLeave((peer: NUClearNetPeer) => {
+//   console.log('nuclear_leave', peer)
+// })
 
 const globalNetwork = NUsightNetwork.of()
+globalNetwork.connect({ name: 'nusight' })
 
 // TODO (Annable): Replace all this code with real networking + simulator
 const localisationModel = LocalisationModel.of()

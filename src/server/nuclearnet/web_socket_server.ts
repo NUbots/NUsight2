@@ -1,4 +1,3 @@
-import { Server } from 'net'
 import * as SocketIO from 'socket.io'
 import SocketIOServer = SocketIO.Server
 import SocketIOSocket = SocketIO.Socket
@@ -8,9 +7,8 @@ export class WebSocketServer {
   constructor(private sioServer: SocketIO.Namespace) {
   }
 
-  public static of(server: Server) {
-    const sioServer = SocketIO(server)
-    return new WebSocketServer(sioServer.of('/nuclearnet'))
+  public static of(server: Namespace) {
+    return new WebSocketServer(server)
   }
 
   public onConnection(cb: (socket: WebSocket) => void) {

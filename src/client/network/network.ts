@@ -1,37 +1,29 @@
-import { GlobalNetwork } from './global_network'
+import { NUsightNetwork } from './global_network'
 import { MessageType } from './global_network'
 import { Message } from './global_network'
 import { MessageCallback } from './global_network'
 
 export class Network {
-  private listeners: Map<MessageType<Message>, Set<MessageCallback<Message>>>
+  private offs: (() => void)[]
 
-  public constructor(private globalNetwork: GlobalNetwork) {
-    this.listeners = new Map()
+  public constructor(private nusightNetwork: NUsightNetwork) {
+    this.offs = []
   }
 
-  public static of(globalNetwork: GlobalNetwork): Network {
-    return new Network(globalNetwork)
+  public static of(nusightNetwork: NUsightNetwork): Network {
+    return new Network(nusightNetwork)
   }
 
-  public on<T extends Message>(messageType: MessageType<T>, cb: MessageCallback<T>) {
-    this.globalNetwork.on(messageType, cb)
-
-    if (!this.listeners.has(messageType)) {
-      this.listeners.set(messageType, new Set())
-    }
-    const listeners = this.listeners.get(messageType)
-    if (listeners) {
-      listeners.add(cb)
-    }
+  public on<T extends Message>(messageType: MessageType<T>, cb: MessageCallback<T>): () => void {
+    const off = this.nusightNetwork.onNUClearMessage(messageType, cb)
+    this.offs.push(off)
+    return off
   }
 
   public off() {
-    for (const [messageType, callbacks] of this.listeners.entries()) {
-      for (const cb of callbacks) {
-        this.globalNetwork.off(messageType, cb)
-      }
+    for (const off of this.offs) {
+      off()
     }
-    this.listeners.clear()
+    this.offs.length = 0
   }
 }

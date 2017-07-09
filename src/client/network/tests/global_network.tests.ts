@@ -1,14 +1,14 @@
 import { createMockInstance } from '../../../shared/base/testing/create_mock_instance'
 import { message } from '../../../shared/proto/messages'
-import { GlobalNetwork } from '../global_network'
+import { NUsightNetwork } from '../global_network'
 import { RawSocket } from '../raw_socket'
 import Socket = SocketIOClient.Socket
 import Sensors = message.input.Sensors
 import { MessageTypePath } from '../message_type_names'
 import Mocked = jest.Mocked
 
-describe('GlobalNetwork', () => {
-  let network: GlobalNetwork
+describe('NUsightNetwork', () => {
+  let network: NUsightNetwork
   let mockedRawSocket: Mocked<RawSocket>
   let mockedMessageTypePath: Mocked<MessageTypePath>
 
@@ -16,7 +16,7 @@ describe('GlobalNetwork', () => {
     mockedRawSocket = createMockInstance(RawSocket)
     mockedMessageTypePath = createMockInstance(MessageTypePath)
     mockedMessageTypePath.getPath.mockReturnValue('message.input.Sensors')
-    network = new GlobalNetwork(mockedRawSocket, mockedMessageTypePath)
+    network = new NUsightNetwork(mockedRawSocket, mockedMessageTypePath)
   })
 
   describe('event handling', () => {

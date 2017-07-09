@@ -1,65 +1,27 @@
+import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { message } from '../../shared/proto/messages'
+import { WebSocketProxyNUClearNetClient } from '../nuclearnet/web_socket_proxy_nuclearnet_client'
 import { MessageTypePath } from './message_type_names'
-import { RawSocket } from './raw_socket'
 import Sensors = message.input.Sensors
+import { NUClearNetPacket } from 'nuclearnet.js'
 
-export class GlobalNetwork {
-  private listeners: Map<MessageType<Message>, Set<MessageCallback<Message>>>
-  private packetListeners: Map<string, (messageType: MessageType<Message>, buffer: ArrayBuffer) => void>
-
-  public constructor(private socket: RawSocket,
+export class NUsightNetwork {
+  public constructor(private nuclearnetClient: NUClearNetClient,
                      private messageTypePath: MessageTypePath) {
-    this.listeners = new Map()
-    this.packetListeners = new Map()
   }
 
   public static of() {
     const messageTypePath = MessageTypePath.of()
-    const socket = RawSocket.of()
-    return new GlobalNetwork(socket, messageTypePath)
+    const nuclearnetClient: NUClearNetClient = WebSocketProxyNUClearNetClient.of()
+    return new NUsightNetwork(nuclearnetClient, messageTypePath)
   }
 
-  public on<T extends Message>(messageType: MessageType<T>, cb: MessageCallback<T>) {
-    if (!this.listeners.has(messageType)) {
-      this.listeners.set(messageType, new Set())
-    }
-    const listeners = this.listeners.get(messageType)
-    if (listeners) {
-      const messageTypeName = this.messageTypePath.getPath(messageType)
-      listeners.add(cb)
-      if (listeners.size === 1) {
-        this.socket.listen(messageTypeName)
-        const listener = this.onPacket.bind(this, messageType)
-        this.socket.on(messageTypeName, listener)
-        this.packetListeners.set(messageTypeName, listener)
-      }
-    }
-  }
-
-  public off<T extends Message>(messageType: MessageType<T>, cb: MessageCallback<T>) {
-    const listeners = this.listeners.get(messageType)
-    if (listeners) {
-      const messageTypeName = this.messageTypePath.getPath(messageType)
-      listeners.delete(cb)
-      const packetListener = this.packetListeners.get(messageTypeName)
-      if (packetListener) {
-        this.socket.off(messageTypeName, packetListener)
-        if (listeners.size === 0) {
-          this.socket.unlisten(messageTypeName)
-          this.packetListeners.delete(messageTypeName)
-        }
-      }
-    }
-  }
-
-  private onPacket(messageType: MessageType<Message>, buffer: ArrayBuffer) {
-    const message = messageType.decode(new Uint8Array(buffer).slice(9))
-    const listeners = this.listeners.get(messageType)
-    if (listeners) {
-      for (const listener of listeners.values()) {
-        listener(message)
-      }
-    }
+  public onNUClearMessage<T extends Message>(messageType: MessageType<T>, cb: MessageCallback<T>) {
+    const messageTypeName = this.messageTypePath.getPath(messageType)
+    return this.nuclearnetClient.on(messageTypeName, (packet: NUClearNetPacket) => {
+      const message = messageType.decode(new Uint8Array(packet.payload).slice(9))
+      cb(message)
+    })
   }
 }
 

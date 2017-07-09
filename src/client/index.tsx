@@ -21,7 +21,7 @@ import { NUClear } from './components/nuclear/view'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
-import { GlobalNetwork } from './network/global_network'
+import { NUsightNetwork } from './network/global_network'
 import { WebSocketProxyNUClearNetClient } from './nuclearnet/web_socket_proxy_nuclearnet_client'
 
 // enable MobX strict mode
@@ -36,7 +36,7 @@ nuclearnetClient.onLeave((peer: NUClearNetPeer) => {
   console.log('nuclear_leave', peer)
 })
 
-const globalNetwork = GlobalNetwork.of()
+const globalNetwork = NUsightNetwork.of()
 
 // TODO (Annable): Replace all this code with real networking + simulator
 const localisationModel = LocalisationModel.of()

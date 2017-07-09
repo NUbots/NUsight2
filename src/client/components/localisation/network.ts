@@ -1,6 +1,6 @@
 import { action } from 'mobx'
 import { message } from '../../../shared/proto/messages'
-import { GlobalNetwork } from '../../network/global_network'
+import { NUsightNetwork } from '../../network/global_network'
 import { Network } from '../../network/network'
 import { LocalisationModel } from './model'
 import Sensors = message.input.Sensors
@@ -11,7 +11,7 @@ export class LocalisationNetwork {
     this.network.on(Sensors, this.onSensors)
   }
 
-  public static of(globalNetwork: GlobalNetwork, model: LocalisationModel): LocalisationNetwork {
+  public static of(globalNetwork: NUsightNetwork, model: LocalisationModel): LocalisationNetwork {
     const network = Network.of(globalNetwork)
     return new LocalisationNetwork(network, model)
   }

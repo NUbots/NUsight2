@@ -1,6 +1,6 @@
 import { action } from 'mobx'
 import { message } from '../../../shared/proto/messages'
-import { NUsightNetwork } from '../../network/global_network'
+import { NUsightNetwork } from '../../network/nusight_network'
 import { Network } from '../../network/network'
 import { LocalisationModel } from './model'
 import Sensors = message.input.Sensors

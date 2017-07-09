@@ -2,7 +2,7 @@ import { message } from '../../../shared/proto/messages'
 import { Network } from '../network'
 import Sensors = message.input.Sensors
 import { createMockInstance } from '../../../shared/base/testing/create_mock_instance'
-import { NUsightNetwork } from '../global_network'
+import { NUsightNetwork } from '../nusight_network'
 import Mocked = jest.Mocked
 
 describe('Network', () => {

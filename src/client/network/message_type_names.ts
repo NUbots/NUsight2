@@ -1,7 +1,7 @@
 import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
 import { message } from '../../shared/proto/messages'
-import { MessageType } from './global_network'
-import { Message } from './global_network'
+import { MessageType } from './nusight_network'
+import { Message } from './nusight_network'
 
 export class MessageTypePath {
   private cache: Map<any, string>

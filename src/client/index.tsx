@@ -21,7 +21,7 @@ import { NUClear } from './components/nuclear/view'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
-import { NUsightNetwork } from './network/global_network'
+import { NUsightNetwork } from './network/nusight_network'
 import { WebSocketProxyNUClearNetClient } from './nuclearnet/web_socket_proxy_nuclearnet_client'
 
 // enable MobX strict mode

@@ -1,7 +1,7 @@
-import { NUsightNetwork } from './global_network'
-import { MessageType } from './global_network'
-import { Message } from './global_network'
-import { MessageCallback } from './global_network'
+import { NUsightNetwork } from './nusight_network'
+import { MessageType } from './nusight_network'
+import { Message } from './nusight_network'
+import { MessageCallback } from './nusight_network'
 
 export class Network {
   private offs: (() => void)[]

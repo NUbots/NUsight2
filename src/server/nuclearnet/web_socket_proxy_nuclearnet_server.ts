@@ -4,8 +4,10 @@ import { DirectNUClearNetClient } from './direct_nuclearnet_client'
 import { FakeNUClearNetClient } from './fake_nuclearnet_client'
 import { WebSocketServer } from './web_socket_server'
 import { WebSocket } from './web_socket_server'
+import { NUClearNetPeer } from 'nuclearnet.js'
+import { NUClearNetPacket } from 'nuclearnet.js'
 
-type Options = {
+type WebSocketProxyNUClearNetServerOpts = {
   fakeNetworking: boolean
 }
 
@@ -14,52 +16,69 @@ export class WebSocketProxyNUClearNetServer {
     server.onConnection(this.onClientConnection)
   }
 
-  public static of(server: WebSocketServer, { fakeNetworking }: Options): WebSocketProxyNUClearNetServer {
+  public static of(server: WebSocketServer, { fakeNetworking }: WebSocketProxyNUClearNetServerOpts): WebSocketProxyNUClearNetServer {
     const nuclearnetClient: NUClearNetClient = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
   }
 
   private onClientConnection = (socket: WebSocket) => {
-    const listeners: Map<string, Map<string, () => void>> = new Map()
+    WebSocketServerClient.of(this.nuclearnetClient, socket)
+  }
+}
 
-    const offJoin = this.nuclearnetClient.onJoin(peer => socket.send('nuclear_join', peer))
+class WebSocketServerClient {
+  private offJoin: () => void
+  private offLeave: () => void
+  private offMap: Map<string, () => void>
 
-    const offLeave = this.nuclearnetClient.onLeave(peer => socket.send('nuclear_leave', peer))
+  public constructor(private nuclearnetClient: NUClearNetClient, private socket: WebSocket) {
+    this.offJoin = this.nuclearnetClient.onJoin(this.onJoin)
+    this.offLeave = this.nuclearnetClient.onLeave(this.onLeave)
+    this.offMap = new Map()
 
-    socket.on('nuclear_connect', (options: NUClearNetOptions) => {
-      const disconnect = this.nuclearnetClient.connect(options)
-      socket.on('nuclear_disconnect', () => disconnect())
-    })
+    this.socket.on('listen', this.onListen)
+    this.socket.on('unlisten', this.onUnlisten)
+    this.socket.on('nuclear_connect', this.onConnect)
+    this.socket.on('disconnect', this.onDisconnect)
+  }
 
-    socket.on('listen', (event: string, messageId: string) => {
-      const off = this.nuclearnetClient.on(event, packet => socket.send(event, packet))
+  public static of(nuclearNetClient: NUClearNetClient, socket: WebSocket) {
+    return new WebSocketServerClient(nuclearNetClient, socket)
+  }
 
-      let listenerIds = listeners.get(event)
-      if (!listenerIds) {
-        listenerIds = new Map()
-        listeners.set(event, listenerIds)
-      }
-      listenerIds.set(messageId, off)
-    })
+  private onJoin = (peer: NUClearNetPeer) => {
+    this.socket.send('nuclear_join', peer)
+  }
 
-    socket.on('unlisten', (event: string, messageId: string) => {
-      const listenerIds = listeners.get(event)
-      if (listenerIds) {
-        const off = listenerIds.get(messageId)
-        if (off) {
-          off()
-        }
-      }
-    })
+  private onLeave = (peer: NUClearNetPeer) => {
+    this.socket.send('nuclear_leave', peer)
+  }
 
-    socket.on('disconnect', () => {
-      offJoin()
-      offLeave()
-      for (const listenerIds of listeners.values()) {
-        for (const off of listenerIds.values()) {
-          off()
-        }
-      }
-    })
+  private onConnect = (options: NUClearNetOptions) => {
+    const disconnect = this.nuclearnetClient.connect(options)
+    this.socket.on('nuclear_disconnect', () => disconnect())
+  }
+
+  private onListen = (event: string, messageId: string) => {
+    console.log('listen', event, messageId)
+    const off = this.nuclearnetClient.on(event, this.onPacket.bind(this, event))
+    this.offMap.set(messageId, off)
+  }
+
+  private onUnlisten = (event: string, messageId: string) => {
+    console.log('unlisten', event, messageId)
+    const off = this.offMap.get(messageId)
+    if (off) {
+      off()
+    }
+  }
+
+  private onDisconnect = () => {
+    this.offJoin()
+    this.offLeave()
+  }
+
+  private onPacket = (event: string, packet: NUClearNetPacket) => {
+    this.socket.send(event, packet)
   }
 }

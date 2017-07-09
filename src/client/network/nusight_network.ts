@@ -23,7 +23,7 @@ export class NUsightNetwork {
 
   public onNUClearMessage<T extends Message>(messageType: MessageType<T>, cb: MessageCallback<T>) {
     const messageTypeName = this.messageTypePath.getPath(messageType)
-    return this.nuclearnetClient.on(messageTypeName, (packet: NUClearNetPacket) => {
+    return this.nuclearnetClient.on(`NUsight<${messageTypeName}>`, (packet: NUClearNetPacket) => {
       const message = messageType.decode(new Uint8Array(packet.payload).slice(9))
       cb(message)
     })

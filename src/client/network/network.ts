@@ -1,6 +1,5 @@
 import { NUsightNetwork } from './nusight_network'
 import { MessageType } from './nusight_network'
-import { Message } from './nusight_network'
 import { MessageCallback } from './nusight_network'
 
 export class Network {
@@ -14,7 +13,7 @@ export class Network {
     return new Network(nusightNetwork)
   }
 
-  public on<T extends Message>(messageType: MessageType<T>, cb: MessageCallback<T>): () => void {
+  public on<T>(messageType: MessageType<T>, cb: MessageCallback<T>): () => void {
     const off = this.nusightNetwork.onNUClearMessage(messageType, cb)
     this.offs.push(off)
     return () => {

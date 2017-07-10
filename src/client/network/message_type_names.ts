@@ -1,7 +1,6 @@
 import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
 import { message } from '../../shared/proto/messages'
 import { MessageType } from './nusight_network'
-import { Message } from './nusight_network'
 
 export class MessageTypePath {
   private cache: Map<any, string>
@@ -16,7 +15,7 @@ export class MessageTypePath {
     return new MessageTypePath()
   })
 
-  public getPath(messageType: MessageType<Message>): string {
+  public getPath<T>(messageType: MessageType<T>): string {
     if (!this.cache.has(messageType)) {
       const path = findPath(this.searchObject, value => value === messageType)
       if (!path) {

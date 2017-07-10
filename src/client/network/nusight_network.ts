@@ -23,7 +23,7 @@ export class NUsightNetwork {
     return this.nuclearnetClient.connect(opts)
   }
 
-  public onNUClearMessage<T extends Message>(messageType: MessageType<T>, cb: MessageCallback<T>) {
+  public onNUClearMessage<T>(messageType: MessageType<T>, cb: MessageCallback<T>) {
     const messageTypeName = this.messageTypePath.getPath(messageType)
     return this.nuclearnetClient.on(`NUsight<${messageTypeName}>`, (packet: NUClearNetPacket) => {
       // Remove NUsight header for decoding by protobufjs
@@ -34,12 +34,9 @@ export class NUsightNetwork {
   }
 }
 
-export interface Message {
-}
-
-export interface MessageType<T extends Message> {
+export interface MessageType<T> {
   new(...args: any[]): T
   decode(...args: any[]): T
 }
 
-export type MessageCallback<T extends Message> = (message: T) => void
+export type MessageCallback<T> = (message: T) => void

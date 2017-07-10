@@ -15,19 +15,23 @@ describe('Network', () => {
   })
 
   it('off() automatically unregisters all callbacks', () => {
-    const off = jest.fn()
-    nusightNetwork.onNUClearMessage.mockReturnValue(off)
-
     const cb1 = jest.fn()
     const cb2 = jest.fn()
 
+    const off1 = jest.fn()
+    nusightNetwork.onNUClearMessage.mockReturnValue(off1)
+
     network.on(Sensors, cb1)
     expect(nusightNetwork.onNUClearMessage).toHaveBeenCalledWith(Sensors, cb1)
+
+    const off2 = jest.fn()
+    nusightNetwork.onNUClearMessage.mockReturnValue(off2)
 
     network.on(Sensors, cb2)
     expect(nusightNetwork.onNUClearMessage).toHaveBeenCalledWith(Sensors, cb2)
 
     network.off()
-    expect(off).toHaveBeenCalledTimes(2)
+    expect(off1).toHaveBeenCalledTimes(1)
+    expect(off2).toHaveBeenCalledTimes(1)
   })
 })

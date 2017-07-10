@@ -3,10 +3,10 @@ import { MessageType } from './nusight_network'
 import { MessageCallback } from './nusight_network'
 
 export class Network {
-  private offs: (() => void)[]
+  private offNUClearMessages: Set<() => void>
 
   public constructor(private nusightNetwork: NUsightNetwork) {
-    this.offs = []
+    this.offNUClearMessages = new Set()
   }
 
   public static of(nusightNetwork: NUsightNetwork): Network {
@@ -14,18 +14,18 @@ export class Network {
   }
 
   public on<T>(messageType: MessageType<T>, cb: MessageCallback<T>): () => void {
-    const off = this.nusightNetwork.onNUClearMessage(messageType, cb)
-    this.offs.push(off)
+    const offNUClearMessage = this.nusightNetwork.onNUClearMessage(messageType, cb)
+    this.offNUClearMessages.add(offNUClearMessage)
     return () => {
-      off()
-      this.offs.splice(this.offs.indexOf(off), 1)
+      offNUClearMessage()
+      this.offNUClearMessages.delete(offNUClearMessage)
     }
   }
 
   public off() {
-    for (const off of this.offs) {
-      off()
+    for (const offNUClearMessage of this.offNUClearMessages.values()) {
+      offNUClearMessage()
     }
-    this.offs.length = 0
+    this.offNUClearMessages.clear()
   }
 }

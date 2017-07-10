@@ -2,7 +2,13 @@ import { NUsightNetwork } from './nusight_network'
 import { MessageType } from './nusight_network'
 import { MessageCallback } from './nusight_network'
 
+/**
+ * A convinience helper class to be used at the component-level.
+ *
+ * Easily subscribe to multiple NUClearNet messages with on(MessageType) and then unsubscribe from them all with off().
+ */
 export class Network {
+  // Store all event listener removers, so we can call them all in off().
   private offNUClearMessages: Set<() => void>
 
   public constructor(private nusightNetwork: NUsightNetwork) {
@@ -13,6 +19,13 @@ export class Network {
     return new Network(nusightNetwork)
   }
 
+  /**
+   * Subscribe to a NUClearNet message.
+   *
+   * @param messageType The protobuf message type that a robot would send. e.g. message.input.Sensors
+   * @param cb The callback to call every time a message is received
+   * @returns A unsubscriber function.
+   */
   public on<T>(messageType: MessageType<T>, cb: MessageCallback<T>): () => void {
     const offNUClearMessage = this.nusightNetwork.onNUClearMessage(messageType, cb)
     this.offNUClearMessages.add(offNUClearMessage)
@@ -22,6 +35,9 @@ export class Network {
     }
   }
 
+  /**
+   * Unsubscribe from all events that is currently being listened to.
+   */
   public off() {
     for (const offNUClearMessage of this.offNUClearMessages.values()) {
       offNUClearMessage()

@@ -108,7 +108,7 @@ describe('FakeNUClearNetClient', () => {
     bob.on('sensors', bobOnSensors)
 
     const aliceOnSensors = jest.fn()
-    bob.on('sensors', aliceOnSensors)
+    alice.on('sensors', aliceOnSensors)
 
     const eveOnSensors = jest.fn()
     eve.on('sensors', eveOnSensors)
@@ -123,5 +123,29 @@ describe('FakeNUClearNetClient', () => {
     expect(aliceOnSensors).toHaveBeenLastCalledWith({ payload, peer: expect.objectContaining({ name: 'eve' }) })
 
     expect(eveOnSensors).toHaveBeenCalledTimes(0)
+  })
+
+  it('only receives targetted messages if they are the target', () => {
+    bob.connect({ name: 'bob' })
+    alice.connect({ name: 'alice' })
+    eve.connect({ name: 'eve' })
+
+    const bobOnSensors = jest.fn()
+    bob.on('sensors', bobOnSensors)
+
+    const aliceOnSensors = jest.fn()
+    alice.on('sensors', aliceOnSensors)
+
+    const eveOnSensors = jest.fn()
+    eve.on('sensors', eveOnSensors)
+
+    const payload = new Buffer(8)
+    eve.send({ type: 'sensors', payload, target: 'bob' })
+
+    expect(bobOnSensors).toHaveBeenCalledTimes(1)
+    expect(bobOnSensors).toHaveBeenLastCalledWith({ payload, peer: expect.objectContaining({ name: 'eve' }) })
+
+    expect(aliceOnSensors).not.toHaveBeenCalled()
+    expect(eveOnSensors).not.toHaveBeenCalled()
   })
 })

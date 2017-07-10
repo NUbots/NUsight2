@@ -2,18 +2,16 @@ import * as EventEmitter from 'events'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
 import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
-import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
+import { FakeNUClearNetClient } from './fake_nuclearnet_client'
 
 export class FakeNUClearNetServer {
-  public messageLog: any[]
   private events: EventEmitter
-  private peers: NUClearNetPeer[]
+  private clients: FakeNUClearNetClient[]
 
   public constructor() {
-    this.messageLog = []
     this.events = new EventEmitter()
-    this.peers = []
+    this.clients = []
   }
 
   /**
@@ -28,32 +26,24 @@ export class FakeNUClearNetServer {
     return new FakeNUClearNetServer()
   })
 
-  public connect(peer: NUClearNetPeer): void {
-    this.emit('nuclear_join', peer)
-    this.peers.push(peer)
+  public connect(client: FakeNUClearNetClient): void {
+    this.emit('nuclear_join', client.peer)
+    this.clients.push(client)
 
-    // TODO (Annable): Send nuclear_join events for all connected peers to the newly connected peer.
-    // for (const peer of this.peers) {
-    //   this.emit('nuclear_join', peer)
-    // }
-  }
-
-  public disconnect(peer: NUClearNetPeer) {
-    this.emit('nuclear_leave', peer)
-    this.peers.splice(this.peers.indexOf(peer), 1)
-  }
-
-  public onJoin(cb: NUClearEventListener): () => void {
-    this.events.on('nuclear_join', cb)
-    return () => {
-      this.events.removeListener('nuclear_join', cb)
+    for (const otherClient of this.clients) {
+      client.fakeJoin(otherClient.peer)
+      if (otherClient !== client) {
+        otherClient.fakeJoin(client.peer)
+      }
     }
   }
 
-  public onLeave(cb: NUClearEventListener): () => void {
-    this.events.on('nuclear_leave', cb)
-    return () => {
-      this.events.removeListener('nuclear_leave', cb)
+  public disconnect(client: FakeNUClearNetClient) {
+    this.emit('nuclear_leave', client.peer)
+    this.clients.splice(this.clients.indexOf(client), 1)
+
+    for (const otherClient of this.clients) {
+      otherClient.fakeLeave(client.peer)
     }
   }
 
@@ -63,8 +53,14 @@ export class FakeNUClearNetServer {
         peer,
         payload: opts.payload,
       }
-      // TODO (Annable): Support Opts.target
-      this.emit(opts.type, packet)
+
+      const targetClients = opts.target === undefined
+        ? this.clients
+        : this.clients.filter(client => client.peer.name === opts.target)
+
+      for (const client of targetClients) {
+        client.fakePacket(opts.type, packet)
+      }
     }
   }
 
@@ -74,7 +70,6 @@ export class FakeNUClearNetServer {
   }
 
   private emit(event: string, ...args: any[]) {
-    this.messageLog.push({ event, args })
     this.events.emit(event, ...args)
   }
 }

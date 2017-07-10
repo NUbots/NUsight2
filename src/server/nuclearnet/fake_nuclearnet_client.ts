@@ -6,10 +6,12 @@ import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { FakeNUClearNetServer } from './fake_nuclearnet_server'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetPacket } from 'nuclearnet.js'
+import { EventEmitter } from 'events'
 
 export class FakeNUClearNetClient implements NUClearNetClient {
+  public peer: NUClearNetPeer
+  private events = new EventEmitter()
   private connected: boolean
-  private peer: NUClearNetPeer
 
   public constructor(private server: FakeNUClearNetServer) {
   }
@@ -28,12 +30,12 @@ export class FakeNUClearNetClient implements NUClearNetClient {
       address: '127.0.0.1',
       port: 7447,
     }
-    this.server.connect(this.peer)
     this.connected = true
+    this.server.connect(this)
 
     return () => {
       this.connected = false
-      this.server.disconnect(this.peer)
+      this.server.disconnect(this)
     }
   }
 
@@ -43,7 +45,8 @@ export class FakeNUClearNetClient implements NUClearNetClient {
         cb(peer)
       }
     }
-    return this.server.onJoin(listener)
+    this.events.on('nuclear_join', listener)
+    return () => this.events.removeListener('nuclear_join', listener)
   }
 
   public onLeave(cb: NUClearEventListener): () => void {
@@ -52,7 +55,8 @@ export class FakeNUClearNetClient implements NUClearNetClient {
         cb(peer)
       }
     }
-    return this.server.onLeave(listener)
+    this.events.on('nuclear_leave', listener)
+    return () => this.events.removeListener('nuclear_leave', listener)
   }
 
   public on(event: string, cb: NUClearPacketListener): () => void {
@@ -61,10 +65,25 @@ export class FakeNUClearNetClient implements NUClearNetClient {
         cb(packet)
       }
     }
-    return this.server.on(event, listener)
+    this.events.on(event, listener)
+    return () => this.events.removeListener(event, listener)
   }
 
   public send(options: NUClearNetSend): void {
     this.server.send(this.peer, options)
+  }
+
+  // Fake helpers
+
+  public fakeJoin(peer: NUClearNetPeer) {
+    this.events.emit('nuclear_join', peer)
+  }
+
+  public fakeLeave(peer: NUClearNetPeer) {
+    this.events.emit('nuclear_leave', peer)
+  }
+
+  public fakePacket(event: string, packet: NUClearNetPacket) {
+    this.events.emit(event, packet)
   }
 }

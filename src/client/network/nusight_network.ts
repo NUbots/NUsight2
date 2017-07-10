@@ -6,6 +6,8 @@ import Sensors = message.input.Sensors
 import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearNetOptions } from 'nuclearnet.js'
 
+const HEADER_SIZE = 9
+
 export class NUsightNetwork {
   public constructor(private nuclearnetClient: NUClearNetClient,
                      private messageTypePath: MessageTypePath) {
@@ -24,7 +26,9 @@ export class NUsightNetwork {
   public onNUClearMessage<T extends Message>(messageType: MessageType<T>, cb: MessageCallback<T>) {
     const messageTypeName = this.messageTypePath.getPath(messageType)
     return this.nuclearnetClient.on(`NUsight<${messageTypeName}>`, (packet: NUClearNetPacket) => {
-      const message = messageType.decode(new Uint8Array(packet.payload).slice(9))
+      // Remove NUsight header for decoding by protobufjs
+      const buffer = new Uint8Array(packet.payload).slice(HEADER_SIZE)
+      const message = messageType.decode(buffer)
       cb(message)
     })
   }

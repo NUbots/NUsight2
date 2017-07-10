@@ -10,18 +10,18 @@ import { NodeSystemClock } from '../src/server/time/node_clock'
 import { SensorDataSimulator } from '../src/simulators/sensor_data_simulator'
 
 describe('Networking Integration', () => {
-  it('Simulate a component listening to a message that is sent by a simulated robot', () => {
-    const nuclearnetServer = new FakeNUClearNetServer()
+  let nuclearnetServer: FakeNUClearNetServer
+  let network: Network
+  let robotSimulator: RobotSimulator
+
+  beforeEach(() => {
+    nuclearnetServer = new FakeNUClearNetServer()
     const nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
     const messageTypePath = new MessageTypePath()
     const nusightNetwork = new NUsightNetwork(nuclearnetClient, messageTypePath)
     nusightNetwork.connect({ name: 'nusight' })
 
-    const cb = jest.fn()
-    const componentNetwork = new Network(nusightNetwork)
-    componentNetwork.on(Sensors, cb)
-
-    new RobotSimulator(
+    robotSimulator = new RobotSimulator(
       new FakeNUClearNetClient(nuclearnetServer),
       NodeSystemClock,
       {
@@ -30,9 +30,20 @@ describe('Networking Integration', () => {
           new SensorDataSimulator(),
         ],
       },
-    ).simulate()
+    )
 
-    expect(cb).toHaveBeenCalledWith(expect.any(Sensors))
-    expect(cb).toHaveBeenCalledTimes(1)
+    network = new Network(nusightNetwork)
+  })
+
+  describe('a networking component', () => {
+    it('receives a Sensors message after subscribing and a robot sending it', () => {
+      const onSensors = jest.fn()
+      network.on(Sensors, onSensors)
+
+      robotSimulator.simulate()
+
+      expect(onSensors).toHaveBeenCalledWith(expect.any(Sensors))
+      expect(onSensors).toHaveBeenCalledTimes(1)
+    })
   })
 })

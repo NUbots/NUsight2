@@ -1,7 +1,6 @@
 import * as EventEmitter from 'events'
 import { NUClearNetSend } from 'nuclearnet.js'
 import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
-import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { FakeNUClearNetClient } from './fake_nuclearnet_client'
 
 export class FakeNUClearNetServer {
@@ -26,7 +25,7 @@ export class FakeNUClearNetServer {
   })
 
   public connect(client: FakeNUClearNetClient): () => void {
-    this.emit('nuclear_join', client.peer)
+    this.events.emit('nuclear_join', client.peer)
     this.clients.push(client)
 
     for (const otherClient of this.clients) {
@@ -37,7 +36,7 @@ export class FakeNUClearNetServer {
     }
 
     return () => {
-      this.emit('nuclear_leave', client.peer)
+      this.events.emit('nuclear_leave', client.peer)
       this.clients.splice(this.clients.indexOf(client), 1)
 
       for (const otherClient of this.clients) {
@@ -62,14 +61,5 @@ export class FakeNUClearNetServer {
         client.fakePacket(opts.type, packet)
       }
     }
-  }
-
-  public on(event: string, listener: NUClearPacketListener) {
-    this.events.on(event, listener)
-    return () => this.events.removeListener(event, listener)
-  }
-
-  private emit(event: string, ...args: any[]) {
-    this.events.emit(event, ...args)
   }
 }

@@ -59,5 +59,19 @@ describe('Networking Integration', () => {
       expect(onSensors1).not.toHaveBeenCalled()
       expect(onSensors2).not.toHaveBeenCalled()
     })
+
+    it('does not receive message on specific unsubscribed callback', () => {
+      const onSensors1 = jest.fn()
+      const onSensors2 = jest.fn()
+      const off1 = network.on(Sensors, onSensors1)
+      network.on(Sensors, onSensors2)
+
+      off1()
+
+      robotSimulator.simulate()
+
+      expect(onSensors1).not.toHaveBeenCalled()
+      expect(onSensors2).toHaveBeenCalledWith(expect.any(Sensors))
+    })
   })
 })

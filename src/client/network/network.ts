@@ -17,7 +17,10 @@ export class Network {
   public on<T extends Message>(messageType: MessageType<T>, cb: MessageCallback<T>): () => void {
     const off = this.nusightNetwork.onNUClearMessage(messageType, cb)
     this.offs.push(off)
-    return off
+    return () => {
+      off()
+      this.offs.splice(this.offs.indexOf(off), 1)
+    }
   }
 
   public off() {

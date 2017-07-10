@@ -50,18 +50,18 @@ export class FakeNUClearNetServer {
         peer,
         payload: opts.payload,
       }
-      // TODO (Annable): Support opts.target
+      // TODO (Annable): Support Opts.target
       this.emit(opts.type, packet)
     }
-  }
-
-  private emit(event: string, ...args: any[]) {
-    this.log.push({ event, args })
-    this.events.emit(event, ...args)
   }
 
   public on(event: string, listener: NUClearPacketListener) {
     this.events.on(event, listener)
     return () => this.events.removeListener(event, listener)
+  }
+
+  private emit(event: string, ...args: any[]) {
+    this.log.push({ event, args })
+    this.events.emit(event, ...args)
   }
 }

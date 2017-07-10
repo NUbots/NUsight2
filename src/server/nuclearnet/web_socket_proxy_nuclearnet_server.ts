@@ -7,7 +7,7 @@ import { WebSocket } from './web_socket_server'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetPacket } from 'nuclearnet.js'
 
-type WebSocketProxyNUClearNetServerOpts = {
+type Opts = {
   fakeNetworking: boolean
 }
 
@@ -16,7 +16,7 @@ export class WebSocketProxyNUClearNetServer {
     server.onConnection(this.onClientConnection)
   }
 
-  public static of(server: WebSocketServer, { fakeNetworking }: WebSocketProxyNUClearNetServerOpts): WebSocketProxyNUClearNetServer {
+  public static of(server: WebSocketServer, { fakeNetworking }: Opts): WebSocketProxyNUClearNetServer {
     const nuclearnetClient: NUClearNetClient = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
   }

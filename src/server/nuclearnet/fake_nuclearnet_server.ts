@@ -23,6 +23,11 @@ export class FakeNUClearNetServer {
   public connect(peer: NUClearNetPeer): void {
     this.emit('nuclear_join', peer)
     this.peers.push(peer)
+
+    // TODO (Annable): Send nuclear_join events for all connected peers to the newly connected peer.
+    // for (const peer of this.peers) {
+    //   this.emit('nuclear_join', peer)
+    // }
   }
 
   public disconnect(peer: NUClearNetPeer) {

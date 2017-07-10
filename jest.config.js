@@ -26,14 +26,13 @@ module.exports = {
     '\\.(frag)$': '<rootDir>/__mocks__/mock.frag'
   },
   roots: [
-    '<rootDir>/src',
-    '<rootDir>/integration_tests'
+    '<rootDir>/src'
   ],
   modulePaths: [
     '<rootDir>/src'
   ],
   testMatch: [
-    '**/*.tests.{ts,tsx}'
+    '**/tests/**/*.tests.{ts,tsx}'
   ],
   transform: {
     '.(ts|tsx)': '<rootDir>/node_modules/ts-jest/preprocessor.js'

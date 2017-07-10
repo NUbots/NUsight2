@@ -21,6 +21,10 @@ export class WebSocketProxyNUClearNetServer {
     return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
   }
 
+  public connect(): () => void {
+    return this.nuclearnetClient.connect({ name: 'nusight' })
+  }
+
   private onClientConnection = (socket: WebSocket) => {
     WebSocketServerClient.of(this.nuclearnetClient, socket)
   }

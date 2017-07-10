@@ -10,10 +10,12 @@ import { EventEmitter } from 'events'
 
 export class FakeNUClearNetClient implements NUClearNetClient {
   public peer: NUClearNetPeer
-  private events = new EventEmitter()
+  private events: EventEmitter
   private connected: boolean
 
   public constructor(private server: FakeNUClearNetServer) {
+    this.events = new EventEmitter()
+    this.connected = false
   }
 
   /**
@@ -74,7 +76,6 @@ export class FakeNUClearNetClient implements NUClearNetClient {
   }
 
   // Fake helpers
-
   public fakeJoin(peer: NUClearNetPeer) {
     this.events.emit('nuclear_join', peer)
   }

@@ -4,6 +4,8 @@ export type MockEventHandler<T> = Mock<(cb: T) => () => void> & {
   mockEvent: T
 }
 
+// A helper method for triggering event listeners for a mock instance.
+// See tests for an example.
 export const createMockEventHandler = <T extends Function>(): MockEventHandler<T> => {
   const listeners: Set<T> = new Set()
   const mockEventHandler: MockEventHandler<T> = Object.assign(

@@ -52,7 +52,7 @@ export class RobotSimulator {
     this.messagesSent++
   }
 
-  private simulate() {
+  public simulate() {
     const messages = flatMap(simulator => simulator.simulate(this.clock.now()), this.simulators)
     messages.forEach(message => this.send(message.messageType, message.buffer))
   }

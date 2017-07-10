@@ -1,12 +1,12 @@
+import { EventEmitter } from 'events'
 import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
+import { NUClearNetPeer } from 'nuclearnet.js'
+import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { FakeNUClearNetServer } from './fake_nuclearnet_server'
-import { NUClearNetPeer } from 'nuclearnet.js'
-import { NUClearNetPacket } from 'nuclearnet.js'
-import { EventEmitter } from 'events'
 
 export class FakeNUClearNetClient implements NUClearNetClient {
   public peer: NUClearNetPeer

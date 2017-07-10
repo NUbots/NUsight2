@@ -34,6 +34,7 @@ type TestEventListener = (str: string, num: number) => void
 
 class TestClass {
   public onTestEvent(callback: TestEventListener): () => void {
-    return () => {}
+    return () => {
+    }
   }
 }

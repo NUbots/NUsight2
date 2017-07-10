@@ -1,10 +1,10 @@
+import { NUClearNetPacket } from 'nuclearnet.js'
+import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { message } from '../../shared/proto/messages'
 import { WebSocketProxyNUClearNetClient } from '../nuclearnet/web_socket_proxy_nuclearnet_client'
 import { MessageTypePath } from './message_type_names'
 import Sensors = message.input.Sensors
-import { NUClearNetPacket } from 'nuclearnet.js'
-import { NUClearNetOptions } from 'nuclearnet.js'
 
 const HEADER_SIZE = 9
 

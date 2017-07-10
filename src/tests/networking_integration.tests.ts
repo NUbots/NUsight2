@@ -1,15 +1,15 @@
+import { MessageTypePath } from '../client/network/message_type_names'
 import { Network } from '../client/network/network'
 import { NUsightNetwork } from '../client/network/nusight_network'
-import { FakeNUClearNetServer } from '../server/nuclearnet/fake_nuclearnet_server'
 import { FakeNUClearNetClient } from '../server/nuclearnet/fake_nuclearnet_client'
-import { MessageTypePath } from '../client/network/message_type_names'
+import { FakeNUClearNetServer } from '../server/nuclearnet/fake_nuclearnet_server'
+import { NodeSystemClock } from '../server/time/node_clock'
 import { message } from '../shared/proto/messages'
+import { RobotSimulator } from '../simulators/robot_simulator'
+import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import Sensors = message.input.Sensors
 import VisionObject = message.vision.VisionObject
 import Overview = message.support.nubugger.Overview
-import { RobotSimulator } from '../simulators/robot_simulator'
-import { NodeSystemClock } from '../server/time/node_clock'
-import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 
 describe('Networking Integration', () => {
   let nuclearnetServer: FakeNUClearNetServer

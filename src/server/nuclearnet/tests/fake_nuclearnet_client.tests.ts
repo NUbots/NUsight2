@@ -1,5 +1,5 @@
-import { FakeNUClearNetServer } from '../fake_nuclearnet_server'
 import { FakeNUClearNetClient } from '../fake_nuclearnet_client'
+import { FakeNUClearNetServer } from '../fake_nuclearnet_server'
 
 describe('FakeNUClearNetClient', () => {
   let server: FakeNUClearNetServer

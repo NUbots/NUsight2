@@ -14,6 +14,10 @@ export class FakeNUClearNetClient implements NUClearNetClient {
   public constructor(private server: FakeNUClearNetServer) {
   }
 
+  /**
+   * Avoid using this factory in tests as FakeNUClearNetServer.of() is a singleton. You'll get cross-contamination
+   * between tests. Simply use the constructor of both FakeNUClearNetServer and FakeNUClearNetClient instead.
+   */
   public static of(): FakeNUClearNetClient {
     return new FakeNUClearNetClient(FakeNUClearNetServer.of())
   }

@@ -16,6 +16,14 @@ export class FakeNUClearNetServer {
     this.peers = []
   }
 
+  /**
+   * Designed to only have a single instance during runtime. This singleton is mimicking the behaviour of
+   * the real NUClearNet, where a single global TCP/IP network is an implicit non-injectable dependency. This is why
+   * FakeNUClearNetClient.of() does not take a given server and instead uses the singleton instance.
+   *
+   * Avoid using this singleton factory in tests though, as you'll have introduce cross-contamination between tests.
+   * Simply use the constructor of both FakeNUClearNetServer and FakeNUClearNetClient instead.
+   */
   public static of = createSingletonFactory(() => {
     return new FakeNUClearNetServer()
   })

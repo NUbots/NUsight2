@@ -29,6 +29,7 @@ describe('Networking Integration', () => {
       {
         name: 'Robot #1',
         simulators: [
+          // TODO (Annable): Add vision and overview simulators when they exist
           new SensorDataSimulator(),
         ],
       },

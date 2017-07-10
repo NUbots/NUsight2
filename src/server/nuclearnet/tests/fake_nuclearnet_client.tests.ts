@@ -53,6 +53,25 @@ describe('FakeNUClearNetClient', () => {
     expect(aliceOnJoin).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'eve' }))
   })
 
+  it('does not receive join events from other clients after unsubscribing', () => {
+    bob.connect({ name: 'bob' })
+    alice.connect({ name: 'alice' })
+
+    const bobOnJoin = jest.fn()
+    const bobOffJoin = bob.onJoin(bobOnJoin)
+    bobOffJoin()
+
+    const aliceOnJoin = jest.fn()
+    alice.onJoin(aliceOnJoin)
+
+    eve.connect({ name: 'eve' })
+
+    expect(bobOnJoin).not.toHaveBeenCalled()
+
+    expect(aliceOnJoin).toHaveBeenCalledTimes(1)
+    expect(aliceOnJoin).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'eve' }))
+  })
+
   it('receives leave events from other clients', () => {
     bob.connect({ name: 'bob' })
     alice.connect({ name: 'alice' })
@@ -68,6 +87,26 @@ describe('FakeNUClearNetClient', () => {
 
     expect(bobOnLeave).toHaveBeenCalledTimes(1)
     expect(bobOnLeave).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'eve' }))
+
+    expect(aliceOnLeave).toHaveBeenCalledTimes(1)
+    expect(aliceOnLeave).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'eve' }))
+  })
+
+  it('does not receive leave events from other clients after unsubscribing', () => {
+    bob.connect({ name: 'bob' })
+    alice.connect({ name: 'alice' })
+
+    const bobOnLeave = jest.fn()
+    const bobOffLeave = bob.onLeave(bobOnLeave)
+    bobOffLeave()
+
+    const aliceOnLeave = jest.fn()
+    alice.onLeave(aliceOnLeave)
+
+    const disconnectEve = eve.connect({ name: 'eve' })
+    disconnectEve()
+
+    expect(bobOnLeave).not.toHaveBeenCalled()
 
     expect(aliceOnLeave).toHaveBeenCalledTimes(1)
     expect(aliceOnLeave).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'eve' }))

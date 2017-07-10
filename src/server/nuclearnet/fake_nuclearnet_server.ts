@@ -25,7 +25,7 @@ export class FakeNUClearNetServer {
     return new FakeNUClearNetServer()
   })
 
-  public connect(client: FakeNUClearNetClient): void {
+  public connect(client: FakeNUClearNetClient): () => void {
     this.emit('nuclear_join', client.peer)
     this.clients.push(client)
 
@@ -35,14 +35,14 @@ export class FakeNUClearNetServer {
         otherClient.fakeJoin(client.peer)
       }
     }
-  }
 
-  public disconnect(client: FakeNUClearNetClient) {
-    this.emit('nuclear_leave', client.peer)
-    this.clients.splice(this.clients.indexOf(client), 1)
+    return () => {
+      this.emit('nuclear_leave', client.peer)
+      this.clients.splice(this.clients.indexOf(client), 1)
 
-    for (const otherClient of this.clients) {
-      otherClient.fakeLeave(client.peer)
+      for (const otherClient of this.clients) {
+        otherClient.fakeLeave(client.peer)
+      }
     }
   }
 

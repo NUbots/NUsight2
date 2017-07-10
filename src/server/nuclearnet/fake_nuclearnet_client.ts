@@ -31,11 +31,11 @@ export class FakeNUClearNetClient implements NUClearNetClient {
       port: 7447,
     }
     this.connected = true
-    this.server.connect(this)
+    const disconnect = this.server.connect(this)
 
     return () => {
       this.connected = false
-      this.server.disconnect(this)
+      disconnect()
     }
   }
 

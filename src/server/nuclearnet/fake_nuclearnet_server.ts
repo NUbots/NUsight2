@@ -6,12 +6,12 @@ import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
 
 export class FakeNUClearNetServer {
-  public log: any[]
+  public messageLog: any[]
   private events: EventEmitter
   private peers: NUClearNetPeer[]
 
   public constructor() {
-    this.log = []
+    this.messageLog = []
     this.events = new EventEmitter()
     this.peers = []
   }
@@ -61,7 +61,7 @@ export class FakeNUClearNetServer {
   }
 
   private emit(event: string, ...args: any[]) {
-    this.log.push({ event, args })
+    this.messageLog.push({ event, args })
     this.events.emit(event, ...args)
   }
 }

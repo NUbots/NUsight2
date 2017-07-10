@@ -122,7 +122,7 @@ describe('Networking Integration', () => {
 
       dashboardNetwork.off()
 
-      expect(nuclearnetServer.log).toEqual([
+      expect(nuclearnetServer.messageLog).toEqual([
         expect.objectContaining({ event: 'nuclear_join', args: [ expect.objectContaining({ name: 'nusight' }) ]}),
         expect.objectContaining({ event: 'NUsight<message.input.Sensors>' }),
         expect.objectContaining({ event: 'NUsight<message.input.Sensors>' }),

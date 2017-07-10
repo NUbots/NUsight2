@@ -52,10 +52,9 @@ export class FakeNUClearNetServer {
         payload: opts.payload,
       }
 
-      const targetClients = (opts.target === undefined
+      const targetClients = opts.target === undefined
         ? this.clients
-        : this.clients.filter(otherClient => otherClient.peer.name === opts.target))
-        .filter(otherClient => otherClient !== client)
+        : this.clients.filter(otherClient => otherClient.peer.name === opts.target)
 
       for (const client of targetClients) {
         client.fakePacket(opts.type, packet)

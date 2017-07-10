@@ -1,11 +1,11 @@
 import { NUClearNetOptions } from 'nuclearnet.js'
+import { NUClearNetPeer } from 'nuclearnet.js'
+import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { DirectNUClearNetClient } from './direct_nuclearnet_client'
 import { FakeNUClearNetClient } from './fake_nuclearnet_client'
 import { WebSocketServer } from './web_socket_server'
 import { WebSocket } from './web_socket_server'
-import { NUClearNetPeer } from 'nuclearnet.js'
-import { NUClearNetPacket } from 'nuclearnet.js'
 
 type Opts = {
   fakeNetworking: boolean
@@ -57,6 +57,9 @@ class WebSocketServerClient {
   }
 
   private onConnect = (options: NUClearNetOptions) => {
+    // This could be improved.
+    // Currently only listens to the first connection request and ignores subsequent requests.
+    // Smarter multiplexing of the shared connection would be ideal.
     if (!this.connected) {
       const disconnect = this.nuclearnetClient.connect(options)
       this.connected = true

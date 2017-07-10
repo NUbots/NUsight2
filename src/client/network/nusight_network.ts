@@ -17,7 +17,7 @@ export class NUsightNetwork {
     return new NUsightNetwork(nuclearnetClient, messageTypePath)
   }
 
-  public connect(opts: NUClearNetOptions) {
+  public connect(opts: NUClearNetOptions): () => void {
     return this.nuclearnetClient.connect(opts)
   }
 

@@ -15,13 +15,12 @@ describe('Networking Integration', () => {
   let nuclearnetServer: FakeNUClearNetServer
   let nusightNetwork: NUsightNetwork
   let robotSimulator: RobotSimulator
+  let disconnectNusightNetwork: () => void
 
   beforeEach(() => {
     nuclearnetServer = new FakeNUClearNetServer()
-    const nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
-    const messageTypePath = new MessageTypePath()
-    nusightNetwork = new NUsightNetwork(nuclearnetClient, messageTypePath)
-    nusightNetwork.connect({ name: 'nusight' })
+    nusightNetwork = createNUsightNetwork()
+    disconnectNusightNetwork = nusightNetwork.connect({ name: 'nusight' })
 
     robotSimulator = new RobotSimulator(
       new FakeNUClearNetClient(nuclearnetServer),
@@ -36,8 +35,14 @@ describe('Networking Integration', () => {
     )
   })
 
+  function createNUsightNetwork() {
+    const nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
+    const messageTypePath = new MessageTypePath()
+    return new NUsightNetwork(nuclearnetClient, messageTypePath)
+  }
+
   describe('a single networked component', () => {
-    let network
+    let network: Network
 
     beforeEach(() => {
       network = new Network(nusightNetwork)
@@ -78,6 +83,44 @@ describe('Networking Integration', () => {
       robotSimulator.simulate()
 
       expect(onSensors1).not.toHaveBeenCalled()
+      expect(onSensors2).toHaveBeenCalledWith(expect.any(Sensors))
+    })
+  })
+
+  describe('sessions', () => {
+    let network: Network
+
+    beforeEach(() => {
+      network = new Network(nusightNetwork)
+    })
+
+    it('handles reconnects', () => {
+      const onSensors = jest.fn()
+      network.on(Sensors, onSensors)
+
+      disconnectNusightNetwork()
+
+      nusightNetwork.connect({ name: 'nusight' })
+
+      robotSimulator.simulate()
+
+      expect(onSensors).toHaveBeenCalledWith(expect.any(Sensors))
+    })
+
+    it('handles multiple sessions simutaneously', () => {
+      const nusightNetwork2 = createNUsightNetwork()
+      nusightNetwork2.connect({ name: 'nusight' })
+      const network2 = new Network(nusightNetwork2)
+
+      const onSensors1 = jest.fn()
+      network.on(Sensors, onSensors1)
+
+      const onSensors2 = jest.fn()
+      network2.on(Sensors, onSensors2)
+
+      robotSimulator.simulate()
+
+      expect(onSensors1).toHaveBeenCalledWith(expect.any(Sensors))
       expect(onSensors2).toHaveBeenCalledWith(expect.any(Sensors))
     })
   })

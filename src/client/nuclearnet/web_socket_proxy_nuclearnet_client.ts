@@ -23,12 +23,8 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
       transports: ['websocket'],
     })
 
+    this.socket.on('reconnect', this.onReconnect.bind(this, options))
     this.socket.send('nuclear_connect', options)
-
-    this.socket.on('reconnect', () => {
-      // TODO (Annable): re-listen to everything D:
-      this.socket.send('nuclear_connect', options)
-    })
 
     return () => {
       this.socket.send('nuclear_disconnect')
@@ -60,5 +56,10 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
     if (typeof options.type === 'string') {
       this.socket.send(options.type, options)
     }
+  }
+
+  private onReconnect = (options: NUClearNetOptions) => {
+    this.socket.send('nuclear_connect', options)
+    // TODO (Annable): Also re-listen to everything D:
   }
 }

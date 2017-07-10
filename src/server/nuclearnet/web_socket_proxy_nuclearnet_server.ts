@@ -60,13 +60,11 @@ class WebSocketServerClient {
   }
 
   private onListen = (event: string, messageId: string) => {
-    console.log('listen', event, messageId)
     const off = this.nuclearnetClient.on(event, this.onPacket.bind(this, event))
     this.offListenMap.set(messageId, off)
   }
 
-  private onUnlisten = (event: string, messageId: string) => {
-    console.log('unlisten', event, messageId)
+  private onUnlisten = (messageId: string) => {
     const off = this.offListenMap.get(messageId)
     if (off) {
       off()

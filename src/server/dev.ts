@@ -65,4 +65,4 @@ NUSightServer.of(withSimulators, sioNetwork.of('/nusight')).connect()
 
 WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
   fakeNetworking: withSimulators,
-}).connect()
+})

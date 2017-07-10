@@ -21,21 +21,19 @@ export class WebSocketProxyNUClearNetServer {
     return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
   }
 
-  public connect(): () => void {
-    return this.nuclearnetClient.connect({ name: 'nusight' })
-  }
-
   private onClientConnection = (socket: WebSocket) => {
     WebSocketServerClient.of(this.nuclearnetClient, socket)
   }
 }
 
 class WebSocketServerClient {
+  private connected: boolean
   private offJoin: () => void
   private offLeave: () => void
   private offListenMap: Map<string, () => void>
 
   public constructor(private nuclearnetClient: NUClearNetClient, private socket: WebSocket) {
+    this.connected = false
     this.offJoin = this.nuclearnetClient.onJoin(this.onJoin)
     this.offLeave = this.nuclearnetClient.onLeave(this.onLeave)
     this.offListenMap = new Map()
@@ -59,8 +57,14 @@ class WebSocketServerClient {
   }
 
   private onConnect = (options: NUClearNetOptions) => {
-    const disconnect = this.nuclearnetClient.connect(options)
-    this.socket.on('nuclear_disconnect', () => disconnect())
+    if (!this.connected) {
+      const disconnect = this.nuclearnetClient.connect(options)
+      this.connected = true
+      this.socket.on('nuclear_disconnect', () => {
+        disconnect()
+        this.connected = false
+      })
+    }
   }
 
   private onListen = (event: string, messageId: string) => {

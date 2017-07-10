@@ -45,5 +45,19 @@ describe('Networking Integration', () => {
       expect(onSensors).toHaveBeenCalledWith(expect.any(Sensors))
       expect(onSensors).toHaveBeenCalledTimes(1)
     })
+
+    it('does not receive any messages after unsubscribing', () => {
+      const onSensors1 = jest.fn()
+      const onSensors2 = jest.fn()
+      network.on(Sensors, onSensors1)
+      network.on(Sensors, onSensors2)
+
+      network.off()
+
+      robotSimulator.simulate()
+
+      expect(onSensors1).not.toHaveBeenCalled()
+      expect(onSensors2).not.toHaveBeenCalled()
+    })
   })
 })

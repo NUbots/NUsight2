@@ -1,91 +1,127 @@
-import { FakeNUClearNetClient } from '../fake_nuclearnet_client'
 import { FakeNUClearNetServer } from '../fake_nuclearnet_server'
-import { createMockInstance } from '../../../shared/base/testing/create_mock_instance'
-import Mocked = jest.Mocked
+import { FakeNUClearNetClient } from '../fake_nuclearnet_client'
 
-describe.skip('FakeNUClearNetClient', () => {
-  let mockServer: Mocked<FakeNUClearNetServer>
-  let alice: FakeNUClearNetClient
+describe('FakeNUClearNetClient', () => {
+  let server: FakeNUClearNetServer
   let bob: FakeNUClearNetClient
+  let alice: FakeNUClearNetClient
   let eve: FakeNUClearNetClient
 
   beforeEach(() => {
-    mockServer = createMockInstance(FakeNUClearNetServer)
-    alice = new FakeNUClearNetClient(mockServer)
-    bob = new FakeNUClearNetClient(mockServer)
-    eve = new FakeNUClearNetClient(mockServer)
+    server = new FakeNUClearNetServer()
+    bob = new FakeNUClearNetClient(server)
+    alice = new FakeNUClearNetClient(server)
+    eve = new FakeNUClearNetClient(server)
   })
 
-  it('calls nuclear_join event handlers on connect', () => {
+  it('receives own join event', () => {
+    const onJoin = jest.fn()
+    bob.onJoin(onJoin)
+
+    bob.connect({ name: 'bob' })
+
+    expect(onJoin).toHaveBeenCalledTimes(1)
+    expect(onJoin).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'bob' }))
+  })
+
+  it('does not receive own leave event', () => {
+    const onLeave = jest.fn()
+    bob.onLeave(onLeave)
+
+    const disconnect = bob.connect({ name: 'bob' })
+    disconnect()
+
+    expect(onLeave).not.toHaveBeenCalled()
+  })
+
+  it('receives join events from other clients', () => {
+    bob.connect({ name: 'bob' })
     alice.connect({ name: 'alice' })
-    eve.connect({ name: 'eve' })
-
-    const aliceOnJoin = jest.fn()
-    alice.onJoin(aliceOnJoin)
-
-    const eveOnJoin = jest.fn()
-    eve.onJoin(eveOnJoin)
 
     const bobOnJoin = jest.fn()
     bob.onJoin(bobOnJoin)
 
-    bob.connect({ name: 'bob' })
+    const aliceOnJoin = jest.fn()
+    alice.onJoin(aliceOnJoin)
 
-    const expectedPeer = expect.objectContaining({ name: 'bob' })
-
-    expect(aliceOnJoin).toHaveBeenCalledWith(expectedPeer)
-    expect(eveOnJoin).toHaveBeenCalledWith(expectedPeer)
-    expect(bobOnJoin).toHaveBeenCalledWith(expectedPeer)
-  })
-
-  it('calls nuclear_leave event handlers on disconnect', () => {
-    alice.connect({ name: 'alice' })
     eve.connect({ name: 'eve' })
 
-    const aliceOnLeave = jest.fn()
-    alice.onLeave(aliceOnLeave)
+    expect(bobOnJoin).toHaveBeenCalledTimes(1)
+    expect(bobOnJoin).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'eve' }))
 
-    const eveOnLeave = jest.fn()
-    eve.onLeave(eveOnLeave)
+    expect(aliceOnJoin).toHaveBeenCalledTimes(1)
+    expect(aliceOnJoin).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'eve' }))
+  })
+
+  it('receives leave events from other clients', () => {
+    bob.connect({ name: 'bob' })
+    alice.connect({ name: 'alice' })
 
     const bobOnLeave = jest.fn()
     bob.onLeave(bobOnLeave)
 
-    const bobDisconnect = bob.connect({ name: 'bob' })
+    const aliceOnLeave = jest.fn()
+    alice.onLeave(aliceOnLeave)
 
-    const expectedPeer = expect.objectContaining({ name: 'bob' })
+    const disconnectEve = eve.connect({ name: 'eve' })
+    disconnectEve()
 
-    bobDisconnect()
+    expect(bobOnLeave).toHaveBeenCalledTimes(1)
+    expect(bobOnLeave).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'eve' }))
 
-    expect(aliceOnLeave).toHaveBeenCalledWith(expectedPeer)
-    expect(eveOnLeave).toHaveBeenCalledWith(expectedPeer)
-    expect(bobOnLeave).not.toHaveBeenCalled()
+    expect(aliceOnLeave).toHaveBeenCalledTimes(1)
+    expect(aliceOnLeave).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'eve' }))
   })
 
-  it('sends messages to others', () => {
+  it('receives join events for all other connected clients on connect', () => {
+    bob.connect({ name: 'bob' })
     alice.connect({ name: 'alice' })
+
+    const onJoin = jest.fn()
+    eve.onJoin(onJoin)
     eve.connect({ name: 'eve' })
+
+    expect(onJoin).toHaveBeenCalledTimes(3)
+    expect(onJoin).toHaveBeenCalledWith(expect.objectContaining({ name: 'bob' }))
+    expect(onJoin).toHaveBeenCalledWith(expect.objectContaining({ name: 'alice' }))
+    expect(onJoin).toHaveBeenCalledWith(expect.objectContaining({ name: 'eve' }))
+  })
+
+  it('does not receive own messages', () => {
     bob.connect({ name: 'bob' })
 
-    const aliceOnFoo = jest.fn()
-    alice.on('foo', aliceOnFoo)
-
-    const eveOnFoo = jest.fn()
-    eve.on('foo', eveOnFoo)
-
-    const bobOnFoo = jest.fn()
-    bob.on('foo', bobOnFoo)
+    const onSensors = jest.fn()
+    bob.on('sensors', onSensors)
 
     const payload = new Buffer(8)
-    bob.send({ type: 'foo', payload })
+    bob.send({ type: 'sensors', payload })
 
-    const expectedPacket = {
-      payload,
-      peer: expect.objectContaining({ name: 'bob' }),
-    }
+    expect(onSensors).toHaveBeenCalledTimes(0)
+  })
 
-    expect(aliceOnFoo).toHaveBeenCalledWith(expectedPacket)
-    expect(eveOnFoo).toHaveBeenCalledWith(expectedPacket)
-    expect(bobOnFoo).toHaveBeenCalledWith(expectedPacket)
+  it('receives messages sent from other clients', () => {
+    bob.connect({ name: 'bob' })
+    alice.connect({ name: 'alice' })
+    eve.connect({ name: 'eve' })
+
+    const bobOnSensors = jest.fn()
+    bob.on('sensors', bobOnSensors)
+
+    const aliceOnSensors = jest.fn()
+    bob.on('sensors', aliceOnSensors)
+
+    const eveOnSensors = jest.fn()
+    eve.on('sensors', eveOnSensors)
+
+    const payload = new Buffer(8)
+    eve.send({ type: 'sensors', payload })
+
+    expect(bobOnSensors).toHaveBeenCalledTimes(1)
+    expect(bobOnSensors).toHaveBeenLastCalledWith({ payload, peer: expect.objectContaining({ name: 'eve' }) })
+
+    expect(aliceOnSensors).toHaveBeenCalledTimes(1)
+    expect(aliceOnSensors).toHaveBeenLastCalledWith({ payload, peer: expect.objectContaining({ name: 'eve' }) })
+
+    expect(eveOnSensors).toHaveBeenCalledTimes(0)
   })
 })

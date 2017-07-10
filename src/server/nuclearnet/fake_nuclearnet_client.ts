@@ -70,7 +70,7 @@ export class FakeNUClearNetClient implements NUClearNetClient {
   }
 
   public send(options: NUClearNetSend): void {
-    this.server.send(this.peer, options)
+    this.server.send(this, options)
   }
 
   // Fake helpers

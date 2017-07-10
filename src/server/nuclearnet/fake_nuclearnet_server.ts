@@ -1,5 +1,4 @@
 import * as EventEmitter from 'events'
-import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
 import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
@@ -47,16 +46,17 @@ export class FakeNUClearNetServer {
     }
   }
 
-  public send(peer: NUClearNetPeer, opts: NUClearNetSend) {
+  public send(client: FakeNUClearNetClient, opts: NUClearNetSend) {
     if (typeof opts.type === 'string') {
       const packet = {
-        peer,
+        peer: client.peer,
         payload: opts.payload,
       }
 
-      const targetClients = opts.target === undefined
+      const targetClients = (opts.target === undefined
         ? this.clients
-        : this.clients.filter(client => client.peer.name === opts.target)
+        : this.clients.filter(otherClient => otherClient.peer.name === opts.target))
+        .filter(otherClient => otherClient !== client)
 
       for (const client of targetClients) {
         client.fakePacket(opts.type, packet)

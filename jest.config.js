@@ -1,42 +1,5 @@
-module.exports = {
-  coverageDirectory: 'coverage',
-  coveragePathIgnorePatterns: ['/node_modules/', 'src/global.d.ts'],
-  collectCoverageFrom: [
-    '**/*.{ts,tsx}',
-    '!src/shared/proto/**',
-    '!**/node_modules/**',
-    '!**/tests/**',
-  ],
-  globals: {
-    __TS_CONFIG__: './tsconfig.test.json'
-  },
-  mapCoverage: true,
-  moduleDirectories: [
-    'node_modules',
-    '<rootDir>/src'
-  ],
-  moduleFileExtensions: [
-    'js',
-    'ts',
-    'tsx'
-  ],
-  moduleNameMapper: {
-    '\\.(css)$': 'identity-obj-proxy',
-    '\\.(vert)$': '<rootDir>/__mocks__/mock.vert',
-    '\\.(frag)$': '<rootDir>/__mocks__/mock.frag'
-  },
-  roots: [
-    '<rootDir>/src',
-    '<rootDir>/integration_tests'
-  ],
-  modulePaths: [
-    '<rootDir>/src'
-  ],
-  testMatch: [
-    '**/*.tests.{ts,tsx}'
-  ],
-  transform: {
-    '.(ts|tsx)': '<rootDir>/node_modules/ts-jest/preprocessor.js'
-  }
-}
+// IntelliJ currently only supports jestconfig.json
+// Move jestconfig.json into here when IntelliJ supports jest.config.js
+
+module.exports = require('./jestconfig.json')
 

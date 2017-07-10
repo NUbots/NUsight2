@@ -11,8 +11,8 @@ export class LocalisationNetwork {
     this.network.on(Sensors, this.onSensors)
   }
 
-  public static of(globalNetwork: NUsightNetwork, model: LocalisationModel): LocalisationNetwork {
-    const network = Network.of(globalNetwork)
+  public static of(nusightNetwork: NUsightNetwork, model: LocalisationModel): LocalisationNetwork {
+    const network = Network.of(nusightNetwork)
     return new LocalisationNetwork(network, model)
   }
 

@@ -36,8 +36,8 @@ useStrict(true)
 //   console.log('nuclear_leave', peer)
 // })
 
-const globalNetwork = NUsightNetwork.of()
-globalNetwork.connect({ name: 'nusight' })
+const nusightNetwork = NUsightNetwork.of()
+nusightNetwork.connect({ name: 'nusight' })
 
 // TODO (Annable): Replace all this code with real networking + simulator
 const localisationModel = LocalisationModel.of()
@@ -78,7 +78,7 @@ ReactDOM.render(
         <Route path='/localisation' render={() => {
           const model = localisationModel
           const controller = LocalisationController.of()
-          const network = LocalisationNetwork.of(globalNetwork, model)
+          const network = LocalisationNetwork.of(nusightNetwork, model)
           return <LocalisationView controller={controller} model={model} network={network}/>
         }}/>
         <Route path='/vision' component={Vision}/>

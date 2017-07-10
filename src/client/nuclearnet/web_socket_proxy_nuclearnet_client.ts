@@ -7,13 +7,13 @@ import { WebSocketClient } from './web_socket_client'
 import SocketIOSocket = SocketIOClient.Socket
 
 export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
-  private nextMessageId: number
+  private nextRequestId: number
   private joinListeners: Set<NUClearEventListener>
   private leaveListeners: Set<NUClearEventListener>
-  private packetListeners: Map<string, Set<{ messageId: string, listener: NUClearPacketListener }>>
+  private packetListeners: Map<string, Set<{ requestId: string, listener: NUClearPacketListener }>>
 
   public constructor(private socket: WebSocketClient) {
-    this.nextMessageId = 0
+    this.nextRequestId = 0
     this.joinListeners = new Set()
     this.leaveListeners = new Set()
     this.packetListeners = new Map()
@@ -57,8 +57,8 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
   }
 
   public on(event: string, listener: NUClearPacketListener): () => void {
-    const messageId = String(this.nextMessageId++)
-    this.socket.send('listen', event, messageId)
+    const requestId = String(this.nextRequestId++)
+    this.socket.send('listen', event, requestId)
     this.socket.on(event, listener)
 
     let packetListeners = this.packetListeners.get(event)
@@ -66,11 +66,11 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
       packetListeners = new Set()
       this.packetListeners.set(event, packetListeners)
     }
-    const packetListener = { messageId, listener }
+    const packetListener = { requestId, listener }
     packetListeners.add(packetListener)
 
     return () => {
-      this.socket.send('unlisten', messageId)
+      this.socket.send('unlisten', requestId)
       this.socket.off(event, listener)
 
       const packetListeners = this.packetListeners.get(event)
@@ -100,7 +100,7 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
 
     for (const [event, packetListeners] of this.packetListeners.entries()) {
       for (const packetListener of packetListeners) {
-        this.socket.send('listen', event, packetListener.messageId)
+        this.socket.send('listen', event, packetListener.requestId)
         this.socket.on(event, packetListener.listener)
       }
     }

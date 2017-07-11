@@ -6,6 +6,11 @@ import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { WebSocketClient } from './web_socket_client'
 import SocketIOSocket = SocketIOClient.Socket
 
+/**
+ * A client-side interface for interacting with NUClearNet. Allows a browser to connect transparently connect to
+ * NUClearNet, using web sockets at the transport layer. Supports automatic reconnection, which rebinds all NUClearNet
+ * event listeners.
+ */
 export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
   private nextRequestToken: number
 

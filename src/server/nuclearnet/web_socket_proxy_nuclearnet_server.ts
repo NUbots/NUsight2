@@ -11,6 +11,11 @@ type Opts = {
   fakeNetworking: boolean
 }
 
+/**
+ * The server component of a NUClearNet proxy running over web sockets. Acts as a gateway to the NUClear network.
+ * All clients currently share a single NUClearNet connection, mostly for performance reasons. Could potentially be
+ * improved to have more intelligent multiplexing.
+ */
 export class WebSocketProxyNUClearNetServer {
   public constructor(private server: WebSocketServer, private nuclearnetClient: NUClearNetClient) {
     server.onConnection(this.onClientConnection)

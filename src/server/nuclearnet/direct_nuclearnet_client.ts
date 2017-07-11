@@ -5,6 +5,9 @@ import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 
+/**
+ * A thin adapter around the real NUClearNet which implements the NUClearNetClient interface.
+ */
 export class DirectNUClearNetClient implements NUClearNetClient {
   public constructor(private nuclearNetwork: NUClearNet) {
   }

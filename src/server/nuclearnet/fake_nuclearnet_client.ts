@@ -36,8 +36,9 @@ export class FakeNUClearNetClient implements NUClearNetClient {
   public connect(options: NUClearNetOptions): () => void {
     this.peer = {
       name: options.name,
-      address: '127.0.0.1',
-      port: 7447,
+      // Address and port are not used for anything yet, dummy values used.
+      address: 'fake_address',
+      port: 0,
     }
     this.connected = true
     const disconnect = this.server.connect(this)

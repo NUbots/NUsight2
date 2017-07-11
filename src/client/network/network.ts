@@ -3,7 +3,7 @@ import { MessageType } from './nusight_network'
 import { MessageCallback } from './nusight_network'
 
 /**
- * A convinience helper class to be used at the component-level.
+ * A convenience helper class to be used at the component-level.
  *
  * Easily subscribe to multiple NUClearNet messages with on(MessageType) and then unsubscribe from them all with off().
  */

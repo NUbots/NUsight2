@@ -6,6 +6,11 @@ import { MessageTypePath } from './message_type_names'
 
 const HEADER_SIZE = 9
 
+/**
+ * This class is intended to handle NUsight-specific networking. It handles the subscription of NUClearNet messages and
+ * decoding them into real protobufjs objects for convenient use. Components should not directly use this class, but
+ * instead create their own ComponentNetwork class which uses the Network helper class.
+ */
 export class NUsightNetwork {
   public constructor(private nuclearnetClient: NUClearNetClient,
                      private messageTypePath: MessageTypePath) {

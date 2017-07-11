@@ -1,13 +1,16 @@
 import * as SocketIO from 'socket.io'
-import SocketIOServer = SocketIO.Server
-import SocketIOSocket = SocketIO.Socket
-import Namespace = SocketIO.Namespace
 
+/**
+ * The thinnest wrapper possible around the Socket IO server interface. This exists to assist testing
+ * WebSocketProxyNUClearNetServer by giving a concrete class which can be mocked.
+ *
+ * There should never be enough logic in here that it needs any testing.
+ */
 export class WebSocketServer {
   public constructor(private sioServer: SocketIO.Namespace) {
   }
 
-  public static of(server: Namespace) {
+  public static of(server: SocketIO.Namespace) {
     return new WebSocketServer(server)
   }
 

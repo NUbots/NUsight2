@@ -1,5 +1,11 @@
 import * as SocketIO from 'socket.io-client'
 
+/**
+ * The thinnest wrapper possible around the Socket IO client interface. This exists to assist testing
+ * WebSocketProxyNUClearNetClient by giving a concrete class which can be mocked.
+ *
+ * There should never be enough logic in here that it needs any testing.
+ */
 export class WebSocketClient {
   private socket: SocketIOClient.Socket
 

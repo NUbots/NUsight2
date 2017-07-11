@@ -38,7 +38,7 @@ export class FakeNUClearNetClient implements NUClearNetClient {
       name: options.name,
       // Address and port are not used for anything yet, dummy values used.
       address: 'fake_address',
-      port: 0,
+      port: NaN,
     }
     this.connected = true
     const disconnect = this.server.connect(this)

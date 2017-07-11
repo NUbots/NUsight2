@@ -7,13 +7,13 @@ import { WebSocketClient } from './web_socket_client'
 import SocketIOSocket = SocketIOClient.Socket
 
 export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
-  private nextRequestId: number
+  private nextRequestToken: number
   private joinListeners: Set<NUClearEventListener>
   private leaveListeners: Set<NUClearEventListener>
-  private packetListeners: Map<string, Set<{ requestId: string, listener: NUClearPacketListener }>>
+  private packetListeners: Map<string, Set<{ requestToken: string, listener: NUClearPacketListener }>>
 
   public constructor(private socket: WebSocketClient) {
-    this.nextRequestId = 0
+    this.nextRequestToken = 0
     this.joinListeners = new Set()
     this.leaveListeners = new Set()
     this.packetListeners = new Map()
@@ -57,8 +57,22 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
   }
 
   public on(event: string, listener: NUClearPacketListener): () => void {
-    const requestId = String(this.nextRequestId++)
-    this.socket.send('listen', event, requestId)
+    /*
+     * This one is a bit more complicated than the others, mostly for performance purposes.
+     *
+     * The intent is to avoid WebSocketProxyNUClearNetServer sending all packets to the client, regardless of whether
+     * they subscribed or not. Ideally we only send packets to a client that they are actively interested in listening
+     * to that type of message. So we first request the type of message, with a 'listen' command. Then we listen to
+     * that type of message. On unsubscribe, we send an unlisten command, to prevent listening.
+     *
+     * We use a request token to uniquely identify each 'listen' call, and so that we can 'unlisten' that same
+     * subscription later.
+     *
+     * You can see this in practice when the client starts/stops receiving localisation events (e.g. Sensors) when
+     * they focus/unfocus the localisation tab.
+     */
+    const requestToken = String(this.nextRequestToken++)
+    this.socket.send('listen', event, requestToken)
     this.socket.on(event, listener)
 
     let packetListeners = this.packetListeners.get(event)
@@ -66,11 +80,11 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
       packetListeners = new Set()
       this.packetListeners.set(event, packetListeners)
     }
-    const packetListener = { requestId, listener }
+    const packetListener = { requestToken, listener }
     packetListeners.add(packetListener)
 
     return () => {
-      this.socket.send('unlisten', requestId)
+      this.socket.send('unlisten', requestToken)
       this.socket.off(event, listener)
 
       const packetListeners = this.packetListeners.get(event)
@@ -100,7 +114,7 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
 
     for (const [event, packetListeners] of this.packetListeners.entries()) {
       for (const packetListener of packetListeners) {
-        this.socket.send('listen', event, packetListener.requestId)
+        this.socket.send('listen', event, packetListener.requestToken)
         this.socket.on(event, packetListener.listener)
       }
     }

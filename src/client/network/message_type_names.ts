@@ -2,6 +2,11 @@ import { createSingletonFactory } from '../../shared/base/create_singleton_facto
 import { message } from '../../shared/proto/messages'
 import { MessageType } from './nusight_network'
 
+/**
+ * This class is used for converting NUClearNet message types into their path identifier strings.
+ *
+ * e.g. getPath(message.input.Sensors) should return the string 'message.input.Sensors'
+ */
 export class MessageTypePath {
   private cache: Map<any, string>
   private searchObject: any

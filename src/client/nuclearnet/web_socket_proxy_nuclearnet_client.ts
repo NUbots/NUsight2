@@ -8,6 +8,8 @@ import SocketIOSocket = SocketIOClient.Socket
 
 export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
   private nextRequestToken: number
+
+  // Store all listeners so that we can restore them after a socket disconnection/reconnection.
   private joinListeners: Set<NUClearEventListener>
   private leaveListeners: Set<NUClearEventListener>
   private packetListeners: Map<string, Set<{ requestToken: string, listener: NUClearPacketListener }>>
@@ -103,7 +105,8 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
   private onReconnect = (options: NUClearNetOptions) => {
     this.socket.send('nuclear_connect', options)
 
-    // Restore all our listeners
+    // We assume the server could have crashed during a reconnection. We need to restore all our listeners so that
+    // a browser refresh is not necessary.
     for (const joinListener of this.joinListeners) {
       this.socket.on('nuclear_join', joinListener)
     }

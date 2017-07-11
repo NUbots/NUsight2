@@ -3,6 +3,12 @@ import { NUClearNetSend } from 'nuclearnet.js'
 import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
 import { FakeNUClearNetClient } from './fake_nuclearnet_client'
 
+/**
+ * A fake in-memory NUClearNet 'server' which routes messages between each FakeNUClearNetClient.
+ *
+ * All messages are 'reliable' in that nothing is intentially dropped.
+ * Targetted messages are supported.
+ */
 export class FakeNUClearNetServer {
   private events: EventEmitter
   private clients: FakeNUClearNetClient[]
@@ -29,8 +35,12 @@ export class FakeNUClearNetServer {
     this.clients.push(client)
 
     for (const otherClient of this.clients) {
+      // This ensures that the newly connected client receives a nuclear_join event from everyone else on the network.
       client.fakeJoin(otherClient.peer)
+
+      // This conditional avoids sending nuclear_join twice to the newly connected client.
       if (otherClient !== client) {
+        // Send a single nuclear_join to everyone on the network about the newly connected client.
         otherClient.fakeJoin(client.peer)
       }
     }
@@ -52,6 +62,10 @@ export class FakeNUClearNetServer {
         payload: opts.payload,
       }
 
+      /*
+       * This list intentially includes the sender unless explicitly targeting another peer. This matches the real
+       * NUClearNet behaviour.
+       */
       const targetClients = opts.target === undefined
         ? this.clients
         : this.clients.filter(otherClient => otherClient.peer.name === opts.target)

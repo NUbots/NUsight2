@@ -8,6 +8,13 @@ import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { FakeNUClearNetServer } from './fake_nuclearnet_server'
 
+/**
+ * A fake NUClearNetClient, which collaborates with FakeNUClearNetServer. Designed to allow completely offline
+ * development of networked components, with the idea that if a component is built and tested using fake networking,
+ * there should be a high level of confidence it will work with a real network and a real robot.
+ *
+ * The fake helpers are public, but only should be used by FakeNUClearNetServer.
+ */
 export class FakeNUClearNetClient implements NUClearNetClient {
   public peer: NUClearNetPeer
   private events: EventEmitter
@@ -75,7 +82,7 @@ export class FakeNUClearNetClient implements NUClearNetClient {
     this.server.send(this, options)
   }
 
-  // Fake helpers
+  // Fake helpers, designed only to be used by FakeNUClearNetServer.
   public fakeJoin(peer: NUClearNetPeer) {
     this.events.emit('nuclear_join', peer)
   }

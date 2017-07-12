@@ -37,6 +37,7 @@
   box-shadow:
     0px 0px 3px 0px rgba(0, 0, 0, 0.15),
     0px 3px 8px 0px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
   width: 100%;
 }
 
@@ -49,11 +50,6 @@
 .robot:hover {
   background-color: #eee;
   cursor: pointer;
-}
-
-.robot:last-child:hover {
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
 }
 
 .robotLabel {

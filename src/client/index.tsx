@@ -37,9 +37,9 @@ const globalNetwork = GlobalNetwork.of()
 const localisationModel = LocalisationModel.of()
 const appModel = AppModel.of({
   robots: [
-    RobotModel.of({ name: 'Robot 1', host: 'localhost' }),
-    RobotModel.of({ name: 'Robot 2', host: 'localhost' }),
-    RobotModel.of({ name: 'Robot 3', host: 'localhost' }),
+    RobotModel.of({ enabled: false, name: 'Robot 1', host: 'localhost' }),
+    RobotModel.of({ enabled: false, name: 'Robot 2', host: 'localhost' }),
+    RobotModel.of({ enabled: false, name: 'Robot 3', host: 'localhost' }),
   ],
 })
 
@@ -71,7 +71,7 @@ requestAnimationFrame(function update() {
 })
 
 const appController = AppController.of()
-const robotSelector = () => <RobotSelector robots={appModel.robots} selectRobot={appController.toggleRobot} />
+const robotSelector = () => <RobotSelector robots={appModel.robots} selectRobot={appController.toggleRobotEnabled} />
 
 function withRobotSelector(robotSelector: ComponentType<{}>) {
   return (props: MenuBarProps) => (<MenuBar robotSelector={robotSelector}>{props.children}</MenuBar>)

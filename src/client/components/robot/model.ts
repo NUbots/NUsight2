@@ -9,8 +9,7 @@ export class RobotModel {
     Object.assign(this, opts)
   }
 
-  public static of(opts: { enabled?: boolean, name: string, host: string }) {
-    const options = Object.assign({}, opts, { enabled: opts.enabled === undefined ? false : opts.enabled })
-    return new RobotModel(options)
+  public static of(opts: RobotModel) {
+    return new RobotModel(opts)
   }
 }

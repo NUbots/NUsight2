@@ -2,23 +2,24 @@ import { action } from 'mobx'
 import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
+import { CSSProperties } from 'react'
 import { ComponentType } from 'react'
+import { ReactNode } from 'react'
+import { DropdownProps } from '../dropdown/view'
+import { Dropdown } from '../dropdown/view'
 
-export type WrappedComponentProps = {
-  onToggle: () => void
+export type DropdownContainerProps = {
+  dropdownMenuStyle?: CSSProperties
+  dropdownToggle: ReactNode
 }
 
-export const dropdownContainer = (WrappedComponent: ComponentType<any>) => {
+export const dropdownContainer = (WrappedComponent: ComponentType<DropdownProps> = Dropdown) => {
   // Refer to: https://github.com/Microsoft/TypeScript/issues/7342
   @observer
-  class EnhancedDropdown extends React.Component<any> {
+  class EnhancedDropdown extends React.Component<DropdownContainerProps> {
     private dropdown: HTMLDivElement
     @observable private isOpen: boolean = false
     private removeClickListener: () => void
-
-    constructor(props: {}) {
-      super(props)
-    }
 
     public componentDidMount() {
       const onClick = (event: MouseEvent) => this.onDocumentClick(event)
@@ -57,16 +58,6 @@ export const dropdownContainer = (WrappedComponent: ComponentType<any>) => {
         return
       }
 
-      const isOutsideEl = (target: EventTarget, el?: HTMLElement): boolean => {
-        let current: Node | null = target as Node
-        while (current) {
-          if (current === el) {
-            return false
-          }
-          current = current.parentNode
-        }
-        return true
-      }
       if (this.isOpen && isOutsideEl(event.target, this.dropdown)) {
         this.close()
       }
@@ -94,4 +85,15 @@ export const dropdownContainer = (WrappedComponent: ComponentType<any>) => {
   }
 
   return EnhancedDropdown
+}
+
+function isOutsideEl(target: EventTarget, el?: HTMLElement): boolean {
+  let current: Node | null = target as Node
+  while (current) {
+    if (current === el) {
+      return false
+    }
+    current = current.parentNode
+  }
+  return true
 }

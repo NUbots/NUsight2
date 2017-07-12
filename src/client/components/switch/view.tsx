@@ -7,7 +7,7 @@ import * as style from './style.css'
 export interface SwitchProps {
   on: boolean
   disabled?: boolean
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void
+  onChange(event: ChangeEvent<HTMLInputElement>): void
 }
 
 export const Switch: StatelessComponent<SwitchProps> = (props: SwitchProps) => {

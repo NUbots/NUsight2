@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
-import { Dropdown } from '../dropdown/view'
 import { dropdownContainer } from '../dropdown_container/view'
 import { Switch } from '../switch/view'
 import { RobotModel } from '../robot/model'
@@ -9,7 +8,7 @@ import * as style from './style.css'
 
 export type RobotSelectorProps = {
   robots: RobotModel[]
-  selectRobot: (robot: RobotModel) => void
+  selectRobot(robot: RobotModel): void
 }
 
 export const RobotSelector = observer((props: RobotSelectorProps) => {
@@ -40,4 +39,4 @@ export const RobotSelector = observer((props: RobotSelectorProps) => {
   )
 })
 
-const EnhancedDropdown = dropdownContainer(Dropdown)
+const EnhancedDropdown = dropdownContainer()

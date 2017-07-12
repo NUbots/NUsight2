@@ -13,25 +13,34 @@ export type DropdownContainerProps = {
   dropdownToggle: ReactNode
 }
 
+enum KeyCode {
+  Escape = 27
+}
+
 export const dropdownContainer = (WrappedComponent: ComponentType<DropdownProps> = Dropdown) => {
   // Refer to: https://github.com/Microsoft/TypeScript/issues/7342
   @observer
   class EnhancedDropdown extends React.Component<DropdownContainerProps> {
     private dropdown: HTMLDivElement
     @observable private isOpen: boolean = false
-    private removeClickListener: () => void
+    private removeListeners: () => void
 
     public componentDidMount() {
       const onClick = (event: MouseEvent) => this.onDocumentClick(event)
       document.addEventListener('click', onClick)
-      this.removeClickListener = () => {
+
+      const onKeydown = (event: KeyboardEvent) => this.onDocumentKeydown(event)
+      document.addEventListener('keydown', onKeydown)
+
+      this.removeListeners = () => {
         document.removeEventListener('click', onClick)
+        document.removeEventListener('keydown', onKeydown)
       }
     }
 
     public componentWillUnmount() {
-      if (this.removeClickListener) {
-        this.removeClickListener()
+      if (this.removeListeners) {
+        this.removeListeners()
       }
     }
 
@@ -54,13 +63,19 @@ export const dropdownContainer = (WrappedComponent: ComponentType<DropdownProps>
     }
 
     private onDocumentClick(event: MouseEvent) {
-      if (!this.dropdown) {
+      if (!this.dropdown || !this.isOpen || !isOutsideEl(event.target, this.dropdown)) {
         return
       }
 
-      if (this.isOpen && isOutsideEl(event.target, this.dropdown)) {
-        this.close()
+      this.close()
+    }
+
+    private onDocumentKeydown(event: KeyboardEvent) {
+      if (!this.dropdown || event.keyCode !== KeyCode.Escape || !this.isOpen) {
+        return
       }
+
+      this.close()
     }
 
     private onRef = (dropdown: HTMLDivElement) => {

@@ -40,6 +40,7 @@
     "object-curly-spacing": true,
     "object-literal-shorthand": true,
     "object-literal-sort-keys": false,
+    "prefer-method-signature": true,
     "quotemark": {
       "options": [
         "avoid-escape",

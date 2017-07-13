@@ -1,16 +1,19 @@
-import { inject } from 'inversify'
-import { injectable } from 'inversify'
 import { action } from 'mobx'
 import { message } from '../../../shared/proto/messages'
 import { Network } from '../../network/network'
+import { NUsightNetwork } from '../../network/nusight_network'
 import { LocalisationModel } from './model'
 import Sensors = message.input.Sensors
 
-@injectable()
 export class LocalisationNetwork {
-  public constructor(@inject(Network) private network: Network,
-                     @inject(LocalisationModel) private model: LocalisationModel) {
+  public constructor(private network: Network,
+                     private model: LocalisationModel) {
     this.network.on(Sensors, this.onSensors)
+  }
+
+  public static of(nusightNetwork: NUsightNetwork, model: LocalisationModel): LocalisationNetwork {
+    const network = Network.of(nusightNetwork)
+    return new LocalisationNetwork(network, model)
   }
 
   public destroy() {

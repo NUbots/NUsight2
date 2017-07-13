@@ -2,7 +2,9 @@ import { useStrict } from 'mobx'
 import { runInAction } from 'mobx'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { browserHistory, IndexRoute, Route, Router } from 'react-router'
+import { BrowserRouter } from 'react-router-dom'
+import { Route } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 import { AppView } from './components/app/view'
 import { Chart } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
@@ -17,13 +19,16 @@ import { NUClear } from './components/nuclear/view'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
-import { container } from './inversify.config'
+import { NUsightNetwork } from './network/nusight_network'
 
 // enable MobX strict mode
 useStrict(true)
 
+const nusightNetwork = NUsightNetwork.of()
+nusightNetwork.connect({ name: 'nusight' })
+
 // TODO (Annable): Replace all this code with real networking + simulator
-const localisationModel = container.get(LocalisationModel)
+const localisationModel = LocalisationModel.of()
 
 runInAction(() => {
   localisationModel.camera.position.set(0, 0.2, 0.5)
@@ -54,23 +59,25 @@ requestAnimationFrame(function update() {
 
 // render react DOM
 ReactDOM.render(
-  <Router history={browserHistory}>
-    <Route path='/' component={AppView}>
-      <IndexRoute component={Dashboard}/>
-      <Route path='/localisation' component={() => {
-        const controller = container.get(LocalisationController)
-        const model = container.get(LocalisationModel)
-        const network = container.get(LocalisationNetwork)
-        return <LocalisationView controller={controller} model={model} network={network}/>
-      }}/>
-      <Route path='/vision' component={Vision}/>
-      <Route path='/chart' component={Chart}/>
-      <Route path='/scatter' component={Scatter}/>
-      <Route path='/nuclear' component={NUClear}/>
-      <Route path='/classifier' component={Classifier}/>
-      <Route path='/subsumption' component={Subsumption}/>
-      <Route path='/gamestate' component={GameState}/>
-    </Route>
-  </Router>,
+  <BrowserRouter>
+    <AppView>
+      <Switch>
+        <Route exact path='/' component={Dashboard}/>
+        <Route path='/localisation' render={() => {
+          const model = localisationModel
+          const controller = LocalisationController.of()
+          const network = LocalisationNetwork.of(nusightNetwork, model)
+          return <LocalisationView controller={controller} model={model} network={network}/>
+        }}/>
+        <Route path='/vision' component={Vision}/>
+        <Route path='/chart' component={Chart}/>
+        <Route path='/scatter' component={Scatter}/>
+        <Route path='/nuclear' component={NUClear}/>
+        <Route path='/classifier' component={Classifier}/>
+        <Route path='/subsumption' component={Subsumption}/>
+        <Route path='/gamestate' component={GameState}/>
+      </Switch>
+    </AppView>
+  </BrowserRouter>,
   document.getElementById('root'),
 )

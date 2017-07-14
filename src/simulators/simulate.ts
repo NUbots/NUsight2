@@ -1,5 +1,5 @@
 import * as minimist from 'minimist'
-import { RobotSimulator } from './robot_simulator'
+import { VirtualRobots } from './virtual_robots'
 import { SensorDataSimulator } from './sensor_data_simulator'
 import { Simulator } from './simulator'
 
@@ -7,12 +7,12 @@ function main() {
   const args = minimist(process.argv.slice(2))
 
   const simulators = getSimulators(args)
-  const robotSimulator = RobotSimulator.of({
+  const virtualRobots = VirtualRobots.of({
     fakeNetworking: false,
     numRobots: 1,
     simulators,
   })
-  robotSimulator.simulateWithFrequency(60)
+  virtualRobots.simulateWithFrequency(60)
 }
 
 function getSimulators(args: minimist.ParsedArgs): Simulator[] {

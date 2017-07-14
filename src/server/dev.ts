@@ -9,7 +9,7 @@ import * as webpack from 'webpack'
 import * as webpackDevMiddleware from 'webpack-dev-middleware'
 import * as webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackConfig from '../../webpack.config'
-import { RobotSimulator } from '../simulators/robot_simulator'
+import { VirtualRobots } from '../simulators/virtual_robots'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
@@ -48,7 +48,7 @@ server.listen(port, () => {
 })
 
 if (withSimulators) {
-  const robotSimulator = RobotSimulator.of({
+  const robotSimulator = VirtualRobots.of({
     fakeNetworking: true,
     numRobots: 1,
     simulators: [

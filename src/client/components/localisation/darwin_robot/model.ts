@@ -6,7 +6,7 @@ export class RobotModel {
   @observable public id: number
   @observable public name: string
   @observable public color?: string
-  @observable public rWTt: Vector3
+  @observable public rWTt: Vector3 // Torso to world translation
   @observable public Rwt: Quaternion // Torso to world rotation
   @observable public motors: DarwinMotorSet
 

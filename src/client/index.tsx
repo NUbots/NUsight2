@@ -47,24 +47,19 @@ runInAction(() => {
   const colors = [undefined, 'magenta', undefined, 'blue', undefined, 'cyan', undefined, 'red']
   const numRobots = 8
   new Array(numRobots).fill(0).map((_, id) => {
-    const robot = LocalisationRobotModel.of({ id, name: `Robot ${id + 1}`, color: colors[id] || undefined, heading: 0 })
+    const angle = id * (2 * Math.PI) / numRobots
+    const distance = 1
+    const robot = LocalisationRobotModel.of({
+      id,
+      name: `Robot ${id + 1}`,
+      color: colors[id] || undefined,
+      heading: -angle - Math.PI / 2
+    })
+    robot.position.x = distance * Math.cos(angle)
+    robot.position.z = distance * Math.sin(angle)
+
     localisationModel.robots.push(robot)
     return robot
-  })
-})
-
-requestAnimationFrame(function update() {
-  requestAnimationFrame(update)
-  runInAction(() => {
-    const numRobots = localisationModel.robots.length
-    localisationModel.robots.forEach((robot, i) => {
-
-      const angle = i * (2 * Math.PI) / numRobots + Date.now() / 4E4
-      const distance = Math.cos(Date.now() / 1E3 + 4 * i) * 0.3 + 1
-      robot.position.x = distance * Math.cos(angle)
-      robot.position.z = distance * Math.sin(angle)
-      robot.heading = -angle - Math.PI / 2
-    })
   })
 })
 

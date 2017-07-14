@@ -10,8 +10,8 @@ export interface DropdownProps {
   dropdownMenuClassName?: string
   dropdownToggle: ReactNode
   isOpen: boolean
-  onRef: (dropdown: HTMLDivElement) => void
-  onToggleClick?: (event: MouseEvent<HTMLSpanElement>) => void
+  onRef(dropdown: HTMLDivElement): void
+  onToggleClick?(event: MouseEvent<HTMLSpanElement>): void
 }
 
 export const Dropdown: StatelessComponent<DropdownProps> = (props: DropdownProps) => {

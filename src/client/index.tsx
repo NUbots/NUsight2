@@ -23,12 +23,13 @@ import { RobotModel } from './components/robot/model'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
-import { GlobalNetwork } from './network/global_network'
+import { NUsightNetwork } from './network/nusight_network'
 
 // enable MobX strict mode
 useStrict(true)
 
-const globalNetwork = GlobalNetwork.of()
+const nusightNetwork = NUsightNetwork.of()
+nusightNetwork.connect({ name: 'nusight' })
 
 // TODO (Annable): Replace all this code with real networking + simulator
 const localisationModel = LocalisationModel.of()
@@ -78,7 +79,7 @@ ReactDOM.render(
         <Route path='/localisation' render={() => {
           const model = localisationModel
           const controller = LocalisationController.of()
-          const network = LocalisationNetwork.of(globalNetwork, model)
+          const network = LocalisationNetwork.of(nusightNetwork, model)
           return <LocalisationView controller={controller} menu={menu} model={model} network={network}/>
         }}/>
         <Route path='/vision' component={Vision}/>

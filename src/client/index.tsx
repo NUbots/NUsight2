@@ -15,6 +15,7 @@ import { GameState } from './components/game_state/view'
 import { LocalisationController } from './components/localisation/controller'
 import { RobotModel as LocalisationRobotModel } from './components/localisation/darwin_robot/model'
 import { LocalisationModel } from './components/localisation/model'
+import { Quaternion } from './components/localisation/model'
 import { LocalisationNetwork } from './components/localisation/network'
 import { LocalisationView } from './components/localisation/view'
 import { withRobotSelectorMenuBar } from './components/menu_bar/view'
@@ -53,7 +54,7 @@ runInAction(() => {
       id,
       name: `Robot ${id + 1}`,
       color: colors[id] || undefined,
-      heading: -angle - Math.PI / 2
+      Rtw: Quaternion.of(),
     })
     robot.position.x = distance * Math.cos(angle)
     robot.position.z = distance * Math.sin(angle)

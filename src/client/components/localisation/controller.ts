@@ -1,5 +1,7 @@
 import { action } from 'mobx'
 import * as THREE from 'three'
+import { Euler } from 'three'
+import { Quaternion } from 'three'
 import { HIP_TO_FOOT } from './darwin_robot/view_model'
 import { KeyCode } from './keycodes'
 import { LocalisationModel } from './model'
@@ -215,7 +217,9 @@ export class LocalisationController {
     // This camera position hack will not work with orientation/head movement.
     // TODO (Annable): Sync camera position/rotation properly using kinematic chain.
     model.camera.position.set(target.position.x - 0.001, target.position.y + 0.4, target.position.z)
-    model.camera.yaw = target.heading + Math.PI // TODO (Annable): Find why offset by PI is needed.
+    const rotation = new Quaternion(target.Rtw.x, target.Rtw.y, target.Rtw.z, target.Rtw.w)
+    const heading = new Euler().setFromQuaternion(rotation).z
+    model.camera.yaw = heading + Math.PI // TODO (Annable): Find why offset by PI is needed.
     model.camera.pitch = 0
   }
 

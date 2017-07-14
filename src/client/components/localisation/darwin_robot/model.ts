@@ -1,19 +1,20 @@
 import { observable } from 'mobx'
 import { Vector3 } from '../model'
+import { Quaternion } from '../model'
 
 export class RobotModel {
   @observable public id: number
   @observable public name: string
   @observable public color?: string
-  @observable public heading: number
   @observable public position: Vector3
+  @observable public Rtw: Quaternion // Torso to world rotation
   @observable public motors: DarwinMotorSet
 
   public constructor(opts: RobotModel) {
     Object.assign(this, opts)
   }
 
-  public static of(opts: { id: number, name: string, color?: string, heading: number }) {
+  public static of(opts: { id: number, name: string, color?: string, Rtw: Quaternion }) {
     return new RobotModel({
       ...opts,
       position: Vector3.of(),

@@ -1,14 +1,13 @@
 import { action } from 'mobx'
 import { Matrix4 } from 'three'
+import { Quaternion } from 'three'
+import { Vector3 } from 'three'
 import { message } from '../../../shared/proto/messages'
+import { mat44$Properties } from '../../../shared/proto/messages'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { LocalisationModel } from './model'
 import Sensors = message.input.Sensors
-import { Quaternion } from 'three'
-import { Vector3 } from 'three'
-import { Euler } from 'three'
-import { mat44$Properties } from '../../../shared/proto/messages'
 
 export class LocalisationNetwork {
   public constructor(private network: Network,
@@ -32,7 +31,7 @@ export class LocalisationNetwork {
 
     const { translation, rotation } = decompose(fromProtoMat44(sensors.world!))
     robot.position.set(translation.x, translation.z, translation.y)
-    robot.heading = new Euler().setFromQuaternion(rotation).z
+    robot.Rtw.set(rotation.x, rotation.z, rotation.y, rotation.w)
 
     robot.motors.rightShoulderPitch.angle = sensors.servo[0].presentPosition!
     robot.motors.leftShoulderPitch.angle = sensors.servo[1].presentPosition!
@@ -67,9 +66,9 @@ function decompose(m: Matrix4): { translation: Vector3, rotation: Quaternion, sc
 
 function fromProtoMat44(m: mat44$Properties): Matrix4 {
   return new Matrix4().set(
-      m!.x!.x!, m!.y!.x!, m!.z!.x!, m!.t!.x!,
-      m!.x!.y!, m!.y!.y!, m!.z!.y!, m!.t!.y!,
-      m!.x!.z!, m!.y!.z!, m!.z!.z!, m!.t!.z!,
-      m!.x!.t!, m!.y!.t!, m!.z!.t!, m!.t!.t!,
-    )
+    m!.x!.x!, m!.y!.x!, m!.z!.x!, m!.t!.x!,
+    m!.x!.y!, m!.y!.y!, m!.z!.y!, m!.t!.y!,
+    m!.x!.z!, m!.y!.z!, m!.z!.z!, m!.t!.z!,
+    m!.x!.t!, m!.y!.t!, m!.z!.t!, m!.t!.t!,
+  )
 }

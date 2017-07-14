@@ -1,5 +1,5 @@
+import * as classNames from 'classnames'
 import * as React from 'react'
-import { CSSProperties } from 'react'
 import { ReactNode } from 'react'
 import { MouseEvent } from 'react'
 import { StatelessComponent } from 'react'
@@ -7,7 +7,7 @@ import * as style from './style.css'
 
 export interface DropdownProps {
   children: ReactNode
-  dropdownMenuStyle?: CSSProperties
+  dropdownMenuClassName?: string
   dropdownToggle: ReactNode
   isOpen: boolean
   onRef: (dropdown: HTMLDivElement) => void
@@ -15,6 +15,7 @@ export interface DropdownProps {
 }
 
 export const Dropdown: StatelessComponent<DropdownProps> = (props: DropdownProps) => {
+  const dropdownMenuClassName = classNames(style.dropdownMenu, props.dropdownMenuClassName)
   return (
     <div className={style.dropdown} ref={props.onRef}>
       <span className={style.dropdownToggle}
@@ -22,7 +23,7 @@ export const Dropdown: StatelessComponent<DropdownProps> = (props: DropdownProps
         {props.dropdownToggle}
       </span>
       {props.isOpen &&
-        <div className={style.dropdownMenu} style={props.dropdownMenuStyle}>
+        <div className={dropdownMenuClassName}>
           {props.children}
         </div>
       }

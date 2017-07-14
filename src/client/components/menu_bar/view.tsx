@@ -7,8 +7,14 @@ import { RobotSelector } from '../robot_selector/view'
 import * as style from './style.css'
 
 export function withRobotSelectorMenuBar(robots: RobotModel[], toggleRobotEnabled: (robot: RobotModel) => void) {
-  const robotSelector = () => <RobotSelector robots={robots} selectRobot={toggleRobotEnabled} />
-  return (props: MenuBarProps) => (<MenuBar robotSelector={robotSelector}>{props.children}</MenuBar>)
+  const robotSelector = () => {
+    return (
+      <RobotSelector dropdownMenuPosition={'right'} robots={robots} selectRobot={toggleRobotEnabled} />
+    )
+  }
+  return (props: MenuBarProps) => (
+    <MenuBar robotSelector={robotSelector}>{props.children}</MenuBar>
+  )
 }
 
 export type MenuBarProps = {

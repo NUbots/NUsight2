@@ -61,6 +61,10 @@
   white-space: nowrap;
 }
 
+.rightDropdownMenu {
+  right: 0;
+}
+
 .robots {
   background-color: white;
   border-bottom-left-radius: 2px;

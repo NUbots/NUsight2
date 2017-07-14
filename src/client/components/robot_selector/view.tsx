@@ -8,6 +8,7 @@ import RobotIcon from './robot.svg'
 import * as style from './style.css'
 
 export type RobotSelectorProps = {
+  dropdownMenuPosition?: 'left' | 'right'
   robots: RobotModel[]
   selectRobot(robot: RobotModel): void
 }
@@ -21,10 +22,10 @@ export const RobotSelector = observer((props: RobotSelectorProps) => {
     </button>
   )
   const onChange = (robot: RobotModel) => () => selectRobot(robot)
-  const dropdownMenuStyle = { right: 0 }
+  const dropdownMenuClassName = props.dropdownMenuPosition === 'right' ? style.rightDropdownMenu : ''
   return (
     <div className={style.robotSelector}>
-      <EnhancedDropdown dropdownToggle={dropdownToggle} dropdownMenuStyle={dropdownMenuStyle}>
+      <EnhancedDropdown dropdownToggle={dropdownToggle} dropdownMenuClassName={dropdownMenuClassName}>
         <div className={style.robots}>
           {robots.length === 0 &&
             <div className={style.empty}>

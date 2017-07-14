@@ -2,14 +2,13 @@ import { action } from 'mobx'
 import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
-import { CSSProperties } from 'react'
 import { ComponentType } from 'react'
 import { ReactNode } from 'react'
 import { DropdownProps } from '../dropdown/view'
 import { Dropdown } from '../dropdown/view'
 
 export type DropdownContainerProps = {
-  dropdownMenuStyle?: CSSProperties
+  dropdownMenuClassName?: string
   dropdownToggle: ReactNode
 }
 

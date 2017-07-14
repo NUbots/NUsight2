@@ -6,18 +6,19 @@ export class RobotModel {
   @observable public id: number
   @observable public name: string
   @observable public color?: string
-  @observable public position: Vector3
-  @observable public Rtw: Quaternion // World to torso rotation
+  @observable public rWTt: Vector3
+  @observable public Rwt: Quaternion // Torso to world rotation
   @observable public motors: DarwinMotorSet
 
   public constructor(opts: RobotModel) {
     Object.assign(this, opts)
   }
 
-  public static of(opts: { id: number, name: string, color?: string, Rtw: Quaternion }) {
+  public static of(opts: { id: number, name: string, color?: string }) {
     return new RobotModel({
       ...opts,
-      position: Vector3.of(),
+      rWTt: Vector3.of(),
+      Rwt: Quaternion.of(),
       motors: DarwinMotorSet.of(),
     })
   }

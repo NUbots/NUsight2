@@ -54,10 +54,9 @@ runInAction(() => {
       id,
       name: `Robot ${id + 1}`,
       color: colors[id] || undefined,
-      Rtw: Quaternion.of(),
     })
-    robot.position.x = distance * Math.cos(angle)
-    robot.position.z = distance * Math.sin(angle)
+    robot.rWTt.x = distance * Math.cos(angle)
+    robot.rWTt.z = distance * Math.sin(angle)
 
     localisationModel.robots.push(robot)
     return robot

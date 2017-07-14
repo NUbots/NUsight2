@@ -23,10 +23,10 @@ export class SensorDataSimulator implements Simulator {
     const x = distance * Math.cos(angle)
     const y = distance * Math.sin(angle)
     const heading = -angle - Math.PI / 2
-    const world = toWorldMatrix4(x, y, heading)
+    const Htw = toHtw(x, y, heading)
 
     const buffer = Sensors.encode({
-      world: toProtoMat44(world),
+      world: toProtoMat44(Htw),
       servo: [
         { presentPosition: 3 * Math.PI / 4 + 0.5 * Math.cos(t - Math.PI) },
         { presentPosition: 3 * Math.PI / 4 + 0.5 * Math.cos(t) },
@@ -57,11 +57,11 @@ export class SensorDataSimulator implements Simulator {
   }
 }
 
-function toWorldMatrix4(x: number, y: number, heading: number): Matrix4 {
+function toHtw(x: number, y: number, heading: number): Matrix4 {
   const translation = new Vector3(x, y, 0)
   const rotation = new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), heading)
   const scale = new Vector3(1, 1, 1)
-  return new Matrix4().compose(translation, rotation, scale)
+  return new Matrix4().getInverse(new Matrix4().compose(translation, rotation, scale))
 }
 
 function toProtoMat44(m: Matrix4): mat44$Properties {

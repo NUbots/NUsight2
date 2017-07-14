@@ -29,9 +29,9 @@ export class LocalisationNetwork {
     // TODO (Annable): Support multiple robots.
     const robot = this.model.robots[0]
 
-    const { translation, rotation } = decompose(fromProtoMat44(sensors.world!))
-    robot.position.set(translation.x, translation.z, translation.y)
-    robot.Rtw.set(rotation.x, rotation.z, rotation.y, rotation.w)
+    const { translation: rWTt, rotation: Rwt } = decompose(new Matrix4().getInverse(fromProtoMat44(sensors.world!)))
+    robot.rWTt.set(rWTt.x, rWTt.z, rWTt.y)
+    robot.Rwt.set(Rwt.x, Rwt.z, Rwt.y, Rwt.w)
 
     robot.motors.rightShoulderPitch.angle = sensors.servo[0].presentPosition!
     robot.motors.leftShoulderPitch.angle = sensors.servo[1].presentPosition!

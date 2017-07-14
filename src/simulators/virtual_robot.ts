@@ -5,7 +5,8 @@ import { FakeNUClearNetClient } from '../server/nuclearnet/fake_nuclearnet_clien
 import { DirectNUClearNetClient } from '../server/nuclearnet/direct_nuclearnet_client'
 import { NodeSystemClock } from '../server/time/node_clock'
 import { flatMap } from './flat_map'
-type SimulatedRobotOpts = {
+
+type Opts = {
   fakeNetworking: boolean
   name: string
   simulators: Simulator[]
@@ -22,7 +23,7 @@ export class VirtualRobot {
     this.simulators = opts.simulators
   }
 
-  public static of(opts: SimulatedRobotOpts): VirtualRobot {
+  public static of(opts: Opts): VirtualRobot {
     const network = opts.fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     const clock = NodeSystemClock
     return new VirtualRobot(network, clock, opts)

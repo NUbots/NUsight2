@@ -48,14 +48,14 @@ server.listen(port, () => {
 })
 
 if (withSimulators) {
-  const robotSimulator = VirtualRobots.of({
+  const virtualRobots = VirtualRobots.of({
     fakeNetworking: true,
     numRobots: 1,
     simulators: [
       SensorDataSimulator.of(),
     ],
   })
-  robotSimulator.simulateWithFrequency(60)
+  virtualRobots.simulateWithFrequency(60)
 }
 
 WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {

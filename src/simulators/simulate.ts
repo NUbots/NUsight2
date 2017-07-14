@@ -1,5 +1,4 @@
 import * as minimist from 'minimist'
-import { SimulatorStatus } from './robot_simulator'
 import { RobotSimulator } from './robot_simulator'
 import { SensorDataSimulator } from './sensor_data_simulator'
 import { Simulator } from './simulator'
@@ -10,10 +9,9 @@ function main() {
   const simulators = getSimulators(args)
   const robotSimulator = RobotSimulator.of({
     fakeNetworking: false,
-    name: 'Robot Simulator',
+    numRobots: 1,
     simulators,
   })
-  SimulatorStatus.of(robotSimulator).statusEvery(2)
   robotSimulator.simulateWithFrequency(60)
 }
 

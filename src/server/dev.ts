@@ -10,7 +10,6 @@ import * as webpackDevMiddleware from 'webpack-dev-middleware'
 import * as webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackConfig from '../../webpack.config'
 import { RobotSimulator } from '../simulators/robot_simulator'
-import { SimulatorStatus } from '../simulators/robot_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
@@ -51,13 +50,12 @@ server.listen(port, () => {
 if (withSimulators) {
   const robotSimulator = RobotSimulator.of({
     fakeNetworking: true,
-    name: 'Sensors Simulator',
+    numRobots: 1,
     simulators: [
       SensorDataSimulator.of(),
     ],
   })
   robotSimulator.simulateWithFrequency(60)
-  SimulatorStatus.of(robotSimulator).statusEvery(60)
 }
 
 WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {

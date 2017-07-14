@@ -1,5 +1,4 @@
 import { Clock } from '../../src/server/time/clock'
-import { CancelTimer } from '../../src/server/time/node_clock'
 import { DirectNUClearNetClient } from '../server/nuclearnet/direct_nuclearnet_client'
 import { FakeNUClearNetClient } from '../server/nuclearnet/fake_nuclearnet_client'
 import { NodeSystemClock } from '../server/time/node_clock'
@@ -8,30 +7,63 @@ import { flatMap } from './flat_map'
 import { Simulator } from './simulator'
 
 export class RobotSimulator {
+  private robots: SimulatedRobot[]
+
+  public constructor(opts: { robots: SimulatedRobot[] }) {
+    this.robots = opts.robots
+  }
+
+  public static of(opts: { fakeNetworking: boolean, numRobots: number; simulators: Simulator[] }): RobotSimulator {
+    const robots = range(opts.numRobots).map(index => SimulatedRobot.of({
+      fakeNetworking: opts.fakeNetworking,
+      name: `Simulated Robot #${index + 1}`,
+      simulators: opts.simulators,
+    }))
+    return new RobotSimulator({ robots })
+  }
+
+  public simulateWithFrequency(frequency: number): () => void {
+    const stops = this.robots.map((robot, index) => robot.simulateWithFrequency(frequency, index, this.robots.length))
+    return () => stops.forEach(stop => stop())
+  }
+
+  public simulate(): void {
+    this.robots.forEach((robot, index) => robot.simulate(index, this.robots.length))
+  }
+
+  public connect(): void {
+    this.robots.forEach(robot => robot.connect())
+  }
+}
+
+type SimulatedRobotOpts = {
+  fakeNetworking: boolean
+  name: string
+  simulators: Simulator[]
+}
+
+export class SimulatedRobot {
   private name: string
   private simulators: Simulator[]
-  public messagesSent: number
 
-  public constructor(private network: NUClearNetClient,
-                     private clock: Clock,
-                     opts: { name: string, simulators: Simulator[] }) {
+  constructor(private network: NUClearNetClient,
+              private clock: Clock,
+              opts: { name: string, simulators: Simulator[] }) {
     this.name = opts.name
     this.simulators = opts.simulators
-
-    this.messagesSent = 0
   }
 
-  public static of(opts: { fakeNetworking: boolean, name: string; simulators: Simulator[] }): RobotSimulator {
+  public static of(opts: SimulatedRobotOpts): SimulatedRobot {
     const network = opts.fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     const clock = NodeSystemClock
-    return new RobotSimulator(network, clock, opts)
+    return new SimulatedRobot(network, clock, opts)
   }
 
-  public simulateWithFrequency(frequency: number) {
+  public simulateWithFrequency(frequency: number, index: number, numRobots: number) {
     const disconnect = this.connect()
 
     const period = 1000 / frequency
-    const cancelLoop = this.clock.setInterval(() => this.simulate(), period)
+    const cancelLoop = this.clock.setInterval(() => this.simulate(index, numRobots), period)
 
     return () => {
       cancelLoop()
@@ -49,38 +81,23 @@ export class RobotSimulator {
       target: 'nusight',
       reliable,
     })
-    this.messagesSent++
   }
 
-  public simulate() {
-    const messages = flatMap(simulator => simulator.simulate(this.clock.now()), this.simulators)
+  public simulate(index: number, numRobots: number) {
+    const messages = flatMap(simulator => simulator.simulate(this.clock.now(), index, numRobots), this.simulators)
     messages.forEach(message => this.send(message.messageType, message.buffer))
+    return messages
   }
 
-  private connect(): () => void {
+  public connect(): () => void {
     return this.network.connect({ name: this.name })
   }
 }
 
-export class SimulatorStatus {
-  private lastMessagesSent: number
-
-  public constructor(private clock: Clock,
-                     private simulator: RobotSimulator) {
-    this.lastMessagesSent = 0
+function range(n: number): number[] {
+  const arr = []
+  for (let i = 0; i < n; i++) {
+    arr.push(i)
   }
-
-  public static of(simulator: RobotSimulator): SimulatorStatus {
-    return new SimulatorStatus(NodeSystemClock, simulator)
-  }
-
-  public statusEvery(seconds: number): CancelTimer {
-    return this.clock.setInterval(() => {
-      const messagesSent = this.simulator.messagesSent
-      const delta = messagesSent - this.lastMessagesSent
-      // tslint:disable-next-line no-console
-      console.log(`Simulator: Sending ${(delta / seconds).toFixed(2)} messages/second.`)
-      this.lastMessagesSent = messagesSent
-    }, seconds * 1000)
-  }
+  return arr
 }

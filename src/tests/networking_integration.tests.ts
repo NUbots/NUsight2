@@ -6,6 +6,7 @@ import { FakeNUClearNetServer } from '../server/nuclearnet/fake_nuclearnet_serve
 import { NodeSystemClock } from '../server/time/node_clock'
 import { message } from '../shared/proto/messages'
 import { RobotSimulator } from '../simulators/robot_simulator'
+import { SimulatedRobot } from '../simulators/robot_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import Sensors = message.input.Sensors
 import VisionObject = message.vision.VisionObject
@@ -22,17 +23,22 @@ describe('Networking Integration', () => {
     nusightNetwork = createNUsightNetwork()
     disconnectNusightNetwork = nusightNetwork.connect({ name: 'nusight' })
 
-    robotSimulator = new RobotSimulator(
-      new FakeNUClearNetClient(nuclearnetServer),
-      NodeSystemClock,
-      {
-        name: 'Robot #1',
-        simulators: [
-          // TODO (Annable): Add vision and overview simulators when they exist
-          new SensorDataSimulator(),
-        ],
-      },
-    )
+    robotSimulator = new RobotSimulator({
+      robots: [
+        new SimulatedRobot(
+          new FakeNUClearNetClient(nuclearnetServer),
+          NodeSystemClock,
+          {
+            name: 'Robot #1',
+            simulators: [
+              // TODO (Annable): Add vision and overview simulators when they exist
+              new SensorDataSimulator(),
+            ],
+          },
+        ),
+      ],
+    })
+    robotSimulator.connect()
   })
 
   function createNUsightNetwork() {

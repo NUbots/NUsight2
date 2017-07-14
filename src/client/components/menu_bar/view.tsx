@@ -2,7 +2,14 @@ import * as React from 'react'
 import { ComponentType } from 'react'
 import { ReactNode } from 'react'
 import { StatelessComponent } from 'react'
+import { RobotModel } from '../robot/model'
+import { RobotSelector } from '../robot_selector/view'
 import * as style from './style.css'
+
+export function withRobotSelectorMenuBar(robots: RobotModel[], toggleRobotEnabled: (robot: RobotModel) => void) {
+  const robotSelector = () => <RobotSelector robots={robots} selectRobot={toggleRobotEnabled} />
+  return (props: MenuBarProps) => (<MenuBar robotSelector={robotSelector}>{props.children}</MenuBar>)
+}
 
 export type MenuBarProps = {
   children?: ReactNode

@@ -1,7 +1,6 @@
 import { useStrict } from 'mobx'
 import { runInAction } from 'mobx'
 import * as React from 'react'
-import { ComponentType } from 'react'
 import * as ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { Route } from 'react-router-dom'
@@ -18,11 +17,9 @@ import { RobotModel as LocalisationRobotModel } from './components/localisation/
 import { LocalisationModel } from './components/localisation/model'
 import { LocalisationNetwork } from './components/localisation/network'
 import { LocalisationView } from './components/localisation/view'
-import { MenuBar } from './components/menu_bar/view'
-import { MenuBarProps } from './components/menu_bar/view'
+import { withRobotSelectorMenuBar } from './components/menu_bar/view'
 import { NUClear } from './components/nuclear/view'
 import { RobotModel } from './components/robot/model'
-import { RobotSelector } from './components/robot_selector/view'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
@@ -71,13 +68,7 @@ requestAnimationFrame(function update() {
 })
 
 const appController = AppController.of()
-const robotSelector = () => <RobotSelector robots={appModel.robots} selectRobot={appController.toggleRobotEnabled} />
-
-function withRobotSelector(robotSelector: ComponentType<{}>) {
-  return (props: MenuBarProps) => (<MenuBar robotSelector={robotSelector}>{props.children}</MenuBar>)
-}
-
-const menu = withRobotSelector(robotSelector)
+const menu = withRobotSelectorMenuBar(appModel.robots, appController.toggleRobotEnabled)
 
 ReactDOM.render(
   <BrowserRouter>

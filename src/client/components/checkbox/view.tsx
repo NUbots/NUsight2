@@ -8,7 +8,7 @@ import * as style from './style.css'
 export interface CheckboxProps {
   checked: boolean
   disabled?: boolean
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void
+  onChange(event: ChangeEvent<HTMLInputElement>): void
 }
 
 export const Checkbox: StatelessComponent<CheckboxProps> = (props: CheckboxProps) => {

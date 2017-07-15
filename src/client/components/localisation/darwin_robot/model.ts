@@ -9,8 +9,8 @@ export class LocalisationRobotModel {
   @observable private model: RobotModel
   @observable public name: string
   @observable public color?: string
-  @observable public rWTt: Vector3 // Torso to world translation
-  @observable public Rwt: Quaternion // Torso to world rotation
+  @observable public rWTt: Vector3 // Torso to world translation in torso space.
+  @observable public Rwt: Quaternion // Torso to world rotation.
   @observable public motors: DarwinMotorSet
 
   public constructor(model: RobotModel, opts: Partial<LocalisationRobotModel>) {

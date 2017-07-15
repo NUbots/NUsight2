@@ -1,4 +1,5 @@
 declare module '*.worker.ts' {
-  const content: any
+  type WorkerLoader = new() => any
+  const content: WorkerLoader
   export = content
 }

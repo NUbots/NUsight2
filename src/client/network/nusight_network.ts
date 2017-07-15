@@ -6,7 +6,7 @@ import { WebSocketProxyNUClearNetClient } from '../nuclearnet/web_socket_proxy_n
 import { MessageTypePath } from './message_type_names'
 import { RobotModel } from '../components/robot/model'
 import { AppModel } from '../components/app/model'
-import * as DecodeWorker from './decode.worker'
+import * as DecodeWorker from './decode.worker.ts'
 
 export class MessageDecoder {
   public constructor(private free: Worker[],

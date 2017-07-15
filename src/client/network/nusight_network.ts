@@ -8,7 +8,7 @@ import { RobotModel } from '../components/robot/model'
 import { AppModel } from '../components/app/model'
 import * as DecodeWorker from './decode.worker'
 
-class MessageDecoder {
+export class MessageDecoder {
   public constructor(private free: Worker[],
                      private busy: Worker[],
                      private callbacks: {[key: string]: (message: any) => void},
@@ -16,8 +16,8 @@ class MessageDecoder {
 
     // Register all our completion handlers
     free.forEach(worker => {
-      worker.onmessage = function(ev: MessageEvent) {
-        console.log(ev)
+      worker.onmessage = (ev: MessageEvent) => {
+        this.onTaskComplete(worker, ev.data[0], ev.data[1])
       }
     })
   }
@@ -96,7 +96,9 @@ export class NUsightNetwork {
       // Pass off to our webworker decoder
       this.decoder.decode<T>(messageTypeName, packet, (message: T) => {
         const robotModel = this.appModel.robots.find(robot => {
-          return robot.name === packet.peer.name && robot.address === packet.peer.address && robot.port === packet.peer.port
+          return robot.name === packet.peer.name
+            && robot.address === packet.peer.address
+            && robot.port === packet.peer.port
         })
         if (robotModel) {
           cb(robotModel, message)

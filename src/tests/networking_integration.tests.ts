@@ -13,6 +13,7 @@ import Sensors = message.input.Sensors
 import VisionObject = message.vision.VisionObject
 import Overview = message.support.nubugger.Overview
 import { AppNetwork } from '../client/components/app/network'
+import { MessageDecoder } from '../client/network/nusight_network'
 
 describe('Networking Integration', () => {
   let nuclearnetServer: FakeNUClearNetServer
@@ -47,7 +48,8 @@ describe('Networking Integration', () => {
     const appModel = AppModel.of()
     const nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
     const messageTypePath = new MessageTypePath()
-    const nusightNetwork =  new NUsightNetwork(nuclearnetClient, appModel, messageTypePath)
+    const decoder = MessageDecoder.of()
+    const nusightNetwork =  new NUsightNetwork(nuclearnetClient, appModel, messageTypePath, decoder)
     AppNetwork.of(nusightNetwork, appModel)
     return nusightNetwork
   }

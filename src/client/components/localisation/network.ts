@@ -6,6 +6,8 @@ import { message } from '../../../shared/proto/messages'
 import { mat44$Properties } from '../../../shared/proto/messages'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
+import { RobotModel } from '../robot/model'
+import { LocalisationRobotModel } from './darwin_robot/model'
 import { LocalisationModel } from './model'
 import Sensors = message.input.Sensors
 
@@ -25,9 +27,8 @@ export class LocalisationNetwork {
   }
 
   @action
-  private onSensors = (sensors: Sensors) => {
-    // TODO (Annable): Support multiple robots.
-    const robot = this.model.robots[0]
+  private onSensors = (robotModel: RobotModel, sensors: Sensors) => {
+    const robot = LocalisationRobotModel.of(robotModel)
 
     const { translation: rWTt, rotation: Rwt } = decompose(new Matrix4().getInverse(fromProtoMat44(sensors.world!)))
     robot.rWTt.set(rWTt.x, rWTt.z, rWTt.y)

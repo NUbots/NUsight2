@@ -3,15 +3,15 @@ import { createTransformer } from 'mobx'
 import { Object3D } from 'three'
 import { Quaternion } from 'three'
 import { BodyViewModel } from './body/view_model'
-import { RobotModel } from './model'
+import { LocalisationRobotModel } from './model'
 
 export const HIP_TO_FOOT = 0.2465
 
 export class RobotViewModel {
-  public constructor(private model: RobotModel) {
+  public constructor(private model: LocalisationRobotModel) {
   }
 
-  public static of = createTransformer((model: RobotModel): RobotViewModel => {
+  public static of = createTransformer((model: LocalisationRobotModel): RobotViewModel => {
     return new RobotViewModel(model)
   })
 

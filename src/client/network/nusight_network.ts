@@ -15,10 +15,10 @@ export class MessageDecoder {
                      private tokenSource : number) {
 
     // Register all our completion handlers
-    free.forEach(worker => {
-      worker.onmessage = (ev: MessageEvent) => {
+    free.forEach((worker) => {
+      worker.addEventListener('message', (ev: MessageEvent) => {
         this.onTaskComplete(worker, ev.data[0], ev.data[1])
-      }
+      })
     })
   }
 
@@ -38,6 +38,7 @@ export class MessageDecoder {
     // If we don't have a free worker but we are reliable, get a busy one
     worker = worker === undefined && packet.reliable ? this.busy.shift() : worker
 
+    // We drop packets if they are unreliable and we are too busy to process them
     if (worker !== undefined) {
       // Store our callback with a unique token so we can find it later
       const token = ++this.tokenSource
@@ -60,7 +61,6 @@ export class MessageDecoder {
 
     // If this worker has finished all its tasks move it to the free list
     if (msg.tasks == 0) {
-      // TODO work out what worker this is
       this.free.push(this.busy.splice(this.busy.indexOf(worker), 1)[0])
     }
   }

@@ -81,6 +81,8 @@ export class FakeNUClearNetServer {
   }
 
   private hash(input: string): Buffer {
+    // Matches hashing implementation from NUClearNet
+    // See https://goo.gl/6NDPo2
     const hashString: string = XXH.h64(input, 0x4e55436c).toString(16)
     return Buffer.from((hashString.match(/../g) as string[]).reverse().join(''), 'hex')
   }

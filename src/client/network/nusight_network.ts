@@ -7,7 +7,60 @@ import { MessageTypePath } from './message_type_names'
 import { RobotModel } from '../components/robot/model'
 import { AppModel } from '../components/app/model'
 
-const HEADER_SIZE = 9
+class MessageDecoder {
+  public constructor(private free: Worker[],
+                     private busy: Worker[],
+                     private callbacks: {[key: string]: (message: any) => void}) {
+
+    // Register all our completion handlers
+    free.forEach(worker => {
+      worker.onmessage = this.onTaskComplete
+    })
+  }
+
+  public static of() {
+    const free = []
+    for (let i = 0; i < navigator.hardwareConcurrency; ++i) {
+      free.push(new Worker(decoderscriptthinggoeshere))
+    }
+    return new MessageDecoder(free, [], {})
+  }
+
+  public decode<T>(type: string, packet: NUClearNetPacket, cb: (message: T) => void) {
+
+    // Try to get a worker to process with
+    let worker = this.free.pop()
+
+    // If we don't have a free worker but we are reliable, get a busy one
+    worker = worker === undefined && packet.reliable ? this.busy.shift() : worker
+
+    if (worker !== undefined) {
+      // Store our callback with a unique token so we can find it later
+      const token = SOMETHINGUNIQUEHERE
+      this.callbacks[token] = cb
+
+      // Execute on the webworker
+      worker.postMessage({
+        'type': type,
+        'token': token,
+      }, [packet.payload])
+      this.busy.push(worker)
+    }
+  }
+
+  private onTaskComplete(msg: {token: string, tasks: number}, protobuf: any) {
+
+    // Find and execute our callback
+    this.callbacks[msg.token](protobuf)
+    delete this.callbacks[msg.token]
+
+    // If this worker has finished all its tasks move it to the free list
+    if (msg.tasks == 0) {
+      // TODO work out what worker this is
+      this.free.push(this.busy.splice(this.busy.indexOf(worker), 1)[0])
+    }
+  }
+}
 
 /**
  * This class is intended to handle NUsight-specific networking. It handles the subscription of NUClearNet messages and
@@ -17,7 +70,8 @@ const HEADER_SIZE = 9
 export class NUsightNetwork {
   public constructor(private nuclearnetClient: NUClearNetClient,
                      private appModel: AppModel,
-                     private messageTypePath: MessageTypePath) {
+                     private messageTypePath: MessageTypePath,
+                     private decoder: MessageDecoder) {
   }
 
   public static of(appModel: AppModel) {
@@ -33,16 +87,16 @@ export class NUsightNetwork {
   public onNUClearMessage<T>(messageType: MessageType<T>, cb: MessageCallback<T>) {
     const messageTypeName = this.messageTypePath.getPath(messageType)
     return this.nuclearnetClient.on(`NUsight<${messageTypeName}>`, (packet: NUClearNetPacket) => {
-      // Remove NUsight header for decoding by protobufjs
-      const buffer = new Uint8Array(packet.payload).slice(HEADER_SIZE)
-      const message = messageType.decode(buffer)
-      const peer = packet.peer
-      const robotModel = this.appModel.robots.find(robot => {
-        return robot.name === peer.name && robot.address === peer.address && robot.port === peer.port
+
+      // Pass off to our webworker decoder
+      this.decoder.decode<T>(packet, (message: T) => {
+        const robotModel = this.appModel.robots.find(robot => {
+          return robot.name === peer.name && robot.address === peer.address && robot.port === peer.port
+        })
+        if (robotModel) {
+          cb(robotModel, message)
+        }
       })
-      if (robotModel) {
-        cb(robotModel, message)
-      }
     })
   }
 

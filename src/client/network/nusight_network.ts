@@ -6,24 +6,28 @@ import { WebSocketProxyNUClearNetClient } from '../nuclearnet/web_socket_proxy_n
 import { MessageTypePath } from './message_type_names'
 import { RobotModel } from '../components/robot/model'
 import { AppModel } from '../components/app/model'
+import * as DecodeWorker from './decode.worker'
 
 class MessageDecoder {
   public constructor(private free: Worker[],
                      private busy: Worker[],
-                     private callbacks: {[key: string]: (message: any) => void}) {
+                     private callbacks: {[key: string]: (message: any) => void},
+                     private tokenSource : number) {
 
     // Register all our completion handlers
     free.forEach(worker => {
-      worker.onmessage = this.onTaskComplete
+      worker.onmessage = function(ev: MessageEvent) {
+        console.log(ev)
+      }
     })
   }
 
   public static of() {
     const free = []
     for (let i = 0; i < navigator.hardwareConcurrency; ++i) {
-      free.push(new Worker(decoderscriptthinggoeshere))
+      free.push(new DecodeWorker())
     }
-    return new MessageDecoder(free, [], {})
+    return new MessageDecoder(free, [], {}, 0)
   }
 
   public decode<T>(type: string, packet: NUClearNetPacket, cb: (message: T) => void) {
@@ -36,7 +40,7 @@ class MessageDecoder {
 
     if (worker !== undefined) {
       // Store our callback with a unique token so we can find it later
-      const token = SOMETHINGUNIQUEHERE
+      const token = ++this.tokenSource
       this.callbacks[token] = cb
 
       // Execute on the webworker
@@ -48,7 +52,7 @@ class MessageDecoder {
     }
   }
 
-  private onTaskComplete(msg: {token: string, tasks: number}, protobuf: any) {
+  private onTaskComplete(worker: Worker, msg: {token: string, tasks: number}, protobuf: any) {
 
     // Find and execute our callback
     this.callbacks[msg.token](protobuf)
@@ -77,7 +81,8 @@ export class NUsightNetwork {
   public static of(appModel: AppModel) {
     const messageTypePath = MessageTypePath.of()
     const nuclearnetClient: NUClearNetClient = WebSocketProxyNUClearNetClient.of()
-    return new NUsightNetwork(nuclearnetClient, appModel, messageTypePath)
+    const decoder = MessageDecoder.of()
+    return new NUsightNetwork(nuclearnetClient, appModel, messageTypePath, decoder)
   }
 
   public connect(opts: NUClearNetOptions): () => void {
@@ -89,9 +94,9 @@ export class NUsightNetwork {
     return this.nuclearnetClient.on(`NUsight<${messageTypeName}>`, (packet: NUClearNetPacket) => {
 
       // Pass off to our webworker decoder
-      this.decoder.decode<T>(packet, (message: T) => {
+      this.decoder.decode<T>(messageTypeName, packet, (message: T) => {
         const robotModel = this.appModel.robots.find(robot => {
-          return robot.name === peer.name && robot.address === peer.address && robot.port === peer.port
+          return robot.name === packet.peer.name && robot.address === packet.peer.address && robot.port === packet.peer.port
         })
         if (robotModel) {
           cb(robotModel, message)

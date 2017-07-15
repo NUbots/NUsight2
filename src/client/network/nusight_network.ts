@@ -17,13 +17,15 @@ export class MessageDecoder {
     // Register all our completion handlers
     free.forEach((worker) => {
       worker.addEventListener('message', (ev: MessageEvent) => {
-        this.onTaskComplete(worker, ev.data[0], ev.data[1])
+        this.onTaskComplete(worker, ev.data)
       })
     })
   }
 
   public static of() {
     const free = []
+
+    // We make a webworker for each cpu core we have
     for (let i = 0; i < navigator.hardwareConcurrency; ++i) {
       free.push(new DecodeWorker())
     }
@@ -48,20 +50,22 @@ export class MessageDecoder {
       worker.postMessage({
         'type': type,
         'token': token,
+        'payload': packet.payload,
       }, [packet.payload])
       this.busy.push(worker)
     }
   }
 
-  private onTaskComplete(worker: Worker, msg: {token: string, tasks: number}, protobuf: any) {
+  private onTaskComplete(worker: Worker, msg: {token: string, output: any}) {
 
     // Find and execute our callback
-    this.callbacks[msg.token](protobuf)
+    this.callbacks[msg.token](msg.output)
     delete this.callbacks[msg.token]
 
     // If this worker has finished all its tasks move it to the free list
-    if (msg.tasks == 0) {
-      this.free.push(this.busy.splice(this.busy.indexOf(worker), 1)[0])
+    const w = this.busy.splice(this.busy.indexOf(worker), 1)[0]
+    if (w !== undefined) {
+      this.free.push(w)
     }
   }
 }

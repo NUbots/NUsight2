@@ -69,6 +69,7 @@ class NbsRecorder {
     return () => {
       stopListening()
       this.recording = false
+      this.file.end()
     }
   }
 
@@ -82,13 +83,14 @@ class NbsRecorder {
     // 4 Bytes - The remaining packet length i.e. 16 bytes + N payload bytes
     // 8 Bytes - 64bit timestamp in microseconds. Note: this is not necessarily a unix timestamp.
     // 8 Bytes - 64bit bit hash of the message type.
-    // N bytes - The binary packet data itself.
+    // N bytes - The binary packet payload.
 
     const header = Buffer.from([0xE2, 0x98, 0xA2]) // NUClear radiation symbol.
 
     // 64bit timestamp in microseconds.
     const time = this.clock.now() * 1000;
     const timeBuffer = new Buffer(8);
+    // Convert double into two 32 bit integers.
     const MAX_UINT32 = 0xFFFFFFFF;
     const highByte = ~~(time / MAX_UINT32);
     const lowByte = (time % MAX_UINT32) - highByte;
@@ -103,7 +105,6 @@ class NbsRecorder {
     this.file.write(remainingByteLength);
     this.file.write(timeBuffer);
     this.file.write(packet.hash);
-
   }
 
   private arePeersEqual(peerA: NUClearNetPeer, peerB: NUClearNetPeer) {

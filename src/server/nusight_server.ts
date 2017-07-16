@@ -99,8 +99,8 @@ class NbsRecorder {
     const MAX_UINT32 = 0xFFFFFFFF;
     const highByte = ~~(time / MAX_UINT32);
     const lowByte = (time % MAX_UINT32) - highByte;
-    timeBuffer.writeUInt32LE(highByte, 0);
-    timeBuffer.writeUInt32LE(lowByte, 4);
+    timeBuffer.writeUInt32LE(lowByte, 0);
+    timeBuffer.writeUInt32LE(highByte, 4);
 
     const remainingByteLength = new Buffer(4);
     remainingByteLength.writeUInt32LE(timeBuffer.byteLength + packet.hash.byteLength + packet.payload.byteLength, 0)

@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
 import { observer } from 'mobx-react'
+import { Field } from './field/view'
 import { DashboardController } from './controller'
 import { DashboardModel } from './model'
 import { DashboardNetwork } from './network'
@@ -30,6 +31,7 @@ export class Dashboard extends Component<DashboardProps> {
         <Menu/>
         <div className={style.dashboard}>
           <div className={style.field}>
+            <Field model={model.field} />
           </div>
           {showPanels &&
           <div className={style.panels}>

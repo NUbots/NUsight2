@@ -6,6 +6,7 @@
 
 .field {
   flex: 1;
+  position: relative;
 }
 
 .panel {

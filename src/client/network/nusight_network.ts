@@ -11,6 +11,7 @@ import * as DecodeWorker from './decode.worker.ts'
 export class MessageDecoder {
   public constructor(private free: Worker[],
                      private busy: Worker[],
+                     private messageTypePath: MessageTypePath,
                      private callbacks: {[key: string]: (message: any) => void},
                      private tokenSource : number) {
 
@@ -29,30 +30,40 @@ export class MessageDecoder {
     for (let i = 0; i < navigator.hardwareConcurrency; ++i) {
       free.push(new DecodeWorker())
     }
-    return new MessageDecoder(free, [], {}, 0)
+
+    const messageTypePath = MessageTypePath.of()
+    return new MessageDecoder(free, [], messageTypePath, {}, 0)
   }
 
-  public decode<T>(type: string, packet: NUClearNetPacket, cb: (message: T) => void) {
+  public decode<T>(type: MessageType<T>, packet: NUClearNetPacket, cb: (message: T) => void) {
 
-    // Try to get a worker to process with
-    let worker = this.free.pop()
+    // Small packets aren't worth sending to a web worker just decode them here
+    if (packet.payload.byteLength < 512) {
+      cb(type.decode(packet.payload))
+    }
+    else {
+      // Try to get a free worker to process with
+      let worker = this.free.pop()
 
-    // If we don't have a free worker but we are reliable, get a busy one
-    worker = worker === undefined && packet.reliable ? this.busy.shift() : worker
+      // If we don't have a free worker but we are reliable, get the (hopefully) least busy one
+      worker = worker === undefined ? this.busy.shift() : worker
 
-    // We drop packets if they are unreliable and we are too busy to process them
-    if (worker !== undefined) {
       // Store our callback with a unique token so we can find it later
       const token = ++this.tokenSource
       this.callbacks[token] = cb
 
       // Execute on the webworker
-      worker.postMessage({
-        'type': type,
-        'token': token,
-        'payload': packet.payload,
-      }, [packet.payload])
-      this.busy.push(worker)
+      try {
+        worker.postMessage({
+          'type': this.messageTypePath.getPath(type),
+          'token': token,
+          'payload': packet.payload,
+        }, [packet.payload])
+        this.busy.push(worker)
+      }
+      catch (e) {
+        this.free.push(worker)
+      }
     }
   }
 
@@ -98,7 +109,7 @@ export class NUsightNetwork {
     return this.nuclearnetClient.on(`NUsight<${messageTypeName}>`, (packet: NUClearNetPacket) => {
 
       // Pass off to our webworker decoder
-      this.decoder.decode<T>(messageTypeName, packet, (message: T) => {
+      this.decoder.decode<T>(messageType, packet, (message: T) => {
         const robotModel = this.appModel.robots.find(robot => {
           return robot.name === packet.peer.name
             && robot.address === packet.peer.address

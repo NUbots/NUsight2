@@ -1,5 +1,6 @@
 import { action, observable } from 'mobx'
 import { computed } from 'mobx'
+import { memoize } from '../../base/memoize'
 import { Vector3 } from '../../math/vector3'
 import { AppModel } from '../app/model'
 import { LocalisationRobotModel } from './darwin_robot/model'
@@ -49,7 +50,7 @@ export class LocalisationModel {
     Object.assign(this, opts)
   }
 
-  public static of(appModel: AppModel): LocalisationModel {
+  public static of = memoize((appModel: AppModel): LocalisationModel => {
     return new LocalisationModel(appModel, {
       aspect: 300 / 150,
       field: FieldModel.of(),
@@ -60,7 +61,7 @@ export class LocalisationModel {
       viewMode: ViewMode.FreeCamera,
       time: TimeModel.of(),
     })
-  }
+  })
 
   @computed get robots(): LocalisationRobotModel[] {
     return this.appModel.robots.map(robot => LocalisationRobotModel.of(robot))

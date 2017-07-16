@@ -1,6 +1,6 @@
 import { observable } from 'mobx'
-import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { memoize } from '../../../base/memoize'
 import { Vector3 } from '../../../math/vector3'
 import { RobotModel } from '../../robot/model'
 import { Quaternion } from '../model'
@@ -18,7 +18,7 @@ export class LocalisationRobotModel {
     Object.assign(this, opts)
   }
 
-  public static of = createTransformer((model: RobotModel): LocalisationRobotModel => {
+  public static of = memoize((model: RobotModel): LocalisationRobotModel => {
     return new LocalisationRobotModel(model, {
       name: model.name,
       rWTt: Vector3.of(),

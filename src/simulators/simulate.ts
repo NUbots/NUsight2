@@ -10,7 +10,7 @@ function main() {
   const simulators = getSimulators(args)
   const virtualRobots = VirtualRobots.of({
     fakeNetworking: false,
-    numRobots: 1,
+    numRobots: 6,
     simulators,
   })
   virtualRobots.simulateWithFrequency(60)

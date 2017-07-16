@@ -35,7 +35,7 @@ server.listen(port, () => {
 if (withSimulators) {
   const virtualRobots = VirtualRobots.of({
     fakeNetworking: true,
-    numRobots: 1,
+    numRobots: 3,
     simulators: [
       SensorDataSimulator.of(),
       OverviewSimulator.of(),

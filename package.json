@@ -14,6 +14,7 @@
     "coverage:ci": "yarn test:ci -- --coverage",
     "tslint": "tslint -c tslint.json 'src/**/*.ts{,x}' --exclude 'src/shared/proto/**'",
     "tslint:fix": "tslint -c tslint.json 'src/**/*.ts{,x}' --exclude 'src/shared/proto/**' --fix",
+    "dev": "yarn start:sim",
     "start": "nodemon ./src/server/dev.ts",
     "start:sim": "nodemon ./src/server/dev.ts --with-simulators",
     "simulate": "nodemon ./src/simulators/simulate.ts",
@@ -94,7 +95,7 @@
     "minimist": "^1.2.0",
     "mobx": "^3.2.0",
     "mobx-react": "^4.2.2",
-    "nuclearnet.js": "^1.1.0",
+    "nuclearnet.js": "^1.2.0",
     "protobufjs": "^6.7.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
@@ -103,6 +104,7 @@
     "serve-favicon": "^2.4.3",
     "socket.io": "^1.7.3",
     "socket.io-client": "^1.7.3",
-    "three": "^0.84.0"
+    "three": "^0.84.0",
+    "xxhashjs": "^0.2.1"
   }
 }

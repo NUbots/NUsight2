@@ -110,6 +110,7 @@ class NbsRecorder {
     this.file.write(remainingByteLength);
     this.file.write(timeBuffer);
     this.file.write(packet.hash);
+    this.file.write(packet.payload);
   }
 
   private arePeersEqual(peerA: NUClearNetPeer, peerB: NUClearNetPeer) {

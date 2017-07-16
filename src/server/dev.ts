@@ -9,10 +9,13 @@ import * as webpack from 'webpack'
 import * as webpackDevMiddleware from 'webpack-dev-middleware'
 import * as webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackConfig from '../../webpack.config'
-import { VirtualRobots } from '../simulators/virtual_robots'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
+import { VirtualRobots } from '../simulators/virtual_robots'
+import { DirectNUClearNetClient } from './nuclearnet/direct_nuclearnet_client'
+import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
+import { NUsightServer } from './nusight_server'
 
 const compiler = webpack(webpackConfig)
 
@@ -58,6 +61,8 @@ if (withSimulators) {
   virtualRobots.simulateWithFrequency(60)
 }
 
-WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
-  fakeNetworking: withSimulators,
-})
+const nuclearnetClient = withSimulators ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+
+WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), nuclearnetClient)
+
+NUsightServer.of(WebSocketServer.of(sioNetwork.of('/nusight')), nuclearnetClient)

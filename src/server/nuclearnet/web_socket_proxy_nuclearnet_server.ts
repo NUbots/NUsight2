@@ -9,10 +9,6 @@ import { WebSocket } from './web_socket_server'
 import { NodeSystemClock } from '../time/node_clock'
 import { Clock } from '../time/clock'
 
-type Opts = {
-  fakeNetworking: boolean
-}
-
 /**
  * The server component of a NUClearNet proxy running over web sockets. Acts as a gateway to the NUClear network.
  * All clients currently share a single NUClearNet connection, mostly for performance reasons. Could potentially be
@@ -23,8 +19,7 @@ export class WebSocketProxyNUClearNetServer {
     server.onConnection(this.onClientConnection)
   }
 
-  public static of(server: WebSocketServer, { fakeNetworking }: Opts): WebSocketProxyNUClearNetServer {
-    const nuclearnetClient: NUClearNetClient = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+  public static of(server: WebSocketServer, nuclearnetClient: NUClearNetClient): WebSocketProxyNUClearNetServer {
     return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
   }
 

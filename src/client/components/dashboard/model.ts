@@ -1,7 +1,7 @@
 import { computed } from 'mobx'
 import { observable } from 'mobx'
-import { createTransformer } from 'mobx'
 import { message } from '../../../shared/proto/messages'
+import { memoize } from '../../base/memoize'
 import { Vector2 } from '../../math/vector2'
 import { RobotModel } from '../robot/model'
 import { FieldModel } from './field/model'
@@ -24,7 +24,8 @@ export class DashboardModel {
     return new DashboardModel(robots, FieldModel.of())
   }
 
-  @computed public get robots(): DashboardRobotModel[] {
+  @computed
+  public get robots(): DashboardRobotModel[] {
     return this.robotModels.map(robot => DashboardRobotModel.of(robot))
   }
 }
@@ -53,7 +54,7 @@ export class DashboardRobotModel {
     Object.assign(this, opts)
   }
 
-  public static of = createTransformer((robot: RobotModel): DashboardRobotModel => {
+  public static of = memoize((robot: RobotModel): DashboardRobotModel => {
     return new DashboardRobotModel(robot, {
       battery: -1,
       ballPosition: Vector2.of(),
@@ -70,7 +71,7 @@ export class DashboardRobotModel {
       penaltyReason: PenaltyReason.UNKNOWN_PENALTY_REASON,
       robotPosition: Vector2.of(),
       time: Date.now() / 1000,
-      voltage: -1
+      voltage: -1,
     })
   })
 

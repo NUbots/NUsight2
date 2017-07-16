@@ -178,6 +178,42 @@ describe('FakeNUClearNetClient', () => {
     }))
   })
 
+  it('receives messages sent from other clients', () => {
+    bob.connect({ name: 'bob' })
+    alice.connect({ name: 'alice' })
+    eve.connect({ name: 'eve' })
+
+    const bobOnPacket = jest.fn()
+    bob.onPacket(bobOnPacket)
+
+    const aliceOnPacket = jest.fn()
+    alice.onPacket(aliceOnPacket)
+
+    const eveOnSensors = jest.fn()
+    eve.on('sensors', eveOnSensors)
+
+    const payload = new Buffer(8)
+    eve.send({ type: 'sensors', payload })
+
+    expect(bobOnPacket).toHaveBeenCalledTimes(1)
+    expect(bobOnPacket).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'eve' }),
+    }))
+
+    expect(aliceOnPacket).toHaveBeenCalledTimes(1)
+    expect(aliceOnPacket).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'eve' }),
+    }))
+
+    expect(eveOnSensors).toHaveBeenCalledTimes(1)
+    expect(eveOnSensors).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'eve' }),
+    }))
+  })
+
   it('only receives targetted messages if they are the target', () => {
     bob.connect({ name: 'bob' })
     alice.connect({ name: 'alice' })

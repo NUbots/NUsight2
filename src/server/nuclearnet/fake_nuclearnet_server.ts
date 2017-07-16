@@ -8,7 +8,7 @@ import { FakeNUClearNetClient } from './fake_nuclearnet_client'
  * A fake in-memory NUClearNet 'server' which routes messages between each FakeNUClearNetClient.
  *
  * All messages are 'reliable' in that nothing is intentially dropped.
- * Targetted messages are supported.
+ * Targeted messages are supported.
  */
 export class FakeNUClearNetServer {
   private events: EventEmitter
@@ -67,16 +67,16 @@ export class FakeNUClearNetServer {
     }
 
     /*
-     * This list intentially includes the sender unless explicitly targeting another peer. This matches the real
+     * This list intentionally includes the sender unless explicitly targeting another peer. This matches the real
      * NUClearNet behaviour.
      */
     const targetClients = opts.target === undefined
       ? this.clients
       : this.clients.filter(otherClient => otherClient.peer.name === opts.target)
 
+    const hashString = hash.toString('hex')
     for (const client of targetClients) {
-      client.fakePacket(hash.toString('hex'), packet)
-      client.fakePacket('nuclear_packet', packet)
+      client.fakePacket(hashString, packet)
     }
   }
 }

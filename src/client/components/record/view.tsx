@@ -50,9 +50,5 @@ type RecordMenuBarProps = {
 
 const RecordMenuBar = observer((props: RecordMenuBarProps) => {
   const { menu: Menu } = props
-  return (
-    <Menu>
-      <ul className={styles.recordMenuBar}></ul>
-    </Menu>
-  )
+  return <Menu/>
 })

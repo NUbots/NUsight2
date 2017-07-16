@@ -82,7 +82,13 @@ export class FakeNUClearNetClient implements NUClearNetClient {
   }
 
   public onPacket(cb: NUClearPacketListener): () => void {
-    return this.on('nuclear_packet', cb)
+    const listener = (packet: NUClearNetPacket) => {
+      if (this.connected) {
+        cb(packet)
+      }
+    }
+    this.events.on('nuclear_packet', listener)
+    return () => this.events.removeListener('nuclear_packet', listener)
   }
 
   public send(options: NUClearNetSend): void {
@@ -100,5 +106,6 @@ export class FakeNUClearNetClient implements NUClearNetClient {
 
   public fakePacket(hash: string, packet: NUClearNetPacket) {
     this.events.emit(hash, packet)
+    this.events.emit('nuclear_packet', packet)
   }
 }

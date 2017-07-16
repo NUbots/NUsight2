@@ -76,12 +76,12 @@
 }
 
 .cameraIcon {
-  margin-left: auto;
 }
 
 .icons {
   align-items: center;
   display: flex;
+  justify-content: space-around;
 }
 
 .label {

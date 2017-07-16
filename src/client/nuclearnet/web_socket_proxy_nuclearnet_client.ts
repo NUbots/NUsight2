@@ -111,6 +111,10 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
     }
   }
 
+  onPacket(cb: NUClearPacketListener): () => void {
+    return this.on('nuclear_packet', cb)
+  }
+
   public send(options: NUClearNetSend): void {
     if (typeof options.type === 'string') {
       this.socket.send(options.type, options)

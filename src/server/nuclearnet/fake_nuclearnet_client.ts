@@ -79,6 +79,10 @@ export class FakeNUClearNetClient implements NUClearNetClient {
     return () => this.events.removeListener(event, listener)
   }
 
+  public onPacket(cb: NUClearPacketListener): () => void {
+    return this.on('nuclear_packet', cb)
+  }
+
   public send(options: NUClearNetSend): void {
     this.server.send(this, options)
   }

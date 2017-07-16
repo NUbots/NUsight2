@@ -76,6 +76,7 @@ export class FakeNUClearNetServer {
 
       for (const client of targetClients) {
         client.fakePacket(opts.type, packet)
+        client.fakePacket('nuclear_packet', packet)
       }
     }
   }

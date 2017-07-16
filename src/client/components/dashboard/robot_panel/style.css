@@ -54,36 +54,25 @@
   width: inherit;
 }
 
-.iconWarningStatus, .iconDangerStatus {
-  animation-duration: 0.5s;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-}
-
-@keyframes flashWarning {
-  to { border-color: #ff9800; }
-}
-
-.iconWarningStatus {
-  animation-name: flashWarning;
-}
-
-.iconWarningStatus > svg {
-  fill: #ff9800;
-  stroke: #ff9800;
-}
-
 @keyframes flashDanger {
   to { border-color: #f44336; }
 }
 
 .iconDangerStatus {
+  animation-direction: alternate;
+  animation-duration: 0.5s;
+  animation-iteration-count: infinite;
   animation-name: flashDanger;
 }
 
 .iconDangerStatus > svg {
   fill: #f44336;
   stroke: #f44336;
+}
+
+.iconWarningStatus > svg {
+  fill: #ff9800;
+  stroke: #ff9800;
 }
 
 .cameraIcon {

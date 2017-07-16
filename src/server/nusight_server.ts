@@ -38,7 +38,7 @@ class NUsightServerClient {
 
   public onRecord = (peer: NUClearNetPeer, requestToken: string) => {
     const recorder = NbsRecorder.of(peer, this.nuclearnetClient)
-    const filename = `${peer.name.replace(/[^A-Za-z0-9]/g, '_')}_${this.clock.now()}.tbs`
+    const filename = `${peer.name.replace(/[^A-Za-z0-9]/g, '_')}_${this.clock.now()}.nbs`
     console.log('recording', peer, requestToken)
     const stopRecording = recorder.record(`recordings/${filename}`)
     this.stopRecordingMap.set(requestToken, stopRecording)

@@ -18,6 +18,7 @@
     "start": "nodemon ./src/server/dev.ts",
     "start:sim": "nodemon ./src/server/dev.ts --with-simulators",
     "simulate": "nodemon ./src/simulators/simulate.ts",
+    "validate": "ts-node ./src/validator/validate.ts",
     "prod": "ts-node -F ./src/server/prod.ts",
     "prod:sim": "ts-node -F ./src/server/prod.ts --with-simulators",
     "build": "yarn clean:build && webpack -p --progress --colors",

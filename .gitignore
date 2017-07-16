@@ -9,3 +9,6 @@ build
 
 # Jest coverage report
 /coverage
+
+# NBS recordings
+/recordings

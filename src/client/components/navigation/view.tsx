@@ -7,6 +7,7 @@ import EyeIcon from './icons/eye.svg'
 import MapIcon from './icons/map.svg'
 import NUClearIcon from './icons/nuclear.svg'
 import OrderingIcon from './icons/ordering.svg'
+import RecordIcon from './icons/record.svg'
 import ScatterIcon from './icons/scatter.svg'
 import SpeedometerIcon from './icons/speedometer.svg'
 import * as style from './style.css'
@@ -40,6 +41,7 @@ export const NavigationView = () => (
       <NavigationItemView url='/classifier' Icon={CubeIcon}>Classifier</NavigationItemView>
       <NavigationItemView url='/subsumption' Icon={OrderingIcon}>Subsumption</NavigationItemView>
       <NavigationItemView url='/gamestate' Icon={ControllerIcon}>GameState</NavigationItemView>
+      <NavigationItemView url='/record' Icon={RecordIcon}>Record</NavigationItemView>
     </ul>
   </header>
 )

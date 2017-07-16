@@ -18,10 +18,12 @@ import { LocalisationNetwork } from './components/localisation/network'
 import { LocalisationView } from './components/localisation/view'
 import { withRobotSelectorMenuBar } from './components/menu_bar/view'
 import { NUClear } from './components/nuclear/view'
+import { RecordView } from './components/record/view'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { NUsightNetwork } from './network/nusight_network'
+import { RecordModel } from './components/record/model'
 
 // enable MobX strict mode
 useStrict(true)
@@ -35,6 +37,9 @@ const localisationModel = LocalisationModel.of(appModel)
 const appController = AppController.of()
 AppNetwork.of(nusightNetwork, appModel)
 const menu = withRobotSelectorMenuBar(appModel.robots, appController.toggleRobotEnabled)
+
+
+const recordModel = RecordModel.of(appModel)
 
 ReactDOM.render(
   <BrowserRouter>
@@ -54,6 +59,7 @@ ReactDOM.render(
         <Route path='/classifier' component={Classifier}/>
         <Route path='/subsumption' component={Subsumption}/>
         <Route path='/gamestate' component={GameState}/>
+        <Route path='/record' render={() => RecordView.of(menu, nusightNetwork, recordModel)}/>
       </Switch>
     </AppView>
   </BrowserRouter>,

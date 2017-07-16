@@ -26,6 +26,8 @@ class NUsightServerClient {
   private stopRecordingMap: Map<string, () => void>
 
   public constructor(private socket: WebSocket, private clock: Clock, private nuclearnetClient: NUClearNetClient) {
+    this.stopRecordingMap = new Map()
+
     this.socket.on('record', this.onRecord)
     this.socket.on('unrecord', this.onUnrecord)
   }
@@ -34,15 +36,18 @@ class NUsightServerClient {
     return new NUsightServerClient(socket, NodeSystemClock, nuclearnetClient)
   }
 
-  public onRecord(peer: NUClearNetPeer, requestToken: string) {
+  public onRecord = (peer: NUClearNetPeer, requestToken: string) => {
     const recorder = NbsRecorder.of(peer, this.nuclearnetClient)
-    const stopRecording = recorder.record(`recordings/${this.clock.now()}.tbs`)
+    const filename = `${peer.name.replace(/[^A-Za-z0-9]/g, '_')}_${this.clock.now()}.tbs`
+    console.log('recording', peer, requestToken)
+    const stopRecording = recorder.record(`recordings/${filename}`)
     this.stopRecordingMap.set(requestToken, stopRecording)
   }
 
-  public onUnrecord(requestToken: string) {
+  public onUnrecord = (requestToken: string) => {
     const stopRecording = this.stopRecordingMap.get(requestToken)
     if (stopRecording) {
+      console.log('stop recording', requestToken)
       stopRecording()
     }
   }
@@ -94,8 +99,8 @@ class NbsRecorder {
     const MAX_UINT32 = 0xFFFFFFFF;
     const highByte = ~~(time / MAX_UINT32);
     const lowByte = (time % MAX_UINT32) - highByte;
-    timeBuffer.writeUInt32BE(highByte, 0);
-    timeBuffer.writeUInt32BE(lowByte, 4);
+    timeBuffer.writeUInt32LE(highByte, 0);
+    timeBuffer.writeUInt32LE(lowByte, 4);
 
     const remainingByteLength = new Buffer(4);
     remainingByteLength.writeUInt32LE(timeBuffer.byteLength + packet.hash.byteLength + packet.payload.byteLength, 0)

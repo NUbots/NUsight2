@@ -1,4 +1,5 @@
-import { message } from '../shared/proto/messages'
+import { message } from '../../src/shared/proto/messages'
+import { FieldDimensions } from '../shared/field/dimensions'
 import { vec2$Properties } from '../shared/proto/messages'
 import { Simulator } from './simulator'
 import { Message } from './simulator'
@@ -9,21 +10,25 @@ import PenaltyReason = message.input.GameState.Data.PenaltyReason
 import State = message.behaviour.Behaviour.State
 
 export class OverviewSimulator implements Simulator {
-  constructor(private random: () => number) {
-  }
+  constructor(private field: FieldDimensions,
+              private random: () => number) {}
 
   public static of() {
-    return new OverviewSimulator(Math.random.bind(Math))
+    return new OverviewSimulator(
+      FieldDimensions.postYear2017(),
+      Math.random.bind(Math)
+    )
   }
 
   public simulate(time: number): Message[] {
     const messageType = 'message.support.nubugger.Overview'
 
-    var robotPosition = this.randomFieldPosition()
-    var robotHeading = this.randomUnitVector()
-    var ballPosition = this.randomFieldPosition()
-    var ballWorldPosition = this.randomFieldPosition()
+    const robotPosition = this.randomFieldPosition()
+    const robotHeading = this.randomUnitVector()
+    const ballPosition = this.randomFieldPosition()
+    const ballWorldPosition = this.randomFieldPosition()
 
+    const timeSeconds = time / 1000
     const buffer = Overview.encode({
       roleName: 'Overview Simulator',
       voltage: this.randomFloat(10, 13),
@@ -40,10 +45,10 @@ export class OverviewSimulator implements Simulator {
       gameMode: Mode.NORMAL,
       gamePhase: Phase.INITIAL,
       penaltyReason: PenaltyReason.UNPENALISED,
-      lastCameraImage: { seconds: time - 5000 * this.random() },
-      lastSeenBall: { seconds: time - 5000 * this.random() },
-      lastSeenGoal: { seconds: time - 15000 * this.random() },
-      lastSeenObstacle: { seconds: time - 15000 * this.random() },
+      lastCameraImage: { seconds: this.randomSeconds(timeSeconds, -6) },
+      lastSeenBall: { seconds: this.randomSeconds(timeSeconds, -6) },
+      lastSeenGoal: { seconds: this.randomSeconds(timeSeconds, -6) },
+      lastSeenObstacle: { seconds: this.randomSeconds(timeSeconds, -6) },
       pathPlan: [
         robotPosition,
         this.randomFieldPosition(),
@@ -59,23 +64,25 @@ export class OverviewSimulator implements Simulator {
     return [message]
   }
 
-  private randomFloat(min: number, max: number): number {
-    return this.random() * (max - min) + min
-  }
-
-
   private randomFieldPosition(): vec2$Properties {
-    // TODO (Annable): Configure from field size definition.
-    var fieldLength = 9
-    var fieldWidth = 6
+    const fieldLength = this.field.fieldLength
+    const fieldWidth = this.field.fieldWidth
     return {
       x: this.random() * fieldLength - (fieldLength * 0.5),
       y: this.random() * fieldWidth - (fieldWidth * 0.5),
     }
   }
 
+  private randomFloat(min: number, max: number): number {
+    return this.random() * (max - min) + min
+  }
+
+  private randomSeconds(now: number, offset: number): number {
+    return now + (offset * this.random())
+  }
+
   private randomUnitVector(): vec2$Properties {
-    var angle = this.random() * 2 * Math.PI
+    const angle = this.random() * 2 * Math.PI
     return {
       x: Math.cos(angle),
       y: Math.sin(angle),

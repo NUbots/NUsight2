@@ -4,6 +4,7 @@ import { createTransformer } from 'mobx'
 import { message } from '../../../shared/proto/messages'
 import { Vector2 } from '../../math/vector2'
 import { RobotModel } from '../robot/model'
+import { FieldModel } from './field/model'
 
 import Mode = message.input.GameState.Data.Mode
 import Phase = message.input.GameState.Data.Phase
@@ -12,13 +13,15 @@ import State = message.behaviour.Behaviour.State
 
 export class DashboardModel {
   @observable private robotModels: RobotModel[]
+  @observable public field: FieldModel
 
-  constructor(robotModels: RobotModel[]) {
+  constructor(robotModels: RobotModel[], field: FieldModel) {
     this.robotModels = robotModels
+    this.field = field
   }
 
   public static of(robots: RobotModel[]): DashboardModel {
-    return new DashboardModel(robots)
+    return new DashboardModel(robots, FieldModel.of())
   }
 
   @computed public get robots(): DashboardRobotModel[] {

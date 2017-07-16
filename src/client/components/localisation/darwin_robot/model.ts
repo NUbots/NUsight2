@@ -4,7 +4,6 @@ import { memoize } from '../../../base/memoize'
 import { RobotModel } from '../../robot/model'
 import { Vector3 } from '../model'
 import { Quaternion } from '../model'
-import { memoize } from '../../../base/memoize'
 
 export class LocalisationRobotModel {
   @observable private model: RobotModel

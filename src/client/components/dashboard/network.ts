@@ -5,7 +5,7 @@ import { Vector2 } from '../../math/vector2'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
-import { DashboardRobotModel } from './model'
+import { DashboardRobotModel } from './dashboard_robot/model'
 import Overview = message.support.nubugger.Overview
 import Timestamp = google.protobuf.Timestamp$Properties
 

@@ -1,20 +1,8 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { DashboardRobotViewModel } from '../dashboard_robot/view_model'
 import { GroundViewModel } from '../ground/view_model'
 import { FieldModel } from './model'
-
-export type KickTargetProps = {
-
-}
-
-const KickTarget = (props: KickTargetProps) => {
-
-}
-
-const Robot = () => {
-
-}
-
 
 export class FieldViewModel {
   public constructor(private model: FieldModel) {}
@@ -26,12 +14,19 @@ export class FieldViewModel {
   @computed
   public get scene() {
     return [
-      this.ground
+      this.ground,
+      this.robots
     ]
   }
-  
+
   @computed
   private get ground() {
     return GroundViewModel.of(this.model.ground).ground
+  }
+
+  @computed
+  private get robots() {
+    return this.model.robots
+      .map(robot => DashboardRobotViewModel.of(robot).robot)
   }
 }

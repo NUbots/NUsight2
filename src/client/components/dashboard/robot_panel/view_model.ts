@@ -1,6 +1,6 @@
 import { computed } from 'mobx'
 import { createTransformer } from 'mobx'
-import { DashboardRobotModel } from '../model'
+import { DashboardRobotModel } from '../dashboard_robot/model'
 import { message } from '../../../../shared/proto/messages'
 import { LastStatus } from './view'
 

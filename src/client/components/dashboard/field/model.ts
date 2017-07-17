@@ -1,21 +1,25 @@
 import { computed } from 'mobx'
 import { observable } from 'mobx'
+import { DashboardRobotModel } from '../dashboard_robot/model'
 import { GroundModel } from '../ground/model'
 
 export type FieldModelOpts = {
   ground: GroundModel
+  robots: DashboardRobotModel[]
 }
 
 export class FieldModel {
   @observable public ground: GroundModel
+  @observable public robots: DashboardRobotModel[]
 
   constructor(opts: FieldModelOpts) {
     Object.assign(this, opts)
   }
 
-  public static of(): FieldModel {
+  public static of(robots: DashboardRobotModel[]): FieldModel {
     return new FieldModel({
-      ground: GroundModel.of()
+      ground: GroundModel.of(),
+      robots
     })
   }
 

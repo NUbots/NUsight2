@@ -11,7 +11,11 @@ export class Vector2 {
     this.y = y
   }
 
-  public static of(vec2?: { x?: number, y?: number } | null) {
+  public static of(x?: number, y?: number): Vector2 {
+    return new Vector2(x || 0, y || 0)
+  }
+
+  public static from(vec2?: { x?: number, y?: number } | null): Vector2 {
     if (!vec2) {
       vec2 = { x: 0, y: 0 }
     }

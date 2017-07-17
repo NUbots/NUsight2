@@ -36,18 +36,18 @@ export class DashboardNetwork {
     }
 
     robot.battery = overview.battery
-    robot.ballPosition = Vector2.of(overview.ballPosition)
-    robot.ballWorldPosition = Vector2.of(overview.ballWorldPosition)
+    robot.ballPosition = Vector2.from(overview.ballPosition)
+    robot.ballWorldPosition = Vector2.from(overview.ballWorldPosition)
     robot.behaviourState = overview.behaviourState
     robot.gameMode = overview.gameMode
     robot.gamePhase = overview.gamePhase
-    robot.kickTarget = Vector2.of(overview.kickTarget)
+    robot.kickTarget = Vector2.from(overview.kickTarget)
     robot.lastCameraImage = toSeconds(overview.lastCameraImage)
     robot.lastSeenBall = toSeconds(overview.lastSeenBall)
     robot.lastSeenGoal = toSeconds(overview.lastSeenGoal)
     robot.lastSeenObstacle = toSeconds(overview.lastSeenObstacle)
     robot.penaltyReason = overview.penaltyReason
-    robot.robotPosition = Vector2.of(overview.robotPosition)
+    robot.robotPosition = Vector2.from(overview.robotPosition)
     robot.time = Date.now () / 1000
     robot.voltage = overview.voltage
   }

@@ -75,19 +75,9 @@ export class GroundViewModel {
   private get centerLine(): LineProps {
     return {
       lineWidth: this.model.dimensions.lineWidth,
-      origin: Vector2.of(
-        {
-          x: 0,
-          y: this.model.dimensions.fieldWidth * 0.5
-        }
-      ),
+      origin: Vector2.of(0, this.model.dimensions.fieldWidth * 0.5),
       strokeStyle: this.model.lineColor,
-      target: Vector2.of(
-        {
-          x: 0,
-          y: -this.model.dimensions.fieldWidth * 0.5,
-        }
-      ),
+      target: Vector2.of(0, -this.model.dimensions.fieldWidth * 0.5),
       type: 'line'
     }
   }

@@ -74,10 +74,17 @@ export class Field extends Component<FieldProps> {
     const fieldAspect = fieldWidth / fieldLength
     const scale = canvasAspect < fieldAspect ? scaleY : scaleX
 
-    this.renderer.scale(scale, scale)
-    this.renderer.rotate(-Math.PI * 0.5)
-    this.renderer.translate(-height * 0.5 / scale, width * 0.5 / scale)
-    this.renderer.render(viewModel.scene)
+    const camera = {
+      // Rotate the field by -90deg so that the sidelines are on the top and bottom of the screen.
+      rotate: -Math.PI * 0.5,
+      scale,
+      translate: {
+        // Translate by half of the canvas width and height so that the field appears in the center.
+        x: width * 0.5,
+        y: height * 0.5
+      }
+    }
+    this.renderer.render(viewModel.scene, camera)
   }
 
   @action

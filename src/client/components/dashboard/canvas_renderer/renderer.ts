@@ -1,9 +1,10 @@
 import { Vector2 } from '../../../math/vector2'
 
 export type CircleProps = {
-  lineWidth: number
+  fillStyle?: string
+  lineWidth?: number
   radius: number
-  strokeStyle: string
+  strokeStyle?: string
   type: 'circle'
   x: number
   y: number
@@ -29,6 +30,11 @@ export type RectangleProps = {
 
 // TODO Monica fix typing here
 export type Scene = Array<any>
+export type Camera = {
+  rotate?: number
+  scale?: number
+  translate?: { x?: number, y?: number }
+}
 
 // TODO Monica abstract away view from geometry props
 export class CanvasRenderer {
@@ -38,8 +44,32 @@ export class CanvasRenderer {
     return new CanvasRenderer(context)
   }
 
-  public render(scene: Scene): void {
+  public render(scene: Scene, camera: Camera = {}): void {
     const context = this.context
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height)
+    context.save()
+
+    const scale = camera.scale || 1
+    context.scale(scale, scale)
+
+    const theta = camera.rotate || 0
+    context.rotate(theta)
+
+    // Use -theta here because context.rotate is using a clockwise system.
+    const rotationMatrix = [
+      Math.cos(-theta), -Math.sin(-theta),
+      Math.sin(-theta), Math.cos(-theta)
+    ]
+
+    const translate = Object.assign({}, { x: 0, y: 0 }, camera.translate)
+    const translateDash = Vector2.of(
+      translate.x * rotationMatrix[0] + translate.y * rotationMatrix[1],
+      translate.x * rotationMatrix[2] + translate.y * rotationMatrix[3]
+    )
+    .divideScalar(scale)
+
+    context.translate(translateDash.x, translateDash.y)
+
     const renderObjects = (objects: Scene) => {
       for (const obj of objects) {
         if (Array.isArray(obj)) {
@@ -61,26 +91,15 @@ export class CanvasRenderer {
       }
     }
     renderObjects(scene)
-  }
-
-  public rotate(angle: number): void {
-    this.context.rotate(angle)
-  }
-
-  public scale(width: number, height: number): void {
-    this.context.scale(width, height)
-  }
-
-  public translate(x: number, y: number): void {
-    this.context.translate(x, y)
+    context.restore()
   }
 
   private renderCircle(context: CanvasRenderingContext2D, props: CircleProps): void {
     context.beginPath()
     context.arc(props.x, props.y, props.radius, 0, 2 * Math.PI, false)
-    context.fillStyle = 'transparent'
-    context.lineWidth = props.lineWidth
-    context.strokeStyle = props.strokeStyle
+    context.fillStyle = props.fillStyle || 'transparent'
+    context.lineWidth = props.lineWidth || 0
+    context.strokeStyle = props.strokeStyle || 'transparent'
     context.fill()
     context.stroke()
   }

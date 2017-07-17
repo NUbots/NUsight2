@@ -122,7 +122,7 @@ class PacketProcessor {
   // The maximum number of packets of a unique type to send before receiving acknowledgements.
   private limit: number
 
-  // The number of milliseconds before giving up on an acknowledge
+  // The number of seconds before giving up on an acknowledge
   private timeout: number
 
   constructor(private socket: WebSocket,
@@ -134,7 +134,7 @@ class PacketProcessor {
   }
 
   public static of(socket: WebSocket) {
-    return new PacketProcessor(socket, NodeSystemClock, { limit: 1, timeout: 5000 })
+    return new PacketProcessor(socket, NodeSystemClock, { limit: 1, timeout: 5 })
   }
 
   public onPacket(event: string, packet: NUClearNetPacket) {

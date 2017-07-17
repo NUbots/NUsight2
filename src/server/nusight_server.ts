@@ -84,7 +84,7 @@ class NbsRecorder {
     }
 
     // NBS File Format:
-    // 3 Bytes - NUClear radiation symbol header, useful for synchronisation when attaching to a existing stream.
+    // 3 Bytes - NUClear radiation symbol header, useful for synchronisation when attaching to an existing stream.
     // 4 Bytes - The remaining packet length i.e. 16 bytes + N payload bytes
     // 8 Bytes - 64bit timestamp in microseconds. Note: this is not necessarily a unix timestamp.
     // 8 Bytes - 64bit bit hash of the message type.
@@ -93,7 +93,7 @@ class NbsRecorder {
     const header = Buffer.from([0xE2, 0x98, 0xA2]) // NUClear radiation symbol.
 
     // 64bit timestamp in microseconds.
-    const time = this.clock.now() * 1000;
+    const time = this.clock.performanceNow() * 1e6;
     const timeBuffer = new Buffer(8);
     // Convert double into two 32 bit integers.
     const MAX_UINT32 = 0xFFFFFFFF;

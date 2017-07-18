@@ -24,7 +24,7 @@ export class NbsFrameEncoder extends stream.Transform {
   }
 
   public writePacket(packet: NUClearNetPacket) {
-    this.write(packetToFrame(packet, this.clock.performanceNow()))
+    this.write(packetToFrame(packet, this.clock.performanceNow() * 1e6))
   }
 }
 

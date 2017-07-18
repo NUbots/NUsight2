@@ -29,13 +29,15 @@ export class NbsNUClearPlayback extends stream.Writable {
   }
 
   public _write(frame: NbsFrame, encoding: string, done: Function) {
+    const now = this.clock.performanceNow()
     if (this.firstFrameTimestamp === undefined || this.firstLocalTimestamp === undefined) {
       this.firstFrameTimestamp = frame.timestamp
-      this.firstLocalTimestamp = this.clock.performanceNow()
+      this.firstLocalTimestamp = now
     }
-    const now = this.clock.performanceNow()
-    const timeOffset = frame.timestamp - this.firstFrameTimestamp
-    const timeout = this.firstLocalTimestamp + timeOffset - now
+
+    const timeOffset = (frame.timestamp - this.firstFrameTimestamp) / 1e6
+    const timeout = Math.max(0, this.firstLocalTimestamp + timeOffset - now)
+
     this.clock.setTimeout(() => {
       this.nuclearnetClient.send({
         type: frame.hash,

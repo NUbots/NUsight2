@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
-import { NbsFrameEncoder } from './nbs_frame_codecs'
+import { NbsFrameEncoder } from './nbs_frame_streams'
 
 export class NbsRecorderController {
   private frameEncoder: NbsFrameEncoder

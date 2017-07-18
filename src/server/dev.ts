@@ -16,6 +16,8 @@ import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
 import { NUsightServer } from './nusight_server'
+import { NbsNUClearPlayback } from './nbs/nbs_nuclear_playback'
+import * as fs from 'fs'
 
 const compiler = webpack(webpackConfig)
 
@@ -66,3 +68,16 @@ const nuclearnetClient = withSimulators ? FakeNUClearNetClient.of() : DirectNUCl
 WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), nuclearnetClient)
 
 NUsightServer.of(WebSocketServer.of(sioNetwork.of('/nusight')), nuclearnetClient)
+
+async function playback() {
+  const fake = FakeNUClearNetClient.of()
+  fake.connect({ name: 'Fake Stream' })
+  while (true) {
+    const file = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/darwin3_WalkAround.nbs')
+    // const file = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/darwin3_FollowBall.nbs')
+    const out = NbsNUClearPlayback.fromRawStream(file, fake)
+    await new Promise(res => out.on('finish', res))
+  }
+}
+
+playback()

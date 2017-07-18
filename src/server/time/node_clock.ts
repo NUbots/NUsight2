@@ -3,12 +3,12 @@ import { Clock } from './clock'
 export type CancelTimer = () => void
 
 function setTimeout(cb: (...args: any[]) => void, seconds: number): CancelTimer {
-  const handle = global.setTimeout(cb, seconds * 1000)
+  const handle = global.setTimeout(cb, seconds * 1e3)
   return global.clearTimeout.bind(null, handle)
 }
 
 function setInterval(cb: (...args: any[]) => void, seconds: number): CancelTimer {
-  const handle = global.setInterval(cb, seconds * 1000)
+  const handle = global.setInterval(cb, seconds * 1e3)
   return global.clearInterval.bind(null, handle)
 }
 
@@ -24,7 +24,7 @@ function performanceNow() {
 
 
 export const NodeSystemClock: Clock = {
-  now: () => Date.now() / 1000,
+  now: () => Date.now() / 1e3,
   performanceNow,
   setTimeout,
   setInterval,

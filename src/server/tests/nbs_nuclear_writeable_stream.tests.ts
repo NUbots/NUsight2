@@ -2,21 +2,21 @@ import * as fs from 'fs'
 import * as stream from 'stream'
 import { Stream } from 'stream'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
+import { message } from '../../shared/proto/messages'
+import { NbsFrameChunker } from '../nbs/nbs_frame_chunker'
+import { NbsFrameDecoder } from '../nbs/nbs_frame_codecs'
+import { NbsNUClearPlayback } from '../nbs/nbs_nuclear_playback'
 import { FakeNUClearNetClient } from '../nuclearnet/fake_nuclearnet_client'
 import { FakeNUClearNetServer } from '../nuclearnet/fake_nuclearnet_server'
-import { NbsFrameTransformStream } from '../nusight_server'
-import { NbsFrameDecoderStream } from '../nusight_server'
-import { NbsNUClearPlayback } from '../nusight_server'
-import WritableStream = NodeJS.WritableStream
 import { FakeNodeClock } from '../time/fake_node_clock'
-import { message } from '../../shared/proto/messages'
+import WritableStream = NodeJS.WritableStream
 import nuclear = message.support.nuclear
 
-describe('NbsFrameTransformStream', () => {
+describe('NbsFrameChunker', () => {
   let transform: stream.Transform
 
   beforeEach(() => {
-    transform = new NbsFrameTransformStream()
+    transform = new NbsFrameChunker()
   })
 
   it('Emits 6988 frames', done => {
@@ -38,8 +38,8 @@ describe('NbsNUClearPlayback', () => {
     nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
 
     stream = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/darwin3_WalkAround.nbs')
-      .pipe(new NbsFrameTransformStream())
-      .pipe(new NbsFrameDecoderStream)
+      .pipe(new NbsFrameChunker())
+      .pipe(new NbsFrameDecoder())
 
   })
 

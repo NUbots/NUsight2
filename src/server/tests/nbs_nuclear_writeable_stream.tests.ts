@@ -7,8 +7,10 @@ import { FakeNUClearNetServer } from '../nuclearnet/fake_nuclearnet_server'
 import { NbsFrameTransformStream } from '../nusight_server'
 import { NbsFrameDecoderStream } from '../nusight_server'
 import { NbsNUClearPlayback } from '../nusight_server'
-import { NodeSystemClock } from '../time/node_clock'
 import WritableStream = NodeJS.WritableStream
+import { FakeNodeClock } from '../time/fake_node_clock'
+import { message } from '../../shared/proto/messages'
+import nuclear = message.support.nuclear
 
 describe('NbsFrameTransformStream', () => {
   let transform: stream.Transform
@@ -27,29 +29,6 @@ describe('NbsFrameTransformStream', () => {
   })
 })
 
-// describe('NbsNUClearWritableStream', () => {
-//   let transform: stream.Transform
-//   let writeStream: WritableStream
-//   let nuclearnetClient: FakeNUClearNetClient
-//
-//   beforeEach(() => {
-//     const nuclearnetServer = new FakeNUClearNetServer()
-//     nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
-//     transform = new NbsFrameTransformStream()
-//     writeStream = new NbsNUClearWritableStream(nuclearnetClient)
-//   })
-//
-//   it('asdfas', done => {
-//     jest.spyOn(nuclearnetClient, 'send')
-//     const file = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/darwin3_WalkAround.nbs')
-//     file.pipe(transform).pipe(writeStream).on('finish', () => {
-//       console.log((nuclearnetClient.send as jest.Mock<any>).mock.calls[0][0].type.toString('hex'))
-//       expect(nuclearnetClient.send).toHaveBeenCalledTimes(6988)
-//       done()
-//     })
-//   })
-// })
-
 describe('NbsNUClearPlayback', () => {
   let stream: Stream
   let nuclearnetClient: NUClearNetClient
@@ -64,11 +43,18 @@ describe('NbsNUClearPlayback', () => {
 
   })
 
-  it.skip('asdf', done => {
+  it('asdf', done => {
+    const fakeClock = FakeNodeClock.of()
     jest.spyOn(nuclearnetClient, 'send')
     stream
-      .pipe(new NbsNUClearPlayback(nuclearnetClient, NodeSystemClock))
+      .on('data', () => {
+        // Ensure that all timers instantly run after each chunk is received.
+        // Run on the next tick to allow NbsNUClearPlayback to schedule the timers first.
+        process.nextTick(() => fakeClock.runAllTimers())
+      })
+      .pipe(new NbsNUClearPlayback(nuclearnetClient, fakeClock))
       .on('finish', () => {
+        expect(nuclearnetClient.send).toHaveBeenCalledTimes(6988)
         done()
       })
   })

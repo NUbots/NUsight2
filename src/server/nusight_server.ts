@@ -1,18 +1,15 @@
 import * as Buffers from 'buffers'
 import * as fs from 'fs'
 import { WriteStream } from 'fs'
-import { ReadStream } from 'fs'
+import * as Long from 'long'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetPacket } from 'nuclearnet.js'
 import * as stream from 'stream'
 import { NUClearNetClient } from '../shared/nuclearnet/nuclearnet_client'
-import { DirectNUClearNetClient } from './nuclearnet/direct_nuclearnet_client'
-import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
 import { WebSocket } from './nuclearnet/web_socket_server'
 import { Clock } from './time/clock'
 import { NodeSystemClock } from './time/node_clock'
-import { Stream } from 'stream'
 import WritableStream = NodeJS.WritableStream
 
 export class NUsightServer {
@@ -129,13 +126,10 @@ class NbsRecorder {
 
     // 64bit timestamp in microseconds.
     const time = this.clock.performanceNow() * 1e6
+    const timeLong = Long.fromNumber(time)
     const timeBuffer = new Buffer(8)
-    // Convert double into two 32 bit integers.
-    const MAX_UINT32 = 0xFFFFFFFF
-    const highByte = ~~(time / MAX_UINT32)
-    const lowByte = (time % MAX_UINT32) - highByte
-    timeBuffer.writeUInt32LE(lowByte, 0)
-    timeBuffer.writeUInt32LE(highByte, 4)
+    timeBuffer.writeUInt32LE(timeLong.low, 0)
+    timeBuffer.writeUInt32LE(timeLong.high, 4)
 
     const remainingByteLength = new Buffer(4)
     remainingByteLength.writeUInt32LE(timeBuffer.byteLength + packet.hash.byteLength + packet.payload.byteLength, 0)
@@ -153,22 +147,19 @@ class NbsRecorder {
   }
 }
 
-const NUCLEAR_HEADER = 3
-
 class NbsPlayback {
   private state: PlaybackState
   private inputStream: stream.Transform
   private outputStream: WritableStream
   private currentIndex: number
 
-  public constructor(private nuclearnetClient: NUClearNetClient,
-                     private clock: Clock) {
+  public constructor(private nuclearnetClient: NUClearNetClient) {
     this.state = PlaybackState.Idle
     this.currentIndex = 0
   }
 
   public static of(nuclearnetClient: NUClearNetClient) {
-    return new NbsPlayback(nuclearnetClient, NodeSystemClock)
+    return new NbsPlayback(nuclearnetClient)
   }
 
   public play(filename: string): () => void {
@@ -271,15 +262,18 @@ export class NbsFrameDecoderStream extends stream.Transform {
     return new NbsFrameDecoderStream()
   }
 
-  public _transform(buffer: Buffer, encoding: string, done: Function) {
-    this.push({
-      header: buffer.slice(0, 3),
-      size: buffer.slice(3, 7), // TODO: decode
-      timestamp: buffer.slice(7, 15), // TODO: decode
-      hash: buffer.slice(15, 23),
-      payload: buffer.slice(23),
-    })
+  public _transform(frame: Buffer, encoding: string, done: (err?: any, data?: any) => void) {
+    this.push(this.decode(frame))
     done()
+  }
+
+  private decode(frame: Buffer) {
+    const header = frame.slice(0, 3)
+    const size = frame.readUInt32LE(3)
+    const timestamp = Long.fromBits(frame.readUInt32LE(7), frame.readUInt32LE(11)).toNumber()
+    const hash = frame.slice(15, 23)
+    const payload = frame.slice(23)
+    return { header, size, timestamp, hash, payload }
   }
 }
 

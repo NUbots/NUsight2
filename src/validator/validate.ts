@@ -17,7 +17,6 @@ function main() {
     map.set(packet.hash, (map.get(packet.hash) || 0) + 1)
     return map
   }, new Map())
-  console.log(types)
 
   console.log(`Num packets: ${packets.length}`)
   console.log('Types:')

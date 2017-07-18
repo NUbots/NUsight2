@@ -76,6 +76,12 @@
   dependencies:
     "@types/babel-types" "*"
 
+"@types/buffers@^0.1.30":
+  version "0.1.30"
+  resolved "https://registry.yarnpkg.com/@types/buffers/-/buffers-0.1.30.tgz#8764e8425ecc52fe131e7b531b5fc100c93bfa10"
+  dependencies:
+    "@types/node" "*"
+
 "@types/classnames@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.0.tgz#f2312039e780bdf89d7d4102a26ec11de5ec58aa"
@@ -1368,6 +1374,10 @@ buffer@^4.3.0:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
     isarray "^1.0.0"
+
+buffers@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/buffers/-/buffers-0.1.1.tgz#b24579c3bed4d6d396aeee6d9a8ae7f5482ab7bb"
 
 builtin-modules@^1.0.0:
   version "1.1.1"

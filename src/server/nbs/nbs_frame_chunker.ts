@@ -1,7 +1,6 @@
 import * as Buffers from 'buffers'
 import * as stream from 'stream'
-
-const NBS_NUCLEAR_HEADER = Buffer.from([0xE2, 0x98, 0xA2]) // NUClear radiation symbol.
+import { NBS_HEADER } from './nbs_frame_codecs'
 
 export class NbsFrameChunker extends stream.Transform {
   private buffers: Buffers
@@ -35,8 +34,8 @@ export class NbsFrameChunker extends stream.Transform {
   }
 
   private getNextFrame(buffer: Buffers): { offset: number, buffer: Buffer } | undefined {
-    const headerIndex = buffer.indexOf(NBS_NUCLEAR_HEADER)
-    const headerSize = NBS_NUCLEAR_HEADER.byteLength
+    const headerIndex = buffer.indexOf(NBS_HEADER)
+    const headerSize = NBS_HEADER.byteLength
     const packetLengthSize = 4
     const headerAndPacketLengthSize = headerSize + packetLengthSize
     if (headerIndex >= 0) {

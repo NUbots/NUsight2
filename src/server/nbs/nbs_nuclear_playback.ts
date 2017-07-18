@@ -5,7 +5,7 @@ import { Clock } from '../time/clock'
 import { NodeSystemClock } from '../time/node_clock'
 import { NbsFrameChunker } from './nbs_frame_chunker'
 import { NbsFrame } from './nbs_frame_codecs'
-import { NbsFrameDecoder } from './nbs_frame_codecs'
+import { NbsFrameDecoder } from './nbs_frame_streams'
 
 export class NbsNUClearPlayback extends stream.Writable {
   private firstFrameTimestamp?: number

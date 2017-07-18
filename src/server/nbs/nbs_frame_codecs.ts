@@ -4,6 +4,9 @@ import { NUClearNetPacket } from 'nuclearnet.js'
 export const NBS_HEADER = Buffer.from([0xE2, 0x98, 0xA2]) // NUClear radiation symbol.
 
 export type NbsFrame = {
+  // Omitted redundant header information.
+  // header: Buffer,
+  // size: number,
   timestamp: number,
   hash: Buffer,
   payload: Buffer,
@@ -19,12 +22,12 @@ export type NbsFrame = {
 export function encodeFrame(frame: NbsFrame): Buffer {
   const size = 16 + frame.payload.byteLength
   const buffer = new Buffer(7 + size)
-  NBS_HEADER.copy(buffer)
+  NBS_HEADER.copy(buffer, 0, 0, 3)
   buffer.writeUInt32LE(size, 3)
   const timeLong = Long.fromNumber(frame.timestamp)
   buffer.writeUInt32LE(timeLong.low, 7)
   buffer.writeUInt32LE(timeLong.high, 11)
-  frame.hash.copy(buffer, 15)
+  frame.hash.copy(buffer, 15, 0, 8)
   frame.payload.copy(buffer, 23)
   return buffer
 }

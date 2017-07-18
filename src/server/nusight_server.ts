@@ -12,6 +12,8 @@ import { WebSocketServer } from './nuclearnet/web_socket_server'
 import { WebSocket } from './nuclearnet/web_socket_server'
 import { Clock } from './time/clock'
 import { NodeSystemClock } from './time/node_clock'
+import { Stream } from 'stream'
+import WritableStream = NodeJS.WritableStream
 
 export class NUsightServer {
   public constructor(private server: WebSocketServer, private nuclearnetClient: NUClearNetClient) {
@@ -35,13 +37,18 @@ class NUsightServerClient {
 
     this.socket.on('record', this.onRecord)
     this.socket.on('unrecord', this.onUnrecord)
+
+    this.socket.on('play', this.onPlay)
+    this.socket.on('pause', this.onPause)
+    this.socket.on('resume', this.onResume)
+    this.socket.on('stop', this.onStop)
   }
 
   public static of(socket: WebSocket, nuclearnetClient: NUClearNetClient): NUsightServerClient {
     return new NUsightServerClient(socket, NodeSystemClock, nuclearnetClient)
   }
 
-  public onRecord = (peer: NUClearNetPeer, requestToken: string) => {
+  private onRecord = (peer: NUClearNetPeer, requestToken: string) => {
     const recorder = NbsRecorder.of(peer, this.nuclearnetClient)
     const filename = `${peer.name.replace(/[^A-Za-z0-9]/g, '_')}_${this.clock.now()}.nbs`
     console.log('recording', peer, requestToken)
@@ -49,7 +56,30 @@ class NUsightServerClient {
     this.stopRecordingMap.set(requestToken, stopRecording)
   }
 
-  public onUnrecord = (requestToken: string) => {
+  private onUnrecord = (requestToken: string) => {
+    const stopRecording = this.stopRecordingMap.get(requestToken)
+    if (stopRecording) {
+      console.log('stop recording', requestToken)
+      stopRecording()
+    }
+  }
+
+  private onPlay = (filename: string, requestToken: string) => {
+    const player = NbsPlayback.of(this.nuclearnetClient)
+    console.log('playing', filename, requestToken)
+    const stopPlaying = player.play(`recordings/${filename}`)
+    this.stopRecordingMap.set(requestToken, stopPlaying)
+  }
+
+  private onPause = () => {
+
+  }
+
+  private onResume = () => {
+
+  }
+
+  public onStop = (requestToken: string) => {
     const stopRecording = this.stopRecordingMap.get(requestToken)
     if (stopRecording) {
       console.log('stop recording', requestToken)
@@ -127,7 +157,8 @@ const NUCLEAR_HEADER = 3
 
 class NbsPlayback {
   private state: PlaybackState
-  private file: ReadStream
+  private inputStream: stream.Transform
+  private outputStream: WritableStream
   private currentIndex: number
 
   public constructor(private nuclearnetClient: NUClearNetClient,
@@ -136,34 +167,39 @@ class NbsPlayback {
     this.currentIndex = 0
   }
 
-  public static of(opts: { fakeNetworking: boolean }) {
-    const network = opts.fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
-    return new NbsPlayback(network, NodeSystemClock)
+  public static of(nuclearnetClient: NUClearNetClient) {
+    return new NbsPlayback(nuclearnetClient, NodeSystemClock)
   }
 
   public play(filename: string): () => void {
     this.state = PlaybackState.Playing
-    this.file = fs.createReadStream(filename, { encoding: 'binary' })
-    this.playNextPacket()
+
+    this.inputStream = fs.createReadStream(filename, { encoding: 'binary' })
+      .pipe(NbsFrameTransformStream.of())
+      .pipe(NbsFrameDecoderStream.of())
+      .on('finish', () => {
+        this.state = PlaybackState.Idle
+      })
+
+    this.outputStream = this.inputStream.pipe(NbsNUClearPlayback.of(this.nuclearnetClient))
 
     return () => {
       if (this.state === PlaybackState.Playing) {
         this.state = PlaybackState.Idle
+        this.inputStream.end()
       }
     }
   }
 
   public pause(): () => void {
     this.state = PlaybackState.Paused
+    this.inputStream.pause()
     return () => {
       if (this.state === PlaybackState.Paused) {
         this.state = PlaybackState.Playing
+        this.inputStream.resume()
       }
     }
-  }
-
-  private playNextPacket() {
-    this.file.read(NUCLEAR_HEADER)
   }
 }
 
@@ -172,7 +208,7 @@ class NbsPlayback {
 
 const NBS_NUCLEAR_HEADER = Buffer.from([0xE2, 0x98, 0xA2]) // NUClear radiation symbol.
 
-export class NBsNUClearTransformSteam extends stream.Transform {
+export class NbsFrameTransformStream extends stream.Transform {
   private buffers: Buffers
   private foundHeader: boolean
   private foundPacketSize: boolean
@@ -185,6 +221,10 @@ export class NBsNUClearTransformSteam extends stream.Transform {
     this.buffers = new Buffers()
     this.foundHeader = false
     this.foundPacketSize = false
+  }
+
+  public static of(): NbsFrameTransformStream {
+    return new NbsFrameTransformStream()
   }
 
   public _transform(chunk: any, encoding: string, done: (err?: any, data?: any) => void) {
@@ -205,13 +245,13 @@ export class NBsNUClearTransformSteam extends stream.Transform {
     const packetLengthSize = 4
     const headerAndPacketLengthSize = headerSize + packetLengthSize
     if (headerIndex >= 0) {
-      const chunk = buffer.slice(headerIndex)
-      if (chunk.length >= headerAndPacketLengthSize) {
-        const packetSize = chunk.slice(headerSize, headerSize + headerAndPacketLengthSize).readUInt32LE(0)
-        if (chunk.length >= headerAndPacketLengthSize + packetSize) {
+      const frame = buffer.slice(headerIndex)
+      if (frame.length >= headerAndPacketLengthSize) {
+        const packetSize = frame.slice(headerSize, headerSize + headerAndPacketLengthSize).readUInt32LE(0)
+        if (frame.length >= headerAndPacketLengthSize + packetSize) {
           return {
             offset: headerIndex,
-            buffer: chunk.slice(0, headerAndPacketLengthSize + packetSize)
+            buffer: frame.slice(0, headerAndPacketLengthSize + packetSize),
           }
         }
       }
@@ -220,65 +260,129 @@ export class NBsNUClearTransformSteam extends stream.Transform {
   }
 }
 
-export class NbsNUClearWritableStream extends stream.Writable {
-  private buffers: Buffers
-  private buffering: boolean
-  private payloadLength: number
-  private headerIndex: number
-
-  public constructor(private nuclearnetClient: NUClearNetClient/*, opts: NbsNUClearWritableStreamOpts*/) {
-    super()
-
-    this.buffers = new Buffers()
-    this.buffering = false
-    this.headerIndex = 0
+export class NbsFrameDecoderStream extends stream.Transform {
+  public constructor() {
+    super({
+      objectMode: true,
+    })
   }
 
-  public static of(opts: { fakeNetworking: boolean }) {
-    const network = opts.fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
-    return new NbsNUClearWritableStream(network)
+  public static of() {
+    return new NbsFrameDecoderStream()
   }
 
-  public _write(chunk: Buffer, encoding: string, cb: Function) {
-    this.buffers.push(chunk)
-
-    if (!this.buffering) {
-      const headerIndex = chunk.indexOf(NBS_NUCLEAR_HEADER)
-      if (headerIndex >= 0) {
-        console.log(`Found header at ${headerIndex}`)
-        this.headerIndex = headerIndex
-        this.buffering = true
-      }
-    } else {
-      console.log(this.buffers.buffers.length)
-
-      const offset = this.headerIndex
-      if (this.buffers.length >= offset + 7) {
-        const remainingByteLength = this.buffers.slice(offset + 3, offset + 3 + 4).readUInt32LE(0)
-        this.payloadLength = remainingByteLength
-        if (this.buffers.length >= offset + 7 + remainingByteLength) {
-          const hash = this.buffers.slice(offset + 15, offset + 15 + 8)
-          const payload = this.buffers.slice(offset + 23, offset + 23 + remainingByteLength - 16)
-          this.nuclearnetClient.send({
-            type: hash,
-            payload,
-          })
-          this.buffering = false
-          const end = offset + 7 + remainingByteLength
-          this.buffers.splice(0, end)
-        }
-      }
-    }
-    cb()
-  }
-
-  decode(buffer: Buffer): { type: Buffer, payload: Buffer } {
-    return {
-      type: new Buffer(8),
-      payload: new Buffer(8),
-    }
+  public _transform(buffer: Buffer, encoding: string, done: Function) {
+    this.push({
+      header: buffer.slice(0, 3),
+      size: buffer.slice(3, 7), // TODO: decode
+      timestamp: buffer.slice(7, 15), // TODO: decode
+      hash: buffer.slice(15, 23),
+      payload: buffer.slice(23),
+    })
+    done()
   }
 }
+
+type NbsFrame = {
+  header: Buffer
+  size: number
+  timestamp: number,
+  hash: Buffer,
+  payload: Buffer,
+}
+
+export class NbsNUClearPlayback extends stream.Writable {
+  private firstFrameTimestamp?: number
+  private firstLocalTimestamp?: number
+
+  public constructor(private nuclearnetClient: NUClearNetClient,
+                     private clock: Clock) {
+    super({
+      objectMode: true,
+    })
+  }
+
+  public static of(nuclearnetClient: NUClearNetClient) {
+    return new NbsNUClearPlayback(nuclearnetClient, NodeSystemClock)
+  }
+
+  public _write(frame: NbsFrame, encoding: string, done: Function) {
+    if (this.firstFrameTimestamp === undefined || this.firstLocalTimestamp === undefined) {
+      this.firstFrameTimestamp = frame.timestamp
+      this.firstLocalTimestamp = this.clock.performanceNow()
+    }
+    const now = this.clock.performanceNow()
+    const timeOffset = frame.timestamp - this.firstFrameTimestamp
+    const timeout = this.firstLocalTimestamp + timeOffset - now
+    this.clock.setTimeout(() => {
+      this.nuclearnetClient.send({
+        type: frame.hash,
+        payload: frame.payload,
+      })
+      done()
+    }, timeout)
+  }
+}
+
+// export class NbsNUClearWritableStream extends stream.Writable {
+//   private buffers: Buffers
+//   private buffering: boolean
+//   private payloadLength: number
+//   private headerIndex: number
+//
+//   public constructor(private nuclearnetClient: NUClearNetClient/*, opts: NbsNUClearWritableStreamOpts*/) {
+//     super()
+//
+//     this.buffers = new Buffers()
+//     this.buffering = false
+//     this.headerIndex = 0
+//   }
+//
+//   public static of(opts: { fakeNetworking: boolean }) {
+//     const network = opts.fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+//     return new NbsNUClearWritableStream(network)
+//   }
+//
+//   public _write(chunk: Buffer, encoding: string, cb: Function) {
+//     this.buffers.push(chunk)
+//
+//     if (!this.buffering) {
+//       const headerIndex = chunk.indexOf(NBS_NUCLEAR_HEADER)
+//       if (headerIndex >= 0) {
+//         console.log(`Found header at ${headerIndex}`)
+//         this.headerIndex = headerIndex
+//         this.buffering = true
+//       }
+//     } else {
+//       console.log(this.buffers.buffers.length)
+//
+//       const offset = this.headerIndex
+//       if (this.buffers.length >= offset + 7) {
+//         const remainingByteLength = this.buffers.slice(offset + 3, offset + 3 + 4).readUInt32LE(0)
+//         this.payloadLength = remainingByteLength
+//         if (this.buffers.length >= offset + 7 + remainingByteLength) {
+//           const hash = this.buffers.slice(offset + 15, offset + 15 + 8)
+//           const payload = this.buffers.slice(offset + 23, offset + 23 + remainingByteLength - 16)
+//           this.nuclearnetClient.send({
+//             type: hash,
+//             payload,
+//           })
+//           this.buffering = false
+//           const end = offset + 7 + remainingByteLength
+//           this.buffers.splice(0, end)
+//         }
+//       }
+//     }
+//     cb()
+//   }
+//
+//   decode(buffer: Buffer): { type: Buffer, payload: Buffer } {
+//     return {
+//       type: new Buffer(8),
+//       payload: new Buffer(8),
+//     }
+//   }
+// }
 
 enum PlaybackState {
   Idle = 1,

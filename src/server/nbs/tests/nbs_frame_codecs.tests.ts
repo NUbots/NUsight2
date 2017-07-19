@@ -8,7 +8,7 @@ describe('NbsFrameCodecs', () => {
       const hash = hashType('message.input.sensors')
       const timestamp = 1500379664696000
       const payload = new Buffer(8).fill(0x12)
-      const buffer = encodeFrame({ timestamp, hash, payload })
+      const buffer = encodeFrame({ timestampInMicroseconds: timestamp, hash, payload })
       expect(buffer.toString('hex')).toEqual('e298a218000000c042f15c9654050010abef8b5398f0d41212121212121212')
     })
   })

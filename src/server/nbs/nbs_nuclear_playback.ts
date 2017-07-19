@@ -31,11 +31,11 @@ export class NbsNUClearPlayback extends stream.Writable {
   public _write(frame: NbsFrame, encoding: string, done: Function) {
     const now = this.clock.performanceNow()
     if (this.firstFrameTimestamp === undefined || this.firstLocalTimestamp === undefined) {
-      this.firstFrameTimestamp = frame.timestamp
+      this.firstFrameTimestamp = frame.timestampInMicroseconds
       this.firstLocalTimestamp = now
     }
 
-    const timeOffset = (frame.timestamp - this.firstFrameTimestamp) / 1e6
+    const timeOffset = (frame.timestampInMicroseconds - this.firstFrameTimestamp) * 1e-6
     const timeout = Math.max(0, this.firstLocalTimestamp + timeOffset - now)
 
     this.clock.setTimeout(() => {

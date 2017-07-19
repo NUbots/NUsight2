@@ -7,7 +7,7 @@ export type NbsFrame = {
   // Omitted redundant header information.
   // header: Buffer,
   // size: number,
-  timestamp: number,
+  timestampInMicroseconds: number,
   hash: Buffer,
   payload: Buffer,
 }
@@ -24,7 +24,7 @@ export function encodeFrame(frame: NbsFrame): Buffer {
   const buffer = new Buffer(7 + size)
   NBS_HEADER.copy(buffer, 0, 0, 3)
   buffer.writeUInt32LE(size, 3)
-  const timeLong = Long.fromNumber(frame.timestamp)
+  const timeLong = Long.fromNumber(frame.timestampInMicroseconds)
   buffer.writeUInt32LE(timeLong.low, 7)
   buffer.writeUInt32LE(timeLong.high, 11)
   frame.hash.copy(buffer, 15, 0, 8)
@@ -34,15 +34,15 @@ export function encodeFrame(frame: NbsFrame): Buffer {
 
 export function decodeFrame(buffer: Buffer): NbsFrame {
   const size = buffer.readUInt32LE(3)
-  const timestamp = Long.fromBits(buffer.readUInt32LE(7), buffer.readUInt32LE(11)).toNumber()
+  const timestampInMicroseconds = Long.fromBits(buffer.readUInt32LE(7), buffer.readUInt32LE(11)).toNumber()
   const hash = buffer.slice(15, 23)
   const payload = buffer.slice(23, 23 + size)
-  return { timestamp, hash, payload }
+  return { timestampInMicroseconds, hash, payload }
 }
 
-export function packetToFrame(packet: NUClearNetPacket, timestamp: number): NbsFrame {
+export function packetToFrame(packet: NUClearNetPacket, timestampInMicroseconds: number): NbsFrame {
   return {
-    timestamp,
+    timestampInMicroseconds: timestampInMicroseconds,
     hash: packet.hash,
     payload: packet.payload,
   }

@@ -2,15 +2,12 @@ import * as fs from 'fs'
 import * as stream from 'stream'
 import { Stream } from 'stream'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
-import { message } from '../../shared/proto/messages'
 import { NbsFrameChunker } from '../nbs/nbs_frame_chunker'
 import { NbsFrameDecoder } from '../nbs/nbs_frame_streams'
 import { NbsNUClearPlayback } from '../nbs/nbs_nuclear_playback'
 import { FakeNUClearNetClient } from '../nuclearnet/fake_nuclearnet_client'
 import { FakeNUClearNetServer } from '../nuclearnet/fake_nuclearnet_server'
 import { FakeNodeClock } from '../time/fake_node_clock'
-import WritableStream = NodeJS.WritableStream
-import nuclear = message.support.nuclear
 
 describe('NbsFrameChunker', () => {
   let transform: stream.Transform
@@ -19,7 +16,7 @@ describe('NbsFrameChunker', () => {
     transform = new NbsFrameChunker()
   })
 
-  it('Emits 6988 frames', done => {
+  it('finds 6988 frames within binary stream', done => {
     const file = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/darwin3_WalkAround.nbs')
     const spy = jest.fn()
     file.pipe(transform).on('data', spy).on('finish', () => {
@@ -43,7 +40,7 @@ describe('NbsNUClearPlayback', () => {
 
   })
 
-  it('asdf', done => {
+  it('sends 6988 messages to NUClearNet', done => {
     const fakeClock = FakeNodeClock.of()
     jest.spyOn(nuclearnetClient, 'send')
     stream

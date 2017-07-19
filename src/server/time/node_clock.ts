@@ -24,7 +24,7 @@ function performanceNow() {
 
 
 export const NodeSystemClock: Clock = {
-  now: () => Date.now() / 1e3,
+  now: () => Date.now() * 1e-3,
   performanceNow,
   setTimeout,
   setInterval,

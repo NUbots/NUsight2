@@ -4,7 +4,7 @@ type Task = {
   id: number,
   nextTime: number,
   period?: number,
-  fn: () => void,
+  fn(): void,
 }
 
 export class FakeNodeClock implements Clock {
@@ -73,23 +73,6 @@ export class FakeNodeClock implements Clock {
     }
   }
 
-  private consumeTask(task: Task) {
-    this.time = task.nextTime
-    if (task.period != null) {
-      task.nextTime += task.period
-      this.sortTasks()
-    } else {
-      this.tasks.shift()
-    }
-    task.fn()
-  }
-
-  private sortTasks() {
-    this.tasks.sort((t1, t2) => {
-      return t1.nextTime - t2.nextTime
-    })
-  }
-
   public runOnlyPendingTimers() {
     const limit = 1000
     let i = 0
@@ -111,6 +94,23 @@ export class FakeNodeClock implements Clock {
   private addTask(task: Task) {
     this.tasks.push(task)
     this.sortTasks()
+  }
+
+  private sortTasks() {
+    this.tasks.sort((t1, t2) => {
+      return t1.nextTime - t2.nextTime
+    })
+  }
+
+  private consumeTask(task: Task) {
+    this.time = task.nextTime
+    if (task.period != null) {
+      task.nextTime += task.period
+      this.sortTasks()
+    } else {
+      this.tasks.shift()
+    }
+    task.fn()
   }
 
   private removeTask(taskId: number) {

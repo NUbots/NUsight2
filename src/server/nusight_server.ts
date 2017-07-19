@@ -6,7 +6,6 @@ import { WebSocketServer } from './nuclearnet/web_socket_server'
 import { WebSocket } from './nuclearnet/web_socket_server'
 import { Clock } from './time/clock'
 import { NodeSystemClock } from './time/node_clock'
-import WritableStream = NodeJS.WritableStream
 
 export class NUsightServer {
   public constructor(private server: WebSocketServer, private nuclearnetClient: NUClearNetClient) {
@@ -72,7 +71,7 @@ class NUsightServerClient {
 
   }
 
-  public onStop = (requestToken: string) => {
+  private onStop = (requestToken: string) => {
     const stopRecording = this.stopRecordingMap.get(requestToken)
     if (stopRecording) {
       console.log('stop recording', requestToken)

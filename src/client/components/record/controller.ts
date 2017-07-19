@@ -11,14 +11,14 @@ export class RecordController {
   }
 
   @action
-  onStartRecordingClick(robot: RecordRobotModel) {
+  public onStartRecordingClick(robot: RecordRobotModel) {
     const peer = { name: robot.name, address: robot.address, port: robot.port }
     robot.stopRecording = this.nusightNetwork.record(peer)
     robot.recording = true
   }
 
   @action
-  onStopRecordingClick(robot: RecordRobotModel) {
+  public onStopRecordingClick(robot: RecordRobotModel) {
     if (robot.stopRecording) {
       robot.stopRecording()
     }

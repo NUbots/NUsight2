@@ -26,7 +26,7 @@ type RecordRobotModelOpts = {
 }
 
 export class RecordRobotModel {
-  @observable robotModel: RobotModel
+  @observable private robotModel: RobotModel
   @observable public recording: boolean
   public stopRecording?: () => void
 

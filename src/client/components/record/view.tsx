@@ -15,7 +15,12 @@ type Props = {
 
 @observer
 export class RecordView extends Component<Props> {
-  render() {
+  public static of(menu: ComponentType<{}>, nusightNetwork: NUsightNetwork, model: RecordModel) {
+    const controller = RecordController.of(nusightNetwork)
+    return <RecordView menu={menu} controller={controller} model={model}/>
+  }
+
+  public render() {
     const { menu, controller, model } = this.props
     const { robots } = model
     return (
@@ -36,11 +41,6 @@ export class RecordView extends Component<Props> {
         </div>
       </div>
     )
-  }
-
-  public static of(menu: ComponentType<{}>, nusightNetwork: NUsightNetwork, model: RecordModel) {
-    const controller = RecordController.of(nusightNetwork)
-    return <RecordView menu={menu} controller={controller} model={model}/>
   }
 }
 

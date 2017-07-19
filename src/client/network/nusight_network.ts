@@ -73,7 +73,7 @@ export class NUsightNetwork {
     }
   }
 
-  getNextRequestToken() {
+  private getNextRequestToken() {
     return String(this.nextRequestTokenId++)
   }
 }

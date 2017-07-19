@@ -42,7 +42,7 @@ export function decodeFrame(buffer: Buffer): NbsFrame {
 
 export function packetToFrame(packet: NUClearNetPacket, timestampInMicroseconds: number): NbsFrame {
   return {
-    timestampInMicroseconds: timestampInMicroseconds,
+    timestampInMicroseconds,
     hash: packet.hash,
     payload: packet.payload,
   }

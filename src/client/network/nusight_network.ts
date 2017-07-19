@@ -6,6 +6,7 @@ import { WebSocketProxyNUClearNetClient } from '../nuclearnet/web_socket_proxy_n
 import { MessageTypePath } from './message_type_names'
 import { RobotModel } from '../components/robot/model'
 import { AppModel } from '../components/app/model'
+import { WebSocketClient } from '../nuclearnet/web_socket_client'
 
 const HEADER_SIZE = 9
 
@@ -15,15 +16,24 @@ const HEADER_SIZE = 9
  * instead create their own ComponentNetwork class which uses the Network helper class.
  */
 export class NUsightNetwork {
+  private nextRequestTokenId: number
+
   public constructor(private nuclearnetClient: NUClearNetClient,
+                     private socket: WebSocketClient,
                      private appModel: AppModel,
                      private messageTypePath: MessageTypePath) {
+    this.nextRequestTokenId = 0
   }
 
   public static of(appModel: AppModel) {
     const messageTypePath = MessageTypePath.of()
     const nuclearnetClient: NUClearNetClient = WebSocketProxyNUClearNetClient.of()
-    return new NUsightNetwork(nuclearnetClient, appModel, messageTypePath)
+    const uri = `${document.location.origin}/nusight`
+    const socket = WebSocketClient.of(uri, {
+      upgrade: false,
+      transports: ['websocket'],
+    })
+    return new NUsightNetwork(nuclearnetClient, socket, appModel, messageTypePath)
   }
 
   public connect(opts: NUClearNetOptions): () => void {
@@ -52,6 +62,19 @@ export class NUsightNetwork {
 
   public onNUClearLeave(cb: (peer: NUClearNetPeer) => void) {
     this.nuclearnetClient.onLeave(cb)
+  }
+
+  public record(peer: NUClearNetPeer): () => void {
+    const token = this.getNextRequestToken()
+    this.socket.send('record', peer, token)
+    return () => {
+      console.log(`unrecording for ${peer}`)
+      this.socket.send('unrecord', token)
+    }
+  }
+
+  private getNextRequestToken() {
+    return String(this.nextRequestTokenId++)
   }
 }
 

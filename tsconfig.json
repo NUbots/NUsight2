@@ -26,7 +26,8 @@
   ],
   "exclude": [
     "build",
-    "node_modules"
+    "node_modules",
+    "**/*.tests.ts"
   ],
   "awesomeTypescriptLoaderOptions": {
     "useWebpackText": true,

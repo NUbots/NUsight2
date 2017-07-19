@@ -47,11 +47,11 @@ export default {
       {
         test: /\.tsx?$/,
         use: isProduction
-            ? 'awesome-typescript-loader?module=es6'
-            : [
-              'react-hot-loader',
-              'awesome-typescript-loader',
-            ],
+          ? 'awesome-typescript-loader?module=es6'
+          : [
+            'react-hot-loader',
+            'awesome-typescript-loader',
+          ],
       },
       // local css
       {
@@ -78,15 +78,15 @@ export default {
         }),
       },
       /*
-      External libraries generally do not support css modules so the selector mangling will break external components.
-      This separate simplified loader is used for anything within the node_modules folder instead.
-      */
+       External libraries generally do not support css modules so the selector mangling will break external components.
+       This separate simplified loader is used for anything within the node_modules folder instead.
+       */
       {
         test: /\.css$/,
         include: [
           path.resolve(__dirname, 'node_modules'),
         ],
-        use: [ 'style-loader', 'css-loader' ],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.svg$/,

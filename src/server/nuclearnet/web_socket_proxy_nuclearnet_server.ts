@@ -9,10 +9,6 @@ import { WebSocket } from './web_socket_server'
 import { NodeSystemClock } from '../time/node_clock'
 import { Clock } from '../time/clock'
 
-type Opts = {
-  fakeNetworking: boolean
-}
-
 /**
  * The server component of a NUClearNet proxy running over web sockets. Acts as a gateway to the NUClear network.
  * All clients currently share a single NUClearNet connection, mostly for performance reasons. Could potentially be
@@ -23,8 +19,7 @@ export class WebSocketProxyNUClearNetServer {
     server.onConnection(this.onClientConnection)
   }
 
-  public static of(server: WebSocketServer, { fakeNetworking }: Opts): WebSocketProxyNUClearNetServer {
-    const nuclearnetClient: NUClearNetClient = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+  public static of(server: WebSocketServer, nuclearnetClient: NUClearNetClient): WebSocketProxyNUClearNetServer {
     return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
   }
 
@@ -127,7 +122,7 @@ class PacketProcessor {
   // The maximum number of packets of a unique type to send before receiving acknowledgements.
   private limit: number
 
-  // The number of milliseconds before giving up on an acknowledge
+  // The number of seconds before giving up on an acknowledge
   private timeout: number
 
   constructor(private socket: WebSocket,
@@ -139,7 +134,7 @@ class PacketProcessor {
   }
 
   public static of(socket: WebSocket) {
-    return new PacketProcessor(socket, NodeSystemClock, { limit: 1, timeout: 5000 })
+    return new PacketProcessor(socket, NodeSystemClock, { limit: 1, timeout: 5 })
   }
 
   public onPacket(event: string, packet: NUClearNetPacket) {

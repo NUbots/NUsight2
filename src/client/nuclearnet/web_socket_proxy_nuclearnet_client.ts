@@ -84,10 +84,20 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
      */
     const requestToken = String(this.nextRequestToken++)
     this.socket.send('listen', event, requestToken)
-    const listener = (packet: NUClearNetPacket, ack?: () => void) => {
-      cb(packet)
-      if (ack) {
-        ack()
+    const listener = (packet: NUClearNetPacket, ack?: (time: number) => void) => {
+
+      // If our listener knows how to use the ack packets hand them over
+      if (cb.length == 2) {
+        (<any>cb)(packet, ack) // TODO HACKS THIS IS BAD DO IT PROPERLY
+      }
+      // Otherwise ack for ourself
+      else if (ack) {
+        const time = performance.now()
+        cb(packet)
+        ack(performance.now() - time)
+      }
+      else {
+        cb(packet)
       }
     }
     this.socket.on(event, listener)

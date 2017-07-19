@@ -1,6 +1,7 @@
 import * as compression from 'compression'
 import * as history from 'connect-history-api-fallback'
 import * as express from 'express'
+import * as fs from 'fs'
 import * as http from 'http'
 import * as minimist from 'minimist'
 import * as favicon from 'serve-favicon'
@@ -11,13 +12,12 @@ import * as webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackConfig from '../../webpack.config'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import { VirtualRobots } from '../simulators/virtual_robots'
+import { NbsNUClearPlayback } from './nbs/nbs_nuclear_playback'
 import { DirectNUClearNetClient } from './nuclearnet/direct_nuclearnet_client'
 import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
 import { NUsightServer } from './nusight_server'
-import { NbsNUClearPlayback } from './nbs/nbs_nuclear_playback'
-import * as fs from 'fs'
 
 const compiler = webpack(webpackConfig)
 
@@ -52,32 +52,34 @@ server.listen(port, () => {
   console.log(`NUsight server started at http://localhost:${port}`)
 })
 
-if (withSimulators) {
-  const virtualRobots = VirtualRobots.of({
-    fakeNetworking: true,
-    numRobots: 3,
-    simulators: [
-      SensorDataSimulator.of(),
-    ],
-  })
-  virtualRobots.simulateWithFrequency(60)
-}
-
-const nuclearnetClient = withSimulators ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
-
-WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), nuclearnetClient)
-
-NUsightServer.of(WebSocketServer.of(sioNetwork.of('/nusight')), nuclearnetClient)
-
-async function playback() {
-  const fake = withSimulators ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
-  fake.connect({ name: 'Fake Stream' })
-  while (true) {
-    const file = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/darwin3_WalkAround.nbs')
-    // const file = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/darwin3_FollowBall.nbs')
-    const out = NbsNUClearPlayback.fromRawStream(file, fake)
-    await new Promise(res => out.on('finish', res))
+devMiddleware.waitUntilValid(() => {
+  if (withSimulators) {
+    const virtualRobots = VirtualRobots.of({
+      fakeNetworking: true,
+      numRobots: 3,
+      simulators: [
+        SensorDataSimulator.of(),
+      ],
+    })
+    virtualRobots.simulateWithFrequency(60)
   }
-}
 
-playback()
+  const nuclearnetClient = withSimulators ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+
+  WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), nuclearnetClient)
+
+  NUsightServer.of(WebSocketServer.of(sioNetwork.of('/nusight')), nuclearnetClient)
+
+  async function playback() {
+    const fake = withSimulators ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+    fake.connect({ name: 'Fake Stream' })
+    while (true) {
+      const file = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/darwin3_WalkAround.nbs')
+      // const file = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/darwin3_FollowBall.nbs')
+      const out = NbsNUClearPlayback.fromRawStream(file, fake)
+      await new Promise(res => out.on('finish', res))
+    }
+  }
+
+  playback()
+})

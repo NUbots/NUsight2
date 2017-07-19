@@ -70,7 +70,7 @@ WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet'
 NUsightServer.of(WebSocketServer.of(sioNetwork.of('/nusight')), nuclearnetClient)
 
 async function playback() {
-  const fake = FakeNUClearNetClient.of()
+  const fake = withSimulators ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
   fake.connect({ name: 'Fake Stream' })
   while (true) {
     const file = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/darwin3_WalkAround.nbs')

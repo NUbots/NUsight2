@@ -1,6 +1,7 @@
 import { action } from 'mobx'
 import { computed } from 'mobx'
 import { observable } from 'mobx'
+import { Transform } from './transform'
 
 export class Vector2 {
   @observable public x: number
@@ -24,6 +25,23 @@ export class Vector2 {
 
   @computed get length(): number {
     return Math.sqrt(this.x * this.x + this.y * this.y)
+  }
+
+  @action
+  public applyTransform(transform: Transform): Vector2 {
+    const { rotate: theta, scale, translate } = transform
+    const rotationMatrix = [
+      Math.cos(theta), -Math.sin(theta),
+      Math.sin(theta), Math.cos(theta)
+    ]
+
+    const x = this.x
+    const y = this.y
+
+    this.x = scale * (x * rotationMatrix[0] + y * rotationMatrix[1]) + translate.x
+    this.y = scale * (x * rotationMatrix[2] + y * rotationMatrix[3]) + translate.y
+
+    return this
   }
 
   @action

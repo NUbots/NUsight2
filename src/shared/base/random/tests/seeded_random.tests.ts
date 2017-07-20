@@ -32,11 +32,13 @@ describe('SeededRandom', () => {
     })
 
     it('should generally produce values across the range', () => {
-      const numbers = range(1000).map(() => random.integer(0, 3))
+      const numbers = range(50).map(() => random.integer(0, 5))
 
       expect(numbers.some(n => n === 0)).toBeTruthy()
       expect(numbers.some(n => n === 1)).toBeTruthy()
       expect(numbers.some(n => n === 2)).toBeTruthy()
+      expect(numbers.some(n => n === 3)).toBeTruthy()
+      expect(numbers.some(n => n === 4)).toBeTruthy()
     })
   })
 

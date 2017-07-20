@@ -1,7 +1,7 @@
+import { SeededRandom } from '../../../shared/base/random/seeded_random'
+import { hashType } from '../../nuclearnet/fake_nuclearnet_server'
 import { NbsFrameChunker } from '../nbs_frame_chunker'
 import { encodeFrame } from '../nbs_frame_codecs'
-import { hashType } from '../../nuclearnet/fake_nuclearnet_server'
-import { SeededRandom } from '../../../shared/base/random/seeded_random'
 
 describe('NbsFrameChunker', () => {
   let chunker: NbsFrameChunker

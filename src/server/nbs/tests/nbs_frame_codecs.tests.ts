@@ -20,7 +20,7 @@ describe('NbsFrameCodecs', () => {
       expect(frame).toEqual({
         timestampInMicroseconds: 1500379664696000,
         hash: hashType('message.input.sensors'),
-        payload: new Buffer(8).fill(0x12)
+        payload: new Buffer(8).fill(0x12),
       })
     })
   })

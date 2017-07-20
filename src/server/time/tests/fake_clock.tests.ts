@@ -27,27 +27,27 @@ describe('FakeClock', () => {
   })
 
   describe('#setTimeout', () => {
-    it('does not call synchronously', () => {
+    it('does not invoke callback synchronously', () => {
       const spy = jest.fn()
       clock.setTimeout(spy, 0)
       expect(spy).not.toHaveBeenCalled()
     })
 
-    it('does not call callback before expected time', () => {
+    it('does not invoke callback before expected time', () => {
       const spy = jest.fn()
       clock.setTimeout(spy, 2)
       clock.tick(1)
       expect(spy).not.toHaveBeenCalled()
     })
 
-    it('calls callback at expected time', () => {
+    it('invokes callback at expected time', () => {
       const spy = jest.fn()
       clock.setTimeout(spy, 2)
       clock.tick(2)
       expect(spy).toHaveBeenCalled()
     })
 
-    it('can be cancelled', () => {
+    it('does not invoke callback when cancelled', () => {
       const spy = jest.fn()
       const cancel = clock.setTimeout(spy, 2)
 
@@ -58,13 +58,13 @@ describe('FakeClock', () => {
   })
 
   describe('#setInterval', () => {
-    it('does not call synchronously', () => {
+    it('does not invoke callback synchronously', () => {
       const spy = jest.fn()
       clock.setInterval(spy, 2)
       expect(spy).not.toHaveBeenCalled()
     })
 
-    it('calls callback regularly at expected times', () => {
+    it('invokes callback regularly at expected times', () => {
       const spy = jest.fn()
       clock.setInterval(spy, 2)
 
@@ -78,7 +78,7 @@ describe('FakeClock', () => {
       expect(spy).toHaveBeenCalledTimes(2)
     })
 
-    it('can be cancelled', () => {
+    it('does not invoke callback when cancelled', () => {
       const spy = jest.fn()
       const cancel = clock.setInterval(spy, 2)
 
@@ -89,13 +89,13 @@ describe('FakeClock', () => {
   })
 
   describe('#setImmediate', () => {
-    it('does not call synchronously', () => {
+    it('does not invoke callback synchronously', () => {
       const spy = jest.fn()
       clock.setImmediate(spy)
       expect(spy).not.toHaveBeenCalled()
     })
 
-    it('calls after at least any tick', () => {
+    it('invokes callback after any tick', () => {
       const spy = jest.fn()
       clock.setImmediate(spy)
 
@@ -103,7 +103,7 @@ describe('FakeClock', () => {
       expect(spy).toHaveBeenCalled()
     })
 
-    it('can be cancelled', () => {
+    it('does not invoke callback when cancelled', () => {
       const spy = jest.fn()
       const cancel = clock.setImmediate(spy)
 
@@ -114,7 +114,7 @@ describe('FakeClock', () => {
   })
 
   describe('#runAllTimers', () => {
-    it('runs all timers, including new ones that are created from the call', () => {
+    it('invokes all scheduled timers', () => {
       const spy1 = jest.fn()
       const spy2 = jest.fn()
       const spy3 = jest.fn()
@@ -129,7 +129,7 @@ describe('FakeClock', () => {
       expect(spy3).toHaveBeenCalled()
     })
 
-    it('runs all timers, including new ones that are created from the call', () => {
+    it('invokes all scheduled timers, including any new timers that were scheduled from running them', () => {
       const spy1 = jest.fn()
       const spy2 = jest.fn()
 
@@ -153,7 +153,7 @@ describe('FakeClock', () => {
   })
 
   describe('#runOnlyPendingTimers', () => {
-    it('runs all pending timers', () => {
+    it('invokes all scheduled timers', () => {
       const spy1 = jest.fn()
       const spy2 = jest.fn()
       const spy3 = jest.fn()
@@ -168,7 +168,7 @@ describe('FakeClock', () => {
       expect(spy3).toHaveBeenCalled()
     })
 
-    it('runs all timers, excluding new ones that are created from the call', () => {
+    it('invokes all scheduled timers, excluding any new timers that were scheduled from running them', () => {
       const spy1 = jest.fn()
       const spy2 = jest.fn()
       const spy3 = jest.fn()
@@ -196,7 +196,7 @@ describe('FakeClock', () => {
   })
 
   describe('#runTimersToTime', () => {
-    it('runs all timers before given time', () => {
+    it('invokes all scheduled timers before the given time', () => {
       const spy1 = jest.fn()
       const spy2 = jest.fn()
       const spy3 = jest.fn()

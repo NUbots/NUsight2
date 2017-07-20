@@ -11,7 +11,11 @@ export class Transform {
     this.translate = opts.translate
   }
 
-  public static of(opts: Transform): Transform {
-    return new Transform(opts)
+  public static of(opts: Partial<Transform> = {}): Transform {
+    return new Transform({
+      rotate: opts.rotate || 0,
+      scale: opts.scale || 1,
+      translate: opts.translate || { x: 0, y: 0 }
+    })
   }
 }

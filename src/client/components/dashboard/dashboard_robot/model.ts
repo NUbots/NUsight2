@@ -14,6 +14,7 @@ export class DashboardRobotModel {
   @observable public battery: number
   @observable public ballColor: string
   @observable public ballPosition: Vector2
+  @observable public ballSightColor: string
   @observable public ballWorldPosition: Vector2
   @observable public behaviourState: State
   @observable public gameMode: Mode
@@ -26,8 +27,10 @@ export class DashboardRobotModel {
   @observable public lastSeenObstacle: number
   @observable public penaltyReason: PenaltyReason
   @observable private robot: RobotModel
+  @observable public robotBorderColor: string
   @observable public robotColor: string
   @observable public robotPosition: Vector2
+  @observable public textColor: string
   @observable public time: number
   @observable public voltage: number
 
@@ -41,6 +44,7 @@ export class DashboardRobotModel {
       battery: -1,
       ballColor: '#ff9800',
       ballPosition: Vector2.of(),
+      ballSightColor: 'rgba(255, 255, 255, 0.3)',
       ballWorldPosition: Vector2.of(),
       behaviourState: State.UNKNOWN,
       gameMode: Mode.UNKNOWN_MODE,
@@ -52,8 +56,10 @@ export class DashboardRobotModel {
       lastSeenGoal: 0,
       lastSeenObstacle: 0,
       penaltyReason: PenaltyReason.UNKNOWN_PENALTY_REASON,
+      robotBorderColor: '#000',
       robotColor: '#777',
       robotPosition: Vector2.of(),
+      textColor: '#fff',
       time: Date.now() / 1000,
       voltage: -1
     })

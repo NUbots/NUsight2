@@ -2,8 +2,10 @@ import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 import { BasicAppearance } from '../../../canvas/appearance/basic_appearance'
 import { CircleGeometry } from '../../../canvas/geometry/circle_geometry'
+import { LineGeometry } from '../../../canvas/geometry/line_geometry'
 import { TextGeometry } from '../../../canvas/geometry/text_geometry'
 import { Shape } from '../../../canvas/object/shape'
+import { Vector2 } from '../../../math/vector2'
 import { DashboardRobotModel } from './model'
 
 export class DashboardRobotViewModel {
@@ -16,6 +18,7 @@ export class DashboardRobotViewModel {
   @computed
   public get robot() {
     return [
+      this.ballSight,
       this.ball,
       this.robotMarker
     ]
@@ -37,6 +40,21 @@ export class DashboardRobotViewModel {
   }
 
   @computed
+  private get ballSight() {
+    return Shape.of(
+      LineGeometry.of({
+        origin: Vector2.of(this.model.robotPosition.x, this.model.robotPosition.y),
+        target: Vector2.of(this.model.ballWorldPosition.x, this.model.ballWorldPosition.y)
+      }),
+      BasicAppearance.of({
+        fillStyle: 'transparent',
+        lineWidth: 0.05,
+        strokeStyle: this.model.ballSightColor
+      })
+    )
+  }
+
+  @computed
   private get robotMarker() {
     return [
       Shape.of(
@@ -47,9 +65,11 @@ export class DashboardRobotViewModel {
         }),
         BasicAppearance.of({
           fillStyle: this.model.robotColor,
-          strokeStyle: 'transparent'
+          lineWidth: 0.01,
+          strokeStyle: this.model.robotBorderColor
         })
       ),
+
       Shape.of(
         TextGeometry.of({
           text: this.model.id.toString(),
@@ -59,7 +79,7 @@ export class DashboardRobotViewModel {
           y: this.model.robotPosition.y
         }),
         BasicAppearance.of({
-          fillStyle: '#fff',
+          fillStyle: this.model.textColor,
           strokeStyle: 'transparent'
         })
       )

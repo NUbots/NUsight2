@@ -47,6 +47,7 @@ export class DashboardNetwork {
     robot.lastSeenGoal = toSeconds(overview.lastSeenGoal)
     robot.lastSeenObstacle = toSeconds(overview.lastSeenObstacle)
     robot.penaltyReason = overview.penaltyReason
+    robot.robotHeading = Vector2.from(overview.robotHeading)
     robot.robotPosition = Vector2.from(overview.robotPosition)
     robot.time = Date.now () / 1000
     robot.voltage = overview.voltage

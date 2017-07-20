@@ -29,6 +29,7 @@ export class DashboardRobotModel {
   @observable private robot: RobotModel
   @observable public robotBorderColor: string
   @observable public robotColor: string
+  @observable public robotHeading: Vector2
   @observable public robotPosition: Vector2
   @observable public textColor: string
   @observable public time: number
@@ -58,6 +59,7 @@ export class DashboardRobotModel {
       penaltyReason: PenaltyReason.UNKNOWN_PENALTY_REASON,
       robotBorderColor: '#000',
       robotColor: '#777',
+      robotHeading: Vector2.of(),
       robotPosition: Vector2.of(),
       textColor: '#fff',
       time: Date.now() / 1000,

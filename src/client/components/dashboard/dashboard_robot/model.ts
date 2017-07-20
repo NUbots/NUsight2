@@ -39,7 +39,7 @@ export class DashboardRobotModel {
   public static of = memoize((robot: RobotModel): DashboardRobotModel => {
     return new DashboardRobotModel(robot, {
       battery: -1,
-      ballColor: 'orange',
+      ballColor: '#ff9800',
       ballPosition: Vector2.of(),
       ballWorldPosition: Vector2.of(),
       behaviourState: State.UNKNOWN,
@@ -52,7 +52,7 @@ export class DashboardRobotModel {
       lastSeenGoal: 0,
       lastSeenObstacle: 0,
       penaltyReason: PenaltyReason.UNKNOWN_PENALTY_REASON,
-      robotColor: 'grey',
+      robotColor: '#777',
       robotPosition: Vector2.of(),
       time: Date.now() / 1000,
       voltage: -1
@@ -60,12 +60,12 @@ export class DashboardRobotModel {
   })
 
   @computed
-  public get name() {
+  public get name(): string {
     return this.robot.name
   }
 
   @computed
-  public get visible() {
+  public get visible(): boolean {
     return this.robot.enabled
   }
 }

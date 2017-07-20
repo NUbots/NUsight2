@@ -3,6 +3,7 @@ import { computed } from 'mobx'
 import { BasicAppearance } from '../../../canvas/appearance/basic_appearance'
 import { CircleGeometry } from '../../../canvas/geometry/circle_geometry'
 import { LineGeometry } from '../../../canvas/geometry/line_geometry'
+import { MarkerGeometry } from '../../../canvas/geometry/marker_geometry'
 import { TextGeometry } from '../../../canvas/geometry/text_geometry'
 import { Shape } from '../../../canvas/object/shape'
 import { Vector2 } from '../../../math/vector2'
@@ -56,9 +57,11 @@ export class DashboardRobotViewModel {
 
   @computed
   private get robotMarker() {
+    debugger
     return [
       Shape.of(
-        CircleGeometry.of({
+        MarkerGeometry.of({
+          heading: this.model.robotHeading.clone(),
           radius: 0.15,
           x: this.model.robotPosition.x,
           y: this.model.robotPosition.y

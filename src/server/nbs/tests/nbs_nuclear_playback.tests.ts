@@ -6,7 +6,7 @@ import { NbsFrame } from '../nbs_frame_codecs'
 import { NbsNUClearPlayback } from '../nbs_nuclear_playback'
 
 describe('NbsNUClearPlayback', () => {
-  it('plays packets at correct', () => {
+  it('sends packets at the rate specified by the frame timestamps', () => {
     const nuclearnetServer = new FakeNUClearNetServer()
     const nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
     const clock = FakeClock.of()

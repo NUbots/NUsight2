@@ -53,6 +53,8 @@ export class DashboardRobotViewModel {
       Shape.of(
         TextGeometry.of({
           text: this.model.id.toString(),
+          textAlign: 'center',
+          textBaseline: 'middle',
           x: this.model.robotPosition.x,
           y: this.model.robotPosition.y
         }),

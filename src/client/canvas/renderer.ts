@@ -4,6 +4,7 @@ import { Appearance } from './appearance/appearance'
 import { BasicAppearance } from './appearance/basic_appearance'
 import { CircleGeometry } from './geometry/circle_geometry'
 import { LineGeometry } from './geometry/line_geometry'
+import { MarkerGeometry } from './geometry/marker_geometry'
 import { RectangleGeometry } from './geometry/rectangle_geometry'
 import { TextGeometry } from './geometry/text_geometry'
 import { Shape } from './object/shape'
@@ -33,6 +34,10 @@ export class CanvasRenderer {
         }
         if (obj.geometry instanceof LineGeometry) {
           this.renderLine(obj, transform)
+          continue
+        }
+        if (obj.geometry instanceof MarkerGeometry) {
+          this.renderMarker(obj, transform)
           continue
         }
         if (obj.geometry instanceof RectangleGeometry) {
@@ -82,9 +87,49 @@ export class CanvasRenderer {
     const { geometry, appearance } = shape
     const origin = Vector2.of(geometry.origin.y, geometry.origin.x).applyTransform(transform)
     const target = Vector2.of(geometry.target.y, geometry.target.x).applyTransform(transform)
+
     this.context.beginPath()
     this.context.moveTo(origin.x, origin.y)
     this.context.lineTo(target.x, target.y)
+
+    this.applyAppearance(appearance, transform)
+    this.context.fill()
+    this.context.stroke()
+  }
+
+  private renderMarker(shape: Shape<MarkerGeometry>, transform: Transform): void {
+    const { geometry, appearance } = shape
+    const position = Vector2.of(geometry.y, geometry.x).applyTransform(transform)
+    const headingTransform = Transform.of({ rotate: transform.rotate })
+    const heading = Vector2.of(geometry.heading.y, geometry.heading.x)
+      .applyTransform(headingTransform)
+      .normalize()
+    const radius = geometry.radius * transform.scale
+
+    const headingAngle = Math.atan2(heading.y, heading.x)
+    const arcDistance = 3 * Math.PI * 0.5
+    // By default, the arc startAngle begins on the positive x-axis and rotates clockwise. If the startAngle and
+    // endAngle are offset by a quadrant, the arc will point toward the positive x-axis instead of starting there.
+    const startAngleOffset = Math.PI * 0.25
+    const startAngle = headingAngle + startAngleOffset
+    const endAngle = headingAngle + arcDistance + startAngleOffset
+
+    this.context.beginPath()
+    this.context.arc(
+      position.x,
+      position.y,
+      radius,
+      startAngle,
+      endAngle
+    )
+    // Scales heading vector to bounding square.
+    const sqrt2 = Math.sqrt(2)
+    // Convert the heading to absolute canvas coordinates.
+    this.context.lineTo(
+      position.x + sqrt2 * radius * heading.x,
+      position.y + sqrt2 * radius * heading.y
+    )
+    this.context.closePath()
 
     this.applyAppearance(appearance, transform)
     this.context.fill()

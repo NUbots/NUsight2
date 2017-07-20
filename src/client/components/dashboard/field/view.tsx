@@ -5,7 +5,8 @@ import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
-import { CanvasRenderer } from '../canvas_renderer/renderer'
+import { CanvasRenderer } from '../../../canvas/renderer'
+import { Transform } from '../../../math/transform'
 import { FieldModel } from './model'
 import { FieldViewModel } from './view_model'
 import * as style from './style.css'
@@ -74,16 +75,16 @@ export class Field extends Component<FieldProps> {
     const fieldAspect = fieldWidth / fieldLength
     const scale = canvasAspect < fieldAspect ? scaleY : scaleX
 
-    const camera = {
+    const camera = Transform.of({
       // Rotate the field by -90deg so that the sidelines are on the top and bottom of the screen.
-      rotate: -Math.PI * 0.5,
+      rotate: Math.PI * 0.5,
       scale,
+      // Translate by half of the canvas width and height so that the field appears in the center.
       translate: {
-        // Translate by half of the canvas width and height so that the field appears in the center.
         x: width * 0.5,
         y: height * 0.5
       }
-    }
+    })
     this.renderer.render(viewModel.scene, camera)
   }
 

@@ -9,6 +9,16 @@ export class TextGeometry {
   @observable public x: number
   @observable public y: number
 
+  constructor(opts: TextGeometry) {
+    this.font = opts.font
+    this.maxWidth = opts.maxWidth
+    this.text = opts.text
+    this.textAlign = opts.textAlign
+    this.textBaseline = opts.textBaseline
+    this.x = opts.x
+    this.y = opts.y
+  }
+  
   public static of(opts: Partial<TextGeometry>) {
     return new TextGeometry({
       font: opts.font || '10px sans-serif',
@@ -19,15 +29,5 @@ export class TextGeometry {
       x: opts.x || 0,
       y: opts.y || 0
     })
-  }
-
-  constructor(opts: TextGeometry) {
-    this.font = opts.font
-    this.maxWidth = opts.maxWidth
-    this.text = opts.text
-    this.textAlign = opts.textAlign
-    this.textBaseline = opts.textBaseline
-    this.x = opts.x
-    this.y = opts.y
   }
 }

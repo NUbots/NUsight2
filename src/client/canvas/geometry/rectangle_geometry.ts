@@ -6,6 +6,13 @@ export class RectangleGeometry {
   @observable public x: number
   @observable public y: number
 
+  constructor(opts: RectangleGeometry) {
+    this.height = opts.height
+    this.width = opts.width
+    this.x = opts.x
+    this.y = opts.y
+  }
+
   public static of(opts: Partial<RectangleGeometry> = {}) {
     return new RectangleGeometry({
       height: opts.height || 1,
@@ -13,12 +20,5 @@ export class RectangleGeometry {
       x: opts.x || 0,
       y: opts.y || 0
     })
-  }
-
-  constructor(opts: RectangleGeometry) {
-    this.height = opts.height
-    this.width = opts.width
-    this.x = opts.x
-    this.y = opts.y
   }
 }

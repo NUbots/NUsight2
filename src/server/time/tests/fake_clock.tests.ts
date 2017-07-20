@@ -7,6 +7,25 @@ describe('FakeClock', () => {
     clock = new FakeClock()
   })
 
+  describe('#tick', () => {
+    it('moves forward time', () => {
+      expect(clock.now()).toEqual(0)
+      expect(clock.performanceNow()).toEqual(0)
+
+      clock.tick(10)
+      expect(clock.now()).toEqual(10)
+      expect(clock.performanceNow()).toEqual(10)
+
+      clock.tick(10)
+      expect(clock.now()).toEqual(20)
+      expect(clock.performanceNow()).toEqual(20)
+
+      clock.tick(10)
+      expect(clock.now()).toEqual(30)
+      expect(clock.performanceNow()).toEqual(30)
+    })
+  })
+
   describe('#setTimeout', () => {
     it('does not call synchronously', () => {
       const spy = jest.fn()

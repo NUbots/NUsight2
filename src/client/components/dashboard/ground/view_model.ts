@@ -50,33 +50,17 @@ export class GroundViewModel {
     const width = dimensions.goalWidth
     const height = dimensions.goalDepth
     const y = width * 0.5
+    const goal = (x: number, strokeStyle: string) => Shape.of(
+      RectangleGeometry.of({ height, width, x, y }),
+      BasicAppearance.of({
+        fillStyle: 'transparent',
+        lineWidth: dimensions.lineWidth,
+        strokeStyle
+      })
+    )
     return [
-      Shape.of(
-        RectangleGeometry.of({
-          height,
-          width,
-          x: (dimensions.fieldLength * 0.5) + height,
-          y
-        }),
-        BasicAppearance.of({
-          fillStyle: 'transparent',
-          lineWidth: dimensions.lineWidth,
-          strokeStyle: this.model.topGoalColor
-        })
-      ),
-      Shape.of(
-        RectangleGeometry.of({
-          height,
-          width,
-          x: -dimensions.fieldLength * 0.5,
-          y
-        }),
-        BasicAppearance.of({
-          fillStyle: 'transparent',
-          lineWidth: dimensions.lineWidth,
-          strokeStyle: this.model.bottomGoalColor
-        })
-      )
+      goal((dimensions.fieldLength * 0.5) + height, this.model.topGoalColor),
+      goal(-dimensions.fieldLength * 0.5, this.model.bottomGoalColor)
     ]
   }
 
@@ -86,7 +70,8 @@ export class GroundViewModel {
       this.centerCircle,
       this.centerLine,
       this.fieldBorder,
-      this.goalAreas
+      this.goalAreas,
+      this.penaltyMarkers
     ]
   }
 
@@ -135,35 +120,39 @@ export class GroundViewModel {
 
   @computed
   private get goalAreas() {
+    const fieldLength = this.model.dimensions.fieldLength
     const width = this.model.dimensions.goalAreaWidth
     const height = this.model.dimensions.goalAreaLength
+    const goalArea = (x: number) => Shape.of(
+      RectangleGeometry.of({ height, width, x, y: width * 0.5 }),
+      BasicAppearance.of({
+        fillStyle: 'transparent',
+        lineWidth: this.model.dimensions.lineWidth,
+        strokeStyle: this.model.lineColor,
+      })
+    )
     return [
-      Shape.of(
-        RectangleGeometry.of({
-          height,
-          width,
-          x: this.model.dimensions.fieldLength * 0.5,
-          y: width * 0.5
-        }),
-        BasicAppearance.of({
-          fillStyle: 'transparent',
-          lineWidth: this.model.dimensions.lineWidth,
-          strokeStyle: this.model.lineColor,
-        })
-      ),
-      Shape.of(
-        RectangleGeometry.of({
-          height,
-          width,
-          x: -this.model.dimensions.fieldLength * 0.5 + height,
-          y: width * 0.5
-        }),
-        BasicAppearance.of({
-          fillStyle: 'transparent',
-          lineWidth: this.model.dimensions.lineWidth,
-          strokeStyle: this.model.lineColor,
-        })
-      )
+      goalArea(fieldLength * 0.5),
+      goalArea((-fieldLength * 0.5) + height)
+    ]
+  }
+
+  @computed
+  private get penaltyMarkers() {
+    const fieldLength = this.model.dimensions.fieldLength
+    const penaltyMarkDistance = this.model.dimensions.penaltyMarkDistance
+    const radius = this.model.dimensions.lineWidth
+    const marker = (x: number) => Shape.of(
+      CircleGeometry.of({ radius, x, y: 0 }),
+      BasicAppearance.of({
+        fillStyle: this.model.lineColor,
+        lineWidth: 0,
+        strokeStyle: 'transparent'
+      })
+    )
+    return [
+      marker((fieldLength * 0.5) - penaltyMarkDistance),
+      marker(-(fieldLength * 0.5) + penaltyMarkDistance)
     ]
   }
 }

@@ -68,7 +68,8 @@ export class GroundViewModel {
   private get fieldLines() {
     return [
       this.centerCircle,
-      this.centerLine,
+      this.centerMark,
+      this.halfwayLine,
       this.fieldBorder,
       this.goalAreas,
       this.penaltyMarkers
@@ -88,7 +89,29 @@ export class GroundViewModel {
   }
 
   @computed
-  private get centerLine() {
+  private get centerMark() {
+    const lineWidth = this.model.dimensions.lineWidth * 2
+    const strokeStyle = this.model.lineColor
+    return [
+      Shape.of(
+        LineGeometry.of({
+          origin: Vector2.of(0, lineWidth),
+          target: Vector2.of(0, -lineWidth)
+        }),
+        LineAppearance.of({ lineWidth, strokeStyle })
+      ),
+      Shape.of(
+        LineGeometry.of({
+          origin: Vector2.of(lineWidth, 0),
+          target: Vector2.of(-lineWidth, 0)
+        }),
+        LineAppearance.of({ lineWidth, strokeStyle })
+      )
+    ]
+  }
+
+  @computed
+  private get halfwayLine() {
     return Shape.of(
       LineGeometry.of({
         origin: Vector2.of(0, this.model.dimensions.fieldWidth * 0.5),
@@ -141,15 +164,29 @@ export class GroundViewModel {
   private get penaltyMarkers() {
     const fieldLength = this.model.dimensions.fieldLength
     const penaltyMarkDistance = this.model.dimensions.penaltyMarkDistance
-    const radius = this.model.dimensions.lineWidth
-    const marker = (x: number) => Shape.of(
-      CircleGeometry.of({ radius, x, y: 0 }),
-      BasicAppearance.of({
-        fillStyle: this.model.lineColor,
-        lineWidth: 0,
-        strokeStyle: 'transparent'
-      })
-    )
+    const lineWidth = this.model.dimensions.lineWidth
+    const marker = (x: number) => [
+      Shape.of(
+        LineGeometry.of({
+          origin: Vector2.of(x + lineWidth, 0),
+          target: Vector2.of(x - lineWidth, 0)
+        }),
+        LineAppearance.of({
+          lineWidth,
+          strokeStyle: this.model.lineColor
+        })
+      ),
+      Shape.of(
+        LineGeometry.of({
+          origin: Vector2.of(x, lineWidth),
+          target: Vector2.of(x, -lineWidth)
+        }),
+        LineAppearance.of({
+          lineWidth,
+          strokeStyle: this.model.lineColor
+        })
+      )
+    ]
     return [
       marker((fieldLength * 0.5) - penaltyMarkDistance),
       marker(-(fieldLength * 0.5) + penaltyMarkDistance)

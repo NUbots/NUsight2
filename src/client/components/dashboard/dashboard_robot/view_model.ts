@@ -1,6 +1,7 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 import { BasicAppearance } from '../../../canvas/appearance/basic_appearance'
+import { LineAppearance } from '../../../canvas/appearance/line_appearance'
 import { CircleGeometry } from '../../../canvas/geometry/circle_geometry'
 import { LineGeometry } from '../../../canvas/geometry/line_geometry'
 import { MarkerGeometry } from '../../../canvas/geometry/marker_geometry'
@@ -47,8 +48,7 @@ export class DashboardRobotViewModel {
         origin: Vector2.of(this.model.robotPosition.x, this.model.robotPosition.y),
         target: Vector2.of(this.model.ballWorldPosition.x, this.model.ballWorldPosition.y)
       }),
-      BasicAppearance.of({
-        fillStyle: 'transparent',
+      LineAppearance.of({
         lineWidth: 0.05,
         strokeStyle: this.model.ballSightColor
       })
@@ -57,7 +57,6 @@ export class DashboardRobotViewModel {
 
   @computed
   private get robotMarker() {
-    debugger
     return [
       Shape.of(
         MarkerGeometry.of({

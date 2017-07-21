@@ -2,6 +2,7 @@ import { Transform } from '../math/transform'
 import { Vector2 } from '../math/vector2'
 import { Appearance } from './appearance/appearance'
 import { BasicAppearance } from './appearance/basic_appearance'
+import { LineAppearance } from './appearance/line_appearance'
 import { CircleGeometry } from './geometry/circle_geometry'
 import { LineGeometry } from './geometry/line_geometry'
 import { MarkerGeometry } from './geometry/marker_geometry'
@@ -57,10 +58,21 @@ export class CanvasRenderer {
     if (appearance instanceof BasicAppearance) {
       this.applyBasicAppearance(appearance, transform)
     }
+    if (appearance instanceof LineAppearance) {
+      this.applyLineAppearance(appearance, transform)
+    }
   }
 
   private applyBasicAppearance(appearance: BasicAppearance, transform: Transform): void {
     this.context.fillStyle = appearance.fillStyle
+    this.context.lineWidth = appearance.lineWidth * transform.scale
+    this.context.strokeStyle = appearance.strokeStyle
+  }
+
+  private applyLineAppearance(appearance: LineAppearance, transform: Transform): void {
+    this.context.lineCap = appearance.lineCap
+    this.context.lineDashOffset = appearance.lineDashOffset
+    this.context.lineJoin = appearance.lineJoin
     this.context.lineWidth = appearance.lineWidth * transform.scale
     this.context.strokeStyle = appearance.strokeStyle
   }
@@ -93,7 +105,6 @@ export class CanvasRenderer {
     this.context.lineTo(target.x, target.y)
 
     this.applyAppearance(appearance, transform)
-    this.context.fill()
     this.context.stroke()
   }
 
@@ -167,5 +178,4 @@ export class CanvasRenderer {
     this.applyAppearance(appearance, transform)
     this.context.fillText(geometry.text, position.x, position.y, maxWidth)
   }
-
 }

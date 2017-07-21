@@ -1,6 +1,7 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 import { BasicAppearance } from '../../../canvas/appearance/basic_appearance'
+import { LineAppearance } from '../../../canvas/appearance/line_appearance'
 import { CircleGeometry } from '../../../canvas/geometry/circle_geometry'
 import { LineGeometry } from '../../../canvas/geometry/line_geometry'
 import { RectangleGeometry } from '../../../canvas/geometry/rectangle_geometry'
@@ -88,8 +89,7 @@ export class GroundViewModel {
         origin: Vector2.of(0, this.model.dimensions.fieldWidth * 0.5),
         target: Vector2.of(0, -this.model.dimensions.fieldWidth * 0.5)
       }),
-      BasicAppearance.of({
-        fillStyle: 'transparent',
+      LineAppearance.of({
         lineWidth: this.model.dimensions.lineWidth,
         strokeStyle: this.model.lineColor,
       })

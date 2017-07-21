@@ -63,8 +63,8 @@ export class Field extends Component<FieldProps> {
 
   private renderField(): void {
     const viewModel = FieldViewModel.of(this.props.model)
-    const fieldWidth = this.props.model.fieldWidth + 1
-    const fieldLength = this.props.model.fieldLength + 1
+    const fieldWidth = this.props.model.fieldWidth
+    const fieldLength = this.props.model.fieldLength
     const width = this.field.clientWidth
     const height = this.field.clientHeight
 

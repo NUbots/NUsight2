@@ -19,9 +19,29 @@ export class GroundViewModel {
   @computed
   public get ground() {
     return [
+      this.grass,
       this.goals,
       this.fieldLines
     ]
+  }
+
+  @computed
+  private get grass() {
+    const borderStripMinWidth = this.model.dimensions.borderStripMinWidth
+    const goalDepth = this.model.dimensions.goalDepth
+    return Shape.of(
+      RectangleGeometry.of({
+        height: this.model.dimensions.fieldLength + (borderStripMinWidth * 2) + (goalDepth * 2),
+        width: this.model.dimensions.fieldWidth + (borderStripMinWidth * 2),
+        x: (this.model.dimensions.fieldLength * 0.5) + borderStripMinWidth + goalDepth,
+        y: this.model.dimensions.fieldWidth * 0.5 + borderStripMinWidth
+      }),
+      BasicAppearance.of({
+        fillStyle: this.model.fieldColor,
+        lineWidth: 0,
+        strokeStyle: 'transparent'
+      })
+    )
   }
 
   @computed

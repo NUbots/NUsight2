@@ -25,11 +25,13 @@ export class FieldModel {
 
   @computed
   public get fieldLength() {
-    return this.ground.dimensions.fieldLength + (this.ground.dimensions.goalDepth * 2)
+    return this.ground.dimensions.fieldLength
+      + (this.ground.dimensions.goalDepth * 2)
+      + (this.ground.dimensions.borderStripMinWidth * 2)
   }
 
   @computed
   public get fieldWidth() {
-    return this.ground.dimensions.fieldWidth
+    return this.ground.dimensions.fieldWidth + (this.ground.dimensions.borderStripMinWidth * 2)
   }
 }

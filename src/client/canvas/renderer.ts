@@ -169,7 +169,7 @@ export class CanvasRenderer {
   private renderText(shape: Shape<TextGeometry>, transform: Transform): void {
     const { geometry, appearance } = shape
     const position = Vector2.of(geometry.y, geometry.x).applyTransform(transform)
-    const maxWidth = geometry.maxWidth === -1 ? undefined : geometry.maxWidth
+    const maxWidth = geometry.maxWidth === -1 ? undefined : geometry.maxWidth * transform.scale
 
     this.context.font = geometry.font
     this.context.textAlign = geometry.textAlign

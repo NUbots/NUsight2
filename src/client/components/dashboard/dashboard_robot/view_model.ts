@@ -49,7 +49,7 @@ export class DashboardRobotViewModel {
         target: Vector2.of(this.model.ballWorldPosition.x, this.model.ballWorldPosition.y)
       }),
       LineAppearance.of({
-        lineWidth: 0.05,
+        lineWidth: 0.025,
         strokeStyle: this.model.ballSightColor
       })
     )

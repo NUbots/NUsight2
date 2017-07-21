@@ -1,7 +1,8 @@
 import { observable } from 'mobx'
 
 export class TextGeometry {
-  @observable public font: string
+  @observable public fontFamily: string
+  @observable public fontSize: string
   @observable public maxWidth: number
   @observable public text: string
   @observable public textAlign: 'start' | 'end' | 'left' | 'right' | 'center'
@@ -10,7 +11,8 @@ export class TextGeometry {
   @observable public y: number
 
   constructor(opts: TextGeometry) {
-    this.font = opts.font
+    this.fontFamily = opts.fontFamily
+    this.fontSize = opts.fontSize
     this.maxWidth = opts.maxWidth
     this.text = opts.text
     this.textAlign = opts.textAlign
@@ -21,7 +23,8 @@ export class TextGeometry {
   
   public static of(opts: Partial<TextGeometry>) {
     return new TextGeometry({
-      font: opts.font || '10px sans-serif',
+      fontFamily: opts.fontFamily || 'sans-serif',
+      fontSize: opts.fontSize || '10px',
       maxWidth: opts.maxWidth || -1,
       text: opts.text || '',
       textAlign: opts.textAlign || 'start',

@@ -57,11 +57,12 @@ export class DashboardRobotViewModel {
 
   @computed
   private get robotMarker() {
+    const radius = 0.15
     return [
       Shape.of(
         MarkerGeometry.of({
           heading: this.model.robotHeading.clone(),
-          radius: 0.15,
+          radius,
           x: this.model.robotPosition.x,
           y: this.model.robotPosition.y
         }),
@@ -74,9 +75,11 @@ export class DashboardRobotViewModel {
 
       Shape.of(
         TextGeometry.of({
+          fontSize: '100%',
           text: this.model.id.toString(),
           textAlign: 'center',
           textBaseline: 'middle',
+          maxWidth: radius,
           x: this.model.robotPosition.x,
           y: this.model.robotPosition.y
         }),

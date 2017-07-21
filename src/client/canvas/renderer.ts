@@ -169,13 +169,26 @@ export class CanvasRenderer {
   private renderText(shape: Shape<TextGeometry>, transform: Transform): void {
     const { geometry, appearance } = shape
     const position = Vector2.of(geometry.y, geometry.x).applyTransform(transform)
+    const fontSize = geometry.fontSize === '100%' ? '1em' : geometry.fontSize
     const maxWidth = geometry.maxWidth === -1 ? undefined : geometry.maxWidth * transform.scale
 
-    this.context.font = geometry.font
+    this.context.font = `${fontSize} ${geometry.fontFamily}`
     this.context.textAlign = geometry.textAlign
     this.context.textBaseline = geometry.textBaseline
 
+    const textWidth = this.context.measureText(geometry.text).width
+    const scaleX = maxWidth ? (maxWidth / textWidth) : 1
+
+    this.context.save()
+    this.context.scale(scaleX, scaleX)
+
     this.applyAppearance(appearance, transform)
-    this.context.fillText(geometry.text, position.x, position.y, maxWidth)
+    this.context.fillText(
+      geometry.text,
+      position.x / scaleX,
+      position.y / scaleX,
+      maxWidth ? maxWidth / scaleX : maxWidth
+    )
+    this.context.restore()
   }
 }

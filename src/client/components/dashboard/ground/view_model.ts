@@ -4,7 +4,7 @@ import { BasicAppearance } from '../../../canvas/appearance/basic_appearance'
 import { LineAppearance } from '../../../canvas/appearance/line_appearance'
 import { CircleGeometry } from '../../../canvas/geometry/circle_geometry'
 import { LineGeometry } from '../../../canvas/geometry/line_geometry'
-import { RectangleGeometry } from '../../../canvas/geometry/rectangle_geometry'
+import { PolygonGeometry } from '../../../canvas/geometry/polygon_geometry'
 import { Shape } from '../../../canvas/object/shape'
 import { Vector2 } from '../../../math/vector2'
 import { GroundModel } from './model'
@@ -29,13 +29,12 @@ export class GroundViewModel {
   private get grass() {
     const borderStripMinWidth = this.model.dimensions.borderStripMinWidth
     const goalDepth = this.model.dimensions.goalDepth
+    const height = this.model.dimensions.fieldLength + (borderStripMinWidth * 2) + (goalDepth * 2)
+    const width = this.model.dimensions.fieldWidth + (borderStripMinWidth * 2)
+    const x = (-this.model.dimensions.fieldLength * 0.5) - goalDepth - borderStripMinWidth
+    const y = (-this.model.dimensions.fieldWidth * 0.5) - borderStripMinWidth
     return Shape.of(
-      RectangleGeometry.of({
-        height: this.model.dimensions.fieldLength + (borderStripMinWidth * 2) + (goalDepth * 2),
-        width: this.model.dimensions.fieldWidth + (borderStripMinWidth * 2),
-        x: (this.model.dimensions.fieldLength * 0.5) + borderStripMinWidth + goalDepth,
-        y: this.model.dimensions.fieldWidth * 0.5 + borderStripMinWidth
-      }),
+      this.getRectanglePolygon({ x, y, width, height }),
       BasicAppearance.of({
         fillStyle: this.model.fieldColor,
         lineWidth: 0,
@@ -49,9 +48,9 @@ export class GroundViewModel {
     const dimensions = this.model.dimensions
     const width = dimensions.goalWidth
     const height = dimensions.goalDepth
-    const y = width * 0.5
+    const y = -width * 0.5
     const goal = (x: number, strokeStyle: string) => Shape.of(
-      RectangleGeometry.of({ height, width, x, y }),
+      this.getRectanglePolygon({ x, y, width, height }),
       BasicAppearance.of({
         fillStyle: 'transparent',
         lineWidth: dimensions.lineWidth,
@@ -59,8 +58,8 @@ export class GroundViewModel {
       })
     )
     return [
-      goal((dimensions.fieldLength * 0.5) + height, this.model.topGoalColor),
-      goal(-dimensions.fieldLength * 0.5, this.model.bottomGoalColor)
+      goal(dimensions.fieldLength * 0.5, this.model.topGoalColor),
+      goal((-dimensions.fieldLength * 0.5) - height, this.model.bottomGoalColor)
     ]
   }
 
@@ -127,11 +126,11 @@ export class GroundViewModel {
   @computed
   private get fieldBorder() {
     return Shape.of(
-      RectangleGeometry.of({
-        height: this.model.dimensions.fieldLength,
+      this.getRectanglePolygon({
+        x: -this.model.dimensions.fieldLength * 0.5,
+        y: -this.model.dimensions.fieldWidth * 0.5,
         width: this.model.dimensions.fieldWidth,
-        x: this.model.dimensions.fieldLength * 0.5,
-        y: this.model.dimensions.fieldWidth * 0.5
+        height: this.model.dimensions.fieldLength
       }),
       BasicAppearance.of({
         fillStyle: 'transparent',
@@ -144,10 +143,11 @@ export class GroundViewModel {
   @computed
   private get goalAreas() {
     const fieldLength = this.model.dimensions.fieldLength
-    const width = this.model.dimensions.goalAreaWidth
     const height = this.model.dimensions.goalAreaLength
+    const width = this.model.dimensions.goalAreaWidth
+    const y = -width * 0.5
     const goalArea = (x: number) => Shape.of(
-      RectangleGeometry.of({ height, width, x, y: width * 0.5 }),
+      this.getRectanglePolygon({ x, y, width, height }),
       BasicAppearance.of({
         fillStyle: 'transparent',
         lineWidth: this.model.dimensions.lineWidth,
@@ -155,8 +155,8 @@ export class GroundViewModel {
       })
     )
     return [
-      goalArea(fieldLength * 0.5),
-      goalArea((-fieldLength * 0.5) + height)
+      goalArea((fieldLength * 0.5) - height),
+      goalArea(-fieldLength * 0.5)
     ]
   }
 
@@ -191,5 +191,14 @@ export class GroundViewModel {
       marker((fieldLength * 0.5) - penaltyMarkDistance),
       marker(-(fieldLength * 0.5) + penaltyMarkDistance)
     ]
+  }
+
+  private getRectanglePolygon(opts: { x: number, y: number, width: number, height: number }): PolygonGeometry {
+    return PolygonGeometry.of([
+      Vector2.of(opts.x, opts.y), // Bottom right
+      Vector2.of(opts.x, opts.y + opts.width), // Bottom left
+      Vector2.of(opts.x + opts.height, opts.y + opts.width), // Top left
+      Vector2.of(opts.x + opts.height, opts.y) // Top right
+    ])
   }
 }

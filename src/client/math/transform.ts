@@ -2,7 +2,7 @@ import { observable } from 'mobx'
 
 export class Transform {
   @observable public rotate: number
-  @observable public scale: number
+  @observable public scale: { x: number, y: number }
   @observable public translate: { x: number, y: number }
 
   public constructor(opts: Transform) {
@@ -14,7 +14,7 @@ export class Transform {
   public static of(opts: Partial<Transform> = {}): Transform {
     return new Transform({
       rotate: opts.rotate || 0,
-      scale: opts.scale || 1,
+      scale: opts.scale || { x: 1, y: 0 },
       translate: opts.translate || { x: 0, y: 0 }
     })
   }

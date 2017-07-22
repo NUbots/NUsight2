@@ -30,16 +30,20 @@ export class Vector2 {
   @action
   public applyTransform(transform: Transform): Vector2 {
     const { rotate: theta, scale, translate } = transform
+    
+    const cosTheta = Math.cos(theta)
+    const sinTheta = Math.sin(theta)
+    
     const rotationMatrix = [
-      Math.cos(theta), -Math.sin(theta),
-      Math.sin(theta), Math.cos(theta)
+      cosTheta, -sinTheta,
+      sinTheta, cosTheta
     ]
 
     const x = this.x
     const y = this.y
 
-    this.x = scale * (x * rotationMatrix[0] + y * rotationMatrix[1]) + translate.x
-    this.y = scale * (x * rotationMatrix[2] + y * rotationMatrix[3]) + translate.y
+    this.x = scale.x * (x * rotationMatrix[0] + y * rotationMatrix[1]) + translate.x
+    this.y = scale.y * (x * rotationMatrix[2] + y * rotationMatrix[3]) + translate.y
 
     return this
   }
@@ -94,5 +98,11 @@ export class Vector2 {
     this.y += movement.y
     return this
   }
-}
 
+  @action
+  public subtract(movement: Vector2): Vector2 {
+    this.x -= movement.x
+    this.y -= movement.y
+    return this
+  }
+}

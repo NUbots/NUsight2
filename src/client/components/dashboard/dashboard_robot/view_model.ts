@@ -2,13 +2,14 @@ import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 import { BasicAppearance } from '../../../canvas/appearance/basic_appearance'
 import { LineAppearance } from '../../../canvas/appearance/line_appearance'
+import { ArrowGeometry } from '../../../canvas/geometry/arrow_geometry'
 import { CircleGeometry } from '../../../canvas/geometry/circle_geometry'
 import { LineGeometry } from '../../../canvas/geometry/line_geometry'
 import { MarkerGeometry } from '../../../canvas/geometry/marker_geometry'
 import { TextGeometry } from '../../../canvas/geometry/text_geometry'
 import { Shape } from '../../../canvas/object/shape'
-import { Vector2 } from '../../../math/vector2'
 import { DashboardRobotModel } from './model'
+import { Vector2 } from '../../../math/vector2'
 
 export class DashboardRobotViewModel {
   public constructor(private model: DashboardRobotModel) {}
@@ -21,6 +22,7 @@ export class DashboardRobotViewModel {
   public get robot() {
     return [
       this.ballSight,
+      this.kickTarget,
       this.ball,
       this.robotMarker
     ]
@@ -45,12 +47,29 @@ export class DashboardRobotViewModel {
   private get ballSight() {
     return Shape.of(
       LineGeometry.of({
-        origin: Vector2.of(this.model.robotPosition.x, this.model.robotPosition.y),
-        target: Vector2.of(this.model.ballWorldPosition.x, this.model.ballWorldPosition.y)
+        origin: this.model.robotPosition.clone(),
+        target: this.model.ballWorldPosition.clone()
       }),
       LineAppearance.of({
         lineWidth: 0.025,
         strokeStyle: this.model.ballSightColor
+      })
+    )
+  }
+
+  @computed
+  private get kickTarget() {
+    const origin = this.model.ballWorldPosition
+    const difference = this.model.kickTarget.clone().subtract(origin)
+    return Shape.of(
+      ArrowGeometry.of({
+        direction: difference.clone().divideScalar(difference.length), // TODO fix normalize???
+        length: difference.length,
+        origin: origin.clone()
+      }),
+      LineAppearance.of({
+        lineWidth: 0.1,
+        strokeStyle: this.model.kickTargetColor
       })
     )
   }

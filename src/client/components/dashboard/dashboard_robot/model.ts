@@ -21,6 +21,7 @@ export class DashboardRobotModel {
   @observable public gamePhase: Phase
   @observable public id: number
   @observable public kickTarget: Vector2
+  @observable public kickTargetColor: string
   @observable public lastCameraImage: number
   @observable public lastSeenBall: number
   @observable public lastSeenGoal: number
@@ -52,6 +53,7 @@ export class DashboardRobotModel {
       gamePhase: Phase.UNKNOWN_PHASE,
       id: -1,
       kickTarget: Vector2.of(),
+      kickTargetColor: 'rgba(255, 0, 0, 0.3)',
       lastCameraImage: 0,
       lastSeenBall: 0,
       lastSeenGoal: 0,

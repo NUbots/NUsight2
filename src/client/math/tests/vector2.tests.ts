@@ -14,7 +14,7 @@ describe('Vector2', () => {
 
   it('should apply transform scale correctly', () => {
     const vec2 = Vector2.of(2, 3)
-    const transform = Transform.of({ scale: 2, })
+    const transform = Transform.of({ scale: Vector2.of(2, 2) })
 
     const actual = vec2.applyTransform(transform)
     const expected = Vector2.of(4, 6)
@@ -36,11 +36,8 @@ describe('Vector2', () => {
     const vec2 = Vector2.of(2, 3)
     const transform = Transform.of({
       rotate: Math.PI,
-      scale: 2,
-      translate: {
-        x: 1,
-        y: 1
-      }
+      scale: Vector2.of(2, 2),
+      translate: { x: 1, y: 1 }
     })
 
     const actual = vec2.applyTransform(transform)

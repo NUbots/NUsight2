@@ -77,8 +77,8 @@ export class Field extends Component<FieldProps> {
 
     const camera = Transform.of({
       // Rotate the field by -90deg so that the sidelines are on the top and bottom of the screen.
-      rotate: Math.PI * 0.5,
-      scale,
+      rotate: Math.PI,
+      scale: { x: scale, y: -scale },
       // Translate by half of the canvas width and height so that the field appears in the center.
       translate: {
         x: width * 0.5,

@@ -7,10 +7,10 @@ import { MeshBasicMaterial } from 'three'
 import { Object3D } from 'three'
 import { ShaderMaterial } from 'three'
 import { Vector3 } from 'three'
+import { PlaneBufferGeometry } from 'three'
 import { SkyboxModel } from './model'
 import * as SkyboxFrag from './skybox.frag'
 import * as SkyboxVert from './skybox.vert'
-import { PlaneBufferGeometry } from 'three'
 
 export class SkyboxViewModel {
 

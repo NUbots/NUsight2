@@ -1,7 +1,7 @@
+import * as assert from 'assert'
+import * as binary from 'binary'
 import * as Long from 'long'
 import { NUClearNetPacket } from 'nuclearnet.js'
-
-export const NBS_HEADER = Buffer.from([0xE2, 0x98, 0xA2]) // NUClear radiation symbol.
 
 export type NbsFrame = {
   // Omitted redundant header information.
@@ -19,25 +19,50 @@ export type NbsFrame = {
 // 8 Bytes - 64bit bit hash of the message type.
 // N bytes - The binary packet payload.
 
+export const NBS_HEADER = Buffer.from([0xE2, 0x98, 0xA2]) // NUClear radiation symbol.
+export const PACKET_SIZE_SIZE = 4
+export const TIMESTAMP_SIZE = 8
+export const HASH_SIZE = 8
+
 export function encodeFrame(frame: NbsFrame): Buffer {
-  const size = 16 + frame.payload.byteLength
-  const buffer = new Buffer(7 + size)
-  NBS_HEADER.copy(buffer, 0, 0, 3)
-  buffer.writeUInt32LE(size, 3)
+  assert(frame.hash.byteLength === HASH_SIZE, `Invalid hash buffer size: ${frame.hash.byteLength}`)
+  const size = TIMESTAMP_SIZE + HASH_SIZE + frame.payload.byteLength
+  const sizeBuffer = new Buffer(PACKET_SIZE_SIZE)
+  sizeBuffer.writeUInt32LE(size, 0)
+
   const timeLong = Long.fromNumber(frame.timestampInMicroseconds)
-  buffer.writeUInt32LE(timeLong.low, 7)
-  buffer.writeUInt32LE(timeLong.high, 11)
-  frame.hash.copy(buffer, 15, 0, 8)
-  frame.payload.copy(buffer, 23)
-  return buffer
+  const timestampBuffer = new Buffer(TIMESTAMP_SIZE)
+  timestampBuffer.writeUInt32LE(timeLong.low, 0)
+  timestampBuffer.writeUInt32LE(timeLong.high, 4)
+
+  return Buffer.concat([
+    NBS_HEADER,
+    sizeBuffer,
+    timestampBuffer,
+    frame.hash,
+    frame.payload,
+  ])
 }
 
 export function decodeFrame(buffer: Buffer): NbsFrame {
-  const size = buffer.readUInt32LE(3)
-  const timestampInMicroseconds = Long.fromBits(buffer.readUInt32LE(7), buffer.readUInt32LE(11)).toNumber()
-  const hash = buffer.slice(15, 23)
-  const payload = buffer.slice(23, 23 + size)
-  return { timestampInMicroseconds, hash, payload }
+  const values = binary.parse(buffer)
+    .buffer('header', NBS_HEADER.byteLength)
+    .word32lu('size')
+    .into('timestamp', function () {
+      this.word32lu('low')
+      this.word32lu('high')
+    })
+    .buffer('hash', HASH_SIZE)
+    .tap(function (vars) {
+      this.buffer('payload', vars.size)
+    })
+    .vars
+
+  return {
+    timestampInMicroseconds: Long.fromBits(values.timestamp.low, values.timestamp.high).toNumber(),
+    hash: values.hash,
+    payload: values.payload,
+  }
 }
 
 export function packetToFrame(packet: NUClearNetPacket, timestamp: number): NbsFrame {

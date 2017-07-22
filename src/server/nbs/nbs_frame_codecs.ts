@@ -25,7 +25,8 @@ export const TIMESTAMP_SIZE = 8
 export const HASH_SIZE = 8
 
 export function encodeFrame(frame: NbsFrame): Buffer {
-  assert(frame.hash.byteLength === HASH_SIZE, `Expected hash buffer size of ${HASH_SIZE} but received ${frame.hash.byteLength}`)
+  assert(frame.hash.byteLength === HASH_SIZE,
+    `Expected hash buffer size of ${HASH_SIZE} but received ${frame.hash.byteLength}`)
 
   const size = TIMESTAMP_SIZE + HASH_SIZE + frame.payload.byteLength
   const sizeBuffer = new Buffer(PACKET_SIZE_SIZE)

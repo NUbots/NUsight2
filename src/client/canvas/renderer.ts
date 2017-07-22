@@ -21,13 +21,13 @@ export class CanvasRenderer {
     return new CanvasRenderer(context)
   }
 
-  public render(scene: Scene, transform: Transform): void {
+  public render(scene: Scene, camera: Transform): void {
     const canvas = this.context.canvas
-    const translateDash = Vector2.from(transform.translate).applyTransform({
-      rotate: -transform.rotate,
+    const translateDash = Vector2.from(camera.translate).applyTransform({
+      rotate: -camera.rotate,
       scale: {
-        x: 1 / transform.scale.x,
-        y: 1 / transform.scale.y
+        x: 1 / camera.scale.x,
+        y: 1 / camera.scale.y
       },
       translate: {
         x: 0,
@@ -38,8 +38,8 @@ export class CanvasRenderer {
     this.context.clearRect(0, 0, canvas.width, canvas.height)
 
     this.context.save()
-    this.context.scale(transform.scale.x, transform.scale.y)
-    this.context.rotate(-transform.rotate)
+    this.context.scale(camera.scale.x, camera.scale.y)
+    this.context.rotate(-camera.rotate)
     this.context.translate(translateDash.x, translateDash.y)
 
     const renderObjects = (objects: Scene) => {
@@ -48,10 +48,10 @@ export class CanvasRenderer {
           renderObjects(obj)
           continue
         }
-        // if (obj.geometry instanceof ArrowGeometry) {
-        //   this.renderArrow(obj, transform)
-        //   continue
-        // }
+        if (obj.geometry instanceof ArrowGeometry) {
+          this.renderArrow(obj)
+          continue
+        }
         if (obj.geometry instanceof CircleGeometry) {
           this.renderCircle(obj)
           continue
@@ -101,25 +101,21 @@ export class CanvasRenderer {
     this.context.strokeStyle = appearance.strokeStyle
   }
 
-  private renderArrow(shape: Shape<ArrowGeometry>, transform: Transform): void {
+  private renderArrow(shape: Shape<ArrowGeometry>): void {
     const { geometry, appearance } = shape
-    // const position = Vector2.of(geometry.origin.y, geometry.origin.x).applyTransform(transform)
-    // const direction = Vector2.of(geometry.direction.y, geometry.direction.x)
-    // const target = position.clone().add(direction.clone().multiplyScalar(geometry.length * transform.scale))
-    //
     const headLength = geometry.headLength * 0.5
     const headWidth = geometry.headWidth * 0.5
 
     this.context.save()
-    this.context.rotate(Math.atan2(geometry.direction.x, geometry.direction.y))
-    this.context.translate(geometry.origin.y, geometry.origin.x)
+    this.context.translate(geometry.origin.x, geometry.origin.y)
+    this.context.rotate(Math.atan2(geometry.direction.y, geometry.direction.x))
 
     this.context.beginPath()
     this.context.moveTo(0, 0)
-    this.context.lineTo(0, -geometry.length)
-    this.context.lineTo(-headWidth, -geometry.length + headLength)
-    this.context.moveTo(0, -geometry.length)
-    this.context.lineTo(headWidth, -geometry.length + headLength)
+    this.context.lineTo(geometry.length, 0)
+    this.context.lineTo(geometry.length - headLength, -headWidth)
+    this.context.moveTo(geometry.length, 0)
+    this.context.lineTo(geometry.length - headLength, headWidth)
 
     this.applyAppearance(appearance)
 
@@ -207,25 +203,27 @@ export class CanvasRenderer {
   private renderText(shape: Shape<TextGeometry>): void {
     const { geometry, appearance } = shape
     const position = Vector2.of(geometry.x, geometry.y)
-    const fontSize = geometry.fontSize === '100%' ? '1em' : geometry.fontSize
     const maxWidth = geometry.maxWidth === -1 ? undefined : geometry.maxWidth
 
-    this.context.font = `${fontSize} ${geometry.fontFamily}`
+    this.context.font = `${geometry.fontSize} ${geometry.fontFamily}`
     this.context.textAlign = geometry.textAlign
     this.context.textBaseline = geometry.textBaseline
 
     const textWidth = this.context.measureText(geometry.text).width
-    const scaleX = maxWidth ? (maxWidth / textWidth) : 1
+    const scaleX = maxWidth ? (maxWidth / textWidth) : geometry.scale.x
+    const scaleY = maxWidth ? (maxWidth / textWidth) : geometry.scale.y
 
     this.context.save()
-    this.context.scale(scaleX, scaleX)
+    this.context.translate(geometry.translate.x, geometry.translate.y)
+    this.context.rotate(geometry.rotate)
+    this.context.scale(scaleX, scaleY)
 
     this.applyAppearance(appearance)
     this.context.fillText(
       geometry.text,
       position.x / scaleX,
-      position.y / scaleX,
-      maxWidth ? maxWidth / scaleX : maxWidth
+      position.y / scaleY,
+      maxWidth
     )
     this.context.restore()
   }

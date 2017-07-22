@@ -10,7 +10,8 @@ import { AppNetwork } from './components/app/network'
 import { AppView } from './components/app/view'
 import { Chart } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
-import { DashboardController } from './components/dashboard/controller'
+import { Field } from './components/dashboard/field/view'
+import { FieldController } from './components/dashboard/field/controller'
 import { DashboardModel } from './components/dashboard/model'
 import { DashboardNetwork } from './components/dashboard/network'
 import { Dashboard } from './components/dashboard/view'
@@ -46,9 +47,9 @@ ReactDOM.render(
       <Switch>
         <Route exact path='/' render={() => {
           const model = dashboardModel
-          const controller = DashboardController.of()
+          const field = () => <Field controller={FieldController.of()} model={model.field} />
           const network = DashboardNetwork.of(nusightNetwork)
-          return <Dashboard controller={controller} menu={menu} model={model} network={network} />
+          return <Dashboard Field={field} menu={menu} model={model} network={network} />
         }}/>
         <Route path='/localisation' render={() => {
           const model = localisationModel

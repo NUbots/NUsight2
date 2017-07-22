@@ -8,14 +8,16 @@ import { LineGeometry } from '../../../canvas/geometry/line_geometry'
 import { MarkerGeometry } from '../../../canvas/geometry/marker_geometry'
 import { TextGeometry } from '../../../canvas/geometry/text_geometry'
 import { Shape } from '../../../canvas/object/shape'
+import { Transform } from '../../../math/transform'
 import { DashboardRobotModel } from './model'
-import { Vector2 } from '../../../math/vector2'
+import { Vector2 } from '../../../math/vector2';
 
 export class DashboardRobotViewModel {
-  public constructor(private model: DashboardRobotModel) {}
+  public constructor(private camera: Transform,
+                     private model: DashboardRobotModel) {}
 
-  public static of = createTransformer((model: DashboardRobotModel): DashboardRobotViewModel => {
-    return new DashboardRobotViewModel(model)
+  public static of = createTransformer((opts: { camera: Transform, model: DashboardRobotModel }): DashboardRobotViewModel => {
+    return new DashboardRobotViewModel(opts.camera, opts.model)
   })
 
   @computed
@@ -91,7 +93,6 @@ export class DashboardRobotViewModel {
           strokeStyle: this.model.robotBorderColor
         })
       ),
-
       Shape.of(
         TextGeometry.of({
           fontSize: '100%',
@@ -99,6 +100,11 @@ export class DashboardRobotViewModel {
           textAlign: 'center',
           textBaseline: 'middle',
           maxWidth: radius,
+          rotate: this.camera.rotate,
+          scale: {
+            x: Math.sign(this.camera.scale.x),
+            y: Math.sign(this.camera.scale.y),
+          },
           x: this.model.robotPosition.x,
           y: this.model.robotPosition.y
         }),

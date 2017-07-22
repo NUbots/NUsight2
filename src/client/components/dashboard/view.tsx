@@ -2,8 +2,6 @@ import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
 import { observer } from 'mobx-react'
-import { Field } from './field/view'
-import { DashboardController } from './controller'
 import { DashboardModel } from './model'
 import { DashboardNetwork } from './network'
 import { RobotPanel } from './robot_panel/view'
@@ -11,7 +9,7 @@ import { RobotPanelViewModel } from './robot_panel/view_model'
 import * as style from './style.css'
 
 export type DashboardProps = {
-  controller: DashboardController
+  Field: ComponentType<{}>
   menu: ComponentType<{}>
   model: DashboardModel
   network: DashboardNetwork
@@ -26,12 +24,13 @@ export class Dashboard extends Component<DashboardProps> {
   public render() {
     const { menu: Menu, model } = this.props
     const showPanels = model.robots.some(robot => robot.visible)
+    const Field = this.props.Field
     return (
       <div className={style.page}>
         <Menu/>
         <div className={style.dashboard}>
           <div className={style.field}>
-            <Field model={model.field} />
+            <Field />
           </div>
           {showPanels &&
           <div className={style.panels}>

@@ -6,12 +6,13 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 import { CanvasRenderer } from '../../../canvas/renderer'
-import { Transform } from '../../../math/transform'
+import { FieldController } from './controller'
 import { FieldModel } from './model'
 import { FieldViewModel } from './view_model'
 import * as style from './style.css'
 
 export type FieldProps = {
+  controller: FieldController
   model: FieldModel
 }
 
@@ -53,7 +54,6 @@ export class Field extends Component<FieldProps> {
     const height = this.field.clientHeight
     if (width !== this.field.width || height !== this.field.height) {
       this.updateField(width, height)
-      this.renderField()
     }
   }
 
@@ -63,34 +63,13 @@ export class Field extends Component<FieldProps> {
 
   private renderField(): void {
     const viewModel = FieldViewModel.of(this.props.model)
-    const fieldWidth = this.props.model.fieldWidth
-    const fieldLength = this.props.model.fieldLength
-    const width = this.field.clientWidth
-    const height = this.field.clientHeight
-
-    const scaleX = width / fieldLength
-    const scaleY = height / fieldWidth
-
-    const canvasAspect = height / width
-    const fieldAspect = fieldWidth / fieldLength
-    const scale = canvasAspect < fieldAspect ? scaleY : scaleX
-
-    const camera = Transform.of({
-      // Rotate the field by -90deg so that the sidelines are on the top and bottom of the screen.
-      rotate: Math.PI,
-      scale: { x: scale, y: -scale },
-      // Translate by half of the canvas width and height so that the field appears in the center.
-      translate: {
-        x: width * 0.5,
-        y: height * 0.5
-      }
-    })
-    this.renderer.render(viewModel.scene, camera)
+    this.renderer.render(viewModel.scene, this.props.model.camera)
   }
 
   @action
   private updateField(width: number, height: number) {
     this.width = width
     this.height = height
+    this.props.controller.onFieldResize(this.props.model, width, height)
   }
 }

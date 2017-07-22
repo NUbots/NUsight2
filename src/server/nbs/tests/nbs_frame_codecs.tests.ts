@@ -1,6 +1,8 @@
 import { hashType } from '../../nuclearnet/fake_nuclearnet_server'
 import { encodeFrame } from '../nbs_frame_codecs'
 import { decodeFrame } from '../nbs_frame_codecs'
+import { NUClearNetPacket } from 'nuclearnet.js'
+import { packetToFrame } from '../nbs_frame_codecs'
 
 describe('NbsFrameCodecs', () => {
   describe('encoding', () => {
@@ -10,6 +12,21 @@ describe('NbsFrameCodecs', () => {
       const payload = new Buffer(8).fill(0x12)
       const buffer = encodeFrame({ timestampInMicroseconds: timestamp, hash, payload })
       expect(buffer.toString('hex')).toEqual('e298a218000000c042f15c9654050010abef8b5398f0d41212121212121212')
+    })
+
+    it('encodes NUClearNet packets', () => {
+      const packet: NUClearNetPacket = {
+        peer: { name: 'Bob', address: '127.0.0.1', port: 1234 },
+        hash: hashType('message.input.sensors'),
+        payload: new Buffer(8).fill(0x12),
+        reliable: false,
+      }
+
+      expect(packetToFrame(packet, 2)).toEqual({
+        timestampInMicroseconds: 2000000,
+        hash: packet.hash,
+        payload: packet.payload,
+      })
     })
   })
 

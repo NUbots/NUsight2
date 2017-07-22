@@ -14,6 +14,14 @@ describe('NbsFrameCodecs', () => {
       expect(buffer.toString('hex')).toEqual('e298a218000000c042f15c9654050010abef8b5398f0d41212121212121212')
     })
 
+    it('errors if you supply an invalid hash size', () => {
+      const hash = new Buffer(12)
+      const timestamp = 1500379664696000
+      const payload = new Buffer(8).fill(0x12)
+      const actual = () => encodeFrame({ timestampInMicroseconds: timestamp, hash, payload })
+      expect(actual).toThrowError(/Expected hash buffer size/)
+    })
+
     it('encodes NUClearNet packets', () => {
       const packet: NUClearNetPacket = {
         peer: { name: 'Bob', address: '127.0.0.1', port: 1234 },

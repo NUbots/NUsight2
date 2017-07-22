@@ -1,6 +1,7 @@
 import * as Buffers from 'buffers'
 import * as stream from 'stream'
 import { NBS_HEADER } from './nbs_frame_codecs'
+import { PACKET_SIZE_SIZE } from './nbs_frame_codecs'
 
 /**
  * This stream tranformer finds and emits nbs frames within a continually running binary stream. It looks for the nbs
@@ -57,8 +58,7 @@ export class NbsFrameChunker extends stream.Transform {
       // Header found, slice from that index to make the following calculations easier.
       const frame = buffer.slice(headerIndex)
       const headerSize = NBS_HEADER.byteLength
-      const packetLengthSize = 4
-      const headerAndPacketLengthSize = headerSize + packetLengthSize
+      const headerAndPacketLengthSize = headerSize + PACKET_SIZE_SIZE
       // Check that we have received enough data to read the size of the frame.
       if (frame.length >= headerAndPacketLengthSize) {
         // Read the size of the frame which exists right after the header.

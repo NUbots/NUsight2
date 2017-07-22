@@ -50,10 +50,7 @@ export function decodeFrame(buffer: Buffer): NbsFrame {
   const values = binary.parse(buffer)
     .buffer('header', NBS_HEADER.byteLength)
     .word32lu('size')
-    .into('timestamp', function () {
-      this.word32lu('low')
-      this.word32lu('high')
-    })
+    .word64le('timestampInMicroseconds')
     .buffer('hash', HASH_SIZE)
     .tap(function (vars) {
       this.buffer('payload', vars.size)
@@ -61,7 +58,7 @@ export function decodeFrame(buffer: Buffer): NbsFrame {
     .vars
 
   return {
-    timestampInMicroseconds: Long.fromBits(values.timestamp.low, values.timestamp.high).toNumber(),
+    timestampInMicroseconds: values.timestampInMicroseconds,
     hash: values.hash,
     payload: values.payload,
   }

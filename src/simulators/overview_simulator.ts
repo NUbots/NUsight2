@@ -57,10 +57,9 @@ export class OverviewSimulator implements Simulator {
       gameMode: this.random.choice(modes),
       gamePhase: this.random.choice(phases),
       penaltyReason: this.random.choice(penaltyReasons),
-      lastCameraImage: { seconds: this.randomSeconds(time, -6) },
-      lastSeenBall: { seconds: this.randomSeconds(time, -6) },
-      lastSeenGoal: { seconds: this.randomSeconds(time, -6) },
-      lastSeenObstacle: { seconds: this.randomSeconds(time, -6) },
+      lastCameraImage: { seconds: this.randomSeconds(time, -5) },
+      lastSeenBall: { seconds: this.randomSeconds(time, -30) },
+      lastSeenGoal: { seconds: this.randomSeconds(time, -30) },
       pathPlan: [
         robotPosition,
         this.randomFieldPosition(),

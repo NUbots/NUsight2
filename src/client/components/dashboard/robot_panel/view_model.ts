@@ -30,17 +30,17 @@ export class RobotPanelViewModel {
 
   @computed
   public get lastCameraImage(): LastStatus {
-    return this.getLastStatus(this.model.lastCameraImage, 3)
+    return this.getLastStatus(this.model.lastCameraImage, 5)
   }
 
   @computed
   public get lastSeenBall(): LastStatus {
-    return this.getLastStatus(this.model.lastSeenBall, 5)
+    return this.getLastStatus(this.model.lastSeenBall, 30)
   }
 
   @computed
   public get lastSeenGoal(): LastStatus {
-    return this.getLastStatus(this.model.lastSeenGoal, 5)
+    return this.getLastStatus(this.model.lastSeenGoal, 30)
   }
 
   @computed

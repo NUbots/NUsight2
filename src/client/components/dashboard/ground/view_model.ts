@@ -195,11 +195,13 @@ export class GroundViewModel {
   }
 
   private getRectanglePolygon(opts: { x: number, y: number, width: number, height: number }): PolygonGeometry {
+    // Width is defined along the positive y axis (across the field), and height along the positive x axis (along the
+    // field). This matches the field definitions model.
     return PolygonGeometry.of([
       Vector2.of(opts.x, opts.y), // Bottom right
       Vector2.of(opts.x, opts.y + opts.width), // Bottom left
       Vector2.of(opts.x + opts.height, opts.y + opts.width), // Top left
-      Vector2.of(opts.x + opts.height, opts.y) // Top right
+      Vector2.of(opts.x + opts.height, opts.y), // Top right
     ])
   }
 }

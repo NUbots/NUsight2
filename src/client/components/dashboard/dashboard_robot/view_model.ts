@@ -63,7 +63,7 @@ export class DashboardRobotViewModel {
     const difference = this.model.kickTarget.clone().subtract(origin)
     return Shape.of(
       ArrowGeometry.of({
-        direction: difference.clone().divideScalar(difference.length), // TODO fix normalize???
+        direction: difference.clone().normalize(),
         headLength: 0.3,
         headWidth: 0.15,
         length: difference.length,

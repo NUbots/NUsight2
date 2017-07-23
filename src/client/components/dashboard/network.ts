@@ -40,7 +40,7 @@ export class DashboardNetwork {
     robot.penaltyReason = overview.penaltyReason
     robot.robotHeading = Vector2.from(overview.robotHeading)
     robot.robotPosition = Vector2.from(overview.robotPosition)
-    robot.time = Date.now() / 1000
+    robot.time = Date.now() / 1000 // TODO Olejniczak: Replace with overview protocol buffer timestamp when added
     robot.voltage = overview.voltage
   }
 }

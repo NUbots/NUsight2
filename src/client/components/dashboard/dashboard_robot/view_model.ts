@@ -10,7 +10,6 @@ import { TextGeometry } from '../../../canvas/geometry/text_geometry'
 import { Shape } from '../../../canvas/object/shape'
 import { Transform } from '../../../math/transform'
 import { DashboardRobotModel } from './model'
-import { Vector2 } from '../../../math/vector2';
 
 export class DashboardRobotViewModel {
   public constructor(private camera: Transform,
@@ -66,12 +65,16 @@ export class DashboardRobotViewModel {
     return Shape.of(
       ArrowGeometry.of({
         direction: difference.clone().divideScalar(difference.length), // TODO fix normalize???
+        headLength: 0.3,
+        headWidth: 0.15,
         length: difference.length,
-        origin: origin.clone()
+        origin: origin.clone(),
+        width: 0.025
       }),
-      LineAppearance.of({
-        lineWidth: 0.1,
-        strokeStyle: this.model.kickTargetColor
+      BasicAppearance.of({
+        fillStyle: this.model.kickTargetColor,
+        lineWidth: 0,
+        strokeStyle: 'transparent'
       })
     )
   }

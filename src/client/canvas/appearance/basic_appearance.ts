@@ -6,14 +6,20 @@ export class BasicAppearance {
   @observable public strokeStyle: string
 
   constructor(opts: BasicAppearance) {
-    Object.assign(this, opts)
+    this.fillStyle = opts.fillStyle
+    this.lineWidth = opts.lineWidth
+    this.strokeStyle = opts.strokeStyle
   }
 
-  public static of(opts: Partial<BasicAppearance> = {}): BasicAppearance {
+  public static of({
+    fillStyle = '#000',
+    lineWidth = 1,
+    strokeStyle = '#000'
+  }: Partial<BasicAppearance> = {}): BasicAppearance {
     return new BasicAppearance({
-      fillStyle: opts.fillStyle || '#000',
-      lineWidth: opts.lineWidth || 1,
-      strokeStyle: opts.strokeStyle || '#000',
+      fillStyle,
+      lineWidth,
+      strokeStyle
     })
   }
 }

@@ -8,16 +8,26 @@ export class LineAppearance {
   @observable public strokeStyle: string
 
   constructor(opts: LineAppearance) {
-    Object.assign(this, opts)
+    this.lineCap = opts.lineCap
+    this.lineDashOffset = opts.lineDashOffset
+    this.lineJoin = opts.lineJoin
+    this.lineWidth = opts.lineWidth
+    this.strokeStyle = opts.strokeStyle
   }
 
-  public static of(opts: Partial<LineAppearance> = {}): LineAppearance {
+  public static of({
+    lineCap = 'butt',
+    lineDashOffset = 0,
+    lineJoin = 'miter',
+    lineWidth = 1,
+    strokeStyle = '#000'
+  }: Partial<LineAppearance> = {}): LineAppearance {
     return new LineAppearance({
-      lineCap: opts.lineCap || 'butt',
-      lineDashOffset: opts.lineDashOffset || 0,
-      lineJoin: opts.lineJoin || 'miter',
-      lineWidth: opts.lineWidth || 1,
-      strokeStyle: opts.strokeStyle || '#000',
+      lineCap,
+      lineDashOffset,
+      lineJoin,
+      lineWidth,
+      strokeStyle
     })
   }
 }

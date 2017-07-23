@@ -26,15 +26,6 @@ export class DashboardNetwork {
   @action
   private onOverview = (robotModel: RobotModel, overview: Overview) => {
     const robot = DashboardRobotModel.of(robotModel)
-    const toSeconds = (timestamp: Timestamp | null): number => {
-      if (!timestamp) {
-        timestamp = { seconds: 0, nanos: 0 }
-      }
-      const seconds: number = Number(timestamp.seconds)
-      const nanos: number = timestamp.nanos! || 0
-      return seconds + (nanos * 1e-9)
-    }
-
     robot.battery = overview.battery
     robot.ballPosition = Vector2.from(overview.ballPosition)
     robot.ballWorldPosition = Vector2.from(overview.ballWorldPosition)
@@ -52,4 +43,13 @@ export class DashboardNetwork {
     robot.time = Date.now() / 1000
     robot.voltage = overview.voltage
   }
+}
+
+function toSeconds(timestamp: Timestamp | null): number {
+  if (!timestamp) {
+    timestamp = { seconds: 0, nanos: 0 }
+  }
+  const seconds: number = Number(timestamp.seconds)
+  const nanos: number = timestamp.nanos! || 0
+  return seconds + (nanos * 1e-9)
 }

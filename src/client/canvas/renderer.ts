@@ -221,6 +221,7 @@ export class CanvasRenderer {
     this.context.font = `${scale}em ${geometry.fontFamily}`
 
     if (geometry.alignToView) {
+      // Ensure the text is always rendered without rotation such that it is aligned with the screen.
       this.context.save()
       this.context.scale(Math.sign(camera.scale.x), Math.sign(camera.scale.y))
       this.context.rotate(-camera.rotate)

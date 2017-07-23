@@ -74,7 +74,15 @@
       true,
       120
     ],
-    "ter-prefer-arrow-callback": true
+    "ter-prefer-arrow-callback": true,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "always",
+        "singleline": "never",
+        "typeLiterals": "ignore"
+      }
+    ]
   },
   "rulesDirectory": []
 }

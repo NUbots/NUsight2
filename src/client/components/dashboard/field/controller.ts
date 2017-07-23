@@ -15,6 +15,7 @@ export class FieldController {
 
     const canvasAspect = height / width
     const fieldAspect = fieldWidth / fieldLength
+    // Ensures the canvas is scaled such that the entire field is always visible, regardless of aspect ratio.
     const scale = canvasAspect < fieldAspect ? scaleY : scaleX
 
     model.camera.scale.x = scale

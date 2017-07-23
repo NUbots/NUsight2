@@ -1,32 +1,40 @@
 import { message } from '../../src/shared/proto/messages'
+import { Vector2 } from '../client/math/vector2'
 import { FieldDimensions } from '../shared/field/dimensions'
 import { vec2$Properties } from '../shared/proto/messages'
 import { Simulator } from './simulator'
 import { Message } from './simulator'
-import Overview = message.support.nubugger.Overview
-import Mode = message.input.GameState.Data.Mode
-import Phase = message.input.GameState.Data.Phase
-import PenaltyReason = message.input.GameState.Data.PenaltyReason
 import State = message.behaviour.Behaviour.State
+import Mode = message.input.GameState.Data.Mode
+import PenaltyReason = message.input.GameState.Data.PenaltyReason
+import Phase = message.input.GameState.Data.Phase
+import Overview = message.support.nubugger.Overview
 
 export class OverviewSimulator implements Simulator {
   constructor(private field: FieldDimensions,
-              private random: () => number) {}
+              private random: () => number) {
+  }
 
   public static of() {
     return new OverviewSimulator(
       FieldDimensions.postYear2017(),
-      Math.random.bind(Math)
+      Math.random.bind(Math),
     )
   }
 
-  public simulate(time: number): Message[] {
+  public simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.support.nubugger.Overview'
 
-    const robotPosition = this.randomFieldPosition()
-    const robotHeading = this.randomUnitVector()
-    const ballPosition = this.randomFieldPosition()
-    const ballWorldPosition = this.randomFieldPosition()
+    const t = time * 1e-3 + index
+
+    const fieldLength = this.field.fieldLength
+    const fieldWidth = this.field.fieldWidth
+
+    const robotPosition = this.figureEight(t, fieldLength / 2, fieldWidth / 2)
+
+    const ballWorldPosition = this.figureEight(t, fieldLength / 4, fieldWidth / 4)
+
+    const robotHeading = ballWorldPosition.clone().subtract(robotPosition).normalize()
 
     const timeSeconds = time / 1000
     const buffer = Overview.encode({
@@ -40,7 +48,6 @@ export class OverviewSimulator implements Simulator {
         y: { x: this.random(), y: this.random() },
       },
       robotHeading,
-      ballPosition,
       ballWorldPosition,
       gameMode: Mode.NORMAL,
       gamePhase: Phase.INITIAL,
@@ -54,7 +61,7 @@ export class OverviewSimulator implements Simulator {
         this.randomFieldPosition(),
         this.randomFieldPosition(),
         this.randomFieldPosition(),
-        ballWorldPosition
+        ballWorldPosition,
       ],
       kickTarget: this.randomFieldPosition(),
     }).finish()
@@ -81,11 +88,10 @@ export class OverviewSimulator implements Simulator {
     return now + (offset * this.random())
   }
 
-  private randomUnitVector(): vec2$Properties {
-    const angle = this.random() * 2 * Math.PI
-    return {
-      x: Math.cos(angle),
-      y: Math.sin(angle),
-    }
+  private figureEight(t: number, scaleX: number, scaleY: number) {
+    return new Vector2(
+      scaleX * Math.cos(t),
+      scaleY * Math.sin(2 * t),
+    )
   }
 }

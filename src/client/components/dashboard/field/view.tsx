@@ -19,8 +19,6 @@ export type FieldProps = {
 @observer
 export class Field extends Component<FieldProps> {
   private field: HTMLCanvasElement
-  @observable private height: number = 0
-  @observable private width: number = 0
   private rafId: number
   private renderer: CanvasRenderer
   private stopAutorun: IReactionDisposer
@@ -40,12 +38,7 @@ export class Field extends Component<FieldProps> {
   }
 
   public render() {
-    return (
-      <canvas width={this.width}
-              height={this.height}
-              className={style.field}
-              ref={this.onRef} />
-    )
+    return <canvas className={style.field} ref={this.onRef} />
   }
 
   private onAnimationFrame = () => {
@@ -68,8 +61,8 @@ export class Field extends Component<FieldProps> {
 
   @action
   private onFieldResize(width: number, height: number) {
-    this.width = width
-    this.height = height
+    this.field.width = width
+    this.field.height = height
     this.props.controller.onFieldResize(this.props.model, width, height)
   }
 }

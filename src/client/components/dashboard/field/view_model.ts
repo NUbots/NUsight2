@@ -1,5 +1,7 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { Group } from '../../../canvas/object/group'
+import { Scene } from '../../../canvas/object/scene'
 import { DashboardRobotViewModel } from '../dashboard_robot/view_model'
 import { GroundViewModel } from '../ground/view_model'
 import { FieldModel } from './model'
@@ -13,11 +15,13 @@ export class FieldViewModel {
   })
 
   @computed
-  public get scene() {
-    return [
-      this.ground,
-      this.robots,
-    ]
+  public get scene(): Scene {
+    return Scene.of({
+      children: [
+        this.ground,
+        this.robots,
+      ],
+    })
   }
 
   @computed
@@ -27,8 +31,10 @@ export class FieldViewModel {
 
   @computed
   private get robots() {
-    return this.model.robots
-      .filter(robot => robot.visible)
-      .map(robot => DashboardRobotViewModel.of(robot).robot)
+    return Group.of({
+      children: this.model.robots
+        .filter(robot => robot.visible)
+        .map(robot => DashboardRobotViewModel.of(robot).robot)
+    })
   }
 }

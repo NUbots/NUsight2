@@ -1,7 +1,7 @@
 import { observable } from 'mobx'
-import { Object2d } from '../object/object2d'
+import { Geometry } from './geometry'
 
-export class TextGeometry implements Object2d {
+export class TextGeometry implements Geometry {
   @observable public alignToView: boolean
   @observable public fontFamily: string
   @observable public maxWidth: number

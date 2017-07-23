@@ -9,10 +9,10 @@ import { LineGeometry } from './geometry/line_geometry'
 import { MarkerGeometry } from './geometry/marker_geometry'
 import { PolygonGeometry } from './geometry/polygon_geometry'
 import { TextGeometry } from './geometry/text_geometry'
+import { Object2d } from './object/object2d'
+import { Group } from './object/group'
+import { Scene } from './object/scene'
 import { Shape } from './object/shape'
-
-// TODO Monica fix typing here
-export type Scene = Array<any>
 
 export class CanvasRenderer {
   constructor(private context: CanvasRenderingContext2D) {
@@ -43,40 +43,36 @@ export class CanvasRenderer {
     this.context.rotate(-camera.rotate)
     this.context.translate(translateDash.x, translateDash.y)
 
-    const renderObjects = (objects: Scene) => {
+    const renderObjects = (objects: Object2d[]) => {
       for (const obj of objects) {
-        if (Array.isArray(obj)) {
-          renderObjects(obj)
+        if (obj instanceof Group) {
+          renderObjects(obj.children)
           continue
         }
-        if (obj.geometry instanceof ArrowGeometry) {
-          this.renderArrow(obj)
-          continue
-        }
-        if (obj.geometry instanceof CircleGeometry) {
-          this.renderCircle(obj)
-          continue
-        }
-        if (obj.geometry instanceof LineGeometry) {
-          this.renderLine(obj)
-          continue
-        }
-        if (obj.geometry instanceof MarkerGeometry) {
-          this.renderMarker(obj)
-          continue
-        }
-        if (obj.geometry instanceof PolygonGeometry) {
-          this.renderPolygon(obj)
-          continue
-        }
-        if (obj.geometry instanceof TextGeometry) {
-          this.renderText(obj, camera)
-          continue
+        if (obj instanceof Shape) {
+          this.renderShape(obj, camera)
         }
       }
     }
-    renderObjects(scene)
+    renderObjects(scene.children)
     this.context.restore()
+  }
+
+  private renderShape(shape: Shape, camera: Transform): void {
+    const { appearance, geometry } = shape
+    if (geometry instanceof ArrowGeometry) {
+      this.renderArrow({ appearance, geometry })
+    } else if (geometry instanceof CircleGeometry) {
+      this.renderCircle({ appearance, geometry })
+    } else if (geometry instanceof LineGeometry) {
+      this.renderLine({ appearance, geometry })
+    } else if (geometry instanceof MarkerGeometry) {
+      this.renderMarker({ appearance, geometry })
+    } else if (geometry instanceof PolygonGeometry) {
+      this.renderPolygon({ appearance, geometry })
+    } else if (geometry instanceof TextGeometry) {
+      this.renderText({ appearance, camera, geometry })
+    }
   }
 
   private applyAppearance(appearance: Appearance): void {
@@ -102,8 +98,8 @@ export class CanvasRenderer {
     this.context.strokeStyle = appearance.strokeStyle
   }
 
-  private renderArrow(shape: Shape<ArrowGeometry>): void {
-    const { geometry, appearance } = shape
+  private renderArrow(opts: { appearance: Appearance, geometry: ArrowGeometry, }): void {
+    const { appearance, geometry } = opts
     const width = geometry.width * 0.5
     const headLength = geometry.headLength * 0.5
     const headWidth = geometry.headWidth * 0.5
@@ -130,8 +126,8 @@ export class CanvasRenderer {
     this.context.restore()
   }
 
-  private renderCircle(shape: Shape<CircleGeometry>): void {
-    const { geometry, appearance } = shape
+  private renderCircle(opts: { appearance: Appearance, geometry: CircleGeometry, }): void {
+    const { appearance, geometry } = opts
 
     this.context.beginPath()
     this.context.arc(
@@ -147,8 +143,8 @@ export class CanvasRenderer {
     this.context.stroke()
   }
 
-  private renderLine(shape: Shape<LineGeometry>): void {
-    const { geometry, appearance } = shape
+  private renderLine(opts: { appearance: Appearance, geometry: LineGeometry, }): void {
+    const { appearance, geometry } = opts
 
     this.context.beginPath()
     this.context.moveTo(geometry.origin.x, geometry.origin.y)
@@ -158,8 +154,8 @@ export class CanvasRenderer {
     this.context.stroke()
   }
 
-  private renderMarker(shape: Shape<MarkerGeometry>): void {
-    const { geometry, appearance } = shape
+  private renderMarker(opts: { appearance: Appearance, geometry: MarkerGeometry, }): void {
+    const { appearance, geometry } = opts
     const position = Vector2.of(geometry.x, geometry.y)
 
     const headingAngle = Math.atan2(geometry.heading.y, geometry.heading.x)
@@ -192,8 +188,8 @@ export class CanvasRenderer {
     this.context.stroke()
   }
 
-  private renderPolygon(shape: Shape<PolygonGeometry>): void {
-    const { geometry, appearance } = shape
+  private renderPolygon(opts: { appearance: Appearance, geometry: PolygonGeometry, }): void {
+    const { appearance, geometry } = opts
 
     this.context.beginPath()
     this.context.moveTo(geometry.points[0].x, geometry.points[0].y)
@@ -207,8 +203,8 @@ export class CanvasRenderer {
     this.context.stroke()
   }
 
-  private renderText(shape: Shape<TextGeometry>, camera: Transform): void {
-    const { geometry, appearance } = shape
+  private renderText(opts: { appearance: Appearance, camera: Transform, geometry: TextGeometry, }): void {
+    const { appearance, camera, geometry } = opts
     const position = Vector2.from(geometry)
     const maxWidth = geometry.maxWidth === -1 ? undefined : geometry.maxWidth
 

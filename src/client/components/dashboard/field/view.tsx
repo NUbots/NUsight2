@@ -53,7 +53,7 @@ export class Field extends Component<FieldProps> {
     const width = this.field.clientWidth
     const height = this.field.clientHeight
     if (width !== this.field.width || height !== this.field.height) {
-      this.updateField(width, height)
+      this.onFieldResize(width, height)
     }
   }
 
@@ -67,7 +67,7 @@ export class Field extends Component<FieldProps> {
   }
 
   @action
-  private updateField(width: number, height: number) {
+  private onFieldResize(width: number, height: number) {
     this.width = width
     this.height = height
     this.props.controller.onFieldResize(this.props.model, width, height)

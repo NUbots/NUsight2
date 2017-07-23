@@ -4,13 +4,16 @@ node_js:
   - '8'
 
 # Cache yarn to speed up the build
-cache: yarn
+cache:
+  yarn: true
+  directories:
+  - node_modules
 
 # We need to set this so our compiler is g++-4.9 for NUClearNet.js
 env:
   - CXX=g++-4.9 YARN_COMMAND=tslint
-  - CXX=g++-4.9 YARN_COMMAND=build
   - CXX=g++-4.9 YARN_COMMAND=test:ci
+  - CXX=g++-4.9 YARN_COMMAND=build
 addons:
   apt:
     sources:

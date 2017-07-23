@@ -97,7 +97,6 @@ export class DashboardRobotViewModel {
       ),
       Shape.of(
         TextGeometry.of({
-          fontSize: '100%',
           text: this.model.id.toString(),
           textAlign: 'center',
           textBaseline: 'middle',

@@ -4,7 +4,6 @@ import { Object2d } from '../object/object2d'
 export class TextGeometry implements Object2d {
   @observable public alignToView: boolean
   @observable public fontFamily: string
-  @observable public fontSize: string
   @observable public maxWidth: number
   @observable public rotate: number
   @observable public scale: { x: number, y: number }
@@ -18,7 +17,6 @@ export class TextGeometry implements Object2d {
   constructor(opts: TextGeometry) {
     this.alignToView = opts.alignToView
     this.fontFamily = opts.fontFamily
-    this.fontSize = opts.fontSize
     this.maxWidth = opts.maxWidth
     this.rotate = opts.rotate
     this.scale = opts.scale
@@ -33,7 +31,6 @@ export class TextGeometry implements Object2d {
   public static of({
     alignToView = true,
     fontFamily = 'sans-serif',
-    fontSize = '10px',
     maxWidth = 0.5,
     rotate = 0,
     scale = { x: 1, y: 1 },
@@ -47,7 +44,6 @@ export class TextGeometry implements Object2d {
     return new TextGeometry({
       alignToView,
       fontFamily,
-      fontSize,
       maxWidth,
       rotate,
       scale,

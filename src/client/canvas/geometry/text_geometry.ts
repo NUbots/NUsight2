@@ -2,6 +2,7 @@ import { observable } from 'mobx'
 import { Object2d } from '../object/object2d'
 
 export class TextGeometry implements Object2d {
+  @observable public alignToView: boolean
   @observable public fontFamily: string
   @observable public fontSize: string
   @observable public maxWidth: number
@@ -15,6 +16,7 @@ export class TextGeometry implements Object2d {
   @observable public y: number
 
   constructor(opts: TextGeometry) {
+    this.alignToView = opts.alignToView
     this.fontFamily = opts.fontFamily
     this.fontSize = opts.fontSize
     this.maxWidth = opts.maxWidth
@@ -27,9 +29,10 @@ export class TextGeometry implements Object2d {
     this.x = opts.x
     this.y = opts.y
   }
-  
+
   public static of(opts: Partial<TextGeometry>) {
     return new TextGeometry({
+      alignToView: opts.alignToView !== undefined ? opts.alignToView : true,
       fontFamily: opts.fontFamily || 'sans-serif',
       fontSize: opts.fontSize || '10px',
       maxWidth: opts.maxWidth || -1,

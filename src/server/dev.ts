@@ -58,7 +58,7 @@ function init() {
         SensorDataSimulator.of(),
       ],
     })
-    virtualRobots.simulateWithFrequency(60)
+    virtualRobots.simulateWithFrequency(1)
   }
 
   WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {

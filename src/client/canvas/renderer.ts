@@ -15,24 +15,28 @@ import { Shape } from './object/shape'
 export type Scene = Array<any>
 
 export class CanvasRenderer {
-  constructor(private context: CanvasRenderingContext2D) {}
+  constructor(private context: CanvasRenderingContext2D) {
+  }
 
   public static of(context: CanvasRenderingContext2D): CanvasRenderer {
     return new CanvasRenderer(context)
   }
 
   public render(scene: Scene, camera: Transform): void {
+    const canvas = this.context.canvas
     const translateDash = Vector2.from(camera.translate).applyTransform({
       rotate: -camera.rotate,
       scale: {
         x: 1 / camera.scale.x,
-        y: 1 / camera.scale.y
+        y: 1 / camera.scale.y,
       },
       translate: {
         x: 0,
-        y: 0
-      }
+        y: 0,
+      },
     })
+
+    this.context.clearRect(0, 0, canvas.width, canvas.height)
 
     this.context.save()
     this.context.scale(camera.scale.x, camera.scale.y)
@@ -66,7 +70,7 @@ export class CanvasRenderer {
           continue
         }
         if (obj.geometry instanceof TextGeometry) {
-          this.renderText(obj)
+          this.renderText(obj, camera)
           continue
         }
       }
@@ -135,7 +139,7 @@ export class CanvasRenderer {
       geometry.y,
       geometry.radius,
       0,
-      2 * Math.PI
+      2 * Math.PI,
     )
 
     this.applyAppearance(appearance)
@@ -172,14 +176,14 @@ export class CanvasRenderer {
       position.y,
       geometry.radius,
       startAngle,
-      endAngle
+      endAngle,
     )
     // Scales heading vector to bounding square.
     const sqrt2 = Math.sqrt(2)
     // Convert the heading to absolute canvas coordinates.
     this.context.lineTo(
       position.x + sqrt2 * geometry.radius * geometry.heading.x,
-      position.y + sqrt2 * geometry.radius * geometry.heading.y
+      position.y + sqrt2 * geometry.radius * geometry.heading.y,
     )
     this.context.closePath()
 
@@ -203,31 +207,36 @@ export class CanvasRenderer {
     this.context.stroke()
   }
 
-  private renderText(shape: Shape<TextGeometry>): void {
+  private renderText(shape: Shape<TextGeometry>, camera: Transform): void {
     const { geometry, appearance } = shape
-    const position = Vector2.of(geometry.x, geometry.y)
+    const position = Vector2.from(geometry)
     const maxWidth = geometry.maxWidth === -1 ? undefined : geometry.maxWidth
 
-    this.context.font = `${geometry.fontSize} ${geometry.fontFamily}`
+    this.context.font = `1em ${geometry.fontFamily}`
     this.context.textAlign = geometry.textAlign
     this.context.textBaseline = geometry.textBaseline
 
     const textWidth = this.context.measureText(geometry.text).width
-    const scaleX = maxWidth ? (maxWidth / textWidth) : geometry.scale.x
-    const scaleY = maxWidth ? (maxWidth / textWidth) : geometry.scale.y
+    const scale = maxWidth ? (maxWidth / textWidth) : geometry.scale.x
+    this.context.font = `${scale}em ${geometry.fontFamily}`
 
-    this.context.save()
-    this.context.translate(geometry.translate.x, geometry.translate.y)
-    this.context.rotate(geometry.rotate)
-    this.context.scale(scaleX, scaleY)
+    if (geometry.alignToView) {
+      this.context.save()
+      this.context.scale(Math.sign(camera.scale.x), Math.sign(camera.scale.y))
+      this.context.rotate(-camera.rotate)
+      position.applyTransform(new Transform({
+        rotate: -camera.rotate,
+        scale: { x: Math.sign(camera.scale.x), y: Math.sign(camera.scale.y) },
+        translate: { x: 0, y: 0 },
+      }))
+    }
+    this.context.translate(position.x, position.y)
 
     this.applyAppearance(appearance)
-    this.context.fillText(
-      geometry.text,
-      position.x / scaleX,
-      position.y / scaleY,
-      maxWidth
-    )
-    this.context.restore()
+    this.context.fillText(geometry.text, 0, 0)
+
+    if (geometry.alignToView) {
+      this.context.restore()
+    }
   }
 }

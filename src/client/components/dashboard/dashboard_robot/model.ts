@@ -9,8 +9,10 @@ import Mode = message.input.GameState.Data.Mode
 import Phase = message.input.GameState.Data.Phase
 import PenaltyReason = message.input.GameState.Data.PenaltyReason
 import State = message.behaviour.Behaviour.State
+import { Transform } from '../../../math/transform'
 
 export class DashboardRobotModel {
+  @observable public camera: Transform
   @observable public battery: number
   @observable public ballColor: string
   @observable public ballPosition: Vector2

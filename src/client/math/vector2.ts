@@ -30,10 +30,10 @@ export class Vector2 {
   @action
   public applyTransform(transform: Transform): Vector2 {
     const { rotate: theta, scale, translate } = transform
-    
+
     const cosTheta = Math.cos(theta)
     const sinTheta = Math.sin(theta)
-    
+
     const rotationMatrix = [
       cosTheta, -sinTheta,
       sinTheta, cosTheta
@@ -73,22 +73,28 @@ export class Vector2 {
   }
 
   @action
-  public multiplyScalar(scalar: number): Vector2 {
-    this.x *= scalar
-    this.y *= scalar
+  public multiplyScalar(scalarX: number, scalarY: number = scalarX): Vector2 {
+    this.x *= scalarX
+    this.y *= scalarY
     return this
   }
 
   @action
-  public divideScalar(scalar: number): Vector2 {
-    if (scalar !== 0) {
-      const invScalar = 1 / scalar
+  public divideScalar(scalarX: number, scalarY: number = scalarX): Vector2 {
+    if (scalarX !== 0) {
+      const invScalar = 1 / scalarX
       this.x *= invScalar
-      this.y *= invScalar
     } else {
       this.x = 0
+    }
+
+    if (scalarY !== 0) {
+      const invScalar = 1 / scalarY
+      this.y *= invScalar
+    } else {
       this.y = 0
     }
+
     return this
   }
 

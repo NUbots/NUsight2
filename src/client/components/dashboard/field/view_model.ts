@@ -28,6 +28,6 @@ export class FieldViewModel {
   private get robots() {
     return this.model.robots
       .filter(robot => robot.visible)
-      .map(robot => DashboardRobotViewModel.of({ camera: this.model.camera, model: robot }).robot)
+      .map(robot => DashboardRobotViewModel.of(robot).robot)
   }
 }

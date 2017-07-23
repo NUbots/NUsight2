@@ -22,7 +22,6 @@ export class CanvasRenderer {
   }
 
   public render(scene: Scene, camera: Transform): void {
-    const canvas = this.context.canvas
     const translateDash = Vector2.from(camera.translate).applyTransform({
       rotate: -camera.rotate,
       scale: {
@@ -34,8 +33,6 @@ export class CanvasRenderer {
         y: 0
       }
     })
-
-    this.context.clearRect(0, 0, canvas.width, canvas.height)
 
     this.context.save()
     this.context.scale(camera.scale.x, camera.scale.y)

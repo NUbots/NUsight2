@@ -33,7 +33,7 @@ export class OverviewSimulator implements Simulator {
 
     const robotPosition = this.figureEight(t, fieldLength / 2, fieldWidth / 2)
 
-    const ballWorldPosition = this.figureEight(time / 10, fieldLength / 4, fieldWidth / 4)
+    const ballWorldPosition = this.figureEight(t, fieldLength / 4, fieldWidth / 4)
 
     const robotHeading = ballWorldPosition.clone().subtract(robotPosition).normalize()
 

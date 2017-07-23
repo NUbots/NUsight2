@@ -43,19 +43,36 @@ export class CanvasRenderer {
     this.context.rotate(-camera.rotate)
     this.context.translate(translateDash.x, translateDash.y)
 
-    const renderObjects = (objects: Object2d[]) => {
-      for (const obj of objects) {
-        if (obj instanceof Group) {
-          renderObjects(obj.children)
-          continue
-        }
-        if (obj instanceof Shape) {
-          this.renderShape(obj, camera)
-        }
-      }
-    }
-    renderObjects(scene.children)
+    this.renderObjects(scene.children, camera)
+
     this.context.restore()
+  }
+
+  private renderObjects(objects: Object2d[], camera: Transform) {
+    for (const obj of objects) {
+      this.context.save()
+      const translateDash = Vector2.from(obj.transform.translate).applyTransform({
+        rotate: -obj.transform.rotate,
+        scale: {
+          x: 1 / obj.transform.scale.x,
+          y: 1 / obj.transform.scale.y,
+        },
+        translate: {
+          x: 0,
+          y: 0,
+        },
+      })
+      this.context.scale(obj.transform.scale.x, obj.transform.scale.y)
+      this.context.rotate(-obj.transform.rotate)
+      this.context.translate(translateDash.x, translateDash.y)
+      if (obj instanceof Group) {
+        this.renderObjects(obj.children, camera)
+      } else if (obj instanceof Shape) {
+        // TODO Annable help Olejniczak: Fix text transform with obj rotate
+        this.renderShape(obj, camera)
+      }
+      this.context.restore()
+    }
   }
 
   private renderShape(shape: Shape, camera: Transform): void {

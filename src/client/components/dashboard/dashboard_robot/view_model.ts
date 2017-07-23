@@ -9,6 +9,7 @@ import { MarkerGeometry } from '../../../canvas/geometry/marker_geometry'
 import { TextGeometry } from '../../../canvas/geometry/text_geometry'
 import { Group } from '../../../canvas/object/group'
 import { Shape } from '../../../canvas/object/shape'
+import { Transform } from '../../../math/transform'
 import { DashboardRobotModel } from './model'
 
 export class DashboardRobotViewModel {
@@ -90,8 +91,8 @@ export class DashboardRobotViewModel {
           MarkerGeometry.of({
             heading: this.model.robotHeading.clone(),
             radius,
-            x: this.model.robotPosition.x,
-            y: this.model.robotPosition.y,
+            x: 0,
+            y: 0,
           }),
           BasicAppearance.of({
             fillStyle: this.model.robotColor,
@@ -105,8 +106,8 @@ export class DashboardRobotViewModel {
             textAlign: 'center',
             textBaseline: 'middle',
             maxWidth: radius,
-            x: this.model.robotPosition.x,
-            y: this.model.robotPosition.y,
+            x: 0,
+            y: 0,
           }),
           BasicAppearance.of({
             fillStyle: this.model.textColor,
@@ -114,6 +115,12 @@ export class DashboardRobotViewModel {
           }),
         )
       ],
+      transform: Transform.of({
+        translate: {
+          x: this.model.robotPosition.x,
+          y: this.model.robotPosition.y
+        }
+      })
     })
   }
 }

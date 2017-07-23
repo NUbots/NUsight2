@@ -178,7 +178,7 @@ export class CanvasRenderer {
       startAngle,
       endAngle,
     )
-    // Scales heading vector to bounding square.
+    // The diagonal length of a unit square.
     const sqrt2 = Math.sqrt(2)
     // Convert the heading to absolute canvas coordinates.
     this.context.lineTo(

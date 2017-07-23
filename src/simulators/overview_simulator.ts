@@ -25,7 +25,7 @@ export class OverviewSimulator implements Simulator {
   public simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.support.nubugger.Overview'
 
-    const t = time + index
+    const t = time / 10 + index
 
     const fieldLength = this.field.fieldLength
     const fieldWidth = this.field.fieldWidth
@@ -51,10 +51,10 @@ export class OverviewSimulator implements Simulator {
       gameMode: Mode.NORMAL,
       gamePhase: Phase.INITIAL,
       penaltyReason: PenaltyReason.UNPENALISED,
-      lastCameraImage: { seconds: this.randomSeconds(time, -6) },
-      lastSeenBall: { seconds: this.randomSeconds(time, -6) },
-      lastSeenGoal: { seconds: this.randomSeconds(time, -6) },
-      lastSeenObstacle: { seconds: this.randomSeconds(time, -6) },
+      lastCameraImage: { seconds: this.randomSeconds(t, -6) },
+      lastSeenBall: { seconds: this.randomSeconds(t, -6) },
+      lastSeenGoal: { seconds: this.randomSeconds(t, -6) },
+      lastSeenObstacle: { seconds: this.randomSeconds(t, -6) },
       pathPlan: [
         robotPosition,
         this.randomFieldPosition(),
@@ -62,7 +62,7 @@ export class OverviewSimulator implements Simulator {
         this.randomFieldPosition(),
         ballWorldPosition,
       ],
-      kickTarget: this.randomFieldPosition(),
+      kickTarget: this.figureEight(-t).add(ballWorldPosition),
     }).finish()
 
     const message = { messageType, buffer }
@@ -87,7 +87,7 @@ export class OverviewSimulator implements Simulator {
     return now + (offset * this.random())
   }
 
-  private figureEight(t: number, scaleX: number, scaleY: number) {
+  private figureEight(t: number, scaleX: number = 1, scaleY: number = 1) {
     return new Vector2(
       scaleX * Math.cos(t),
       scaleY * Math.sin(2 * t),

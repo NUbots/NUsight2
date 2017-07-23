@@ -103,6 +103,7 @@ export class CanvasRenderer {
 
   private renderArrow(shape: Shape<ArrowGeometry>): void {
     const { geometry, appearance } = shape
+    const width = geometry.width * 0.5
     const headLength = geometry.headLength * 0.5
     const headWidth = geometry.headWidth * 0.5
 
@@ -110,16 +111,21 @@ export class CanvasRenderer {
     this.context.translate(geometry.origin.x, geometry.origin.y)
     this.context.rotate(Math.atan2(geometry.direction.y, geometry.direction.x))
 
+    // Draw the arrow facing the positive x-axis.
     this.context.beginPath()
-    this.context.moveTo(0, 0)
-    this.context.lineTo(geometry.length, 0)
+    this.context.moveTo(0, -width)
+    this.context.lineTo(geometry.length - headLength, -width)
     this.context.lineTo(geometry.length - headLength, -headWidth)
-    this.context.moveTo(geometry.length, 0)
+    this.context.lineTo(geometry.length, 0)
     this.context.lineTo(geometry.length - headLength, headWidth)
+    this.context.lineTo(geometry.length - headLength, width)
+    this.context.lineTo(0, width)
+    this.context.closePath()
 
     this.applyAppearance(appearance)
 
     this.context.stroke()
+    this.context.fill()
     this.context.restore()
   }
 

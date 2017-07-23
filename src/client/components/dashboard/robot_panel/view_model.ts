@@ -1,16 +1,17 @@
 import { computed } from 'mobx'
 import { createTransformer } from 'mobx'
-import { DashboardRobotModel } from '../dashboard_robot/model'
 import { message } from '../../../../shared/proto/messages'
+import { DashboardRobotModel } from '../dashboard_robot/model'
 import { LastStatus } from './view'
-
-import Mode = message.input.GameState.Data.Mode
-import Phase = message.input.GameState.Data.Phase
-import PenaltyReason = message.input.GameState.Data.PenaltyReason
 import State = message.behaviour.Behaviour.State
 
+import Mode = message.input.GameState.Data.Mode
+import PenaltyReason = message.input.GameState.Data.PenaltyReason
+import Phase = message.input.GameState.Data.Phase
+
 export class RobotPanelViewModel {
-  public constructor(private model: DashboardRobotModel) {}
+  public constructor(private model: DashboardRobotModel) {
+  }
 
   public static of = createTransformer((model: DashboardRobotModel) => {
     return new RobotPanelViewModel(model)

@@ -10,7 +10,8 @@ import { Vector2 } from '../../../math/vector2'
 import { GroundModel } from './model'
 
 export class GroundViewModel {
-  public constructor(private model: GroundModel) {}
+  public constructor(private model: GroundModel) {
+  }
 
   public static of = createTransformer((model: GroundModel): GroundViewModel => {
     return new GroundViewModel(model)
@@ -21,7 +22,7 @@ export class GroundViewModel {
     return [
       this.grass,
       this.goals,
-      this.fieldLines
+      this.fieldLines,
     ]
   }
 
@@ -38,8 +39,8 @@ export class GroundViewModel {
       BasicAppearance.of({
         fillStyle: this.model.fieldColor,
         lineWidth: 0,
-        strokeStyle: 'transparent'
-      })
+        strokeStyle: 'transparent',
+      }),
     )
   }
 
@@ -54,12 +55,12 @@ export class GroundViewModel {
       BasicAppearance.of({
         fillStyle: 'transparent',
         lineWidth: dimensions.lineWidth,
-        strokeStyle
-      })
+        strokeStyle,
+      }),
     )
     return [
       goal(dimensions.fieldLength * 0.5, this.model.topGoalColor),
-      goal((-dimensions.fieldLength * 0.5) - height, this.model.bottomGoalColor)
+      goal((-dimensions.fieldLength * 0.5) - height, this.model.bottomGoalColor),
     ]
   }
 
@@ -71,7 +72,7 @@ export class GroundViewModel {
       this.halfwayLine,
       this.fieldBorder,
       this.goalAreas,
-      this.penaltyMarkers
+      this.penaltyMarkers,
     ]
   }
 
@@ -83,7 +84,7 @@ export class GroundViewModel {
         fillStyle: 'transparent',
         lineWidth: this.model.dimensions.lineWidth,
         strokeStyle: this.model.lineColor,
-      })
+      }),
     )
   }
 
@@ -95,17 +96,17 @@ export class GroundViewModel {
       Shape.of(
         LineGeometry.of({
           origin: Vector2.of(0, lineWidth),
-          target: Vector2.of(0, -lineWidth)
+          target: Vector2.of(0, -lineWidth),
         }),
-        LineAppearance.of({ lineWidth, strokeStyle })
+        LineAppearance.of({ lineWidth, strokeStyle }),
       ),
       Shape.of(
         LineGeometry.of({
           origin: Vector2.of(lineWidth, 0),
-          target: Vector2.of(-lineWidth, 0)
+          target: Vector2.of(-lineWidth, 0),
         }),
-        LineAppearance.of({ lineWidth, strokeStyle })
-      )
+        LineAppearance.of({ lineWidth, strokeStyle }),
+      ),
     ]
   }
 
@@ -114,12 +115,12 @@ export class GroundViewModel {
     return Shape.of(
       LineGeometry.of({
         origin: Vector2.of(0, this.model.dimensions.fieldWidth * 0.5),
-        target: Vector2.of(0, -this.model.dimensions.fieldWidth * 0.5)
+        target: Vector2.of(0, -this.model.dimensions.fieldWidth * 0.5),
       }),
       LineAppearance.of({
         lineWidth: this.model.dimensions.lineWidth,
         strokeStyle: this.model.lineColor,
-      })
+      }),
     )
   }
 
@@ -130,13 +131,13 @@ export class GroundViewModel {
         x: -this.model.dimensions.fieldLength * 0.5,
         y: -this.model.dimensions.fieldWidth * 0.5,
         width: this.model.dimensions.fieldWidth,
-        height: this.model.dimensions.fieldLength
+        height: this.model.dimensions.fieldLength,
       }),
       BasicAppearance.of({
         fillStyle: 'transparent',
         lineWidth: this.model.dimensions.lineWidth,
         strokeStyle: this.model.lineColor,
-      })
+      }),
     )
   }
 
@@ -152,11 +153,11 @@ export class GroundViewModel {
         fillStyle: 'transparent',
         lineWidth: this.model.dimensions.lineWidth,
         strokeStyle: this.model.lineColor,
-      })
+      }),
     )
     return [
       goalArea((fieldLength * 0.5) - height),
-      goalArea(-fieldLength * 0.5)
+      goalArea(-fieldLength * 0.5),
     ]
   }
 
@@ -169,27 +170,27 @@ export class GroundViewModel {
       Shape.of(
         LineGeometry.of({
           origin: Vector2.of(x + lineWidth, 0),
-          target: Vector2.of(x - lineWidth, 0)
+          target: Vector2.of(x - lineWidth, 0),
         }),
         LineAppearance.of({
           lineWidth,
-          strokeStyle: this.model.lineColor
-        })
+          strokeStyle: this.model.lineColor,
+        }),
       ),
       Shape.of(
         LineGeometry.of({
           origin: Vector2.of(x, lineWidth),
-          target: Vector2.of(x, -lineWidth)
+          target: Vector2.of(x, -lineWidth),
         }),
         LineAppearance.of({
           lineWidth,
-          strokeStyle: this.model.lineColor
-        })
-      )
+          strokeStyle: this.model.lineColor,
+        }),
+      ),
     ]
     return [
       marker((fieldLength * 0.5) - penaltyMarkDistance),
-      marker(-(fieldLength * 0.5) + penaltyMarkDistance)
+      marker(-(fieldLength * 0.5) + penaltyMarkDistance),
     ]
   }
 

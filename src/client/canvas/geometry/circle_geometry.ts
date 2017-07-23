@@ -10,12 +10,12 @@ export class CircleGeometry {
     this.x = opts.x
     this.y = opts.y
   }
-  
+
   public static of(opts: Partial<CircleGeometry> = {}) {
     return new CircleGeometry({
       radius: opts.radius || 1,
       x: opts.x || 0,
-      y: opts.y || 0
+      y: opts.y || 0,
     })
   }
 }

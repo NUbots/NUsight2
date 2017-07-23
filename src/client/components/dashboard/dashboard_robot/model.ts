@@ -2,14 +2,14 @@ import { computed } from 'mobx'
 import { observable } from 'mobx'
 import { message } from '../../../../shared/proto/messages'
 import { memoize } from '../../../base/memoize'
+import { Transform } from '../../../math/transform'
 import { Vector2 } from '../../../math/vector2'
 import { RobotModel } from '../../robot/model'
+import State = message.behaviour.Behaviour.State
 
 import Mode = message.input.GameState.Data.Mode
-import Phase = message.input.GameState.Data.Phase
 import PenaltyReason = message.input.GameState.Data.PenaltyReason
-import State = message.behaviour.Behaviour.State
-import { Transform } from '../../../math/transform'
+import Phase = message.input.GameState.Data.Phase
 
 export class DashboardRobotModel {
   @observable public camera: Transform
@@ -67,7 +67,7 @@ export class DashboardRobotModel {
       robotPosition: Vector2.of(),
       textColor: '#fff',
       time: Date.now() / 1000,
-      voltage: -1
+      voltage: -1,
     })
   })
 

@@ -6,8 +6,8 @@ import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
 import { DashboardRobotModel } from './dashboard_robot/model'
-import Overview = message.support.nubugger.Overview
 import Timestamp = google.protobuf.Timestamp$Properties
+import Overview = message.support.nubugger.Overview
 
 export class DashboardNetwork {
   public constructor(private network: Network) {
@@ -49,7 +49,7 @@ export class DashboardNetwork {
     robot.penaltyReason = overview.penaltyReason
     robot.robotHeading = Vector2.from(overview.robotHeading)
     robot.robotPosition = Vector2.from(overview.robotPosition)
-    robot.time = Date.now () / 1000
+    robot.time = Date.now() / 1000
     robot.voltage = overview.voltage
   }
 }

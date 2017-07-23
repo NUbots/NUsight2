@@ -25,15 +25,15 @@ export type RobotPanelProps = {
 export const RobotPanel = (props: RobotPanelProps) => {
   const cameraClassName = classNames(style.icon, style.cameraIcon, {
     [style.iconWarningStatus]: props.lastCameraImage === 'warning',
-    [style.iconDangerStatus]: props.lastCameraImage === 'danger'
+    [style.iconDangerStatus]: props.lastCameraImage === 'danger',
   })
   const ballClassName = classNames(style.icon, style.ballIcon, {
     [style.iconWarningStatus]: props.lastSeenBall === 'warning',
-    [style.iconDangerStatus]: props.lastSeenBall === 'danger'
+    [style.iconDangerStatus]: props.lastSeenBall === 'danger',
   })
   const goalClassName = classNames(style.icon, style.goalIcon, {
     [style.iconWarningStatus]: props.lastSeenGoal === 'warning',
-    [style.iconDangerStatus]: props.lastSeenGoal === 'danger'
+    [style.iconDangerStatus]: props.lastSeenGoal === 'danger',
   })
   return (
     <div>
@@ -42,7 +42,7 @@ export const RobotPanel = (props: RobotPanelProps) => {
           <span className={style.title}>
             {props.title}
           </span>
-          {props.batteryValue && <Battery value={props.batteryValue} />}
+          {props.batteryValue && <Battery value={props.batteryValue}/>}
         </div>
       </header>
       <div className={style.details}>
@@ -65,19 +65,19 @@ export const RobotPanel = (props: RobotPanelProps) => {
               <span className={style.penalty}>
                 {props.penalty}
               </span>
-              {props.penalised && <WarningIcon className={style.penaltyIcon} />}
+              {props.penalised && <WarningIcon className={style.penaltyIcon}/>}
             </div>
           </div>
         </div>
         <div className={style.icons}>
           <span className={cameraClassName}>
-            <CameraIcon />
+            <CameraIcon/>
           </span>
           <span className={ballClassName}>
-            <BallIcon />
+            <BallIcon/>
           </span>
           <span className={goalClassName}>
-            <GoalIcon />
+            <GoalIcon/>
           </span>
         </div>
       </div>
@@ -90,7 +90,7 @@ const Battery = (props: { value: string }) => (
     <span className={style.batteryValue}>
       {props.value}
     </span>
-    <BatteryIcon className={style.batteryIcon} />
+    <BatteryIcon className={style.batteryIcon}/>
   </span>
 )
 

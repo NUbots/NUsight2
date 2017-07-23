@@ -17,7 +17,7 @@ export class LineAppearance {
       lineDashOffset: opts.lineDashOffset || 0,
       lineJoin: opts.lineJoin || 'miter',
       lineWidth: opts.lineWidth || 1,
-      strokeStyle: opts.strokeStyle || '#000'
+      strokeStyle: opts.strokeStyle || '#000',
     })
   }
 }

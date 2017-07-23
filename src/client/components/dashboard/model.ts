@@ -15,11 +15,13 @@ export class DashboardModel {
     return new DashboardModel(robots)
   }
 
-  @computed public get field(): FieldModel {
+  @computed
+  public get field(): FieldModel {
     return FieldModel.of(this.robots)
   }
 
-  @computed public get robots(): DashboardRobotModel[] {
+  @computed
+  public get robots(): DashboardRobotModel[] {
     return this.robotModels.map(robot => DashboardRobotModel.of(robot))
   }
 }

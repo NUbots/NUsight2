@@ -13,7 +13,7 @@ export class LineGeometry {
   public static of(opts: Partial<LineGeometry> = {}) {
     return new LineGeometry({
       origin: opts.origin || Vector2.of(0, 0),
-      target: opts.target || Vector2.of(1, 1)
+      target: opts.target || Vector2.of(1, 1),
     })
   }
 }

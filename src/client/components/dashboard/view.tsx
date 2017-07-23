@@ -1,7 +1,7 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
-import { observer } from 'mobx-react'
 import { DashboardModel } from './model'
 import { DashboardNetwork } from './network'
 import { RobotPanel } from './robot_panel/view'
@@ -30,7 +30,7 @@ export class Dashboard extends Component<DashboardProps> {
         <Menu/>
         <div className={style.dashboard}>
           <div className={style.field}>
-            <Field />
+            <Field/>
           </div>
           {showPanels &&
           <div className={style.panels}>
@@ -49,7 +49,7 @@ export class Dashboard extends Component<DashboardProps> {
                     penalised={model.penalised}
                     penalty={model.penalty}
                     phase={model.phase}
-                    title={model.title} />
+                    title={model.title}/>
                 </div>
               )
             })}

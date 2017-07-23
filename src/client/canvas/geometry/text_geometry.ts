@@ -43,7 +43,7 @@ export class TextGeometry implements Object2d {
       textBaseline: opts.textBaseline || 'alphabetic',
       translate: opts.translate || { x: 0, y: 0 },
       x: opts.x || 0,
-      y: opts.y || 0
+      y: opts.y || 0,
     })
   }
 }

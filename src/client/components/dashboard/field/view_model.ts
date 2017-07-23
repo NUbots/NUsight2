@@ -5,7 +5,8 @@ import { GroundViewModel } from '../ground/view_model'
 import { FieldModel } from './model'
 
 export class FieldViewModel {
-  public constructor(private model: FieldModel) {}
+  public constructor(private model: FieldModel) {
+  }
 
   public static of = createTransformer((model: FieldModel): FieldViewModel => {
     return new FieldViewModel(model)
@@ -15,7 +16,7 @@ export class FieldViewModel {
   public get scene() {
     return [
       this.ground,
-      this.robots
+      this.robots,
     ]
   }
 

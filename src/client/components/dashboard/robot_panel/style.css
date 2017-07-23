@@ -55,7 +55,9 @@
 }
 
 @keyframes flashDanger {
-  to { border-color: #f44336; }
+  to {
+    border-color: #f44336;
+  }
 }
 
 .iconDangerStatus {

@@ -13,7 +13,7 @@ export class BasicAppearance {
     return new BasicAppearance({
       fillStyle: opts.fillStyle || '#000',
       lineWidth: opts.lineWidth || 1,
-      strokeStyle: opts.strokeStyle || '#000'
+      strokeStyle: opts.strokeStyle || '#000',
     })
   }
 }

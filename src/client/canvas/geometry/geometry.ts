@@ -4,9 +4,9 @@ import { LineGeometry } from './line_geometry'
 import { PolygonGeometry } from './polygon_geometry'
 import { TextGeometry } from './text_geometry'
 
-export type Geometry = 
+export type Geometry =
   ArrowGeometry
-    | CircleGeometry
-    | LineGeometry
-    | PolygonGeometry
-    | TextGeometry
+  | CircleGeometry
+  | LineGeometry
+  | PolygonGeometry
+  | TextGeometry

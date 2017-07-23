@@ -1,15 +1,14 @@
 import { action } from 'mobx'
 import { autorun } from 'mobx'
 import { IReactionDisposer } from 'mobx'
-import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 import { CanvasRenderer } from '../../../canvas/renderer'
 import { FieldController } from './controller'
 import { FieldModel } from './model'
-import { FieldViewModel } from './view_model'
 import * as style from './style.css'
+import { FieldViewModel } from './view_model'
 
 export type FieldProps = {
   controller: FieldController
@@ -38,7 +37,7 @@ export class Field extends Component<FieldProps> {
   }
 
   public render() {
-    return <canvas className={style.field} ref={this.onRef} />
+    return <canvas className={style.field} ref={this.onRef}/>
   }
 
   private onAnimationFrame = () => {

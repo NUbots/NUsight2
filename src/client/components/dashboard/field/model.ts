@@ -26,7 +26,7 @@ export class FieldModel {
     return new FieldModel({
       camera: Transform.of(),
       ground: GroundModel.of(),
-      robots
+      robots,
     })
   })
 

@@ -26,7 +26,7 @@ export class ArrowGeometry {
       headWidth: opts.headWidth || 0.04 * length,
       length: opts.length || 1,
       origin: opts.origin || Vector2.of(),
-      width: opts.width || 1
+      width: opts.width || 1,
     })
   }
 }

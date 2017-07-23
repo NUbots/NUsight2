@@ -30,20 +30,33 @@ export class TextGeometry implements Object2d {
     this.y = opts.y
   }
 
-  public static of(opts: Partial<TextGeometry>) {
+  public static of({
+    alignToView = true,
+    fontFamily = 'sans-serif',
+    fontSize = '10px',
+    maxWidth = 0.5,
+    rotate = 0,
+    scale = { x: 1, y: 1 },
+    text = '',
+    textAlign = 'start',
+    textBaseline = 'alphabetic',
+    translate = { x: 0, y: 0 },
+    x = 0,
+    y = 0,
+  }: Partial<TextGeometry> = {}): TextGeometry {
     return new TextGeometry({
-      alignToView: opts.alignToView !== undefined ? opts.alignToView : true,
-      fontFamily: opts.fontFamily || 'sans-serif',
-      fontSize: opts.fontSize || '10px',
-      maxWidth: opts.maxWidth || -1,
-      rotate: opts.rotate || 0,
-      scale: opts.scale || { x: 1, y: 1 },
-      text: opts.text || '',
-      textAlign: opts.textAlign || 'start',
-      textBaseline: opts.textBaseline || 'alphabetic',
-      translate: opts.translate || { x: 0, y: 0 },
-      x: opts.x || 0,
-      y: opts.y || 0,
+      alignToView,
+      fontFamily,
+      fontSize,
+      maxWidth,
+      rotate,
+      scale,
+      text,
+      textAlign,
+      textBaseline,
+      translate,
+      x,
+      y,
     })
   }
 }

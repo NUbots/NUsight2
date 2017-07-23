@@ -18,15 +18,21 @@ export class ArrowGeometry {
     this.width = opts.width
   }
 
-  public static of(opts: Partial<ArrowGeometry> = {}) {
-    const length = opts.length || 1
+  public static of({
+    length = 1,
+    direction = Vector2.of(1, 0),
+    headLength = 0.2 * length,
+    headWidth = 0.04 * length,
+    origin = Vector2.of(),
+    width = 1
+  }: Partial<ArrowGeometry> = {}): ArrowGeometry {
     return new ArrowGeometry({
-      direction: opts.direction || Vector2.of(1, 0),
-      headLength: opts.headLength || 0.2 * length,
-      headWidth: opts.headWidth || 0.04 * length,
-      length: opts.length || 1,
-      origin: opts.origin || Vector2.of(),
-      width: opts.width || 1,
+      direction,
+      headLength,
+      headWidth,
+      length,
+      origin,
+      width,
     })
   }
 }

@@ -14,12 +14,17 @@ export class MarkerGeometry {
     this.y = opts.y
   }
 
-  public static of(opts: Partial<MarkerGeometry> = {}) {
+  public static of({
+    heading = Vector2.of(1, 1),
+    radius = 1,
+    x = 0,
+    y = 0,
+  }: Partial<MarkerGeometry> = {}): MarkerGeometry {
     return new MarkerGeometry({
-      heading: opts.heading || Vector2.of(1, 1),
-      radius: opts.radius || 1,
-      x: opts.x || 0,
-      y: opts.y || 0,
+      heading,
+      radius,
+      x,
+      y,
     })
   }
 }

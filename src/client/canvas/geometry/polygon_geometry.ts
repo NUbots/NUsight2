@@ -8,7 +8,7 @@ export class PolygonGeometry {
     this.points = opts.points
   }
 
-  public static of(points: Vector2[]) {
+  public static of(points: Vector2[]): PolygonGeometry {
     if (points.length < 3) {
       throw new Error('Polygon must have 3 or more points.')
     }

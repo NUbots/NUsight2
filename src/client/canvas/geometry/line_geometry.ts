@@ -10,10 +10,13 @@ export class LineGeometry {
     this.target = opts.target
   }
 
-  public static of(opts: Partial<LineGeometry> = {}) {
+  public static of({
+    origin = Vector2.of(0, 0),
+    target = Vector2.of(1, 1),
+  }: Partial<LineGeometry> = {}): LineGeometry {
     return new LineGeometry({
-      origin: opts.origin || Vector2.of(0, 0),
-      target: opts.target || Vector2.of(1, 1),
+      origin,
+      target,
     })
   }
 }

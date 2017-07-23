@@ -11,11 +11,16 @@ import { Shape } from '../../../canvas/object/shape'
 import { Transform } from '../../../math/transform'
 import { DashboardRobotModel } from './model'
 
+export type DashboardRobotViewModelOpts = {
+  camera: Transform
+  model: DashboardRobotModel
+}
+
 export class DashboardRobotViewModel {
   public constructor(private camera: Transform,
                      private model: DashboardRobotModel) {}
 
-  public static of = createTransformer((opts: { camera: Transform, model: DashboardRobotModel }): DashboardRobotViewModel => {
+  public static of = createTransformer((opts: DashboardRobotViewModelOpts): DashboardRobotViewModel => {
     return new DashboardRobotViewModel(opts.camera, opts.model)
   })
 

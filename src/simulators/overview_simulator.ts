@@ -25,7 +25,7 @@ export class OverviewSimulator implements Simulator {
   public simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.support.nubugger.Overview'
 
-    const t = time * 1e-3 + index
+    const t = time + index
 
     const fieldLength = this.field.fieldLength
     const fieldWidth = this.field.fieldWidth
@@ -36,7 +36,6 @@ export class OverviewSimulator implements Simulator {
 
     const robotHeading = ballWorldPosition.clone().subtract(robotPosition).normalize()
 
-    const timeSeconds = time / 1000
     const buffer = Overview.encode({
       roleName: 'Overview Simulator',
       voltage: this.randomFloat(10, 13),
@@ -52,10 +51,10 @@ export class OverviewSimulator implements Simulator {
       gameMode: Mode.NORMAL,
       gamePhase: Phase.INITIAL,
       penaltyReason: PenaltyReason.UNPENALISED,
-      lastCameraImage: { seconds: this.randomSeconds(timeSeconds, -6) },
-      lastSeenBall: { seconds: this.randomSeconds(timeSeconds, -6) },
-      lastSeenGoal: { seconds: this.randomSeconds(timeSeconds, -6) },
-      lastSeenObstacle: { seconds: this.randomSeconds(timeSeconds, -6) },
+      lastCameraImage: { seconds: this.randomSeconds(time, -6) },
+      lastSeenBall: { seconds: this.randomSeconds(time, -6) },
+      lastSeenGoal: { seconds: this.randomSeconds(time, -6) },
+      lastSeenObstacle: { seconds: this.randomSeconds(time, -6) },
       pathPlan: [
         robotPosition,
         this.randomFieldPosition(),

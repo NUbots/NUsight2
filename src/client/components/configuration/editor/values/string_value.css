@@ -1,0 +1,11 @@
+.stringValue {
+
+}
+
+.stringValue__input {
+  color: #183691;
+  border: none;
+  background-color: #EEE;
+  padding: 2px 4px;
+  min-width: 212px;
+}

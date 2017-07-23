@@ -1,0 +1,28 @@
+.listField {
+  padding: 0;
+  list-style: none;
+  margin: 0;
+  width: 100%;
+}
+
+.listField__header {
+  color: #63a35c;
+  cursor: default;
+}
+
+.listField__header::after {
+  display: inline-block;
+  content: ':';
+}
+
+.listField__subFields {
+  padding-left: 22px;
+}
+
+.listField__subFields .listField__subField::before {
+  display: inline-block;
+  content: '-';
+  margin-right: 8px;
+  color: rgba(0,0,0,0.5);
+  align-self: flex-start;
+}

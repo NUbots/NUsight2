@@ -40,6 +40,7 @@ export const NavigationView = () => (
       <NavigationItemView url='/classifier' Icon={CubeIcon}>Classifier</NavigationItemView>
       <NavigationItemView url='/subsumption' Icon={OrderingIcon}>Subsumption</NavigationItemView>
       <NavigationItemView url='/gamestate' Icon={ControllerIcon}>GameState</NavigationItemView>
+      <NavigationItemView url='/configuration' Icon={ControllerIcon}>Configuration</NavigationItemView>
     </ul>
   </header>
 )

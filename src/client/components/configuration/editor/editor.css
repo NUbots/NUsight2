@@ -1,0 +1,21 @@
+.editor {
+  padding: 18px 0;
+}
+
+.editor,
+.editor * {
+  font-family: monospace;
+}
+
+.editorLine {
+  margin-bottom: 4px;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  /*border-bottom: 1px solid #EEE;*/
+}
+
+.editorLine__nestedList {
+  margin-bottom: 0;
+  /*border-bottom: 0;*/
+}

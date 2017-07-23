@@ -1,0 +1,21 @@
+.configuration {
+  font-weight: normal;
+}
+
+.configuration__body {
+  display: flex;
+}
+
+.configuration__sidebar {
+  width: 256px;
+  border-right: 1px solid #DDD;
+}
+
+.configuration__content {
+  flex-grow: 1;
+}
+
+.configuration__contentPlaceholder {
+  padding-top: 32px;
+  text-align: center;
+}

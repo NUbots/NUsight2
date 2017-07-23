@@ -7,7 +7,7 @@ export class PolygonGeometry {
   constructor(opts: PolygonGeometry) {
     const points = opts.points
     if (points.length < 3) {
-      throw new Error('Polygon must have 3 or more points.')
+      throw new Error(`Polygon must have 3 or more points, ${points.length} points given.`)
     }
     this.points = points
   }

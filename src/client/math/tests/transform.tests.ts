@@ -2,16 +2,16 @@ import { Transform } from '../transform'
 
 describe('Transform', () => {
   describe('#then', () => {
-    it('should apply rotate correctly', () => {
+    it('composes rotations', () => {
       const transform1 = Transform.of({ rotate: Math.PI })
       const transform2 = Transform.of({ rotate: Math.PI / 2 })
 
       const actual = transform1.then(transform2)
-      const expected = Transform.of({ rotate: Math.PI * 1.5  })
+      const expected = Transform.of({ rotate: Math.PI * 1.5 })
       expect(actual).toEqual(expected)
     })
 
-    it('should apply scale correctly', () => {
+    it('composes scales', () => {
       const transform1 = Transform.of({ scale: { x: 2, y: 3 } })
       const transform2 = Transform.of({ scale: { x: 4, y: -5 } })
 
@@ -20,7 +20,7 @@ describe('Transform', () => {
       expect(actual).toEqual(expected)
     })
 
-    it('should apply translate correctly', () => {
+    it('composes translations', () => {
       const transform1 = Transform.of({ translate: { x: 2, y: 3 } })
       const transform2 = Transform.of({ translate: { x: 4, y: -5 } })
 
@@ -29,41 +29,23 @@ describe('Transform', () => {
       expect(actual).toEqual(expected)
     })
 
-    it('should apply all transforms correctly', () => {
+    it('composes rotations, scales and translations together', () => {
       const transform1 = Transform.of({
         rotate: Math.PI / 2,
-        scale: {
-          x: 2,
-          y: 2,
-        },
-        translate: {
-          x: 2,
-          y: 1,
-        },
+        scale: { x: 2, y: 2 },
+        translate: { x: 2, y: 1 },
       })
       const transform2 = Transform.of({
         rotate: Math.PI,
-        scale: {
-          x: 1,
-          y: 1,
-        },
-        translate: {
-          x: 1,
-          y: -2,
-        },
+        scale: { x: 1, y: 1 },
+        translate: { x: 1, y: -2 },
       })
 
       const actual = transform1.then(transform2)
       const expected = Transform.of({
         rotate: 3 * Math.PI / 2,
-        scale: {
-          x: 2,
-          y: 2,
-        },
-        translate: {
-          x: 6,
-          y: 3,
-        },
+        scale: { x: 2, y: 2 },
+        translate: { x: 6, y: 3 },
       })
       expect(actual).toEqual(expected)
     })

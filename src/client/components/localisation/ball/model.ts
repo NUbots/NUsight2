@@ -21,7 +21,7 @@ export class BallModel extends Object3D {
   }
 
   public static of(opts: BallModelOpts = {}) {
-    let mesh = opts.mesh;
+    let mesh = opts.mesh
 
     // Create the mesh if not given one
     if (!mesh) {
@@ -35,7 +35,7 @@ export class BallModel extends Object3D {
 
       // Create a material
       const material = new MeshLambertMaterial({
-        color
+        color,
       })
 
       // Create the sphere mesh with its geometry and specified material

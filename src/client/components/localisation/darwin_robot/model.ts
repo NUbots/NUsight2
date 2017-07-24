@@ -26,7 +26,7 @@ export class LocalisationRobotModel {
       rWTt: Vector3.of(),
       Rwt: Quaternion.of(),
       motors: DarwinMotorSet.of(),
-      ball: BallModel.of()
+      ball: BallModel.of(),
     })
   })
 

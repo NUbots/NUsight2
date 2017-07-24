@@ -25,11 +25,7 @@ export class CanvasRenderer {
   public render(scene: Scene, camera: Transform): void {
     const canvas = this.context.canvas
     this.context.clearRect(0, 0, canvas.width, canvas.height)
-
-    this.context.save()
-    this.applyTransform(camera)
     this.renderObjects(scene.children, camera)
-    this.context.restore()
   }
 
   private applyTransform(transform: Transform) {
@@ -40,11 +36,7 @@ export class CanvasRenderer {
           scale: {
             x: 1 / transform.scale.x,
             y: 1 / transform.scale.y,
-          },
-          translate: {
-            x: 0,
-            y: 0,
-          },
+          }
         })
       )
 
@@ -53,21 +45,25 @@ export class CanvasRenderer {
     this.context.translate(translateDash.x, translateDash.y)
   }
 
-  private renderObjects(objects: Object2d[], camera: Transform) {
+  private renderObjects(objects: Object2d[],
+                        parentTransform: Transform,
+                        parentWorldTransform: Transform = parentTransform) {
+    this.context.save()
+    this.applyTransform(parentTransform)
     for (const obj of objects) {
       this.context.save()
       this.applyTransform(obj.transform)
       if (obj instanceof Group) {
-        this.renderObjects(obj.children, camera)
+        this.renderObjects(obj.children, obj.transform, parentTransform.clone().applyTransformLocal(obj.transform))
       } else if (obj instanceof Shape) {
-        // TODO Annable help Olejniczak: Fix text transform with obj rotate
-        this.renderShape(obj, camera)
+        this.renderShape(obj, parentWorldTransform)
       }
       this.context.restore()
     }
+    this.context.restore()
   }
 
-  private renderShape(shape: Shape, camera: Transform): void {
+  private renderShape(shape: Shape, worldTransform: Transform): void {
     const { appearance, geometry } = shape
     if (geometry instanceof ArrowGeometry) {
       this.renderArrow({ appearance, geometry })
@@ -80,7 +76,7 @@ export class CanvasRenderer {
     } else if (geometry instanceof PolygonGeometry) {
       this.renderPolygon({ appearance, geometry })
     } else if (geometry instanceof TextGeometry) {
-      this.renderText({ appearance, camera, geometry })
+      this.renderText({ appearance, geometry, worldTransform })
     } else {
       throw new Error(`Unsupported geometry type: ${geometry}`)
     }
@@ -215,8 +211,8 @@ export class CanvasRenderer {
     this.context.stroke()
   }
 
-  private renderText(opts: { appearance: Appearance, camera: Transform, geometry: TextGeometry }): void {
-    const { appearance, camera, geometry } = opts
+  private renderText(opts: { appearance: Appearance, geometry: TextGeometry, worldTransform: Transform }): void {
+    const { appearance, geometry, worldTransform } = opts
     const position = Vector2.from(geometry)
     const maxWidth = geometry.maxWidth === -1 ? undefined : geometry.maxWidth
 
@@ -231,12 +227,11 @@ export class CanvasRenderer {
     if (geometry.alignToView) {
       // Ensure the text is always rendered without rotation such that it is aligned with the screen.
       this.context.save()
-      this.context.scale(Math.sign(camera.scale.x), Math.sign(camera.scale.y))
-      this.context.rotate(-camera.rotate)
+      this.context.scale(Math.sign(worldTransform.scale.x), Math.sign(worldTransform.scale.y))
+      this.context.rotate(-worldTransform.rotate)
       position.applyTransform(Transform.of({
-        rotate: -camera.rotate,
-        scale: { x: Math.sign(camera.scale.x), y: Math.sign(camera.scale.y) },
-        translate: { x: 0, y: 0 },
+        rotate: -worldTransform.rotate,
+        scale: { x: Math.sign(worldTransform.scale.x), y: Math.sign(worldTransform.scale.y) },
       }))
     }
     this.context.translate(position.x, position.y)

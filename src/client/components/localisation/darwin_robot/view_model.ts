@@ -30,14 +30,6 @@ export class RobotViewModel {
 
   @computed
   public get ball(): Object3D {
-    const ball = new Object3D()
-
-    ball.position.x = this.model.ball.position.x
-    ball.position.y = this.model.ball.position.y
-    ball.position.z = this.model.ball.position.z
-
-    ball.add(BallViewModel.of(this.model.ball).ball)
-
-    return ball
+    return BallViewModel.of(this.model.ball).ball
   }
 }

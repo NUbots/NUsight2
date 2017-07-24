@@ -1,6 +1,7 @@
 import { computed } from 'mobx'
 import { createTransformer } from 'mobx'
 import { Mesh } from 'three'
+import { Object3D } from 'three'
 import { SphereGeometry } from 'three'
 import { MeshLambertMaterial } from 'three'
 import { BallModel } from './model'
@@ -14,7 +15,7 @@ export class BallViewModel {
   })
 
   @computed
-  public get ball(): Mesh {
+  public get mesh(): Mesh {
     const segments = 16
     const rings = 16
 
@@ -24,5 +25,18 @@ export class BallViewModel {
     })
 
     return new Mesh(geometry, material)
+  }
+
+  @computed
+  public get ball(): Object3D {
+    const ball = new Object3D()
+
+    ball.position.x = this.model.position.x
+    ball.position.y = this.model.position.y
+    ball.position.z = this.model.position.z
+
+    ball.add(this.mesh)
+
+    return ball
   }
 }

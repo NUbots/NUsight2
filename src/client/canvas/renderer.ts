@@ -36,8 +36,8 @@ export class CanvasRenderer {
           scale: {
             x: 1 / transform.scale.x,
             y: 1 / transform.scale.y,
-          }
-        })
+          },
+        }),
       )
 
     this.context.scale(transform.scale.x, transform.scale.y)
@@ -45,22 +45,17 @@ export class CanvasRenderer {
     this.context.translate(translateDash.x, translateDash.y)
   }
 
-  private renderObjects(objects: Object2d[],
-                        parentTransform: Transform,
-                        parentWorldTransform: Transform = parentTransform) {
-    this.context.save()
-    this.applyTransform(parentTransform)
+  private renderObjects(objects: Object2d[], worldTransform: Transform) {
     for (const obj of objects) {
-      this.context.save()
-      this.applyTransform(obj.transform)
       if (obj instanceof Group) {
-        this.renderObjects(obj.children, obj.transform, parentTransform.clone().applyTransformLocal(obj.transform))
+        this.renderObjects(obj.children, worldTransform.clone().then(obj.transform))
       } else if (obj instanceof Shape) {
-        this.renderShape(obj, parentWorldTransform)
+        this.context.save()
+        this.applyTransform(worldTransform.clone().then(obj.transform))
+        this.renderShape(obj, worldTransform)
+        this.context.restore()
       }
-      this.context.restore()
     }
-    this.context.restore()
   }
 
   private renderShape(shape: Shape, worldTransform: Transform): void {

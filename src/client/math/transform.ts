@@ -35,7 +35,7 @@ export class Transform {
   }
 
   @action
-  public applyTransformLocal(transform: Transform): Transform {
+  public then(transform: Transform): Transform {
     const { rotate, scale, translate } = transform
 
     const scaleX = this.scale.x
@@ -63,19 +63,6 @@ export class Transform {
     return this
   }
 
-  @action
-  public applyTransformWorld(transform: Transform): Transform {
-    const { rotate, scale, translate } = transform
-
-    this.scale.x *= scale.x
-    this.scale.y *= scale.y
-    this.rotate += rotate
-    this.translate.x += translate.x
-    this.translate.y += translate.y
-
-    return this
-  }
-
   public clone(): Transform {
     return new Transform({
       rotate: this.rotate,
@@ -85,8 +72,8 @@ export class Transform {
       },
       translate: {
         x: this.translate.x,
-        y: this.translate.y
-      }
+        y: this.translate.y,
+      },
     })
   }
 }

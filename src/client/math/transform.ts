@@ -1,5 +1,6 @@
 import { action } from 'mobx'
 import { observable } from 'mobx'
+import { computed } from 'mobx'
 
 export type Rotate = number
 export type Scale = { x: number, y: number }
@@ -63,6 +64,15 @@ export class Transform {
     return this
   }
 
+  @computed
+  public get inverse(): Transform {
+    return new Transform({
+      scale: { x: 1 / this.scale.x, y: 1 / this.scale.y },
+      rotate: -this.rotate,
+      translate: { x: this.translate.x, y: this.translate.y },
+    })
+  }
+
   public clone(): Transform {
     return new Transform({
       rotate: this.rotate,
@@ -75,5 +85,12 @@ export class Transform {
         y: this.translate.y,
       },
     })
+  }
+
+  @action
+  public setTranslate(x: number, y: number): Transform {
+    this.translate.x = x
+    this.translate.y = y
+    return this
   }
 }

@@ -21,7 +21,10 @@ export class LocalisationViewModel {
   @computed
   public get scene(): Scene {
     const scene = new Scene()
+
+    // TODO Josephus / Luke, should we change robots to return the model instead of the Object3D?
     this.robots.forEach(robot => scene.add(robot))
+    this.balls.forEach(ball => scene.add(ball))
 
     scene.add(this.field)
     scene.add(this.skybox)
@@ -49,6 +52,13 @@ export class LocalisationViewModel {
     return this.model.robots
       .filter(robotModel => robotModel.visible)
       .map(robotModel => RobotViewModel.of(robotModel).robot)
+  }
+
+  @computed
+  private get balls(): Object3D[] {
+    return this.model.robots
+      .filter(robotModel => robotModel.visible)
+      .map(robotModel => RobotViewModel.of(robotModel).ball)
   }
 
   @computed

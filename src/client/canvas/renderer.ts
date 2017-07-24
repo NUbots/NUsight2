@@ -89,6 +89,8 @@ export class CanvasRenderer {
       this.renderPolygon({ appearance, geometry })
     } else if (geometry instanceof TextGeometry) {
       this.renderText({ appearance, camera, geometry })
+    } else {
+      throw new Error(`Unsupported geometry type: ${geometry}`)
     }
   }
 

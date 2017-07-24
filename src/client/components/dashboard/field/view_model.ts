@@ -1,7 +1,6 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 import { Group } from '../../../canvas/object/group'
-import { Scene } from '../../../canvas/object/scene'
 import { DashboardRobotViewModel } from '../dashboard_robot/view_model'
 import { GroundViewModel } from '../ground/view_model'
 import { FieldModel } from './model'
@@ -15,8 +14,8 @@ export class FieldViewModel {
   })
 
   @computed
-  public get scene(): Scene {
-    return Scene.of({
+  public get scene(): Group {
+    return Group.of({
       children: [
         this.ground,
         this.robots,

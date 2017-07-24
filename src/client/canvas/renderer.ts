@@ -11,7 +11,6 @@ import { PolygonGeometry } from './geometry/polygon_geometry'
 import { TextGeometry } from './geometry/text_geometry'
 import { Object2d } from './object/object2d'
 import { Group } from './object/group'
-import { Scene } from './object/scene'
 import { Shape } from './object/shape'
 
 export class CanvasRenderer {
@@ -22,13 +21,13 @@ export class CanvasRenderer {
     return new CanvasRenderer(context)
   }
 
-  public render(scene: Scene, camera: Transform): void {
+  public render(scene: Group, camera: Transform): void {
     const canvas = this.context.canvas
     this.context.clearRect(0, 0, canvas.width, canvas.height)
     this.renderObjects(scene.children, camera)
   }
 
-  private applyTransform(transform: Transform) {
+  private applyTransform(transform: Transform): void {
     const translateDash = Vector2.from(transform.translate)
       .applyTransform(
         Transform.of({
@@ -45,7 +44,7 @@ export class CanvasRenderer {
     this.context.translate(translateDash.x, translateDash.y)
   }
 
-  private renderObjects(objects: Object2d[], worldTransform: Transform) {
+  private renderObjects(objects: Object2d[], worldTransform: Transform): void {
     for (const obj of objects) {
       if (obj instanceof Group) {
         this.renderObjects(obj.children, worldTransform.clone().then(obj.transform))

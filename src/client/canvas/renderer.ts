@@ -97,9 +97,10 @@ export class CanvasRenderer {
   private applyAppearance(appearance: Appearance): void {
     if (appearance instanceof BasicAppearance) {
       this.applyBasicAppearance(appearance)
-    }
-    if (appearance instanceof LineAppearance) {
+    } else if (appearance instanceof LineAppearance) {
       this.applyLineAppearance(appearance)
+    } else {
+      throw new Error(`Unsupported appearance type: ${appearance}`)
     }
   }
 

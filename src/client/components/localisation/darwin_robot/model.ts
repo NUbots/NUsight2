@@ -3,6 +3,7 @@ import { computed } from 'mobx'
 import { memoize } from '../../../base/memoize'
 import { Vector3 } from '../../../math/vector3'
 import { RobotModel } from '../../robot/model'
+import { BallModel } from '../ball/model'
 import { Quaternion } from '../model'
 
 export class LocalisationRobotModel {
@@ -12,6 +13,7 @@ export class LocalisationRobotModel {
   @observable public rWTt: Vector3 // Torso to world translation in torso space.
   @observable public Rwt: Quaternion // Torso to world rotation.
   @observable public motors: DarwinMotorSet
+  @observable public ball: BallModel
 
   public constructor(model: RobotModel, opts: Partial<LocalisationRobotModel>) {
     this.model = model
@@ -24,6 +26,7 @@ export class LocalisationRobotModel {
       rWTt: Vector3.of(),
       Rwt: Quaternion.of(),
       motors: DarwinMotorSet.of(),
+      ball: BallModel.of()
     })
   })
 

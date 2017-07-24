@@ -3,6 +3,7 @@ import { createTransformer } from 'mobx'
 import { Object3D } from 'three'
 import { Quaternion } from 'three'
 import { BodyViewModel } from './body/view_model'
+import { BallModel } from '../ball/model'
 import { LocalisationRobotModel } from './model'
 
 export const HIP_TO_FOOT = 0.2465
@@ -25,5 +26,10 @@ export class RobotViewModel {
     robot.setRotationFromQuaternion(rotation)
     robot.add(BodyViewModel.of(this.model).body)
     return robot
+  }
+
+  @computed
+  public get ball(): BallModel {
+    return this.model.ball
   }
 }

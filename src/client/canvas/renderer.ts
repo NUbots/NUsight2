@@ -225,7 +225,7 @@ export class CanvasRenderer {
     this.context.textBaseline = geometry.textBaseline
 
     const textWidth = this.context.measureText(geometry.text).width
-    const scale = maxWidth ? (maxWidth / textWidth) : geometry.scale.x
+    const scale = maxWidth ? (maxWidth / textWidth) : geometry.transform.scale.x
     this.context.font = `${scale}em ${geometry.fontFamily}`
 
     if (geometry.alignToView) {

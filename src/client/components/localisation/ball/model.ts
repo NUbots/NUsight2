@@ -14,13 +14,13 @@ export class BallModel {
     this.color = color
   }
 
-  public static of(opts: BallModelOpts = {}) {
-    return new BallModel(
-      opts.name || 'Ball',
-      opts.position || Vector3.of(),
-      opts.radius || 0.0335,
-      opts.color || '#FFCC00',
-    )
+  public static of({
+    name = 'Ball',
+    position = Vector3.of(),
+    radius = 0.0335,
+    color = '#FFCC00',
+  }: BallModelOpts = {}): BallModel {
+    return new BallModel(name, position, radius, color)
   }
 }
 

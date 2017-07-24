@@ -33,17 +33,20 @@ export class CanvasRenderer {
   }
 
   private applyTransform(transform: Transform) {
-    const translateDash = Vector2.from(transform.translate).applyTransform({
-      rotate: -transform.rotate,
-      scale: {
-        x: 1 / transform.scale.x,
-        y: 1 / transform.scale.y,
-      },
-      translate: {
-        x: 0,
-        y: 0,
-      },
-    })
+    const translateDash = Vector2.from(transform.translate)
+      .applyTransform(
+        Transform.of({
+          rotate: -transform.rotate,
+          scale: {
+            x: 1 / transform.scale.x,
+            y: 1 / transform.scale.y,
+          },
+          translate: {
+            x: 0,
+            y: 0,
+          },
+        })
+      )
 
     this.context.scale(transform.scale.x, transform.scale.y)
     this.context.rotate(-transform.rotate)
@@ -230,7 +233,7 @@ export class CanvasRenderer {
       this.context.save()
       this.context.scale(Math.sign(camera.scale.x), Math.sign(camera.scale.y))
       this.context.rotate(-camera.rotate)
-      position.applyTransform(new Transform({
+      position.applyTransform(Transform.of({
         rotate: -camera.rotate,
         scale: { x: Math.sign(camera.scale.x), y: Math.sign(camera.scale.y) },
         translate: { x: 0, y: 0 },

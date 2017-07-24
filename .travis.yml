@@ -6,17 +6,17 @@ node_js:
 # Cache yarn to speed up the build
 cache: yarn
 
-# We need to set this so our compiler is g++-4.9 for NUClearNet.js
+# We need to set this so our compiler is >= g++-4.9 for NUClearNet.js
 env:
-  - CXX=g++-4.9 YARN_COMMAND=build
-  - CXX=g++-4.9 YARN_COMMAND=tslint
-  - CXX=g++-4.9 YARN_COMMAND=test:ci
+  - CXX=g++-7 YARN_COMMAND=build
+  - CXX=g++-7 YARN_COMMAND=tslint
+  - CXX=g++-7 YARN_COMMAND=test:ci
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - g++-4.9
+      - g++-7
 
 # Only build the master branch, PRs will build also due to settings in the web ui
 branches:

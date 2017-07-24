@@ -19,11 +19,11 @@ export class Group implements Object2d {
 
   public static of({
     children = [],
-    transform = Transform.of()
+    transform = Transform.of(),
   }: Partial<GroupOpts> = {}): Group {
     return new Group({
       children,
-      transform
+      transform,
     })
   }
 

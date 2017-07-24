@@ -115,7 +115,7 @@ export class CanvasRenderer {
     this.context.strokeStyle = appearance.strokeStyle
   }
 
-  private renderArrow(opts: { appearance: Appearance, geometry: ArrowGeometry, }): void {
+  private renderArrow(opts: { appearance: Appearance, geometry: ArrowGeometry }): void {
     const { appearance, geometry } = opts
     const width = geometry.width * 0.5
     const headLength = geometry.headLength * 0.5
@@ -143,7 +143,7 @@ export class CanvasRenderer {
     this.context.restore()
   }
 
-  private renderCircle(opts: { appearance: Appearance, geometry: CircleGeometry, }): void {
+  private renderCircle(opts: { appearance: Appearance, geometry: CircleGeometry }): void {
     const { appearance, geometry } = opts
 
     this.context.beginPath()
@@ -160,7 +160,7 @@ export class CanvasRenderer {
     this.context.stroke()
   }
 
-  private renderLine(opts: { appearance: Appearance, geometry: LineGeometry, }): void {
+  private renderLine(opts: { appearance: Appearance, geometry: LineGeometry }): void {
     const { appearance, geometry } = opts
 
     this.context.beginPath()
@@ -171,7 +171,7 @@ export class CanvasRenderer {
     this.context.stroke()
   }
 
-  private renderMarker(opts: { appearance: Appearance, geometry: MarkerGeometry, }): void {
+  private renderMarker(opts: { appearance: Appearance, geometry: MarkerGeometry }): void {
     const { appearance, geometry } = opts
     const position = Vector2.of(geometry.x, geometry.y)
 
@@ -205,7 +205,7 @@ export class CanvasRenderer {
     this.context.stroke()
   }
 
-  private renderPolygon(opts: { appearance: Appearance, geometry: PolygonGeometry, }): void {
+  private renderPolygon(opts: { appearance: Appearance, geometry: PolygonGeometry }): void {
     const { appearance, geometry } = opts
 
     this.context.beginPath()
@@ -220,7 +220,7 @@ export class CanvasRenderer {
     this.context.stroke()
   }
 
-  private renderText(opts: { appearance: Appearance, camera: Transform, geometry: TextGeometry, }): void {
+  private renderText(opts: { appearance: Appearance, camera: Transform, geometry: TextGeometry }): void {
     const { appearance, camera, geometry } = opts
     const position = Vector2.from(geometry)
     const maxWidth = geometry.maxWidth === -1 ? undefined : geometry.maxWidth

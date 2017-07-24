@@ -21,7 +21,7 @@ export class Scene implements Object2d {
   }: Partial<SceneOpts> = {}): Scene {
     return new Scene({
       children,
-      transform
+      transform,
     })
   }
 

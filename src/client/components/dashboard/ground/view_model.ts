@@ -114,7 +114,7 @@ export class GroundViewModel {
             target: Vector2.of(-lineWidth, 0),
           }),
           LineAppearance.of({ lineWidth, strokeStyle }),
-        )
+        ),
       ],
     })
   }

@@ -113,14 +113,14 @@ export class DashboardRobotViewModel {
             fillStyle: this.model.textColor,
             strokeStyle: 'transparent',
           }),
-        )
+        ),
       ],
       transform: Transform.of({
         translate: {
           x: this.model.robotPosition.x,
-          y: this.model.robotPosition.y
-        }
-      })
+          y: this.model.robotPosition.y,
+        },
+      }),
     })
   }
 }

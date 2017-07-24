@@ -24,11 +24,20 @@ export class CanvasRenderer {
 
   public render(scene: Scene, camera: Transform): void {
     const canvas = this.context.canvas
-    const translateDash = Vector2.from(camera.translate).applyTransform({
-      rotate: -camera.rotate,
+    this.context.clearRect(0, 0, canvas.width, canvas.height)
+
+    this.context.save()
+    this.applyTransform(camera)
+    this.renderObjects(scene.children, camera)
+    this.context.restore()
+  }
+
+  private applyTransform(transform: Transform) {
+    const translateDash = Vector2.from(transform.translate).applyTransform({
+      rotate: -transform.rotate,
       scale: {
-        x: 1 / camera.scale.x,
-        y: 1 / camera.scale.y,
+        x: 1 / transform.scale.x,
+        y: 1 / transform.scale.y,
       },
       translate: {
         x: 0,
@@ -36,35 +45,15 @@ export class CanvasRenderer {
       },
     })
 
-    this.context.clearRect(0, 0, canvas.width, canvas.height)
-
-    this.context.save()
-    this.context.scale(camera.scale.x, camera.scale.y)
-    this.context.rotate(-camera.rotate)
+    this.context.scale(transform.scale.x, transform.scale.y)
+    this.context.rotate(-transform.rotate)
     this.context.translate(translateDash.x, translateDash.y)
-
-    this.renderObjects(scene.children, camera)
-
-    this.context.restore()
   }
 
   private renderObjects(objects: Object2d[], camera: Transform) {
     for (const obj of objects) {
       this.context.save()
-      const translateDash = Vector2.from(obj.transform.translate).applyTransform({
-        rotate: -obj.transform.rotate,
-        scale: {
-          x: 1 / obj.transform.scale.x,
-          y: 1 / obj.transform.scale.y,
-        },
-        translate: {
-          x: 0,
-          y: 0,
-        },
-      })
-      this.context.scale(obj.transform.scale.x, obj.transform.scale.y)
-      this.context.rotate(-obj.transform.rotate)
-      this.context.translate(translateDash.x, translateDash.y)
+      this.applyTransform(obj.transform)
       if (obj instanceof Group) {
         this.renderObjects(obj.children, camera)
       } else if (obj instanceof Shape) {

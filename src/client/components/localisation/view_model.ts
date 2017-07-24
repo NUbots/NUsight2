@@ -6,6 +6,7 @@ import { PointLight } from 'three'
 import { PerspectiveCamera } from 'three'
 import { Object3D } from 'three'
 import { RobotViewModel } from './darwin_robot/view_model'
+import { LocalisationRobotModel } from './darwin_robot/model'
 import { FieldViewModel } from './field/view_model'
 import { LocalisationModel } from './model'
 import { SkyboxViewModel } from './skybox/view_model'
@@ -48,17 +49,18 @@ export class LocalisationViewModel {
   }
 
   @computed
+  private get visibleRobots(): LocalisationRobotModel[] {
+    return this.model.robots.filter(robotModel => robotModel.visible)
+  }
+
+  @computed
   private get robots(): Object3D[] {
-    return this.model.robots
-      .filter(robotModel => robotModel.visible)
-      .map(robotModel => RobotViewModel.of(robotModel).robot)
+    return this.visibleRobots.map(robotModel => RobotViewModel.of(robotModel).robot)
   }
 
   @computed
   private get balls(): Object3D[] {
-    return this.model.robots
-      .filter(robotModel => robotModel.visible)
-      .map(robotModel => RobotViewModel.of(robotModel).ball)
+    return this.visibleRobots.map(robotModel => RobotViewModel.of(robotModel).ball)
   }
 
   @computed

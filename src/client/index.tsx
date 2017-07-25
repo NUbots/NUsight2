@@ -32,7 +32,7 @@ useStrict(true)
 
 const appModel = AppModel.of()
 const nusightNetwork = NUsightNetwork.of(appModel)
-nusightNetwork.connect({ name: 'nusight' })
+nusightNetwork.connect({ name: 'nusight', address: '10.1.255.255' })
 
 const localisationModel = LocalisationModel.of(appModel)
 const dashboardModel = DashboardModel.of(appModel.robots)

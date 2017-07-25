@@ -11,6 +11,7 @@ import * as webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackConfig from '../../webpack.config'
 import { OverviewSimulator } from '../simulators/overview_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
+import { LocalisationDataSimulator } from '../simulators/localisation_data_simulator'
 import { VirtualRobots } from '../simulators/virtual_robots'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
@@ -61,6 +62,7 @@ function init() {
       simulators: [
         OverviewSimulator.of(),
         SensorDataSimulator.of(),
+        LocalisationDataSimulator.of(),
       ],
     })
     virtualRobots.simulateWithFrequency(60)

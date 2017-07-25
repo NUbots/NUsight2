@@ -10,11 +10,13 @@ import { RobotModel } from '../robot/model'
 import { LocalisationRobotModel } from './darwin_robot/model'
 import { LocalisationModel } from './model'
 import Sensors = message.input.Sensors
+import Ball = message.localisation.Ball
 
 export class LocalisationNetwork {
   public constructor(private network: Network,
                      private model: LocalisationModel) {
     this.network.on(Sensors, this.onSensors)
+    this.network.on(Ball, this.onBall)
   }
 
   public static of(nusightNetwork: NUsightNetwork, model: LocalisationModel): LocalisationNetwork {
@@ -55,6 +57,20 @@ export class LocalisationNetwork {
     robot.motors.headPan.angle = sensors.servo[18].presentPosition!
     robot.motors.headTilt.angle = sensors.servo[19].presentPosition!
   }
+
+  @action
+  private onBall = (robotModel: RobotModel, ball: Ball) => {
+    const robot = LocalisationRobotModel.of(robotModel)
+
+    robot.ball.position.set(ball.position!.x!, ball.position!.y!, robot.ball.position.z)
+
+    const ellipse = calculateConfidenceEllipse(ball.covariance!.x!.x!, ball.covariance!.x!.y!, ball.covariance!.y!.y!)
+    const confidenceEllipse = robot.ball.confidenceEllipse
+
+    confidenceEllipse.scaleX = ellipse.x
+    confidenceEllipse.scaleY = ellipse.y
+    confidenceEllipse.rotationAngle = ellipse.angle
+  }
 }
 
 function decompose(m: Matrix4): { translation: Vector3, rotation: Quaternion, scale: Vector3 } {
@@ -72,4 +88,40 @@ function fromProtoMat44(m: mat44$Properties): Matrix4 {
     m!.x!.z!, m!.y!.z!, m!.z!.z!, m!.t!.z!,
     m!.x!.t!, m!.y!.t!, m!.z!.t!, m!.t!.t!,
   )
+}
+
+interface ConfidenceEllipseData {
+  x: number,
+  y: number,
+  angle: number
+}
+
+/**
+ * Based on http://www.math.harvard.edu/archive/21b_fall_04/exhibits/2dmatrices/index.html
+ * and http://www.visiondummy.com/2014/04/draw-error-ellipse-representing-covariance-matrix/
+ */
+function calculateConfidenceEllipse(xx: number, xy: number, yy: number): ConfidenceEllipseData {
+  const ellipse: ConfidenceEllipseData = {
+    x: 0,
+    y: 0,
+    angle: 0,
+  }
+
+  const scalefactor = 2.4477 // for 95% confidence.
+
+  const trace = xx + yy
+  const det = xx * yy - xy * xy
+
+  const Eig1 = trace / 2 + Math.sqrt(trace * trace / 4 - det)
+  const Eig2 = trace / 2 - Math.sqrt(trace * trace / 4 - det)
+
+  const maxEig = Math.max(Eig1, Eig2)
+  const minEig = Math.min(Eig1, Eig2)
+
+  ellipse.x = Math.sqrt(maxEig) * scalefactor
+  ellipse.y = Math.sqrt(minEig) * scalefactor
+
+  ellipse.angle = Math.atan2(xy, maxEig - yy)
+
+  return ellipse
 }

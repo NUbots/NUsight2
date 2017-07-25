@@ -1,6 +1,7 @@
 import * as minimist from 'minimist'
 import { OverviewSimulator } from './overview_simulator'
 import { SensorDataSimulator } from './sensor_data_simulator'
+import { LocalisationDataSimulator } from './localisation_data_simulator'
 import { Simulator } from './simulator'
 import { VirtualRobots } from './virtual_robots'
 
@@ -23,6 +24,9 @@ function getSimulators(args: minimist.ParsedArgs): Simulator[] {
   }
   if (args.overview || args.all) {
     simulators.push(OverviewSimulator.of())
+  }
+  if (args.localisation || args.all) {
+    simulators.push(LocalisationDataSimulator.of())
   }
   if (simulators.length === 0) {
     // If no simulators given, enable them all.

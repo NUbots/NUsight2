@@ -78,4 +78,34 @@ export class LayeredCanvasModel {
       }
     }
   }
+
+  public getLayer(name: string): Layer | null {
+    let foundLayer: Layer | null = null
+
+    for(let i = 0; i < this.layers.length; i++) {
+      if (this.layers[i].name === name) {
+        foundLayer = this.layers[i]
+      }
+    }
+
+    return foundLayer
+  }
+
+  public move(name: string, location: number) {
+    let newLayers: Layer[] = []
+    let layerToMove: Layer | null = this.getLayer(name)
+
+    if (layerToMove != null) {
+
+      this.layers.filter(layer => layer.name != name).forEach((layer, index) => {
+        if (index === location) {
+          newLayers.push(layerToMove!)
+        }
+        
+        newLayers.push(layer)
+      })
+
+      this.layers = newLayers
+    }
+  }
 }

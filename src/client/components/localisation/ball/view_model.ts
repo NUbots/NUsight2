@@ -3,7 +3,7 @@ import { createTransformer } from 'mobx'
 import { Mesh } from 'three'
 import { Object3D } from 'three'
 import { SphereGeometry } from 'three'
-import { MeshLambertMaterial } from 'three'
+import { MeshPhongMaterial } from 'three'
 import { BallModel } from './model'
 
 export class BallViewModel {
@@ -15,28 +15,23 @@ export class BallViewModel {
   })
 
   @computed
-  public get mesh(): Mesh {
+  public get ball(): Mesh {
     const segments = 16
     const rings = 16
 
     const geometry = new SphereGeometry(this.model.radius, segments, rings)
-    const material = new MeshLambertMaterial({
+    const material = new MeshPhongMaterial({
       color: this.model.color,
     })
 
-    return new Mesh(geometry, material)
-  }
+    const mesh = new Mesh(geometry, material)
 
-  @computed
-  public get ball(): Object3D {
-    const ball = new Object3D()
+    mesh.position.set(
+      this.model.position.x,
+      this.model.position.y,
+      this.model.position.z + (this.model.radius / 2),
+    )
 
-    ball.position.x = this.model.position.x
-    ball.position.y = this.model.position.y
-    ball.position.z = this.model.position.z
-
-    ball.add(this.mesh)
-
-    return ball
+    return mesh
   }
 }

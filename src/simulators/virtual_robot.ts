@@ -60,6 +60,6 @@ export class VirtualRobot {
   }
 
   public connect(): () => void {
-    return this.network.connect({ name: this.name, address: '10.1.255.255' })
+    return this.network.connect({ name: this.name })
   }
 }

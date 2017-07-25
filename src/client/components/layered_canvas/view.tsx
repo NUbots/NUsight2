@@ -32,7 +32,8 @@ export class LayeredCanvas extends React.Component<LayeredCanvasProps> {
           {
             this.props.model.layers.filter(layer => layer.visible).map((layer, index) => {
               return (
-                <canvas id={layer.name} className={style.layer_canvas} key={layer.name} ref={ canvas => {
+                <canvas width={this.props.model.width} height={this.props.model.height} id={layer.name} 
+                className={style.layer_canvas} key={layer.name} ref={ canvas => {
                   if (canvas) {
                     layer.context = canvas.getContext(layer.type)
                   }

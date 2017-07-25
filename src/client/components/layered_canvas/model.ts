@@ -3,18 +3,22 @@ import { observable } from 'mobx'
 
 export interface LayeredCanvasModelOpts {
   layers: Layer[]
+  width: number
+  height: number
 }
 
 export class LayeredCanvasModel {
 
   @observable public layers: Layer[]
+  @observable public width: number
+  @observable public height: number
 
   constructor(opts: LayeredCanvasModelOpts) {
     Object.assign(this, opts)
   }
 
   public static of() {
-    return new LayeredCanvasModel({ layers: [] })
+    return new LayeredCanvasModel({ layers: [], width: 640, height: 480 })
   }
 
   public add(layer: Layer): void {
@@ -101,11 +105,16 @@ export class LayeredCanvasModel {
         if (index === location) {
           newLayers.push(layerToMove!)
         }
-        
+
         newLayers.push(layer)
       })
 
       this.layers = newLayers
     }
+  }
+
+  public resize(width: number, height: number) {
+    this.width = width
+    this.height = height
   }
 }

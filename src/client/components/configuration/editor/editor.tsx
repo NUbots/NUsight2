@@ -5,20 +5,7 @@ import * as style from './editor.css'
 import { ListField } from './fields/list_field'
 import { MapField } from './fields/map_field'
 import { ScalarField } from './fields/scalar_field'
-
-export interface ConfigurationField {
-  type: string
-  value: any
-  tag?: string
-  name?: string
-  uid?: string
-  path?: string
-}
-
-export interface ConfigurationFile {
-  path: string,
-  content: ConfigurationField
-}
+import { ConfigurationField, ConfigurationFile } from '../model'
 
 export interface FieldProps {
   data: ConfigurationField,

@@ -19,3 +19,9 @@
   padding-top: 32px;
   text-align: center;
 }
+
+.configuration__saveCheckboxLabel {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 12px;
+}

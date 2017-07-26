@@ -3,7 +3,8 @@ import * as React from 'react'
 import * as style from './map_field.css'
 import * as editorStyle from '../editor.css'
 
-import { ConfigurationField, FieldProps } from '../editor'
+import { ConfigurationField } from '../../model'
+import { FieldProps } from '../editor'
 import { ListField } from './list_field'
 import { ScalarField } from './scalar_field'
 

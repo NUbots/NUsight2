@@ -1,0 +1,56 @@
+/*
+* This file is part of the NUbots Codebase.
+*
+* The NUbots Codebase is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* The NUbots Codebase is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with the NUbots Codebase.  If not, see <http://www.gnu.org/licenses/>.
+*
+* Copyright 2014 NUbots <nubots@nubots.net>
+*/
+
+syntax = "proto3";
+
+package message.support.nubugger;
+
+message Configuration {
+    message Value {
+        enum Type {
+            NULL_VALUE = 0;
+            INT_VALUE = 1;
+            DOUBLE_VALUE = 2;
+            STRING_VALUE = 3;
+            BOOL_VALUE = 4;
+            MAP_VALUE = 5;
+            LIST_VALUE = 6;
+        }
+
+        int64 int_value = 1;
+        double double_value = 2;
+        string string_value = 3;
+        bool bool_value = 4;
+        map<string, Value> map_value = 5;
+        repeated Value list_value = 6;
+
+        Type type = 7;
+        string tag = 8;
+        string name = 9;
+        string uid = 10;
+        string path = 11;
+    }
+
+    message File {
+        Value content = 1;
+        string path = 2;
+    }
+
+    repeated File files = 1;
+}

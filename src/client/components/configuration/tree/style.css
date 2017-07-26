@@ -15,11 +15,6 @@
   user-select: none;
 }
 
-.treenode__header:hover {
-  background-color: #EEE;
-  color: #1197d3;
-}
-
 .treenode__icon {
   margin-right: 4px;
 }
@@ -34,6 +29,16 @@
   flex-grow: 1;
 }
 
+.treenode--changed .treenode__header {
+  background-color: #FFF9C4;
+  color: #4d4d4d;
+}
+
+.treenode__header:hover {
+  background-color: #EEE;
+  color: #1197d3;
+}
+
 .treenode--selected .treenode__header {
   color: white;
   background-color: #1197d3;
@@ -41,4 +46,9 @@
 
 .treenode--selected .treenode__header svg {
   fill: rgba(255, 255, 255, 0.75);
+}
+
+.treenode--changed.treenode--selected .treenode__header {
+  color: white;
+  background-color: #1197d3;
 }

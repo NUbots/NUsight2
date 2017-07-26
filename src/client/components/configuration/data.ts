@@ -14,6 +14,10 @@ export function createTreeFromFiles(files: any): TreeNode {
     leaf: false,
     selected: false,
     children: [],
+    status: {
+      changed: false,
+      lastRevision: null
+    }
   }
 
   // A map of file paths to tree nodes
@@ -52,17 +56,24 @@ export function createTreeNode(pathSegments: string[], parentPath: string, file:
   }
 
   // Create the new node
-  const node = {
+  const node: TreeNode = {
     label,
     expanded: false,
     leaf: !isFolder,
     selected: false,
     data: isFolder ? undefined : file,
     children: [],
+    status: {
+      changed: false,
+      lastRevision: null
+    }
   }
 
   // Add the new node to the tree
   pathNodeMap[parentPath].children.push(node)
+  // pathNodeMap[parentPath].children.sort((a: TreeNode, b: TreeNode) => {
+  //   return (a.leaf === b.leaf ? a.label.toLowerCase() > b.label.toLowerCase() : a.leaf > b.leaf)
+  // })
 
   // Add the new node to the path map
   pathNodeMap[currentPath] = node

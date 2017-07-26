@@ -17,6 +17,13 @@ export class Vector3 {
     return new Vector3(0, 0, 0)
   }
 
+  public static from(vec3?: { x?: number, y?: number, z?: number } | null): Vector3 {
+    if (!vec3) {
+      vec3 = { x: 0, y: 0, z: 0 }
+    }
+    return new Vector3(vec3.x || 0, vec3.y || 0, vec3.z || 0)
+  }
+
   @computed get length(): number {
     return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z)
   }
@@ -75,6 +82,14 @@ export class Vector3 {
     this.x += movement.x
     this.y += movement.y
     this.z += movement.z
+    return this
+  }
+
+  @action
+  public subtract(movement: Vector3): Vector3 {
+    this.x -= movement.x
+    this.y -= movement.y
+    this.z -= movement.z
     return this
   }
 }

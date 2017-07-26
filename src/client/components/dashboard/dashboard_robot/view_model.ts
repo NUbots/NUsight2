@@ -89,7 +89,6 @@ export class DashboardRobotViewModel {
       children: [
         Shape.of(
           MarkerGeometry.of({
-            heading: this.model.robotHeading.clone(),
             radius,
             x: 0,
             y: 0,
@@ -116,6 +115,7 @@ export class DashboardRobotViewModel {
         ),
       ],
       transform: Transform.of({
+        rotate: Math.atan2(this.model.robotHeading.y, this.model.robotHeading.x),
         translate: {
           x: this.model.robotPosition.x,
           y: this.model.robotPosition.y,

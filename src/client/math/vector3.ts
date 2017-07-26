@@ -79,18 +79,18 @@ export class Vector3 {
   }
 
   @action
-  public add(movement: Vector3): Vector3 {
-    this.x += movement.x
-    this.y += movement.y
-    this.z += movement.z
+  public add(v: Vector3): Vector3 {
+    this.x += v.x
+    this.y += v.y
+    this.z += v.z
     return this
   }
 
   @action
-  public subtract(movement: Vector3): Vector3 {
-    this.x -= movement.x
-    this.y -= movement.y
-    this.z -= movement.z
+  public subtract(v: Vector3): Vector3 {
+    this.x -= v.x
+    this.y -= v.y
+    this.z -= v.z
     return this
   }
 }

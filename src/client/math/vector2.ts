@@ -103,16 +103,16 @@ export class Vector2 {
   }
 
   @action
-  public add(movement: Vector2): Vector2 {
-    this.x += movement.x
-    this.y += movement.y
+  public add(v: Vector2): Vector2 {
+    this.x += v.x
+    this.y += v.y
     return this
   }
 
   @action
-  public subtract(movement: Vector2): Vector2 {
-    this.x -= movement.x
-    this.y -= movement.y
+  public subtract(v: Vector2): Vector2 {
+    this.x -= v.x
+    this.y -= v.y
     return this
   }
 }

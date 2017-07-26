@@ -1,8 +1,9 @@
 import { message } from '../../src/shared/proto/messages'
 import { Simulator } from './simulator'
 import { Message } from './simulator'
-import Ball = message.localisation.Ball
 import { FieldDimensions } from '../shared/field/dimensions'
+import Ball = message.localisation.Ball
+import Field = message.localisation.Field
 
 export class LocalisationDataSimulator implements Simulator {
   public static of() {
@@ -10,6 +11,36 @@ export class LocalisationDataSimulator implements Simulator {
   }
 
   public simulate(time: number, index: number, numRobots: number): Message[] {
+    return [
+      this.createFieldMessage(time, index, numRobots),
+      this.createBallMessage(time, index, numRobots),
+    ]
+  }
+
+  public createFieldMessage(time: number, index: number, numRobots: number): Message {
+    const messageType = 'message.localisation.Field'
+
+    const buffer = Ball.encode({
+      position: {
+        x: 0,
+        y: 0,
+      },
+      covariance: {
+        x: {
+          x: 0.02,
+          y: -0.009,
+        },
+        y: {
+          x: -0.009,
+          y: 0.01,
+        },
+      },
+    }).finish()
+
+    return { messageType, buffer }
+  }
+
+  public createBallMessage(time: number, index: number, numRobots: number): Message {
     const messageType = 'message.localisation.Ball'
     const field = FieldDimensions.postYear2017()
 
@@ -44,8 +75,6 @@ export class LocalisationDataSimulator implements Simulator {
       },
     }).finish()
 
-    const message = { messageType, buffer }
-
-    return [message]
+    return { messageType, buffer }
   }
 }

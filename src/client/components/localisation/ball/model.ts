@@ -1,22 +1,13 @@
 import { observable } from 'mobx'
 import { Vector3 } from '../../../math/vector3'
-
-interface BallConfidenceEllipse {
-  color: string
-  opacity: number
-  position: Vector3
-  scaleX: number
-  scaleY: number
-  rotationAxis: Vector3
-  rotationAngle: number
-}
+import { ConfidenceEllipseModel } from '../confidence_ellipse/model'
 
 export class BallModel {
   @observable public name: string
   @observable public position: Vector3
   @observable public radius: number
   @observable public color: string
-  @observable public confidenceEllipse: BallConfidenceEllipse
+  @observable public confidenceEllipse: ConfidenceEllipseModel
 
   public constructor(name: string, position: Vector3, radius: number, color: string) {
     this.name = name
@@ -24,7 +15,7 @@ export class BallModel {
     this.radius = radius
     this.color = color
 
-    this.confidenceEllipse = {
+    this.confidenceEllipse = ConfidenceEllipseModel.of({
       color: '#0000ff',
       opacity: 0.5,
       position: new Vector3(0, 0, 0.001123),
@@ -32,7 +23,7 @@ export class BallModel {
       scaleY: 1,
       rotationAxis: new Vector3(0, 0, 1),
       rotationAngle: 0,
-    }
+    })
   }
 
   public static of({

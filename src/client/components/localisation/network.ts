@@ -11,12 +11,14 @@ import { LocalisationRobotModel } from './darwin_robot/model'
 import { LocalisationModel } from './model'
 import Sensors = message.input.Sensors
 import Ball = message.localisation.Ball
+import Field = message.localisation.Field
 
 export class LocalisationNetwork {
   public constructor(private network: Network,
                      private model: LocalisationModel) {
     this.network.on(Sensors, this.onSensors)
     this.network.on(Ball, this.onBall)
+    this.network.on(Field, this.onField)
   }
 
   public static of(nusightNetwork: NUsightNetwork, model: LocalisationModel): LocalisationNetwork {
@@ -56,6 +58,13 @@ export class LocalisationNetwork {
     robot.motors.leftAnkleRoll.angle = sensors.servo[17].presentPosition!
     robot.motors.headPan.angle = sensors.servo[18].presentPosition!
     robot.motors.headTilt.angle = sensors.servo[19].presentPosition!
+  }
+
+  @action
+  private onField = (robotModel: RobotModel, field: Field) => {
+    const robot = LocalisationRobotModel.of(robotModel)
+
+    // TODO (Josephus): Update the robot confidence ellipse
   }
 
   @action

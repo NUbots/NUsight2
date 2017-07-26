@@ -53,20 +53,4 @@ export class Matrix3 {
     this.z = m.z
     return this
   }
-
-  @action
-  public multiplyScalar(scalar: number): Matrix3 {
-    this.x.multiplyScalar(scalar)
-    this.y.multiplyScalar(scalar)
-    this.z.multiplyScalar(scalar)
-    return this
-  }
-
-  @action
-  public divideScalar(scalar: number): Matrix3 {
-    this.x.divideScalar(scalar)
-    this.y.divideScalar(scalar)
-    this.z.divideScalar(scalar)
-    return this
-  }
 }

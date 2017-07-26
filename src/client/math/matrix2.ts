@@ -48,18 +48,4 @@ export class Matrix2 {
     this.y = m.y
     return this
   }
-
-  @action
-  public multiplyScalar(scalar: number): Matrix2 {
-    this.x.multiplyScalar(scalar)
-    this.y.multiplyScalar(scalar)
-    return this
-  }
-
-  @action
-  public divideScalar(scalar: number): Matrix2 {
-    this.x.divideScalar(scalar)
-    this.y.divideScalar(scalar)
-    return this
-  }
 }

@@ -1,5 +1,6 @@
 import { message } from '../../src/shared/proto/messages'
 import { Vector2 } from '../client/math/vector2'
+import { Vector3 } from '../client/math/vector3'
 import { SeededRandom } from '../shared/base/random/seeded_random'
 import { FieldDimensions } from '../shared/field/dimensions'
 import { vec2$Properties } from '../shared/proto/messages'
@@ -33,9 +34,10 @@ export class OverviewSimulator implements Simulator {
 
     const robotPosition = this.figureEight(t, fieldLength / 2, fieldWidth / 2)
 
-    const ballWorldPosition = this.figureEight(t, fieldLength / 4, fieldWidth / 4)
+    const ballPosition = this.figureEight(t, fieldLength / 4, fieldWidth / 4)
 
-    const robotHeading = ballWorldPosition.clone().subtract(robotPosition).normalize()
+    const robotHeading = ballPosition.clone().subtract(robotPosition).normalize()
+    const robotAngle = Math.atan2(robotHeading.y, robotHeading.x)
 
     const states = getEnumValues<State>(State)
     const modes = getEnumValues<Mode>(Mode)
@@ -47,13 +49,17 @@ export class OverviewSimulator implements Simulator {
       voltage: this.randomFloat(10, 13),
       battery: this.random.float(),
       behaviourState: this.random.choice(states),
-      robotPosition,
+      robotPosition: new Vector3(robotPosition.x, robotPosition.y, robotAngle),
       robotPositionCovariance: {
+        x: { x: this.random.float(), y: this.random.float(), z: this.random.float() },
+        y: { x: this.random.float(), y: this.random.float(), z: this.random.float() },
+        z: { x: this.random.float(), y: this.random.float(), z: this.random.float() },
+      },
+      ballPosition,
+      ballPositionCovariance: {
         x: { x: this.random.float(), y: this.random.float() },
         y: { x: this.random.float(), y: this.random.float() },
       },
-      robotHeading,
-      ballWorldPosition,
       gameMode: this.random.choice(modes),
       gamePhase: this.random.choice(phases),
       penaltyReason: this.random.choice(penaltyReasons),
@@ -65,9 +71,9 @@ export class OverviewSimulator implements Simulator {
         this.randomFieldPosition(),
         this.randomFieldPosition(),
         this.randomFieldPosition(),
-        ballWorldPosition,
+        ballPosition,
       ],
-      kickTarget: this.figureEight(-t).add(ballWorldPosition),
+      kickTarget: this.figureEight(-t).add(ballPosition),
     }).finish()
 
     const message = { messageType, buffer }

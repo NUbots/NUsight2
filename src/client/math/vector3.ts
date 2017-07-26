@@ -1,6 +1,7 @@
 import { action } from 'mobx'
 import { computed } from 'mobx'
 import { observable } from 'mobx'
+import { Vector2 } from './vector2'
 
 export class Vector3 {
   @observable public x: number
@@ -26,6 +27,10 @@ export class Vector3 {
 
   @computed get length(): number {
     return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z)
+  }
+
+  @computed get xy() : Vector2 {
+    return new Vector2(this.x, this.y)
   }
 
   @action

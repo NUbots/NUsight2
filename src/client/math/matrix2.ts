@@ -21,7 +21,7 @@ export class Matrix2 {
     y?: { x?: number, y?: number }
   } | null): Matrix2 {
     if (!mat) {
-      mat = { x: { x:0, y:0, z:0 }, y: { x:0, y:0, z:0 }, z: { x:0, y:0, z:0 } }
+      mat = { x: { x:0, y:0 }, y: { x:0, y:0 } }
     }
     return new Matrix2(Vector2.from(mat.x), Vector2.from(mat.y))
   }

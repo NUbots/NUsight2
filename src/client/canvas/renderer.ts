@@ -98,7 +98,6 @@ export class CanvasRenderer {
     const headLength = geometry.headLength * 0.5
     const headWidth = geometry.headWidth * 0.5
 
-    this.context.save()
     this.context.translate(geometry.origin.x, geometry.origin.y)
     this.context.rotate(Math.atan2(geometry.direction.y, geometry.direction.x))
 
@@ -117,7 +116,6 @@ export class CanvasRenderer {
 
     this.context.stroke()
     this.context.fill()
-    this.context.restore()
   }
 
   private renderCircle(opts: { appearance: Appearance, geometry: CircleGeometry }): void {
@@ -200,19 +198,16 @@ export class CanvasRenderer {
   private renderText(opts: { appearance: Appearance, geometry: TextGeometry, worldTransform: Transform }): void {
     const { appearance, geometry, worldTransform } = opts
     const position = Vector2.from(geometry)
-    const maxWidth = geometry.maxWidth === -1 ? undefined : geometry.maxWidth
 
     this.context.font = `1em ${geometry.fontFamily}`
     this.context.textAlign = geometry.textAlign
     this.context.textBaseline = geometry.textBaseline
 
     const textWidth = this.context.measureText(geometry.text).width
-    const scale = maxWidth ? (maxWidth / textWidth) : geometry.transform.scale.x
-    this.context.font = `${scale}em ${geometry.fontFamily}`
+    const scale = geometry.maxWidth / textWidth
 
     if (geometry.alignToView) {
       // Ensure the text is always rendered without rotation such that it is aligned with the screen.
-      this.context.save()
       this.context.scale(Math.sign(worldTransform.scale.x), Math.sign(worldTransform.scale.y))
       this.context.rotate(-worldTransform.rotate)
       position.transform(Transform.of({
@@ -220,13 +215,11 @@ export class CanvasRenderer {
         scale: { x: Math.sign(worldTransform.scale.x), y: Math.sign(worldTransform.scale.y) },
       }))
     }
-    this.context.translate(position.x, position.y)
+
+    this.context.scale(scale, scale)
+    this.context.translate(position.x / scale, position.y / scale)
 
     this.applyAppearance(appearance)
     this.context.fillText(geometry.text, 0, 0)
-
-    if (geometry.alignToView) {
-      this.context.restore()
-    }
   }
 }

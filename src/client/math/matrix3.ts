@@ -24,7 +24,7 @@ export class Matrix3 {
     z?: { x?: number, y?: number, z? :number }
   } | null): Matrix3 {
     if (!mat) {
-      mat = { x: { x:0, y:0, z:0 }, y: { x:0, y:0, z:0 }, z: { x:0, y:0, z:0 } }
+      return Matrix3.of()
     }
     return new Matrix3(Vector3.from(mat.x), Vector3.from(mat.y), Vector3.from(mat.z))
   }
@@ -67,22 +67,6 @@ export class Matrix3 {
     this.x.divideScalar(scalar)
     this.y.divideScalar(scalar)
     this.z.divideScalar(scalar)
-    return this
-  }
-
-  @action
-  public add(movement: Matrix3): Matrix3 {
-    this.x.add(movement.x)
-    this.y.add(movement.y)
-    this.z.add(movement.z)
-    return this
-  }
-
-  @action
-  public subtract(movement: Matrix3): Matrix3 {
-    this.x.subtract(movement.x)
-    this.y.subtract(movement.y)
-    this.z.subtract(movement.z)
     return this
   }
 }

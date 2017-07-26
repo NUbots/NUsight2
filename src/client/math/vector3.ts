@@ -18,19 +18,15 @@ export class Vector3 {
     return new Vector3(0, 0, 0)
   }
 
-  public static from(vec3?: { x?: number, y?: number, z?: number } | null): Vector3 {
-    if (!vec3) {
-      vec3 = { x: 0, y: 0, z: 0 }
+  public static from(vec?: { x?: number, y?: number, z?: number } | null): Vector3 {
+    if (!vec) {
+      return vector3.of()
     }
-    return new Vector3(vec3.x || 0, vec3.y || 0, vec3.z || 0)
+    return new Vector3(vec.x || 0, vec.y || 0, vec.z || 0)
   }
 
   @computed get length(): number {
     return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z)
-  }
-
-  @computed get xy() : Vector2 {
-    return new Vector2(this.x, this.y)
   }
 
   @action

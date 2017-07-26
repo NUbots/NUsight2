@@ -21,7 +21,7 @@ export class Matrix2 {
     y?: { x?: number, y?: number }
   } | null): Matrix2 {
     if (!mat) {
-      mat = { x: { x:0, y:0 }, y: { x:0, y:0 } }
+      return Matrix2.of()
     }
     return new Matrix2(Vector2.from(mat.x), Vector2.from(mat.y))
   }
@@ -60,20 +60,6 @@ export class Matrix2 {
   public divideScalar(scalar: number): Matrix2 {
     this.x.divideScalar(scalar)
     this.y.divideScalar(scalar)
-    return this
-  }
-
-  @action
-  public add(movement: Matrix2): Matrix2 {
-    this.x.add(movement.x)
-    this.y.add(movement.y)
-    return this
-  }
-
-  @action
-  public subtract(movement: Matrix2): Matrix2 {
-    this.x.subtract(movement.x)
-    this.y.subtract(movement.y)
     return this
   }
 }

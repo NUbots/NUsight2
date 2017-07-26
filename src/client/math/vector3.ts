@@ -1,7 +1,6 @@
 import { action } from 'mobx'
 import { computed } from 'mobx'
 import { observable } from 'mobx'
-import { Vector2 } from './vector2'
 
 export class Vector3 {
   @observable public x: number

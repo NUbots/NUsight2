@@ -90,6 +90,7 @@ export class DashboardRobotViewModel {
       children: [
         Shape.of(
           MarkerGeometry.of({
+            // TODO (Annable): Add helper method for converting an angle to a unit vector.
             heading: new Vector2(Math.cos(this.model.robotPosition.z), Math.sin(this.model.robotPosition.z)),
             radius,
             x: 0,

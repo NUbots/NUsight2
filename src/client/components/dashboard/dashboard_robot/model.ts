@@ -27,7 +27,7 @@ export class DashboardRobotModel {
   @observable public textColor: string
 
   // Parameters from the network
-  // The timestamp of the last message from the robot
+  // The timestamp of the last message from the robot (in seconds since an arbitrary time)
   @observable public time: number
 
   // The id number of the robot
@@ -61,7 +61,8 @@ export class DashboardRobotModel {
   @observable public gamePhase: Phase
   @observable public penaltyReason: PenaltyReason
 
-  // When we last had an image, saw the ball and saw a goal
+  // The timestamp of when we last had an image, saw the ball and saw a goal
+  // Measured in seconds compared to the variable `time`
   @observable public lastCameraImage: number
   @observable public lastSeenBall: number
   @observable public lastSeenGoal: number

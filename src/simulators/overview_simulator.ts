@@ -47,6 +47,7 @@ export class OverviewSimulator implements Simulator {
 
     const buffer = Overview.encode({
       roleName: 'Overview Simulator',
+      robotId: index + 1,
       voltage: this.randomFloat(10, 13),
       battery: this.random.float(),
       behaviourState: this.random.choice(states),

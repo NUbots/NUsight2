@@ -27,7 +27,7 @@ export class OverviewSimulator implements Simulator {
   public simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.support.nubugger.Overview'
 
-    const t = time / 10 + index
+    const t = time / 10 - index
 
     const fieldLength = this.field.fieldLength
     const fieldWidth = this.field.fieldWidth

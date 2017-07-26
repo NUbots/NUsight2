@@ -136,10 +136,13 @@ describe('FakeNUClearNetClient', () => {
     bob.send({ type: 'sensors', payload })
 
     expect(onSensors).toHaveBeenCalledTimes(1)
-    expect(onSensors).toHaveBeenLastCalledWith({ payload, peer: expect.objectContaining({ name: 'bob' }) })
+    expect(onSensors).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'bob' }),
+    }))
   })
 
-  it('receives messages sent from other clients', () => {
+  it('receives specific messages sent from other clients', () => {
     bob.connect({ name: 'bob' })
     alice.connect({ name: 'alice' })
     eve.connect({ name: 'eve' })
@@ -157,13 +160,58 @@ describe('FakeNUClearNetClient', () => {
     eve.send({ type: 'sensors', payload })
 
     expect(bobOnSensors).toHaveBeenCalledTimes(1)
-    expect(bobOnSensors).toHaveBeenLastCalledWith({ payload, peer: expect.objectContaining({ name: 'eve' }) })
+    expect(bobOnSensors).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'eve' }),
+    }))
 
     expect(aliceOnSensors).toHaveBeenCalledTimes(1)
-    expect(aliceOnSensors).toHaveBeenLastCalledWith({ payload, peer: expect.objectContaining({ name: 'eve' }) })
+    expect(aliceOnSensors).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'eve' }),
+    }))
 
     expect(eveOnSensors).toHaveBeenCalledTimes(1)
-    expect(eveOnSensors).toHaveBeenLastCalledWith({ payload, peer: expect.objectContaining({ name: 'eve' }) })
+    expect(eveOnSensors).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'eve' }),
+    }))
+  })
+
+  it('receives general packets sent from other clients', () => {
+    bob.connect({ name: 'bob' })
+    alice.connect({ name: 'alice' })
+    eve.connect({ name: 'eve' })
+
+    const bobOnPacket = jest.fn()
+    bob.onPacket(bobOnPacket)
+
+    const aliceOnPacket = jest.fn()
+    alice.onPacket(aliceOnPacket)
+
+    const eveOnSensors = jest.fn()
+    eve.on('sensors', eveOnSensors)
+
+    const payload = new Buffer(8)
+    eve.send({ type: 'sensors', payload })
+
+    expect(bobOnPacket).toHaveBeenCalledTimes(1)
+    expect(bobOnPacket).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'eve' }),
+    }))
+
+    expect(aliceOnPacket).toHaveBeenCalledTimes(1)
+    expect(aliceOnPacket).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'eve' }),
+    }))
+
+    expect(eveOnSensors).toHaveBeenCalledTimes(1)
+    expect(eveOnSensors).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'eve' }),
+    }))
   })
 
   it('only receives targetted messages if they are the target', () => {
@@ -184,7 +232,10 @@ describe('FakeNUClearNetClient', () => {
     eve.send({ type: 'sensors', payload, target: 'bob' })
 
     expect(bobOnSensors).toHaveBeenCalledTimes(1)
-    expect(bobOnSensors).toHaveBeenLastCalledWith({ payload, peer: expect.objectContaining({ name: 'eve' }) })
+    expect(bobOnSensors).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'eve' }),
+    }))
 
     expect(aliceOnSensors).not.toHaveBeenCalled()
     expect(eveOnSensors).not.toHaveBeenCalled()
@@ -211,10 +262,16 @@ describe('FakeNUClearNetClient', () => {
     eve.send({ type: 'sensors', payload, target: 'bob' })
 
     expect(bobOnSensors1).toHaveBeenCalledTimes(1)
-    expect(bobOnSensors1).toHaveBeenLastCalledWith({ payload, peer: expect.objectContaining({ name: 'eve' }) })
+    expect(bobOnSensors1).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'eve' }),
+    }))
 
     expect(bobOnSensors2).toHaveBeenCalledTimes(1)
-    expect(bobOnSensors2).toHaveBeenLastCalledWith({ payload, peer: expect.objectContaining({ name: 'eve' }) })
+    expect(bobOnSensors2).toHaveBeenLastCalledWith(expect.objectContaining({
+      payload,
+      peer: expect.objectContaining({ name: 'eve' }),
+    }))
 
     expect(eveOnSensors).not.toHaveBeenCalled()
   })

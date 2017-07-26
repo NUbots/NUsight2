@@ -1,5 +1,6 @@
 import * as EventEmitter from 'events'
 import { NUClearNetSend } from 'nuclearnet.js'
+import * as XXH from 'xxhashjs'
 import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
 import { FakeNUClearNetClient } from './fake_nuclearnet_client'
 
@@ -7,7 +8,7 @@ import { FakeNUClearNetClient } from './fake_nuclearnet_client'
  * A fake in-memory NUClearNet 'server' which routes messages between each FakeNUClearNetClient.
  *
  * All messages are 'reliable' in that nothing is intentially dropped.
- * Targetted messages are supported.
+ * Targeted messages are supported.
  */
 export class FakeNUClearNetServer {
   private events: EventEmitter
@@ -56,23 +57,33 @@ export class FakeNUClearNetServer {
   }
 
   public send(client: FakeNUClearNetClient, opts: NUClearNetSend) {
-    if (typeof opts.type === 'string') {
-      const packet = {
-        peer: client.peer,
-        payload: opts.payload,
-      }
+    const hash: Buffer = typeof opts.type === 'string' ? hashType(opts.type) : opts.type
+    const packet = {
+      peer: client.peer,
+      type: typeof opts.type === 'string' ? opts.type : undefined,
+      hash,
+      payload: opts.payload,
+      reliable: !!opts.reliable,
+    }
 
-      /*
-       * This list intentially includes the sender unless explicitly targeting another peer. This matches the real
-       * NUClearNet behaviour.
-       */
-      const targetClients = opts.target === undefined
-        ? this.clients
-        : this.clients.filter(otherClient => otherClient.peer.name === opts.target)
+    /*
+     * This list intentionally includes the sender unless explicitly targeting another peer. This matches the real
+     * NUClearNet behaviour.
+     */
+    const targetClients = opts.target === undefined
+      ? this.clients
+      : this.clients.filter(otherClient => otherClient.peer.name === opts.target)
 
-      for (const client of targetClients) {
-        client.fakePacket(opts.type, packet)
-      }
+    const hashString = hash.toString('hex')
+    for (const client of targetClients) {
+      client.fakePacket(hashString, packet)
     }
   }
+}
+
+export function hashType(type: string): Buffer {
+  // Matches hashing implementation from NUClearNet
+  // See https://goo.gl/6NDPo2
+  const hashString: string = XXH.h64(type, 0x4e55436c).toString(16)
+  return Buffer.from((hashString.match(/../g) as string[]).reverse().join(''), 'hex')
 }

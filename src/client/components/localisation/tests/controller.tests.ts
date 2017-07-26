@@ -1,3 +1,5 @@
+import { createMockInstance } from '../../../../shared/base/testing/create_mock_instance'
+import { AppModel } from '../../app/model'
 import { LocalisationController } from '../controller'
 import { LocalisationModel } from '../model'
 import { ViewMode } from '../model'
@@ -7,7 +9,7 @@ describe('LocalisationController', () => {
   let model: LocalisationModel
 
   beforeEach(() => {
-    model = LocalisationModel.of()
+    model = LocalisationModel.of(createMockInstance(AppModel))
     controller = new LocalisationController()
   })
 
@@ -17,7 +19,7 @@ describe('LocalisationController', () => {
     })
 
     it('resets yaw to 0', () => {
-      expect(model.camera.yaw).toEqual(0)
+      expect(model.camera.yaw).toEqual(Math.PI / 2)
     })
 
     it('resets pitch to looking vertically down', () => {
@@ -25,7 +27,7 @@ describe('LocalisationController', () => {
     })
 
     it('moves camera above the field', () => {
-      expect(model.camera.position).toEqual({ x: 0, y: 5, z: 0 })
+      expect(model.camera.position).toEqual({ x: 0, y: 0, z: 5 })
     })
 
     it('resets viewing mode to no clip', () => {

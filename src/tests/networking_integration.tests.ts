@@ -1,3 +1,4 @@
+import { AppModel } from '../client/components/app/model'
 import { MessageTypePath } from '../client/network/message_type_names'
 import { Network } from '../client/network/network'
 import { NUsightNetwork } from '../client/network/nusight_network'
@@ -5,16 +6,18 @@ import { FakeNUClearNetClient } from '../server/nuclearnet/fake_nuclearnet_clien
 import { FakeNUClearNetServer } from '../server/nuclearnet/fake_nuclearnet_server'
 import { NodeSystemClock } from '../server/time/node_clock'
 import { message } from '../shared/proto/messages'
-import { RobotSimulator } from '../simulators/robot_simulator'
+import { VirtualRobots } from '../simulators/virtual_robots'
+import { VirtualRobot } from '../simulators/virtual_robot'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import Sensors = message.input.Sensors
 import VisionObject = message.vision.VisionObject
 import Overview = message.support.nubugger.Overview
+import { AppNetwork } from '../client/components/app/network'
 
 describe('Networking Integration', () => {
   let nuclearnetServer: FakeNUClearNetServer
   let nusightNetwork: NUsightNetwork
-  let robotSimulator: RobotSimulator
+  let virtualRobots: VirtualRobots
   let disconnectNusightNetwork: () => void
 
   beforeEach(() => {
@@ -22,23 +25,31 @@ describe('Networking Integration', () => {
     nusightNetwork = createNUsightNetwork()
     disconnectNusightNetwork = nusightNetwork.connect({ name: 'nusight' })
 
-    robotSimulator = new RobotSimulator(
-      new FakeNUClearNetClient(nuclearnetServer),
-      NodeSystemClock,
-      {
-        name: 'Robot #1',
-        simulators: [
-          // TODO (Annable): Add vision and overview simulators when they exist
-          new SensorDataSimulator(),
-        ],
-      },
-    )
+    virtualRobots = new VirtualRobots({
+      robots: [
+        new VirtualRobot(
+          new FakeNUClearNetClient(nuclearnetServer),
+          NodeSystemClock,
+          {
+            name: 'Robot #1',
+            simulators: [
+              // TODO (Annable): Add vision and overview simulators when they exist
+              new SensorDataSimulator(),
+            ],
+          },
+        ),
+      ],
+    })
+    virtualRobots.connect()
   })
 
   function createNUsightNetwork() {
+    const appModel = AppModel.of()
     const nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
     const messageTypePath = new MessageTypePath()
-    return new NUsightNetwork(nuclearnetClient, messageTypePath)
+    const nusightNetwork =  new NUsightNetwork(nuclearnetClient, appModel, messageTypePath)
+    AppNetwork.of(nusightNetwork, appModel)
+    return nusightNetwork
   }
 
   describe('a single networked component', () => {
@@ -52,9 +63,9 @@ describe('Networking Integration', () => {
       const onSensors = jest.fn()
       network.on(Sensors, onSensors)
 
-      robotSimulator.simulate()
+      virtualRobots.simulate()
 
-      expect(onSensors).toHaveBeenCalledWith(expect.any(Sensors))
+      expect(onSensors).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
       expect(onSensors).toHaveBeenCalledTimes(1)
     })
 
@@ -66,7 +77,7 @@ describe('Networking Integration', () => {
 
       network.off()
 
-      robotSimulator.simulate()
+      virtualRobots.simulate()
 
       expect(onSensors1).not.toHaveBeenCalled()
       expect(onSensors2).not.toHaveBeenCalled()
@@ -80,10 +91,10 @@ describe('Networking Integration', () => {
 
       off1()
 
-      robotSimulator.simulate()
+      virtualRobots.simulate()
 
       expect(onSensors1).not.toHaveBeenCalled()
-      expect(onSensors2).toHaveBeenCalledWith(expect.any(Sensors))
+      expect(onSensors2).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
     })
   })
 
@@ -102,9 +113,9 @@ describe('Networking Integration', () => {
 
       nusightNetwork.connect({ name: 'nusight' })
 
-      robotSimulator.simulate()
+      virtualRobots.simulate()
 
-      expect(onSensors).toHaveBeenCalledWith(expect.any(Sensors))
+      expect(onSensors).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
     })
 
     it('handles multiple sessions simutaneously', () => {
@@ -118,10 +129,10 @@ describe('Networking Integration', () => {
       const onSensors2 = jest.fn()
       network2.on(Sensors, onSensors2)
 
-      robotSimulator.simulate()
+      virtualRobots.simulate()
 
-      expect(onSensors1).toHaveBeenCalledWith(expect.any(Sensors))
-      expect(onSensors2).toHaveBeenCalledWith(expect.any(Sensors))
+      expect(onSensors1).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
+      expect(onSensors2).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
     })
   })
 
@@ -140,7 +151,7 @@ describe('Networking Integration', () => {
       const onSensors = jest.fn()
       localisationNetwork.on(Sensors, onSensors)
 
-      robotSimulator.simulate()
+      virtualRobots.simulate()
 
       expect(onSensors).toHaveBeenCalledTimes(1)
 
@@ -149,7 +160,7 @@ describe('Networking Integration', () => {
       const onVisionObject = jest.fn()
       visionNetwork.on(VisionObject, onVisionObject)
 
-      robotSimulator.simulate()
+      virtualRobots.simulate()
 
       expect(onVisionObject).toHaveBeenCalledTimes(0)
       expect(onSensors).toHaveBeenCalledTimes(1)

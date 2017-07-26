@@ -34,7 +34,8 @@ export class LocalisationViewModel {
   public get camera(): PerspectiveCamera {
     const camera = new PerspectiveCamera(75, this.model.aspect, 0.01, 100)
     camera.position.set(this.model.camera.position.x, this.model.camera.position.y, this.model.camera.position.z)
-    camera.rotation.set(this.model.camera.pitch, this.model.camera.yaw, 0, 'YXZ')
+    camera.rotation.set(Math.PI / 2 + this.model.camera.pitch, 0, -Math.PI / 2 + this.model.camera.yaw, 'ZXY')
+    camera.up.set(0, 0, 1)
     return camera
   }
 
@@ -45,7 +46,9 @@ export class LocalisationViewModel {
 
   @computed
   private get robots(): Object3D[] {
-    return this.model.robots.map(robotModel => RobotViewModel.of(robotModel).robot)
+    return this.model.robots
+      .filter(robotModel => robotModel.visible)
+      .map(robotModel => RobotViewModel.of(robotModel).robot)
   }
 
   @computed

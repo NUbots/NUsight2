@@ -1,10 +1,12 @@
 import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
+import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { WebSocketClient } from './web_socket_client'
-import SocketIOSocket = SocketIOClient.Socket
+
+type PacketListener = (packet: NUClearNetPacket, ack?: () => void) => void
 
 /**
  * A client-side interface for interacting with NUClearNet. Allows a browser to connect transparently connect to
@@ -17,7 +19,7 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
   // Store all listeners so that we can restore them after a socket disconnection/reconnection.
   private joinListeners: Set<NUClearEventListener>
   private leaveListeners: Set<NUClearEventListener>
-  private packetListeners: Map<string, Set<{ requestToken: string, listener: NUClearPacketListener }>>
+  private packetListeners: Map<string, Set<{ requestToken: string, listener: PacketListener }>>
 
   public constructor(private socket: WebSocketClient) {
     this.nextRequestToken = 0
@@ -27,17 +29,18 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
   }
 
   public static of() {
-    return new WebSocketProxyNUClearNetClient(WebSocketClient.of())
+    const uri = `${document.location.origin}/nuclearnet`
+    return new WebSocketProxyNUClearNetClient(WebSocketClient.of(uri, {
+      upgrade: false,
+      transports: ['websocket'],
+    }))
   }
 
   public connect(options: NUClearNetOptions): () => void {
-    this.socket.connect(`${document.location.origin}/nuclearnet`, {
-      upgrade: false,
-      transports: ['websocket'],
-    })
-
+    this.socket.connect()
     this.socket.on('reconnect', this.onReconnect.bind(this, options))
     this.socket.send('nuclear_connect', options)
+
 
     return () => {
       this.socket.send('nuclear_disconnect')
@@ -63,7 +66,7 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
     }
   }
 
-  public on(event: string, listener: NUClearPacketListener): () => void {
+  public on(event: string, cb: NUClearPacketListener): () => void {
     /*
      * This one is a bit more complicated than the others, mostly for performance purposes.
      *
@@ -80,6 +83,12 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
      */
     const requestToken = String(this.nextRequestToken++)
     this.socket.send('listen', event, requestToken)
+    const listener = (packet: NUClearNetPacket, ack?: () => void) => {
+      cb(packet)
+      if (ack) {
+        ack()
+      }
+    }
     this.socket.on(event, listener)
 
     let packetListeners = this.packetListeners.get(event)
@@ -99,6 +108,10 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
         packetListeners.delete(packetListener)
       }
     }
+  }
+
+  public onPacket(cb: NUClearPacketListener): () => void {
+    return this.on('nuclear_packet', cb)
   }
 
   public send(options: NUClearNetSend): void {

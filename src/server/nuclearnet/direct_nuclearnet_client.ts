@@ -1,6 +1,7 @@
 import { NUClearNet } from 'nuclearnet.js'
 import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
+import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
@@ -35,6 +36,10 @@ export class DirectNUClearNetClient implements NUClearNetClient {
   public on(event: string, cb: NUClearPacketListener): () => void {
     this.nuclearNetwork.on(event, cb)
     return () => this.nuclearNetwork.removeListener(event, cb)
+  }
+
+  public onPacket(cb: NUClearPacketListener): () => void {
+    return this.on('nuclear_packet', cb)
   }
 
   public send(options: NUClearNetSend): void {

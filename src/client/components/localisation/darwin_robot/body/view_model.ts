@@ -6,16 +6,16 @@ import { geometryAndMaterial } from '../../utils'
 import { HeadViewModel } from '../head/view_model'
 import { LeftArmViewModel } from '../left_arm/view_model'
 import { LeftLegViewModel } from '../left_leg/view_model'
-import { RobotModel } from '../model'
+import { LocalisationRobotModel } from '../model'
 import { RightArmViewModel } from '../right_arm/view_model'
 import { RightLegViewModel } from '../right_leg/view_model'
 import * as BodyConfig from './config/body.json'
 
 export class BodyViewModel {
-  public constructor(private model: RobotModel) {
+  public constructor(private model: LocalisationRobotModel) {
   }
 
-  public static of = createTransformer((model: RobotModel): BodyViewModel => {
+  public static of = createTransformer((model: LocalisationRobotModel): BodyViewModel => {
     return new BodyViewModel(model)
   })
 
@@ -23,12 +23,14 @@ export class BodyViewModel {
   public get body(): Mesh {
     const { geometry, materials } = this.bodyGeometryAndMaterial
     const mesh = new Mesh(geometry, new MultiMaterial(materials))
-    mesh.position.set(0, 0.096, 0)
+    mesh.position.set(0, 0, 0.096)
     mesh.add(this.head)
     mesh.add(this.leftArm)
     mesh.add(this.rightArm)
     mesh.add(this.leftLeg)
     mesh.add(this.rightLeg)
+    mesh.rotation.x = Math.PI / 2
+    mesh.rotation.y = Math.PI / 2
     return mesh
   }
 

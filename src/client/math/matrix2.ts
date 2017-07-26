@@ -13,7 +13,7 @@ export class Matrix2 {
   }
 
   public static of() {
-    return new Matrix2(new Vector2(0, 0), new Vector2(0, 0))
+    return new Matrix2(new Vector2(1, 0), new Vector2(0, 1))
   }
 
   public static from(mat?: {
@@ -24,6 +24,10 @@ export class Matrix2 {
       mat = { x: { x:0, y:0 }, y: { x:0, y:0 } }
     }
     return new Matrix2(Vector2.from(mat.x), Vector2.from(mat.y))
+  }
+
+  @computed get trace(): number {
+    return this.x.x + this.y.y
   }
 
   @action
@@ -39,9 +43,9 @@ export class Matrix2 {
   }
 
   @action
-  public copy(v: Matrix2): Matrix2 {
-    this.x = v.x
-    this.y = v.y
+  public copy(m: Matrix2): Matrix2 {
+    this.x = m.x
+    this.y = m.y
     return this
   }
 
@@ -71,9 +75,5 @@ export class Matrix2 {
     this.x.subtract(movement.x)
     this.y.subtract(movement.y)
     return this
-  }
-
-  @computed get trace(): number {
-    return this.x.x + this.y.y
   }
 }

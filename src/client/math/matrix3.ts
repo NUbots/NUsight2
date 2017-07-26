@@ -15,7 +15,7 @@ export class Matrix3 {
   }
 
   public static of() {
-    return new Matrix3(new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(0, 0, 0))
+    return new Matrix3(new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1))
   }
 
   public static from(mat?: {
@@ -27,6 +27,10 @@ export class Matrix3 {
       mat = { x: { x:0, y:0, z:0 }, y: { x:0, y:0, z:0 }, z: { x:0, y:0, z:0 } }
     }
     return new Matrix3(Vector3.from(mat.x), Vector3.from(mat.y), Vector3.from(mat.z))
+  }
+
+  @computed get trace(): number {
+    return this.x.x + this.y.y + this.z.z
   }
 
   @action
@@ -43,10 +47,10 @@ export class Matrix3 {
   }
 
   @action
-  public copy(v: Matrix3): Matrix3 {
-    this.x = v.x
-    this.y = v.y
-    this.z = v.z
+  public copy(m: Matrix3): Matrix3 {
+    this.x = m.x
+    this.y = m.y
+    this.z = m.z
     return this
   }
 
@@ -80,9 +84,5 @@ export class Matrix3 {
     this.y.subtract(movement.y)
     this.z.subtract(movement.z)
     return this
-  }
-
-  @computed get trace(): number {
-    return this.x.x + this.y.y + this.z.z
   }
 }

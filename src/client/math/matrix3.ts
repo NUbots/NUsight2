@@ -48,9 +48,9 @@ export class Matrix3 {
 
   @action
   public copy(m: Matrix3): Matrix3 {
-    this.x = m.x
-    this.y = m.y
-    this.z = m.z
+    this.x.copy(m.x)
+    this.y.copy(m.y)
+    this.z.copy(m.z)
     return this
   }
 }

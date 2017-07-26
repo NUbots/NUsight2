@@ -17,9 +17,9 @@ export class Matrix2 {
   }
 
   public static from(mat?: {
-      x?: { x?: number, y?: number },
-      y?: { x?: number, y?: number },
-    } | null): Matrix2 {
+    x?: { x?: number, y?: number },
+    y?: { x?: number, y?: number }
+  } | null): Matrix2 {
     if (!mat) {
       mat = { x: { x:0, y:0, z:0 }, y: { x:0, y:0, z:0 }, z: { x:0, y:0, z:0 } }
     }

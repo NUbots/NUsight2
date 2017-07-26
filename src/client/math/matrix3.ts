@@ -19,10 +19,10 @@ export class Matrix3 {
   }
 
   public static from(mat?: {
-      x?: { x?: number, y?: number, z? :number },
-      y?: { x?: number, y?: number, z? :number },
-      z?: { x?: number, y?: number, z? :number },
-    } | null): Matrix3 {
+    x?: { x?: number, y?: number, z? :number },
+    y?: { x?: number, y?: number, z? :number },
+    z?: { x?: number, y?: number, z? :number }
+  } | null): Matrix3 {
     if (!mat) {
       mat = { x: { x:0, y:0, z:0 }, y: { x:0, y:0, z:0 }, z: { x:0, y:0, z:0 } }
     }

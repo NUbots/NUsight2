@@ -70,18 +70,20 @@ export class DashboardRobotModel {
   @observable public walkPathPlan: Vector2[]
   @observable public walkCommand: Vector3
 
-  constructor(robot: RobotModel, opts: DashboardRobotModel) {
+  constructor(robot: RobotModel, opts: DashboardRobotModelOpts) {
     this.robot = robot
     Object.assign(this, opts)
   }
 
   public static of = memoize((robot: RobotModel): DashboardRobotModel => {
     return new DashboardRobotModel(robot, {
-      battery: -1,
       ballColor: '#ff9800',
+      ballCovariance: Matrix2.of(),
       ballPosition: Vector2.of(),
       ballSightColor: '#4DB6AC',
+      battery: -1,
       behaviourState: State.UNKNOWN,
+      camera: Transform.of(),
       gameMode: Mode.UNKNOWN_MODE,
       gamePhase: Phase.UNKNOWN_PHASE,
       id: -1,
@@ -94,9 +96,13 @@ export class DashboardRobotModel {
       robotBorderColor: 'transparent',
       robotColor: '#015457',
       robotPosition: Vector3.of(),
+      robotPositionCovariance: Matrix3.of(),
+      roleName: '',
       textColor: '#fff',
       time: Date.now() / 1000,
       voltage: -1,
+      walkCommand: Vector3.of(),
+      walkPathPlan: [],
     })
   })
 
@@ -109,4 +115,33 @@ export class DashboardRobotModel {
   public get visible(): boolean {
     return this.robot.enabled
   }
+}
+
+interface DashboardRobotModelOpts {
+  camera: Transform
+  ballColor: string
+  ballSightColor: string
+  kickTargetColor: string
+  robotBorderColor: string
+  robotColor: string
+  textColor: string
+  time: number
+  id: number
+  roleName: string
+  battery: number
+  voltage: number
+  behaviourState: State
+  robotPosition: Vector3 // x, y, theta
+  robotPositionCovariance: Matrix3
+  ballPosition: Vector2
+  ballCovariance: Matrix2
+  kickTarget: Vector2
+  gameMode: Mode
+  gamePhase: Phase
+  penaltyReason: PenaltyReason
+  lastCameraImage: number
+  lastSeenBall: number
+  lastSeenGoal: number
+  walkPathPlan: Vector2[]
+  walkCommand: Vector3
 }

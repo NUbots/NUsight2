@@ -66,7 +66,7 @@ export class OverviewSimulator implements Simulator {
       lastCameraImage: { seconds: this.randomSeconds(time, -5) },
       lastSeenBall: { seconds: this.randomSeconds(time, -30) },
       lastSeenGoal: { seconds: this.randomSeconds(time, -30) },
-      pathPlan: [
+      walkPathPlan: [
         robotPosition,
         this.randomFieldPosition(),
         this.randomFieldPosition(),

@@ -13,7 +13,12 @@ export class VisionViewModel {
 
   @computed
   public get robots(): RobotViewModel[] {
-    return this.model.visibleRobots.map(robot => RobotViewModel.of(robot))
+    return this.visibleRobots.map(robot => RobotViewModel.of(robot))
+  }
+
+  @computed
+  private get visibleRobots(): VisionRobotModel[] {
+    return this.model.robots.filter(robot => robot.visible)
   }
 }
 

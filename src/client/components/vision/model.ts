@@ -15,11 +15,6 @@ export class VisionModel {
   public get robots(): VisionRobotModel[] {
     return this.appModel.robots.map(robot => VisionRobotModel.of(robot))
   }
-
-  @computed
-  public get visibleRobots() {
-    return this.robots.filter(robot => robot.visible)
-  }
 }
 
 export class VisionRobotModel {

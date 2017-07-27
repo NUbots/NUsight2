@@ -1,0 +1,13 @@
+.robot {
+  margin: 6px;
+  border: 1px solid red;
+  text-align: center;
+}
+
+.canvases {
+  position: relative;
+}
+
+.canvas:not(:last-child) {
+  position: absolute;
+}

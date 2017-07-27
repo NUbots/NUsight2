@@ -10,8 +10,9 @@ import { AppNetwork } from './components/app/network'
 import { AppView } from './components/app/view'
 import { Chart } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
-import { Field } from './components/dashboard/field/view'
+import { DashboardController } from './components/dashboard/controller'
 import { FieldController } from './components/dashboard/field/controller'
+import { Field } from './components/dashboard/field/view'
 import { DashboardModel } from './components/dashboard/model'
 import { DashboardNetwork } from './components/dashboard/network'
 import { Dashboard } from './components/dashboard/view'
@@ -24,9 +25,9 @@ import { withRobotSelectorMenuBar } from './components/menu_bar/view'
 import { NUClear } from './components/nuclear/view'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
-import { Vision } from './components/vision/view'
+import { VisionModel } from './components/vision/model'
+import { VisionView } from './components/vision/view'
 import { NUsightNetwork } from './network/nusight_network'
-import { DashboardController } from './components/dashboard/controller'
 
 // enable MobX strict mode
 useStrict(true)
@@ -37,6 +38,7 @@ nusightNetwork.connect({ name: 'nusight' })
 
 const localisationModel = LocalisationModel.of(appModel)
 const dashboardModel = DashboardModel.of(appModel.robots)
+const visionModel = VisionModel.of(appModel)
 
 const appController = AppController.of()
 AppNetwork.of(nusightNetwork, appModel)
@@ -48,10 +50,10 @@ ReactDOM.render(
       <Switch>
         <Route exact path='/' render={() => {
           const model = dashboardModel
-          const field = () => <Field controller={FieldController.of()} model={model.field} />
+          const field = () => <Field controller={FieldController.of()} model={model.field}/>
           const network = DashboardNetwork.of(nusightNetwork)
           const controller = DashboardController.of()
-          return <Dashboard controller={controller} Field={field} menu={menu} model={model} network={network} />
+          return <Dashboard controller={controller} Field={field} menu={menu} model={model} network={network}/>
         }}/>
         <Route path='/localisation' render={() => {
           const model = localisationModel
@@ -59,7 +61,9 @@ ReactDOM.render(
           const network = LocalisationNetwork.of(nusightNetwork, model)
           return <LocalisationView controller={controller} menu={menu} model={model} network={network}/>
         }}/>
-        <Route path='/vision' component={Vision}/>
+        <Route path='/vision' component={() => {
+          return <VisionView model={visionModel}/>
+        }}/>
         <Route path='/chart' component={Chart}/>
         <Route path='/scatter' component={Scatter}/>
         <Route path='/nuclear' component={NUClear}/>

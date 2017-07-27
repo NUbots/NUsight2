@@ -32,14 +32,15 @@ export class RobotViewModel {
 
   @computed
   public get layers(): LayerViewModel[] {
+    // Layers should be ordered from top-to-bottom.
     return [
       this.visionObjectsLayer,
-      this.imageLayer,
+      this.cameraImageLayer,
     ]
   }
 
   @computed
-  public get imageLayer(): LayerViewModel {
+  public get cameraImageLayer(): LayerViewModel {
     return {
       type: 'webgl',
       children: [

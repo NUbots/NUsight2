@@ -68,7 +68,8 @@ export class VisionView extends Component<Props> {
         const canvas = this.canvases.get(this.hash(robot, layerIndex))
         if (canvas) {
           if (layer.type === '2d') {
-            // TODO: Use the canvas engine used by dashboard.
+            // TODO: Construct canvas 2d scene in view model, compatible with the canvas engine used by dashboard.
+            // TODO: Render using the canvas engine used by dashboard.
             const ctx = canvas.getContext('2d')
             if (ctx) {
               ctx.beginPath()
@@ -77,7 +78,8 @@ export class VisionView extends Component<Props> {
               ctx.fill()
             }
           } else if (layer.type === 'webgl') {
-            // TODO: Do this properly, somehow.
+            // TODO: Put the scene construction into the view model, similar to localisation.
+            // TODO: Use a ShaderMaterial to render the camera image.
             const renderer = new THREE.WebGLRenderer({ canvas })
             const scene = new THREE.Scene()
             const geometry = new THREE.BoxGeometry(1, 1, 1)
@@ -94,7 +96,7 @@ export class VisionView extends Component<Props> {
     })
   }
 
-  // TODO: Find an alternative approach for mapping an unique identifier for each canvas.
+  // TODO: Find an alternative approach for mapping a unique identifier for each canvas.
   private hash(robot: RobotViewModel, index: number) {
     return `${robot.name}:${index}}`
   }

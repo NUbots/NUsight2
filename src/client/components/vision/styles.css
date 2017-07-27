@@ -1,3 +1,5 @@
+/* TODO: Style this nicely :) */
+
 .robot {
   margin: 6px;
   border: 1px solid red;
@@ -8,6 +10,11 @@
   position: relative;
 }
 
+/*
+ * The :not(:last-child) selector ensures at least 1 canvas element takes up DOM space. This might not be needed when
+ * auto-sizing is added.
+ */
 .canvas:not(:last-child) {
+  /* Float canvas layer on top. */
   position: absolute;
 }

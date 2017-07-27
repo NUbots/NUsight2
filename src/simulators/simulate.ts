@@ -1,4 +1,5 @@
 import * as minimist from 'minimist'
+import { ChartSimulator } from './chart_simulator'
 import { OverviewSimulator } from './overview_simulator'
 import { SensorDataSimulator } from './sensor_data_simulator'
 import { Simulator } from './simulator'
@@ -18,11 +19,14 @@ function main() {
 
 function getSimulators(args: minimist.ParsedArgs): Simulator[] {
   const simulators = []
-  if (args.sensors || args.all) {
-    simulators.push(SensorDataSimulator.of())
+  if (args.chart || args.all) {
+    simulators.push(ChartSimulator.of())
   }
   if (args.overview || args.all) {
     simulators.push(OverviewSimulator.of())
+  }
+  if (args.sensors || args.all) {
+    simulators.push(SensorDataSimulator.of())
   }
   if (simulators.length === 0) {
     // If no simulators given, enable them all.

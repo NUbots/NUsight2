@@ -71,9 +71,9 @@ export class OverviewSimulator implements Simulator {
       lastSeenBall: { seconds: this.randomSeconds(time, -30) },
       lastSeenGoal: { seconds: this.randomSeconds(time, -30) },
       walkCommand: {
-        x: 0.1 * Math.cos(time / 3 + index),
-        y: 0.1 * Math.cos(time / 5 + index),
-        z: 0.1 * Math.cos(time / 7 + index),
+        x: Math.cos(time / 3 + index),
+        y: Math.cos(time / 5 + index),
+        z: Math.cos(time / 7 + index),
       },
       walkPathPlan: [
         robotPosition,

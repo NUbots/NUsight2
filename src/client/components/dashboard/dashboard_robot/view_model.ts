@@ -62,7 +62,7 @@ export class DashboardRobotViewModel {
 
   @computed
   private get walkCommand() {
-    const t = 10
+    const t = 2
     const translation = Vector2.from(this.model.walkCommand)
     const rotation = this.model.walkCommand.z
     const radius = translation.length / Math.abs(rotation)

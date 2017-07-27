@@ -63,7 +63,7 @@ function init() {
         SensorDataSimulator.of(),
       ],
     })
-    virtualRobots.simulateWithFrequency(1)
+    virtualRobots.simulateWithFrequency(60)
   }
 }
 

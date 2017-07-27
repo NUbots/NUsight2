@@ -94,7 +94,7 @@ export class VisionView extends Component<Props> {
     })
   }
 
-  // TODO: Find an alternative approach for mapping an unique identifier for each the canvas.
+  // TODO: Find an alternative approach for mapping an unique identifier for each canvas.
   private hash(robot: RobotViewModel, index: number) {
     return `${robot.name}:${index}}`
   }

@@ -9,9 +9,9 @@ import { message } from '../shared/proto/messages'
 import { OverviewSimulator } from '../simulators/overview_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import { VirtualRobots } from '../simulators/virtual_robots'
+import { VisionSimulator } from '../simulators/vision_simulator'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
-import Overview = message.support.nubugger.Overview
 
 const args = minimist(process.argv.slice(2))
 const withSimulators = args['with-simulators'] || false
@@ -39,6 +39,7 @@ if (withSimulators) {
     simulators: [
       SensorDataSimulator.of(),
       OverviewSimulator.of(),
+      VisionSimulator.of(),
     ],
   })
   virtualRobots.simulateWithFrequency(60)

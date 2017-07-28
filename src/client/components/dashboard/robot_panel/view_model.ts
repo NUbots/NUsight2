@@ -18,6 +18,10 @@ export class RobotPanelViewModel {
     return new RobotPanelViewModel(model)
   })
 
+  @computed get connected(): boolean {
+    return this.model.connected
+  }
+
   @computed
   public get batteryValue(): string {
     const battery = this.model.battery

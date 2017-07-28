@@ -2,6 +2,7 @@ import { observable } from 'mobx'
 
 export class RobotModel {
   @observable public connected: boolean
+  @observable public lastDisconnectedTimestamp: number
   @observable public enabled: boolean
   @observable public name: string
   @observable public address: string

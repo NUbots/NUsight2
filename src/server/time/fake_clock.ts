@@ -1,4 +1,4 @@
-import { Clock } from './clock'
+import { Clock } from '../../shared/base/clock'
 
 type Task = {
   id: number

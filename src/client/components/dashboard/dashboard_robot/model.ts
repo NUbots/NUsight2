@@ -113,11 +113,6 @@ export class DashboardRobotModel {
   }
 
   @computed
-  public get lastDisconnectedTimestamp(): number {
-    return this.robot.lastDisconnectedTimestamp
-  }
-
-  @computed
   public get name(): string {
     return this.robot.name
   }

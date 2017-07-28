@@ -8,14 +8,13 @@ import { BrowserSystemClock } from '../../base/browser_clock'
 
 export class AppNetwork {
   public constructor(private nusightNetwork: NUsightNetwork,
-                     private clock: Clock,
                      private model: AppModel) {
     nusightNetwork.onNUClearJoin(this.onJoin)
     nusightNetwork.onNUClearLeave(this.onLeave)
   }
 
   public static of(nusightNetwork: NUsightNetwork, model: AppModel) {
-    return new AppNetwork(nusightNetwork, BrowserSystemClock, model)
+    return new AppNetwork(nusightNetwork, model)
   }
 
   @action
@@ -36,7 +35,6 @@ export class AppNetwork {
         address: peer.address,
         port: peer.port,
         connected: true,
-        lastDisconnectedTimestamp: 0,
         enabled: true, // TODO (Annable): Only automatically enable robots that have connected shortly after load.
       }))
     }
@@ -53,7 +51,6 @@ export class AppNetwork {
     })
     if (robot) {
       robot.connected = false
-      robot.lastDisconnectedTimestamp = this.clock.now()
     }
   }
 

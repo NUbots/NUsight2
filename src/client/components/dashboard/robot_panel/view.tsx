@@ -46,7 +46,7 @@ export const RobotPanel = (props: RobotPanelProps) => {
     <div>
       <header className={style.header}>
         <div className={style.statusBar}>
-          <span className={connectionStatusClassName} title={props.connected ? 'Connected' : 'Disconnect'}/>
+          <span className={connectionStatusClassName} title={props.connected ? 'Connected' : 'Disconnected'}/>
           <span className={style.title}>
             {props.title}
           </span>

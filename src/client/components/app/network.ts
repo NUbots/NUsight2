@@ -3,8 +3,6 @@ import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
 import { AppModel } from './model'
-import { Clock } from '../../../shared/base/clock'
-import { BrowserSystemClock } from '../../base/browser_clock'
 
 export class AppNetwork {
   public constructor(private nusightNetwork: NUsightNetwork,

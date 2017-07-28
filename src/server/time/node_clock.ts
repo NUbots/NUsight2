@@ -1,4 +1,4 @@
-import { Clock } from '../../shared/base/clock'
+import { Clock } from './clock'
 
 export type CancelTimer = () => void
 

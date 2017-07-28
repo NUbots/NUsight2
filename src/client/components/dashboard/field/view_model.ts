@@ -18,6 +18,7 @@ export class FieldViewModel {
   public get scene(): Group {
     return Group.of({
       transform: Transform.of({
+        // TODO (Annable): move camera to the view model and put this transform there.
         rotate: this.model.flipped ? Math.PI : 0,
       }),
       children: [

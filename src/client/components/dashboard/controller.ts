@@ -7,7 +7,7 @@ export class DashboardController {
   }
 
   @action
-  public toggleFlipped(model: DashboardModel) {
-    model.field.flipped = !model.field.flipped
+  public toggleOrientation(model: DashboardModel) {
+    model.field.orientation = model.field.orientation === 'left' ? 'right' : 'left'
   }
 }

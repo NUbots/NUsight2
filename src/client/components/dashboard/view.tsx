@@ -32,7 +32,7 @@ export class Dashboard extends Component<DashboardProps> {
         <Menu>
           <ul className={style.menu}>
               <li className={style.menuItem}>
-                <button className={style.menuButton} onClick={this.onFlipClick}>Flip</button>
+                <button className={style.menuButton} onClick={this.onToggleOrientationClick}>Flip Orientation</button>
               </li>
           </ul>
         </Menu>
@@ -70,8 +70,8 @@ export class Dashboard extends Component<DashboardProps> {
     )
   }
 
-  private onFlipClick = () => {
+  private onToggleOrientationClick = () => {
     const { controller, model } = this.props
-    controller.toggleFlipped(model)
+    controller.toggleOrientation(model)
   }
 }

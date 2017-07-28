@@ -19,7 +19,7 @@ export class FieldViewModel {
     return Group.of({
       transform: Transform.of({
         // TODO (Annable): move camera to the view model and put this transform there.
-        rotate: this.model.flipped ? Math.PI : 0,
+        rotate: this.model.orientation === 'left' ? Math.PI : 0,
       }),
       children: [
         this.ground,

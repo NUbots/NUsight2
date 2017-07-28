@@ -10,9 +10,13 @@ import { VisionModel } from './model'
 import * as styles from './styles.css'
 import { VisionViewModel } from './view_model'
 import { RobotViewModel } from './view_model'
+import { VisionNetwork } from './network'
+import { CanvasRenderer } from '../../canvas/renderer'
+import { Transform } from '../../math/transform'
 
 type Props = {
   model: VisionModel
+  network: VisionNetwork
 }
 
 @observer
@@ -32,6 +36,7 @@ export class VisionView extends Component<Props> {
 
   public componentWillUnmount() {
     this.stopRendering()
+    this.props.network.destroy()
   }
 
   public render() {
@@ -68,14 +73,12 @@ export class VisionView extends Component<Props> {
         const canvas = this.canvases.get(this.hash(robot, layerIndex))
         if (canvas) {
           if (layer.type === '2d') {
-            // TODO: Construct canvas 2d scene in view model, compatible with the canvas engine used by dashboard.
-            // TODO: Render using the canvas engine used by dashboard.
             const ctx = canvas.getContext('2d')
             if (ctx) {
-              ctx.beginPath()
-              ctx.arc(canvas.clientWidth / 2, canvas.clientHeight / 2, 10, 0, 2 * Math.PI)
-              ctx.fillStyle = 'orange'
-              ctx.fill()
+              const renderer = CanvasRenderer.of(ctx)
+              // TODO: Position camera correctly.
+              const camera = Transform.of({ anticlockwise: false })
+              renderer.render(layer.scene, camera)
             }
           } else if (layer.type === 'webgl') {
             // TODO: Put the scene construction into the view model, similar to localisation.

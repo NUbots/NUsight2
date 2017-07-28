@@ -26,6 +26,7 @@ import { NUClear } from './components/nuclear/view'
 import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { VisionModel } from './components/vision/model'
+import { VisionNetwork } from './components/vision/network'
 import { VisionView } from './components/vision/view'
 import { NUsightNetwork } from './network/nusight_network'
 
@@ -62,7 +63,8 @@ ReactDOM.render(
           return <LocalisationView controller={controller} menu={menu} model={model} network={network}/>
         }}/>
         <Route path='/vision' component={() => {
-          return <VisionView model={visionModel}/>
+          const network = VisionNetwork.of(nusightNetwork)
+          return <VisionView model={visionModel} network={network}/>
         }}/>
         <Route path='/chart' component={Chart}/>
         <Route path='/scatter' component={Scatter}/>

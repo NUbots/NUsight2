@@ -12,6 +12,7 @@ import webpackConfig from '../../webpack.config'
 import { OverviewSimulator } from '../simulators/overview_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import { VirtualRobots } from '../simulators/virtual_robots'
+import { VisionSimulator } from '../simulators/vision_simulator'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
 
@@ -61,9 +62,10 @@ function init() {
       simulators: [
         OverviewSimulator.of(),
         SensorDataSimulator.of(),
+        VisionSimulator.of(),
       ],
     })
-    virtualRobots.simulateWithFrequency(60)
+    virtualRobots.simulateWithFrequency(5)
   }
 }
 

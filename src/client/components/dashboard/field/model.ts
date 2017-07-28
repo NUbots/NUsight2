@@ -7,17 +7,20 @@ import { GroundModel } from '../ground/model'
 
 export type FieldModelOpts = {
   camera: Transform
+  flipped: boolean
   ground: GroundModel
   robots: DashboardRobotModel[]
 }
 
 export class FieldModel {
   @observable public camera: Transform
+  @observable public flipped: boolean
   @observable public ground: GroundModel
   @observable public robots: DashboardRobotModel[]
 
   constructor(opts: FieldModelOpts) {
     this.camera = opts.camera
+    this.flipped = opts.flipped
     this.ground = opts.ground
     this.robots = opts.robots
   }
@@ -25,6 +28,7 @@ export class FieldModel {
   public static of = memoize((robots: DashboardRobotModel[]): FieldModel => {
     return new FieldModel({
       camera: Transform.of({ anticlockwise: false }),
+      flipped: false,
       ground: GroundModel.of(),
       robots,
     })

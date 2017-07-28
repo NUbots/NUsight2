@@ -123,7 +123,7 @@ export class DashboardRobotModel {
   }
 
   @computed
-  public get visible(): boolean {
+  public get enabled(): boolean {
     return this.robot.enabled
   }
 }

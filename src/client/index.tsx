@@ -8,8 +8,11 @@ import { AppController } from './components/app/controller'
 import { AppModel } from './components/app/model'
 import { AppNetwork } from './components/app/network'
 import { AppView } from './components/app/view'
-import { Chart } from './components/chart/view'
+import { ChartModel } from './components/chart/model'
+import { ChartNetwork } from './components/chart/network'
+import { ChartView } from './components/chart/view'
 import { Classifier } from './components/classifier/view'
+import { DashboardController } from './components/dashboard/controller'
 import { Field } from './components/dashboard/field/view'
 import { FieldController } from './components/dashboard/field/controller'
 import { DashboardModel } from './components/dashboard/model'
@@ -26,7 +29,6 @@ import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { NUsightNetwork } from './network/nusight_network'
-import { DashboardController } from './components/dashboard/controller'
 
 // enable MobX strict mode
 useStrict(true)
@@ -35,8 +37,9 @@ const appModel = AppModel.of()
 const nusightNetwork = NUsightNetwork.of(appModel)
 nusightNetwork.connect({ name: 'nusight' })
 
-const localisationModel = LocalisationModel.of(appModel)
+const chartModel = ChartModel.of(appModel.robots)
 const dashboardModel = DashboardModel.of(appModel.robots)
+const localisationModel = LocalisationModel.of(appModel)
 
 const appController = AppController.of()
 AppNetwork.of(nusightNetwork, appModel)
@@ -60,7 +63,11 @@ ReactDOM.render(
           return <LocalisationView controller={controller} menu={menu} model={model} network={network}/>
         }}/>
         <Route path='/vision' component={Vision}/>
-        <Route path='/chart' component={Chart}/>
+        <Route path='/chart' render={() => {
+          const model = chartModel
+          const network = ChartNetwork.of(nusightNetwork)
+          return <ChartView Menu={menu} model={model} network={network}/>
+        }}/>
         <Route path='/scatter' component={Scatter}/>
         <Route path='/nuclear' component={NUClear}/>
         <Route path='/classifier' component={Classifier}/>

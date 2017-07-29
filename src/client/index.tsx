@@ -8,6 +8,8 @@ import { AppController } from './components/app/controller'
 import { AppModel } from './components/app/model'
 import { AppNetwork } from './components/app/network'
 import { AppView } from './components/app/view'
+import { LineChartController } from './components/chart/line_chart/controller'
+import { LineChart } from './components/chart/line_chart/view'
 import { ChartModel } from './components/chart/model'
 import { ChartNetwork } from './components/chart/network'
 import { ChartView } from './components/chart/view'
@@ -54,7 +56,7 @@ ReactDOM.render(
           const field = () => <Field controller={FieldController.of()} model={model.field} />
           const network = DashboardNetwork.of(nusightNetwork)
           const controller = DashboardController.of()
-          return <Dashboard controller={controller} Field={field} menu={menu} model={model} network={network} />
+          return <Dashboard controller={controller} Field={field} Menu={menu} model={model} network={network} />
         }}/>
         <Route path='/localisation' render={() => {
           const model = localisationModel
@@ -65,8 +67,9 @@ ReactDOM.render(
         <Route path='/vision' component={Vision}/>
         <Route path='/chart' render={() => {
           const model = chartModel
+          const lineChart = () => <LineChart controller={LineChartController.of()} model={model.lineChart} />
           const network = ChartNetwork.of(nusightNetwork)
-          return <ChartView Menu={menu} model={model} network={network}/>
+          return <ChartView LineChart={lineChart} Menu={menu} model={model} network={network}/>
         }}/>
         <Route path='/scatter' component={Scatter}/>
         <Route path='/nuclear' component={NUClear}/>

@@ -2,18 +2,21 @@ import { action } from 'mobx'
 import { message } from '../../../shared/proto/messages'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
+import { BrowserSystemClock } from '../../../client/time/browser_clock'
+import { Clock } from '../../../shared/time/clock'
 import { RobotModel } from '../robot/model'
-import { ChartRobotModel } from './model'
+import { ChartRobotModel, SeriesModel } from './model'
 import DataPoint = message.support.nubugger.DataPoint
 
 export class ChartNetwork {
-  public constructor(private network: Network) {
+  public constructor(private clock: Clock,
+                     private network: Network) {
     this.network.on(DataPoint, this.onDataPoint)
   }
 
   public static of(nusightNetwork: NUsightNetwork): ChartNetwork {
     const network = Network.of(nusightNetwork)
-    return new ChartNetwork(network)
+    return new ChartNetwork(BrowserSystemClock, network)
   }
 
   public destroy() {
@@ -24,15 +27,22 @@ export class ChartNetwork {
   private onDataPoint = (robotModel: RobotModel, data: DataPoint) => {
     const robot = ChartRobotModel.of(robotModel)
     const key = data.label
-    const series = robot.series.get(key)
-    const point = {
-      timestamp: Date.now() / 1000,
-      value: data.value
+    const timestamp = this.clock.now()
+    if (!robot.series.get(key)) {
+      robot.series.set(key, data.value.map(() => SeriesModel.of()))
     }
-    if (series) {
-      series.points.push(point)
-    } else {
-      robot.series.set(key, { points: [point] })
-    }
+    const seriesList = robot.series.get(key) as SeriesModel[]
+
+    data.value.forEach((value, index) => {
+      const point = {
+        timestamp,
+        value
+      }
+      const series = seriesList[index]
+      if (!series) {
+        throw new Error('Series dskjjkf')
+      }
+      series.append(point)
+    })
   }
 }

@@ -7,6 +7,7 @@ import { ChartNetwork } from './network'
 import * as style from './style.css'
 
 export type ChartViewProps = {
+  LineChart: ComponentType<{}>
   Menu: ComponentType<{}>
   model: ChartModel
   network: ChartNetwork
@@ -19,11 +20,12 @@ export class ChartView extends Component<ChartViewProps> {
   }
 
   public render() {
-    const { Menu, model } = this.props
+    const { LineChart, Menu } = this.props
     return (
       <div className={style.page}>
         <Menu />
         <div className={style.chart}>
+          <LineChart />
         </div>
       </div>
     )

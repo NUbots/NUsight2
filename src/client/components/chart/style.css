@@ -4,3 +4,7 @@
   width: 100%;
 }
 
+.chart {
+  flex: 1;
+  position: relative;
+}

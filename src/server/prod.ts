@@ -42,16 +42,16 @@ if (withSimulators) {
     ],
   })
   virtualRobots.simulateWithFrequency(60)
+}
 
-  if (recordAll) {
-    console.log('recording all')
-    const controller = RecordingController.of({
-      fakeNetworking: withSimulators,
-    })
-    controller.connect({
-      name: 'nusight',
-    })
-  }
+if (recordAll) {
+  console.log('recording all')
+  const controller = RecordingController.of({
+    fakeNetworking: withSimulators,
+  })
+  controller.connect({
+    name: 'nusight',
+  })
 }
 
 WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {

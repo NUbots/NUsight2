@@ -4,22 +4,21 @@ import { Clock } from '../../shared/time/clock'
 const SecondsToMilliseconds = 1e3
 const MillisecondsToSeconds = 1e-3
 
-function setTimeout(cb: (...args: any[]) => void, seconds: number): CancelTimer {
+function setTimeout(cb: () => void, seconds: number): CancelTimer {
   const handle = window.setTimeout(cb, seconds * SecondsToMilliseconds)
   return window.clearTimeout.bind(undefined, handle)
 }
 
-function setInterval(cb: (...args: any[]) => void, seconds: number): CancelTimer {
+function setInterval(cb: () => void, seconds: number): CancelTimer {
   const handle = window.setInterval(cb, seconds * SecondsToMilliseconds)
   return window.clearInterval.bind(undefined, handle)
 }
 
-function setImmediate(cb: (...args: any[]) => void): CancelTimer {
-  const handle = window.setTimeout(cb, 0)
-  return window.clearTimeout.bind(undefined, handle)
+function nextTick(cb: () => void): void {
+  Promise.resolve().then(cb)
 }
 
-function performanceNow() {
+function performanceNow(): number {
   return window.performance.now() * MillisecondsToSeconds
 }
 
@@ -28,5 +27,5 @@ export const BrowserSystemClock: Clock = {
   performanceNow,
   setTimeout,
   setInterval,
-  setImmediate,
+  nextTick,
 }

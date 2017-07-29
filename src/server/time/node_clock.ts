@@ -1,6 +1,5 @@
-import { Clock } from './clock'
-
-export type CancelTimer = () => void
+import { Clock } from '../../shared/time/clock'
+import { CancelTimer } from '../../shared/time/clock'
 
 function setTimeout(cb: (...args: any[]) => void, seconds: number): CancelTimer {
   const handle = global.setTimeout(cb, seconds * 1e3)
@@ -21,7 +20,6 @@ function performanceNow() {
   const t = process.hrtime()
   return t[0] + t[1] * 1e-9
 }
-
 
 export const NodeSystemClock: Clock = {
   now: () => Date.now() * 1e-3,

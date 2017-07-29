@@ -14,11 +14,17 @@ import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import { VirtualRobots } from '../simulators/virtual_robots'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
+import { NbsRecorderController } from './nbs/nbs_recorder_controller'
+import { NUClearNetClient } from '../shared/nuclearnet/nuclearnet_client'
+import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
+import { DirectNUClearNetClient } from './nuclearnet/direct_nuclearnet_client'
+import { RecordingController } from './recording/controller'
 
 const compiler = webpack(webpackConfig)
 
 const args = minimist(process.argv.slice(2))
 const withSimulators = args['with-simulators'] || false
+const recordAll = args['record-all'] || false
 
 const app = express()
 const server = http.createServer(app)
@@ -64,6 +70,16 @@ function init() {
       ],
     })
     virtualRobots.simulateWithFrequency(60)
+  }
+
+  if (recordAll) {
+    console.log('recording all')
+    const controller = RecordingController.of({
+      fakeNetworking: withSimulators,
+    })
+    controller.connect({
+      name: 'nusight',
+    })
   }
 }
 

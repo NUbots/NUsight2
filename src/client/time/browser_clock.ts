@@ -15,6 +15,8 @@ function setInterval(cb: () => void, seconds: number): CancelTimer {
 }
 
 function nextTick(cb: () => void): void {
+  // Promises are guaranteed to resolve asynchronously. This is a faster alternative to setTimeout(cb, 0).
+  // See https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
   Promise.resolve().then(cb)
 }
 

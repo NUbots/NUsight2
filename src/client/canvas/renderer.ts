@@ -7,6 +7,7 @@ import { ArrowGeometry } from './geometry/arrow_geometry'
 import { CircleGeometry } from './geometry/circle_geometry'
 import { LineGeometry } from './geometry/line_geometry'
 import { MarkerGeometry } from './geometry/marker_geometry'
+import { PathGeometry } from './geometry/path_geometry'
 import { PolygonGeometry } from './geometry/polygon_geometry'
 import { TextGeometry } from './geometry/text_geometry'
 import { Object2d } from './object/object2d'
@@ -22,7 +23,7 @@ export class CanvasRenderer {
     return new CanvasRenderer(context)
   }
 
-  public render(scene: Group, camera: Transform): void {
+  public render(scene: Group, camera: Transform = Transform.of()): void {
     const canvas = this.context.canvas
     this.context.clearRect(0, 0, canvas.width, canvas.height)
     this.renderObjects(scene.children, camera.clone().then(scene.transform))
@@ -64,6 +65,8 @@ export class CanvasRenderer {
       this.renderLine({ appearance, geometry })
     } else if (geometry instanceof MarkerGeometry) {
       this.renderMarker({ appearance, geometry })
+    } else if (geometry instanceof PathGeometry) {
+      this.renderPath({ appearance, geometry })
     } else if (geometry instanceof PolygonGeometry) {
       this.renderPolygon({ appearance, geometry })
     } else if (geometry instanceof TextGeometry) {
@@ -192,6 +195,20 @@ export class CanvasRenderer {
       position.y + sqrt2 * geometry.radius * geometry.heading.y,
     )
     this.context.closePath()
+
+    this.applyAppearance(appearance)
+    this.context.fill()
+    this.context.stroke()
+  }
+
+  private renderPath(opts: { appearance: Appearance, geometry: PathGeometry }): void {
+    const { appearance, geometry } = opts
+
+    this.context.beginPath()
+    this.context.moveTo(geometry.path[0].x, geometry.path[0].y)
+    for (const point of geometry.path.slice(0)) {
+      this.context.lineTo(point.x, point.y)
+    }
 
     this.applyAppearance(appearance)
     this.context.fill()

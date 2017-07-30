@@ -6,6 +6,7 @@ import * as minimist from 'minimist'
 import * as favicon from 'serve-favicon'
 import * as sio from 'socket.io'
 import { message } from '../shared/proto/messages'
+import { ChartSimulator } from '../simulators/chart_simulator'
 import { OverviewSimulator } from '../simulators/overview_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import { VirtualRobots } from '../simulators/virtual_robots'
@@ -37,6 +38,7 @@ if (withSimulators) {
     fakeNetworking: true,
     numRobots: 3,
     simulators: [
+      ChartSimulator.of(),
       SensorDataSimulator.of(),
       OverviewSimulator.of(),
     ],

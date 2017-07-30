@@ -28,6 +28,10 @@ export class LineChartViewModel {
         x: scale,
         y: scale,
       },
+      translate: {
+        x: 0,
+        y: this.model.height - ((maxValue - minValue) * 0.5)
+      }
     })
   }
 

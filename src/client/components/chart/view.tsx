@@ -2,6 +2,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
+// import { FieldSelector } from './field_selector/view'
 import { ChartModel } from './model'
 import { ChartNetwork } from './network'
 import * as style from './style.css'
@@ -21,11 +22,16 @@ export class ChartView extends Component<ChartViewProps> {
 
   public render() {
     const { LineChart, Menu } = this.props
+    // <FieldSelector />
     return (
       <div className={style.page}>
         <Menu />
         <div className={style.chart}>
-          <LineChart />
+          <div className={style.fieldSelector}>
+          </div>
+          <div className={style.lineChart}>
+            <LineChart />
+          </div>
         </div>
       </div>
     )

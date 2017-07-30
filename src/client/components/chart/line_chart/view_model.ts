@@ -5,7 +5,6 @@ import { PathGeometry } from '../../../canvas/geometry/path_geometry'
 import { Group } from '../../../canvas/object/group'
 import { Shape } from '../../../canvas/object/shape'
 import { Transform } from '../../../math/transform'
-import { Vector2 } from '../../../math/vector2'
 import { ChartRobotModel, SeriesModel } from '../model'
 import { LineChartModel } from './model'
 

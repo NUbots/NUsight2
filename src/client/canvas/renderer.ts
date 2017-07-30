@@ -211,7 +211,6 @@ export class CanvasRenderer {
     }
 
     this.applyAppearance(appearance)
-    this.context.fill()
     this.context.stroke()
   }
 

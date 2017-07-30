@@ -31,10 +31,10 @@ export class LineChartViewModel {
         x: scale,
         y: scale,
       },
-      // translate: {
-      //   x: 0,
-      //   y: (this.model.height - ((maxValue - minValue) * 0.5)) * scale,
-      // },
+      translate: {
+        x: 0,
+        y: this.model.height * 0.5
+      },
     })
   }
 
@@ -86,7 +86,7 @@ export class LineChartViewModel {
         return Shape.of(
           PathGeometry.of(path),
           LineAppearance.of({
-            lineWidth: 0.01
+            lineWidth: 0.01,
           }),
         )
       })

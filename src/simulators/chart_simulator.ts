@@ -12,7 +12,7 @@ export class ChartSimulator implements Simulator {
 
   public simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.support.nubugger.DataPoint'
-    const period = 1000 * 10
+    const period = 10 - index
     const theta = (2 * Math.PI * time) / period
     const sin = Math.sin(theta)
     const cos = Math.cos(theta)

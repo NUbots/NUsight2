@@ -15,18 +15,17 @@ export class ChartModel {
     return new ChartModel(robots)
   })
 
-  @computed get robots(): ChartRobotModel[] {
+  @computed public get robots(): ChartRobotModel[] {
     return this.robotModels.map(robot => ChartRobotModel.of(robot))
   }
 
-  @computed
-  public get lineChart(): LineChartModel {
+  @computed public get lineChart(): LineChartModel {
     return LineChartModel.of(this.robots)
   }
 }
 
 export class ChartRobotModel {
-  @observable public robot: RobotModel
+  @observable private robot: RobotModel
   @observable public series: Map<string, SeriesModel[]>
 
   constructor(robot: RobotModel, series: Map<string, SeriesModel[]>) {
@@ -67,8 +66,8 @@ export class SeriesModel {
     this.stacks = {
       value: {
         max: [],
-        min: []
-      }
+        min: [],
+      },
     }
     this.enabled = enabled
   }

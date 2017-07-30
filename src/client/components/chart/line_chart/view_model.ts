@@ -30,15 +30,15 @@ export class LineChartViewModel {
       },
       translate: {
         x: 0,
-        y: this.model.height - ((maxValue - minValue) * 0.5)
-      }
+        y: this.model.height - ((maxValue - minValue) * 0.5),
+      },
     })
   }
 
   @computed
   public get chart(): Group {
     return Group.of({
-      children: this.robots.map(robot => this.seriesList(robot.series))
+      children: this.robots.map(robot => this.seriesList(robot.series)),
     })
   }
 
@@ -77,7 +77,7 @@ export class LineChartViewModel {
         const path = series.data.map(d => {
           return Vector2.of(
             (Date.now() / 1000) - d.timestamp,
-            d.value
+            d.value,
           )
         })
         return Shape.of(
@@ -88,7 +88,7 @@ export class LineChartViewModel {
       paths.push(...shapes)
     }
     return Group.of({
-      children: paths
+      children: paths,
     })
   }
 }

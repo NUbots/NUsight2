@@ -36,11 +36,11 @@ export class ChartNetwork {
     data.value.forEach((value, index) => {
       const point = {
         timestamp,
-        value
+        value,
       }
       const series = seriesList[index]
       if (!series) {
-        throw new Error('Series dskjjkf')
+        throw new Error('Series should exist.')
       }
       series.append(point)
     })

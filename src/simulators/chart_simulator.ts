@@ -10,7 +10,7 @@ export class ChartSimulator implements Simulator {
     return new ChartSimulator()
   }
 
-  simulate(time: number, index: number, numRobots: number): Message[] {
+  public simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.support.nubugger.DataPoint'
     const period = 1000 * 10
     const theta = 2 * Math.PI * time / period
@@ -19,7 +19,7 @@ export class ChartSimulator implements Simulator {
     const buffer = DataPoint.encode({
       label: 'Debug Waves',
       value: [sin, cos, 2 * sin, 4 * cos],
-      type: Type.FLOAT_LIST
+      type: Type.FLOAT_LIST,
     }).finish()
 
     const message = { messageType, buffer }

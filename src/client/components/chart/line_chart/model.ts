@@ -23,7 +23,7 @@ export class LineChartModel {
     return new LineChartModel({
       height: 0,
       robots,
-      width: 0
+      width: 0,
     })
   })
 }

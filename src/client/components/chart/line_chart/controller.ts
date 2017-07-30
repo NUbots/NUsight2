@@ -10,11 +10,11 @@ export class LineChartController {
   public onChartResize(model: LineChartModel, width: number, height: number) {
     model.width = width
     model.height = height
-    this.removeOutOfBoundsData(model)
   }
 
   @action
   public onRequestAnimationFrame(model: LineChartModel, timestamp: number) {
+    // TODO Annable/Olejniczak add requestAnimationFrame to browser clock so this is not a thing
     model.timestamp = timestamp / 1000
   }
 
@@ -22,8 +22,17 @@ export class LineChartController {
     this.removeOutOfBoundsData(model)
   }
 
-  @action
   private removeOutOfBoundsData(model: LineChartModel) {
-    // TODO Olejniczak
+    if (model.timestamp < model.timeWindow) {
+      return
+    }
+    const oldestValidTime = model.timestamp - model.timeWindow
+    model.robots.forEach(robot => {
+      for (const seriesList of robot.series.values()) {
+        for (const series of seriesList) {
+          series.removeOlderThan(oldestValidTime)
+        }
+      }
+    })
   }
 }

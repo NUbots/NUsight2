@@ -59,6 +59,7 @@ type Stacks = {
 export class SeriesModel {
   @observable public enabled: boolean
   @observable private points: DataPointModel[]
+  // TODO Olejniczak use heap like structure instead of stacks
   @observable private stacks: Stacks
 
   constructor(enabled: boolean) {
@@ -90,13 +91,24 @@ export class SeriesModel {
 
   @action
   public append(point: DataPointModel): void {
-    this.points.push(point)
+    // TODO Olejniczak Ensure data points are inserted in correct order of timestamp
+    this.points.unshift(point)
     const value = point.value
     if (value > this.maxValue) {
       this.stacks.value.max.unshift(value)
     }
     if (value < this.minValue) {
       this.stacks.value.min.unshift(value)
+    }
+  }
+
+  @action
+  public removeOlderThan(timestamp: number): void {
+    for (const [index, point] of this.points.entries()) {
+      if (point.timestamp < timestamp) {
+        this.points.splice(index, this.points.length - index)
+        break
+      }
     }
   }
 }

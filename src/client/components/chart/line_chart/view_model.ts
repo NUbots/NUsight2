@@ -1,23 +1,20 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
-import { Clock } from '../../../../shared/time/clock'
 import { LineAppearance } from '../../../canvas/appearance/line_appearance'
 import { PathGeometry } from '../../../canvas/geometry/path_geometry'
 import { Group } from '../../../canvas/object/group'
 import { Shape } from '../../../canvas/object/shape'
 import { Transform } from '../../../math/transform'
 import { Vector2 } from '../../../math/vector2'
-import { BrowserSystemClock } from '../../../time/browser_clock'
 import { ChartRobotModel, SeriesModel } from '../model'
 import { LineChartModel } from './model'
 
 export class LineChartViewModel {
-  public constructor(private clock: Clock,
-                     private model: LineChartModel) {
+  public constructor(private model: LineChartModel) {
   }
 
   public static of = createTransformer((model: LineChartModel): LineChartViewModel => {
-    return new LineChartViewModel(BrowserSystemClock, model)
+    return new LineChartViewModel(model)
   })
 
   @computed
@@ -79,7 +76,7 @@ export class LineChartViewModel {
       const shapes = seriesList.map(series => {
         const path = series.data.map(d => {
           return Vector2.of(
-            d.timestamp - this.clock.now(),
+            d.timestamp - this.model.timestamp,
             d.value,
           )
         })

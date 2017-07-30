@@ -7,17 +7,20 @@ import { ChartRobotModel } from '../model'
 export type LineChartModelOpts = {
   height: number
   model: ChartModel
+  timestamp: number
   width: number
 }
 
 export class LineChartModel {
   @observable public height: number
   @observable private model: ChartModel
+  @observable public timestamp: number
   @observable public width: number
 
   constructor(opts: LineChartModelOpts) {
     this.height = opts.height
     this.model = opts.model
+    this.timestamp = opts.timestamp
     this.width = opts.width
   }
 
@@ -25,10 +28,11 @@ export class LineChartModel {
     return new LineChartModel({
       height: 0,
       model,
+      timestamp: 0,
       width: 0,
     })
   })
-  
+
   @computed public get robots(): ChartRobotModel[] {
     return this.model.robots
   }

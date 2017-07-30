@@ -27,7 +27,7 @@ export class ChartNetwork {
   private onDataPoint = (robotModel: RobotModel, data: DataPoint) => {
     const robot = ChartRobotModel.of(robotModel)
     const key = data.label
-    const timestamp = this.clock.now()
+    const timestamp = this.clock.performanceNow()
     if (!robot.series.get(key)) {
       robot.series.set(key, data.value.map(() => SeriesModel.of()))
     }

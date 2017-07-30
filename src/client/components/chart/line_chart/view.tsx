@@ -29,7 +29,7 @@ export class LineChart extends Component<LineChartProps> {
     const context: CanvasRenderingContext2D = this.chart.getContext('2d')!
     this.renderer = CanvasRenderer.of(context)
     this.stopAutorun = autorun(() => this.renderChart())
-    this.rafId = requestAnimationFrame(this.onAnimationFrame)
+    this.rafId = requestAnimationFrame(this.onRequestAnimationFrame)
   }
 
   public componentWillUnmount() {
@@ -40,13 +40,14 @@ export class LineChart extends Component<LineChartProps> {
     return <canvas className={style.lineChart} ref={this.onRef}/>
   }
 
-  private onAnimationFrame = () => {
-    this.rafId = requestAnimationFrame(this.onAnimationFrame)
+  private onRequestAnimationFrame = (timestamp: number) => {
+    this.rafId = requestAnimationFrame(this.onRequestAnimationFrame)
     const width = this.chart.clientWidth
     const height = this.chart.clientHeight
     if (width !== this.chart.width || height !== this.chart.height) {
       this.onChartResize(width, height)
     }
+    this.props.controller.onRequestAnimationFrame(this.props.model, timestamp)
   }
 
   private onRef = (chart: HTMLCanvasElement) => {
@@ -56,6 +57,7 @@ export class LineChart extends Component<LineChartProps> {
   private renderChart() {
     const viewModel = LineChartViewModel.of(this.props.model)
     this.renderer.render(viewModel.chart, viewModel.camera)
+    this.props.controller.onRenderChart(this.props.model)
   }
 
   @action

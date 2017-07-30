@@ -1,5 +1,6 @@
 import { action } from 'mobx'
 import { message } from '../../../shared/proto/messages'
+import { Vector2 } from '../../math/vector2'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { BrowserSystemClock } from '../../../client/time/browser_clock'
@@ -34,10 +35,7 @@ export class ChartNetwork {
     const seriesList = robot.series.get(key) as SeriesModel[]
 
     data.value.forEach((value, index) => {
-      const point = {
-        timestamp,
-        value,
-      }
+      const point = Vector2.of(timestamp, value)
       const series = seriesList[index]
       if (!series) {
         throw new Error('Series should exist.')

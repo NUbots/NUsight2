@@ -75,23 +75,23 @@ export class LineChartViewModel {
     let paths: Shape[] = []
     for (const seriesList of series.values()) {
       const shapes = seriesList.map(series => {
-        const path = series.data.map(d => {
-          return Vector2.of(
-            d.timestamp - this.model.timestamp,
-            d.value,
-          )
-        })
         return Shape.of(
-          PathGeometry.of(path),
+          PathGeometry.of(series.data),
           LineAppearance.of({
             lineWidth: 0.01,
-          }),
+          })
         )
       })
       paths.push(...shapes)
     }
     return Group.of({
       children: paths,
+      transform: Transform.of({
+        translate: {
+          x: -this.model.timestamp,
+          y: 0,
+        }
+      })
     })
   }
 }

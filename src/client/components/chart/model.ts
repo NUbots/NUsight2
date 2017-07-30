@@ -1,6 +1,7 @@
 import { computed, action } from 'mobx'
 import { observable } from 'mobx'
 import { memoize } from '../../base/memoize'
+import { Vector2 } from '../../math/vector2'
 import { RobotModel } from '../robot/model'
 import { LineChartModel } from './line_chart/model'
 
@@ -42,11 +43,6 @@ export class ChartRobotModel {
   }
 }
 
-export type DataPointModel = {
-  timestamp: number
-  value: number
-}
-
 type Stack = {
   max: number[]
   min: number[]
@@ -58,7 +54,7 @@ type Stacks = {
 
 export class SeriesModel {
   @observable public enabled: boolean
-  @observable private points: DataPointModel[]
+  @observable private points: Vector2[]
   // TODO Olejniczak use heap like structure instead of stacks
   @observable private stacks: Stacks
 
@@ -85,15 +81,15 @@ export class SeriesModel {
     return this.stacks.value.min.length === 0 ? Number.MAX_VALUE : this.stacks.value.min[0]
   }
 
-  @computed public get data(): DataPointModel[] {
+  @computed public get data(): ReadonlyArray<Vector2> {
     return this.points
   }
 
   @action
-  public append(point: DataPointModel): void {
+  public append(point: Vector2): void {
     // TODO Olejniczak Ensure data points are inserted in correct order of timestamp
     this.points.unshift(point)
-    const value = point.value
+    const value = point.y
     if (value > this.maxValue) {
       this.stacks.value.max.unshift(value)
     }
@@ -105,7 +101,7 @@ export class SeriesModel {
   @action
   public removeOlderThan(timestamp: number): void {
     for (const [index, point] of this.points.entries()) {
-      if (point.timestamp < timestamp) {
+      if (point.x < timestamp) {
         this.points.splice(index, this.points.length - index)
         break
       }

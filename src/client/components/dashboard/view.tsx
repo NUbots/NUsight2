@@ -7,8 +7,10 @@ import { DashboardNetwork } from './network'
 import { RobotPanel } from './robot_panel/view'
 import { RobotPanelViewModel } from './robot_panel/view_model'
 import * as style from './style.css'
+import { DashboardController } from './controller'
 
 export type DashboardProps = {
+  controller: DashboardController
   Field: ComponentType<{}>
   menu: ComponentType<{}>
   model: DashboardModel
@@ -23,11 +25,17 @@ export class Dashboard extends Component<DashboardProps> {
 
   public render() {
     const { menu: Menu, model } = this.props
-    const showPanels = model.robots.some(robot => robot.visible)
+    const showPanels = model.robots.some(robot => robot.enabled)
     const Field = this.props.Field
     return (
       <div className={style.page}>
-        <Menu/>
+        <Menu>
+          <ul className={style.menu}>
+              <li className={style.menuItem}>
+                <button className={style.menuButton} onClick={this.onToggleOrientationClick}>Flip Orientation</button>
+              </li>
+          </ul>
+        </Menu>
         <div className={style.dashboard}>
           <div className={style.field}>
             <Field/>
@@ -37,9 +45,10 @@ export class Dashboard extends Component<DashboardProps> {
             {model.robots.map(robot => {
               const model = RobotPanelViewModel.of(robot)
               return (
-                robot.visible &&
+                robot.enabled &&
                 <div className={style.panel} key={robot.name}>
                   <RobotPanel
+                    connected={model.connected}
                     batteryValue={model.batteryValue}
                     behaviour={model.behaviour}
                     lastCameraImage={model.lastCameraImage}
@@ -49,7 +58,9 @@ export class Dashboard extends Component<DashboardProps> {
                     penalised={model.penalised}
                     penalty={model.penalty}
                     phase={model.phase}
-                    title={model.title}/>
+                    title={model.title}
+                    walkCommand={model.walkCommand}
+                  />
                 </div>
               )
             })}
@@ -58,5 +69,10 @@ export class Dashboard extends Component<DashboardProps> {
         </div>
       </div>
     )
+  }
+
+  private onToggleOrientationClick = () => {
+    const { controller, model } = this.props
+    controller.toggleOrientation(model)
   }
 }

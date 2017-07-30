@@ -6,10 +6,12 @@ import CameraIcon from './icon/camera.svg'
 import GoalIcon from './icon/goal.svg'
 import WarningIcon from './icon/warning.svg'
 import * as style from './style.css'
+import { Vector3 } from '../../../math/vector3'
 
 export type LastStatus = 'okay' | 'warning' | 'danger'
 
 export type RobotPanelProps = {
+  connected: boolean,
   batteryValue?: string
   behaviour: string
   lastCameraImage: LastStatus
@@ -20,9 +22,14 @@ export type RobotPanelProps = {
   penalty: string
   phase: string
   title: string
+  walkCommand: Vector3
 }
 
 export const RobotPanel = (props: RobotPanelProps) => {
+  const connectionStatusClassName = classNames(style.connectionStatus, {
+    [style.connectedStatus]: props.connected,
+    [style.disconnectedStatus]: !props.connected,
+  })
   const cameraClassName = classNames(style.icon, style.cameraIcon, {
     [style.iconWarningStatus]: props.lastCameraImage === 'warning',
     [style.iconDangerStatus]: props.lastCameraImage === 'danger',
@@ -39,6 +46,7 @@ export const RobotPanel = (props: RobotPanelProps) => {
     <div>
       <header className={style.header}>
         <div className={style.statusBar}>
+          <span className={connectionStatusClassName} title={props.connected ? 'Connected' : 'Disconnected'}/>
           <span className={style.title}>
             {props.title}
           </span>
@@ -67,6 +75,10 @@ export const RobotPanel = (props: RobotPanelProps) => {
               </span>
               {props.penalised && <WarningIcon className={style.penaltyIcon}/>}
             </div>
+          </div>
+          <div className={style.row}>
+            <span className={style.label}>Walk Command</span>
+            {props.walkCommand.x.toFixed(3)}, {props.walkCommand.y.toFixed(3)}, {props.walkCommand.z.toFixed(3)}
           </div>
         </div>
         <div className={style.icons}>

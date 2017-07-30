@@ -8,14 +8,19 @@ import State = message.behaviour.Behaviour.State
 import Mode = message.input.GameState.Data.Mode
 import PenaltyReason = message.input.GameState.Data.PenaltyReason
 import Phase = message.input.GameState.Data.Phase
+import { Vector3 } from '../../../math/vector3'
 
 export class RobotPanelViewModel {
   public constructor(private model: DashboardRobotModel) {
   }
 
-  public static of = createTransformer((model: DashboardRobotModel) => {
+  public static of = createTransformer((model: DashboardRobotModel): RobotPanelViewModel => {
     return new RobotPanelViewModel(model)
   })
+
+  @computed get connected(): boolean {
+    return this.model.connected
+  }
 
   @computed
   public get batteryValue(): string {
@@ -66,6 +71,10 @@ export class RobotPanelViewModel {
   @computed
   public get title(): string {
     return this.model.name
+  }
+
+  public get walkCommand(): Vector3 {
+    return this.model.walkCommand
   }
 
   private getLastStatus(time: number, threshold: number): LastStatus {

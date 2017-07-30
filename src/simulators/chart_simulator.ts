@@ -12,13 +12,13 @@ export class ChartSimulator implements Simulator {
 
   public simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.support.nubugger.DataPoint'
-    const period = 10 - index
-    const theta = (2 * Math.PI * time) / period
+    const period = 10
+    const theta = (2 * Math.PI * (time - index)) / period
     const sin = Math.sin(theta)
     const cos = Math.cos(theta)
     const buffer = DataPoint.encode({
       label: 'Debug Waves',
-      value: [sin, cos, 2 * sin, 4 * cos],
+      value: [sin, cos, 2 * sin, 4 * cos + 1],
       type: Type.FLOAT_LIST,
     }).finish()
 

@@ -31,7 +31,7 @@ export class LineChartViewModel {
       },
       translate: {
         x: -this.model.width,
-        y: -this.model.height * 0.5,
+        y: -maxValue / scaleY,
       },
     })
   }
@@ -79,7 +79,7 @@ export class LineChartViewModel {
           PathGeometry.of(series.data),
           LineAppearance.of({
             lineWidth: 0.01,
-          })
+          }),
         )
       })
       paths.push(...shapes)
@@ -90,8 +90,8 @@ export class LineChartViewModel {
         translate: {
           x: -this.model.timestamp,
           y: 0,
-        }
-      })
+        },
+      }),
     })
   }
 }

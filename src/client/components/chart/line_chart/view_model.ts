@@ -29,10 +29,10 @@ export class LineChartViewModel {
     return Transform.of({
       scale: {
         x: scale,
-        y: scale,
+        y: -scale,
       },
       translate: {
-        x: 0,
+        x: this.model.width,
         y: this.model.height * 0.5
       },
     })
@@ -79,7 +79,7 @@ export class LineChartViewModel {
       const shapes = seriesList.map(series => {
         const path = series.data.map(d => {
           return Vector2.of(
-            this.clock.now() - d.timestamp,
+            d.timestamp - this.clock.now(),
             d.value,
           )
         })

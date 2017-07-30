@@ -21,12 +21,13 @@ export class LineChartViewModel {
   public get camera(): Transform {
     const maxValue = this.maxValue
     const minValue = this.minValue
-    const scale = (maxValue - minValue) / this.model.height
+    const scaleX = this.model.timeWindow / this.model.width
+    const scaleY = (maxValue - minValue) / this.model.height
 
     return Transform.of({
       scale: {
-        x: scale,
-        y: -scale,
+        x: scaleX,
+        y: -scaleY,
       },
       translate: {
         x: -this.model.width,

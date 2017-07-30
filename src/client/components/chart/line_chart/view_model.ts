@@ -1,14 +1,14 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { Clock } from '../../../../shared/time/clock'
 import { LineAppearance } from '../../../canvas/appearance/line_appearance'
 import { PathGeometry } from '../../../canvas/geometry/path_geometry'
 import { Group } from '../../../canvas/object/group'
 import { Shape } from '../../../canvas/object/shape'
 import { Transform } from '../../../math/transform'
 import { Vector2 } from '../../../math/vector2'
-import { Clock } from '../../../../shared/time/clock'
 import { BrowserSystemClock } from '../../../time/browser_clock'
-import { SeriesModel, ChartRobotModel } from '../model'
+import { ChartRobotModel, SeriesModel } from '../model'
 import { LineChartModel } from './model'
 
 export class LineChartViewModel {
@@ -24,7 +24,7 @@ export class LineChartViewModel {
   public get camera(): Transform {
     const maxValue = this.maxValue
     const minValue = this.minValue
-    const scale = this.model.height / Math.max(1, (maxValue - minValue))
+    const scale = (maxValue - minValue) / this.model.height
 
     return Transform.of({
       scale: {
@@ -32,8 +32,8 @@ export class LineChartViewModel {
         y: -scale,
       },
       translate: {
-        x: this.model.width,
-        y: this.model.height * 0.5
+        x: -this.model.width,
+        y: -this.model.height * 0.5,
       },
     })
   }

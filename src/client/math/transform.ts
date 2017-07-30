@@ -75,7 +75,7 @@ export class Transform {
       anticlockwise: this.anticlockwise,
       scale: { x: 1 / this.scale.x, y: 1 / this.scale.y },
       rotate: -this.rotate,
-      translate: { x: this.translate.x, y: this.translate.y },
+      translate: { x: -this.translate.x, y: -this.translate.y },
     })
   }
 

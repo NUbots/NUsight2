@@ -6,15 +6,18 @@ import { Group } from '../../../canvas/object/group'
 import { Shape } from '../../../canvas/object/shape'
 import { Transform } from '../../../math/transform'
 import { Vector2 } from '../../../math/vector2'
+import { Clock } from '../../../../shared/time/clock'
+import { BrowserSystemClock } from '../../../time/browser_clock'
 import { SeriesModel, ChartRobotModel } from '../model'
 import { LineChartModel } from './model'
 
 export class LineChartViewModel {
-  public constructor(private model: LineChartModel) {
+  public constructor(private clock: Clock,
+                     private model: LineChartModel) {
   }
 
   public static of = createTransformer((model: LineChartModel): LineChartViewModel => {
-    return new LineChartViewModel(model)
+    return new LineChartViewModel(BrowserSystemClock, model)
   })
 
   @computed
@@ -28,10 +31,10 @@ export class LineChartViewModel {
         x: scale,
         y: scale,
       },
-      translate: {
-        x: 0,
-        y: this.model.height - ((maxValue - minValue) * 0.5),
-      },
+      // translate: {
+      //   x: 0,
+      //   y: (this.model.height - ((maxValue - minValue) * 0.5)) * scale,
+      // },
     })
   }
 
@@ -57,7 +60,7 @@ export class LineChartViewModel {
     return this.robots.reduce((minValue, robot) => {
       for (const seriesList of robot.series.values()) {
         minValue = seriesList.reduce((minValue, series) => {
-          return Math.max(minValue, series.minValue)
+          return Math.min(minValue, series.minValue)
         }, minValue)
       }
       return minValue
@@ -76,13 +79,15 @@ export class LineChartViewModel {
       const shapes = seriesList.map(series => {
         const path = series.data.map(d => {
           return Vector2.of(
-            (Date.now() / 1000) - d.timestamp,
+            this.clock.now() - d.timestamp,
             d.value,
           )
         })
         return Shape.of(
           PathGeometry.of(path),
-          LineAppearance.of(),
+          LineAppearance.of({
+            lineWidth: 0.01
+          }),
         )
       })
       paths.push(...shapes)

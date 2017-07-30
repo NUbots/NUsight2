@@ -1,29 +1,35 @@
+import { computed } from 'mobx'
 import { observable } from 'mobx'
 import { memoize } from '../../../base/memoize'
+import { ChartModel } from '../model'
 import { ChartRobotModel } from '../model'
 
 export type LineChartModelOpts = {
   height: number
-  robots: ChartRobotModel[]
+  model: ChartModel
   width: number
 }
 
 export class LineChartModel {
   @observable public height: number
-  @observable public robots: ChartRobotModel[]
+  @observable private model: ChartModel
   @observable public width: number
 
   constructor(opts: LineChartModelOpts) {
     this.height = opts.height
-    this.robots = opts.robots
+    this.model = opts.model
     this.width = opts.width
   }
 
-  public static of = memoize((robots: ChartRobotModel[]): LineChartModel => {
+  public static of = memoize((model: ChartModel): LineChartModel => {
     return new LineChartModel({
       height: 0,
-      robots,
+      model,
       width: 0,
     })
   })
+  
+  @computed public get robots(): ChartRobotModel[] {
+    return this.model.robots
+  }
 }

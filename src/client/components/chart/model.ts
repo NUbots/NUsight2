@@ -20,7 +20,7 @@ export class ChartModel {
   }
 
   @computed public get lineChart(): LineChartModel {
-    return LineChartModel.of(this.robots)
+    return LineChartModel.of(this)
   }
 }
 

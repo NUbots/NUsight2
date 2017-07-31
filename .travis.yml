@@ -36,6 +36,6 @@ notifications:
 
 before_install:
   # If our yarn lock file has changed then purge our node_modules cache
-  - cmp --silent yarn.lock .cache/yarn/yarn.lock || (echo "Clearing node_modules" && find node_modules -mindepth 1 -delete && cp yarn.lock .cache/yarn/yarn.lock)
+  - cmp --silent yarn.lock /home/travis/.cache/yarn/yarn.lock || (echo "Clearing node_modules" && find node_modules -mindepth 1 -delete && cp yarn.lock /home/travis/.cache/yarn/yarn.lock)
 script:
   - yarn $YARN_COMMAND

@@ -25,7 +25,7 @@ export class RecordingController {
   public static of({ fakeNetworking }: { fakeNetworking: boolean }) {
     const nuclearnetClient: NUClearNetClient = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     // TODO (Annable): clean up.
-    const recordingDirectory = `recordings/${dateformat(new Date(), 'yyyy-mm-dd-HHMMss')}`
+    const recordingDirectory = `recordings/${dateformat(NodeSystemClock.date(), 'yyyy-mm-dd-HHMMss')}`
     return new RecordingController(nuclearnetClient, NodeSystemClock, recordingDirectory)
   }
 
@@ -41,7 +41,7 @@ export class RecordingController {
     // TODO (Annable): Clean this up.
     const peerRecorder = NbsRecorderController.of(peer, this.nuclearnetClient)
     mkdirp(this.recordingDirectory).then(() => {
-      const timestamp = dateformat(new Date(), 'yyyy-mm-dd-HHMMss')
+      const timestamp = dateformat(this.clock.date(), 'yyyy-mm-dd-HHMMss')
       const filename = `${timestamp}-${peer.name}-${peer.address}-${peer.port}`.replace(/[^a-zA-Z0-9\-_]+/g, '_')
       const filepath = path.join(this.recordingDirectory, `${filename}.nbz`)
       console.log(`recording to ${filepath}`)

@@ -32,10 +32,10 @@ export function encodeFrame(frame: NbsFrame): Buffer {
   const sizeBuffer = new Buffer(PACKET_SIZE_SIZE)
   sizeBuffer.writeUInt32LE(size, 0)
 
-  const timeLong = Long.fromNumber(frame.timestampInMicroseconds)
+  const timeLong = Long.fromNumber(frame.timestampInMicroseconds, true)
   const timestampBuffer = new Buffer(TIMESTAMP_SIZE)
-  timestampBuffer.writeUInt32LE(timeLong.low, 0)
-  timestampBuffer.writeUInt32LE(timeLong.high, 4)
+  timestampBuffer.writeUInt32LE(timeLong.getLowBitsUnsigned(), 0)
+  timestampBuffer.writeUInt32LE(timeLong.getHighBitsUnsigned(), 4)
 
   return Buffer.concat([
     NBS_HEADER,

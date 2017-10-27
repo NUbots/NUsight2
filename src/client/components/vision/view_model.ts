@@ -1,11 +1,17 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { Scene } from 'three'
 import { BasicAppearance } from '../../canvas/appearance/basic_appearance'
 import { CircleGeometry } from '../../canvas/geometry/circle_geometry'
 import { Group } from '../../canvas/object/group'
 import { Shape } from '../../canvas/object/shape'
+import { CameraViewModel } from './camera/view_model'
 import { VisionModel } from './model'
 import { VisionRobotModel } from './model'
+import { CanvasRenderer } from '../../canvas/renderer'
+import { WebGLRenderer } from 'three'
+import { Camera } from 'three'
+import { VisionObjectsViewModel } from './vision_objects/view_model'
 
 export class VisionViewModel {
   public constructor(private model: VisionModel) {
@@ -44,47 +50,40 @@ export class RobotViewModel {
     // Layers should be ordered from top-to-bottom.
     return [
       this.visionObjectsLayer,
-      // this.cameraImageLayer,
+      this.cameraImageLayer,
     ]
   }
 
   @computed
   public get cameraImageLayer(): LayerViewModel {
+    const cameraViewModel = this.cameraViewModel
     return {
       type: 'webgl',
-      scene: [
-        // TODO: image here
-      ],
+      scene: cameraViewModel.scene,
+      camera: cameraViewModel.camera,
+      renderer: cameraViewModel.renderer,
     }
   }
 
   @computed
   public get visionObjectsLayer(): LayerViewModel {
+    const visionObjectsViewModel = this.visionObjectsViewModel
     return {
       type: '2d',
-      scene: Group.of({
-        children: [
-          this.balls,
-          // TODO: goals here
-        ],
-      }),
+      scene: visionObjectsViewModel.scene,
+      camera: visionObjectsViewModel.camera,
+      renderer: visionObjectsViewModel.renderer,
     }
   }
 
   @computed
-  public get balls(): Group {
-    return Group.of({
-      children: this.robotModel.balls.map(ball => Shape.of(
-        CircleGeometry.of({
-          radius: ball.radius,
-          x: ball.centre.x,
-          y: ball.centre.y,
-        }),
-        BasicAppearance.of({
-          fillStyle: 'orange',
-        }),
-      )),
-    })
+  private get cameraViewModel(): CameraViewModel {
+    return CameraViewModel.of(this.robotModel)
+  }
+
+  @computed
+  private get visionObjectsViewModel(): VisionObjectsViewModel {
+    return VisionObjectsViewModel.of(this.robotModel)
   }
 }
 
@@ -92,10 +91,13 @@ type LayerViewModel = WebGLLayer | Canvas2DLayer
 
 type WebGLLayer = {
   type: 'webgl'
-  scene: any[] // TODO: type this
+  scene: Scene,
+  camera: Camera,
+  renderer(canvas: HTMLCanvasElement): WebGLRenderer
 }
 
 type Canvas2DLayer = {
   type: '2d'
-  scene: Group
+  scene: Group,
+  renderer(canvas: HTMLCanvasElement): CanvasRenderer
 }

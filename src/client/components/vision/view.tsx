@@ -73,26 +73,12 @@ export class VisionView extends Component<Props> {
         const canvas = this.canvases.get(this.hash(robot, layerIndex))
         if (canvas) {
           if (layer.type === '2d') {
-            const ctx = canvas.getContext('2d')
-            if (ctx) {
-              const renderer = CanvasRenderer.of(ctx)
-              // TODO: Position camera correctly.
-              const camera = Transform.of({ anticlockwise: false })
-              renderer.render(layer.scene, camera)
-            }
+            const camera = Transform.of({ anticlockwise: false })
+            layer.renderer(canvas).render(layer.scene, camera)
           } else if (layer.type === 'webgl') {
-            // TODO: Put the scene construction into the view model, similar to localisation.
-            // TODO: Use a ShaderMaterial to render the camera image.
-            const renderer = new THREE.WebGLRenderer({ canvas })
-            const scene = new THREE.Scene()
-            const geometry = new THREE.BoxGeometry(1, 1, 1)
-            const material = new THREE.MeshBasicMaterial({ color: 'green' })
-            const mesh = new THREE.Mesh(geometry, material)
-            scene.add(mesh)
-            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100)
-            camera.position.z = 1
+            const renderer = layer.renderer(canvas)
             renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight)
-            renderer.render(scene, camera)
+            renderer.render(layer.scene, layer.camera)
           }
         }
       })

@@ -7,9 +7,9 @@ import { Matrix3 } from '../../../math/matrix3'
 import { Transform } from '../../../math/transform'
 import { Vector2 } from '../../../math/vector2'
 import { Vector3 } from '../../../math/vector3'
+import { BrowserSystemClock } from '../../../time/browser_clock'
 import { RobotModel } from '../../robot/model'
 import State = message.behaviour.Behaviour.State
-
 import Mode = message.input.GameState.Data.Mode
 import PenaltyReason = message.input.GameState.Data.PenaltyReason
 import Phase = message.input.GameState.Data.Phase
@@ -30,8 +30,8 @@ export class DashboardRobotModel {
   // The timestamp of the last message from the robot (in seconds since an arbitrary time)
   @observable public time: number
 
-  // The id number of the robot
-  @observable public id: number
+  // The player id of the robot, typically 1 through N
+  @observable public playerId: number
 
   // The name of the role the robot is executing
   @observable public roleName: string
@@ -87,7 +87,7 @@ export class DashboardRobotModel {
       camera: Transform.of(),
       gameMode: Mode.UNKNOWN_MODE,
       gamePhase: Phase.UNKNOWN_PHASE,
-      id: -1,
+      playerId: -1,
       kickTarget: Vector2.of(),
       kickTargetColor: '#00796B',
       lastCameraImage: 0,
@@ -100,7 +100,7 @@ export class DashboardRobotModel {
       robotPositionCovariance: Matrix3.of(),
       roleName: '',
       textColor: '#fff',
-      time: Date.now() / 1000,
+      time: BrowserSystemClock.now(),
       voltage: -1,
       walkCommand: Vector3.of(),
       walkPathPlan: [],
@@ -108,12 +108,22 @@ export class DashboardRobotModel {
   })
 
   @computed
+  public get connected(): boolean {
+    return this.robot.connected
+  }
+
+  @computed
+  public get id(): string {
+    return this.robot.id
+  }
+
+  @computed
   public get name(): string {
     return this.robot.name
   }
 
   @computed
-  public get visible(): boolean {
+  public get enabled(): boolean {
     return this.robot.enabled
   }
 }
@@ -127,7 +137,6 @@ interface DashboardRobotModelOpts {
   robotColor: string
   textColor: string
   time: number
-  id: number
   roleName: string
   battery: number
   voltage: number
@@ -140,6 +149,7 @@ interface DashboardRobotModelOpts {
   gameMode: Mode
   gamePhase: Phase
   penaltyReason: PenaltyReason
+  playerId: number
   lastCameraImage: number
   lastSeenBall: number
   lastSeenGoal: number

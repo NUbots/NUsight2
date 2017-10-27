@@ -4,7 +4,27 @@ describe('FakeClock', () => {
   let clock: FakeClock
 
   beforeEach(() => {
-    clock = new FakeClock()
+    clock = FakeClock.of()
+  })
+
+  describe('#now', () => {
+    it('starts at 0 by default', () => {
+      expect(FakeClock.of().now()).toEqual(0)
+    })
+
+    it('returns time with initialized value', () => {
+      expect(FakeClock.of(1000).now()).toEqual(1000)
+    })
+  })
+
+  describe('#date', () => {
+    it('starts at unix epoch by default', () => {
+      expect(FakeClock.of().date().toUTCString()).toEqual('Thu, 01 Jan 1970 00:00:00 GMT')
+    })
+
+    it('returns date at the initialized time', () => {
+      expect(FakeClock.of(1492778724).date().toUTCString()).toEqual('Fri, 21 Apr 2017 12:45:24 GMT')
+    })
   })
 
   describe('#tick', () => {
@@ -88,16 +108,16 @@ describe('FakeClock', () => {
     })
   })
 
-  describe('#setImmediate', () => {
+  describe('#nextTick', () => {
     it('does not invoke callback synchronously', () => {
       const spy = jest.fn()
-      clock.setImmediate(spy)
+      clock.nextTick(spy)
       expect(spy).not.toHaveBeenCalled()
     })
 
     it('invokes callback after any tick', () => {
       const spy = jest.fn()
-      clock.setImmediate(spy)
+      clock.nextTick(spy)
 
       clock.tick(0.1)
       expect(spy).toHaveBeenCalled()
@@ -105,7 +125,7 @@ describe('FakeClock', () => {
 
     it('does not invoke callback when cancelled', () => {
       const spy = jest.fn()
-      const cancel = clock.setImmediate(spy)
+      const cancel = clock.nextTick(spy)
 
       cancel()
       clock.tick(100)

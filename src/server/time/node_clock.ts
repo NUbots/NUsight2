@@ -1,32 +1,34 @@
-import { Clock } from './clock'
+import { Clock } from '../../shared/time/clock'
+import { CancelTimer } from '../../shared/time/clock'
 
-export type CancelTimer = () => void
+const SecondsToMilliseconds = 1e3
+const MillisecondsToSeconds = 1e-3
+const NanosecondsToSeconds = 1e-9
 
-function setTimeout(cb: (...args: any[]) => void, seconds: number): CancelTimer {
-  const handle = global.setTimeout(cb, seconds * 1e3)
-  return global.clearTimeout.bind(null, handle)
+function setTimeout(cb: () => void, seconds: number): CancelTimer {
+  const handle = global.setTimeout(cb, seconds * SecondsToMilliseconds)
+  return global.clearTimeout.bind(undefined, handle)
 }
 
-function setInterval(cb: (...args: any[]) => void, seconds: number): CancelTimer {
-  const handle = global.setInterval(cb, seconds * 1e3)
-  return global.clearInterval.bind(null, handle)
+function setInterval(cb: () => void, seconds: number): CancelTimer {
+  const handle = global.setInterval(cb, seconds * SecondsToMilliseconds)
+  return global.clearInterval.bind(undefined, handle)
 }
 
-function setImmediate(cb: (...args: any[]) => void): CancelTimer {
-  const handle = global.setImmediate(cb)
-  return global.clearImmediate.bind(null, handle)
+function nextTick(cb: () => void): void {
+  process.nextTick(cb)
 }
 
-function performanceNow() {
+function performanceNow(): number {
   const t = process.hrtime()
-  return t[0] + t[1] * 1e-9
+  return t[0] + t[1] * NanosecondsToSeconds
 }
-
 
 export const NodeSystemClock: Clock = {
-  now: () => Date.now() * 1e-3,
+  now: () => Date.now() * MillisecondsToSeconds,
+  date: () => new Date(),
   performanceNow,
   setTimeout,
   setInterval,
-  setImmediate,
+  nextTick,
 }

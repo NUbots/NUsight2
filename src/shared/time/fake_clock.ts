@@ -1,4 +1,7 @@
 import { Clock } from './clock'
+import { CancelTimer } from './clock'
+
+const SecondsToMilliseconds = 1e3
 
 type Task = {
   id: number
@@ -12,43 +15,47 @@ export class FakeClock implements Clock {
   private time: number
   private tasks: Task[]
 
-  constructor() {
+  public constructor(time: number) {
     this.nextId = 0
-    this.time = 0
+    this.time = time
     this.tasks = []
   }
 
-  public static of() {
-    return new FakeClock()
+  public static of(time: number = 0) {
+    return new FakeClock(time)
   }
 
   public now(): number {
     return this.time
   }
 
+  public date(): Date {
+    return new Date(this.now() * SecondsToMilliseconds)
+  }
+
   public performanceNow(): number {
     return this.time
   }
 
-  public setTimeout(fn: () => void, seconds: number): () => void {
+  public setTimeout(fn: () => void, seconds: number): CancelTimer {
     const id = this.nextId++
     this.addTask({ id, nextTime: this.now() + seconds, fn })
     return () => this.removeTask(id)
   }
 
-  public setInterval(fn: () => void, seconds: number): () => void {
+  public setInterval(fn: () => void, seconds: number): CancelTimer {
     const id = this.nextId++
     this.addTask({ id, nextTime: this.now() + seconds, period: seconds, fn })
     return () => this.removeTask(id)
   }
 
-  public setImmediate(fn: () => void): () => void {
+  public nextTick(fn: () => void): CancelTimer {
     const id = this.nextId++
     this.addTask({ id, nextTime: this.now() + Number.MIN_VALUE, fn })
     return () => this.removeTask(id)
   }
 
-  public tick(delta: number = 1) {
+  public tick(delta: number = 1): void {
     const newTime = this.now() + delta
 
     while (this.tasks.length > 0 && this.tasks[0].nextTime <= newTime) {
@@ -59,7 +66,7 @@ export class FakeClock implements Clock {
     this.time = newTime
   }
 
-  public runAllTimers() {
+  public runAllTimers(): void {
     const limit = 1000
     let i = 0
 
@@ -73,7 +80,7 @@ export class FakeClock implements Clock {
     }
   }
 
-  public runOnlyPendingTimers() {
+  public runOnlyPendingTimers(): void {
     const limit = 1000
     let i = 0
 
@@ -89,7 +96,7 @@ export class FakeClock implements Clock {
     }
   }
 
-  public runTimersToTime(time: number) {
+  public runTimersToTime(time: number): void {
     const limit = 1000
     let i = 0
 

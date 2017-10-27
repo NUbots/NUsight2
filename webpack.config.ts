@@ -49,7 +49,7 @@ export default {
         use: isProduction
             ? 'awesome-typescript-loader?module=es6'
             : [
-              'react-hot-loader',
+              'react-hot-loader/webpack',
               'awesome-typescript-loader',
             ],
       },

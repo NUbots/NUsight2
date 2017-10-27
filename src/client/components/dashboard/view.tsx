@@ -45,7 +45,7 @@ export class Dashboard extends Component<DashboardProps> {
               const model = RobotPanelViewModel.of(robot)
               return (
                 robot.enabled &&
-                <div className={style.panel} key={robot.name}>
+                <div className={style.panel} key={robot.id}>
                   <RobotPanel
                     connected={model.connected}
                     batteryValue={model.batteryValue}

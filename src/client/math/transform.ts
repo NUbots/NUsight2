@@ -69,8 +69,7 @@ export class Transform {
     return this
   }
 
-  @computed
-  public get inverse(): Transform {
+  public inverse(): Transform {
     return new Transform({
       anticlockwise: this.anticlockwise,
       scale: { x: 1 / this.scale.x, y: 1 / this.scale.y },

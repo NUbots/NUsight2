@@ -5,14 +5,11 @@ import { IReactionDisposer } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
-import * as THREE from 'three'
 import { VisionModel } from './model'
+import { VisionNetwork } from './network'
 import * as styles from './styles.css'
 import { VisionViewModel } from './view_model'
 import { RobotViewModel } from './view_model'
-import { VisionNetwork } from './network'
-import { CanvasRenderer } from '../../canvas/renderer'
-import { Transform } from '../../math/transform'
 
 type Props = {
   model: VisionModel

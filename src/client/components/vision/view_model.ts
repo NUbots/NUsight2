@@ -1,16 +1,14 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 import { Scene } from 'three'
-import { BasicAppearance } from '../../canvas/appearance/basic_appearance'
-import { CircleGeometry } from '../../canvas/geometry/circle_geometry'
+import { WebGLRenderer } from 'three'
+import { Camera } from 'three'
 import { Group } from '../../canvas/object/group'
-import { Shape } from '../../canvas/object/shape'
+import { CanvasRenderer } from '../../canvas/renderer'
+import { Transform } from '../../math/transform'
 import { CameraViewModel } from './camera/view_model'
 import { VisionModel } from './model'
 import { VisionRobotModel } from './model'
-import { CanvasRenderer } from '../../canvas/renderer'
-import { WebGLRenderer } from 'three'
-import { Camera } from 'three'
 import { VisionObjectsViewModel } from './vision_objects/view_model'
 
 export class VisionViewModel {
@@ -69,7 +67,7 @@ export class RobotViewModel {
   public get visionObjectsLayer(): LayerViewModel {
     const visionObjectsViewModel = this.visionObjectsViewModel
     return {
-      type: '2d',
+      type: 'canvas2d',
       scene: visionObjectsViewModel.scene,
       camera: visionObjectsViewModel.camera,
       renderer: visionObjectsViewModel.renderer,
@@ -97,7 +95,8 @@ type WebGLLayer = {
 }
 
 type Canvas2DLayer = {
-  type: '2d'
+  type: 'canvas2d'
   scene: Group,
+  camera: Transform,
   renderer(canvas: HTMLCanvasElement): CanvasRenderer
 }

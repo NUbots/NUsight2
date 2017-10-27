@@ -72,13 +72,10 @@ export class VisionView extends Component<Props> {
       robot.layers.forEach((layer, layerIndex) => {
         const canvas = this.canvases.get(this.hash(robot, layerIndex))
         if (canvas) {
-          if (layer.type === '2d') {
-            const camera = Transform.of({ anticlockwise: false })
-            layer.renderer(canvas).render(layer.scene, camera)
+          if (layer.type === 'canvas2d') {
+            layer.renderer(canvas).render(layer.scene, layer.camera)
           } else if (layer.type === 'webgl') {
-            const renderer = layer.renderer(canvas)
-            renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight)
-            renderer.render(layer.scene, layer.camera)
+            layer.renderer(canvas).render(layer.scene, layer.camera)
           }
         }
       })

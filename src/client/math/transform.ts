@@ -1,6 +1,5 @@
 import { action } from 'mobx'
 import { observable } from 'mobx'
-import { computed } from 'mobx'
 
 export type Rotate = number
 export type Scale = { x: number, y: number }

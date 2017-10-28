@@ -27,6 +27,12 @@ export class VisionNetwork {
   private onGoals = (robotModel: RobotModel, goals: NUsightGoals) => {
     const robot = VisionRobotModel.of(robotModel)
     // TODO
+    robot.goals = goals.goals.map(goal => ({
+      tl: Vector2.from(goal.quad!.tl!),
+      tr: Vector2.from(goal.quad!.tr!),
+      bl: Vector2.from(goal.quad!.bl!),
+      br: Vector2.from(goal.quad!.br!),
+    }))
   }
 
   @action

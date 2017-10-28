@@ -3,6 +3,7 @@ import { computed } from 'mobx'
 import { memoize } from '../../../base/memoize'
 import { BasicAppearance } from '../../../canvas/appearance/basic_appearance'
 import { CircleGeometry } from '../../../canvas/geometry/circle_geometry'
+import { PolygonGeometry } from '../../../canvas/geometry/polygon_geometry'
 import { Group } from '../../../canvas/object/group'
 import { Shape } from '../../../canvas/object/shape'
 import { CanvasRenderer } from '../../../canvas/renderer'
@@ -32,7 +33,7 @@ export class VisionObjectsViewModel {
     return Group.of({
       children: [
         this.balls,
-        // TODO: goals here
+        this.goals,
       ],
     })
   }
@@ -48,6 +49,23 @@ export class VisionObjectsViewModel {
         }),
         BasicAppearance.of({
           fillStyle: 'orange',
+        }),
+      )),
+    })
+  }
+
+  @computed
+  private get goals(): Group {
+    return Group.of({
+      children: this.robotModel.goals.map(goal => Shape.of(
+        PolygonGeometry.of([
+          goal.tl,
+          goal.tr,
+          goal.br,
+          goal.bl,
+        ]),
+        BasicAppearance.of({
+          fillStyle: 'yellow',
         }),
       )),
     })

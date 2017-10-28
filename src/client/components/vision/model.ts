@@ -21,6 +21,7 @@ export class VisionModel {
 
 type VisionRobotModelOpts = {
   balls: VisionBall[]
+  goals: VisionGoal[]
 }
 
 type VisionBall = {
@@ -28,16 +29,26 @@ type VisionBall = {
   centre: Vector2
 }
 
+type VisionGoal = {
+  tl: Vector2
+  tr: Vector2
+  bl: Vector2
+  br: Vector2
+}
+
 export class VisionRobotModel {
   @observable public balls: VisionBall[]
+  @observable public goals: VisionGoal[]
 
   constructor(private robotModel: RobotModel, opts: VisionRobotModelOpts) {
     this.balls = opts.balls
+    this.goals = opts.goals
   }
 
   public static of = memoize((robotModel: RobotModel) => {
     return new VisionRobotModel(robotModel, {
       balls: [],
+      goals: [],
     })
   })
 

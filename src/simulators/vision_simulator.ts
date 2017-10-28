@@ -10,6 +10,7 @@ import NUsightBalls = message.vision.NUsightBalls
 import NUsightGoals = message.vision.NUsightGoals
 import Side = message.vision.Goal.Side
 import Team = message.vision.Goal.Team
+import { Vector2 } from '../client/math/vector2'
 
 export class VisionSimulator implements Simulator {
   public constructor(private random: SeededRandom) {
@@ -60,29 +61,37 @@ export class VisionSimulator implements Simulator {
     const messageType = MessageTypePath.of().getPath(NUsightGoals)
     // TODO: production reasonable values.
     const buffer = NUsightGoals.encode({
-      goals: range(numGoals).map(i => ({
-        visObject: {
-          timestamp: { seconds: time },
-          screenAngular: { x: 0, y: 0 },
-          angularSize: { x: 0, y: 0 },
-          cameraId: 1,
-        },
-        side: Side.UNKNOWN_SIDE,
-        team: Team.UNKNOWN_TEAM,
-        quad: {
-          tl: { x: 0, y: 0 },
-          tr: { x: 0, y: 0 },
-          bl: { x: 0, y: 0 },
-          br: { x: 0, y: 0 },
-        },
-        measurement: [{
-          type: GoalMeasurementType.UNKNOWN_MEASUREMENT,
-          position: { x: 0, y: 0, z: 0 },
-          covariance: { x: { x: 0, y: 0, z: 0 }, y: { x: 0, y: 0, z: 0 }, z: { x: 0, y: 0, z: 0 } },
-          normalAngles: { x: 0, y: 0 },
-          normAngCov: { x: { x: 0, y: 0 }, y: { x: 0, y: 0 } },
-        }],
-      })),
+      goals: range(numGoals).map(i => {
+        const center = Vector2.of(this.random.float(0, 300), this.random.float(0, 150))
+        const heightHalf = this.random.float(25, 50)
+        const topWidthHalf = this.random.float(5, 10)
+        const bottomWidthHalf = this.random.float(5, 10)
+        const topShift = this.random.float(-10, 10)
+        const bottomShift = this.random.float(-10, 10)
+        return {
+          visObject: {
+            timestamp: { seconds: time },
+            screenAngular: { x: 0, y: 0 },
+            angularSize: { x: 0, y: 0 },
+            cameraId: 1,
+          },
+          side: Side.UNKNOWN_SIDE,
+          team: Team.UNKNOWN_TEAM,
+          quad: {
+            tl: { x: center.x - topWidthHalf + topShift, y: center.x - heightHalf },
+            tr: { x: center.x + topWidthHalf + topShift, y: center.x - heightHalf },
+            bl: { x: center.x - bottomWidthHalf + bottomShift, y: center.x + heightHalf },
+            br: { x: center.x + bottomWidthHalf + bottomShift, y: center.x + heightHalf },
+          },
+          measurement: [{
+            type: GoalMeasurementType.UNKNOWN_MEASUREMENT,
+            position: { x: 0, y: 0, z: 0 },
+            covariance: { x: { x: 0, y: 0, z: 0 }, y: { x: 0, y: 0, z: 0 }, z: { x: 0, y: 0, z: 0 } },
+            normalAngles: { x: 0, y: 0 },
+            normAngCov: { x: { x: 0, y: 0 }, y: { x: 0, y: 0 } },
+          }],
+        }
+      }),
     }).finish()
     return { messageType, buffer }
   }

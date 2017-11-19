@@ -1,6 +1,7 @@
 import * as compression from 'compression'
 import * as history from 'connect-history-api-fallback'
 import * as express from 'express'
+import * as fs from 'fs'
 import * as http from 'http'
 import * as minimist from 'minimist'
 import * as favicon from 'serve-favicon'
@@ -9,12 +10,15 @@ import * as webpack from 'webpack'
 import * as webpackDevMiddleware from 'webpack-dev-middleware'
 import * as webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackConfig from '../../webpack.config'
+import { VisionSimulator } from '../simulators/vision_simulator'
+import { NbsNUClearPlayback } from './nbs/nbs_nuclear_playback'
+import { DirectNUClearNetClient } from './nuclearnet/direct_nuclearnet_client'
+import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
+import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
+import { WebSocketServer } from './nuclearnet/web_socket_server'
 import { OverviewSimulator } from '../simulators/overview_simulator'
 import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
 import { VirtualRobots } from '../simulators/virtual_robots'
-import { VisionSimulator } from '../simulators/vision_simulator'
-import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
-import { WebSocketServer } from './nuclearnet/web_socket_server'
 
 const compiler = webpack(webpackConfig)
 
@@ -67,6 +71,18 @@ function init() {
     })
     virtualRobots.simulateWithFrequency(5)
   }
+
+  async function playback() {
+    const fake = withSimulators ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+    fake.connect({ name: 'Fake Stream' })
+    while (true) {
+      const file = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/igus.nbz')
+      const out = NbsNUClearPlayback.fromRawStream(file, fake)
+      await new Promise(res => out.on('finish', res))
+    }
+  }
+
+  playback()
 }
 
 devMiddleware.waitUntilValid(init)

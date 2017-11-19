@@ -1,16 +1,16 @@
 import { message } from '../../src/shared/proto/messages'
+import { Vector2 } from '../client/math/vector2'
 import { MessageTypePath } from '../client/network/message_type_names'
 import { SeededRandom } from '../shared/base/random/seeded_random'
 import { range } from '../shared/base/range'
-import { Simulator } from './simulator'
-import { Message } from './simulator'
+import { Simulator } from '../virtual_robots/simulator'
+import { Message } from '../virtual_robots/simulator'
 import BallMeasurementType = message.vision.Ball.MeasurementType
 import GoalMeasurementType = message.vision.Goal.MeasurementType
-import NUsightBalls = message.vision.NUsightBalls
-import NUsightGoals = message.vision.NUsightGoals
 import Side = message.vision.Goal.Side
 import Team = message.vision.Goal.Team
-import { Vector2 } from '../client/math/vector2'
+import NUsightBalls = message.vision.NUsightBalls
+import NUsightGoals = message.vision.NUsightGoals
 
 export class VisionSimulator implements Simulator {
   public constructor(private random: SeededRandom) {

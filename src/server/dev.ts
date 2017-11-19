@@ -14,16 +14,16 @@ import { VisionSimulator } from '../simulators/vision_simulator'
 import { NbsNUClearPlayback } from './nbs/nbs_nuclear_playback'
 import { DirectNUClearNetClient } from './nuclearnet/direct_nuclearnet_client'
 import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
+import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
+import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
+import { VirtualRobots } from '../virtual_robots/virtual_robots'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
-import { OverviewSimulator } from '../simulators/overview_simulator'
-import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
-import { VirtualRobots } from '../simulators/virtual_robots'
 
 const compiler = webpack(webpackConfig)
 
 const args = minimist(process.argv.slice(2))
-const withSimulators = args['with-simulators'] || false
+const withVirtualRobots = args['virtual-robots'] || false
 
 const app = express()
 const server = http.createServer(app)
@@ -31,7 +31,7 @@ const sioNetwork = sio(server)
 
 // Initialize socket.io namespace immediately to catch reconnections.
 WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
-  fakeNetworking: withSimulators,
+  fakeNetworking: withVirtualRobots,
 })
 
 const devMiddleware = webpackDevMiddleware(compiler, {
@@ -59,21 +59,21 @@ server.listen(port, () => {
 })
 
 function init() {
-  if (withSimulators) {
+  if (withVirtualRobots) {
     const virtualRobots = VirtualRobots.of({
       fakeNetworking: true,
       numRobots: 3,
       simulators: [
-        OverviewSimulator.of(),
-        SensorDataSimulator.of(),
-        VisionSimulator.of(),
+        { frequency: 1, simulator: OverviewSimulator.of() },
+        { frequency: 60, simulator: SensorDataSimulator.of() },
+        { frequency: 5, simulator: VisionSimulator.of() },
       ],
     })
-    virtualRobots.simulateWithFrequency(5)
+    virtualRobots.startSimulators()
   }
 
   async function playback() {
-    const fake = withSimulators ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+    const fake = withVirtualRobots ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     fake.connect({ name: 'Fake Stream' })
     while (true) {
       const file = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/igus.nbz')

@@ -1,9 +1,10 @@
 import { computed } from 'mobx'
+import { observable } from 'mobx'
+import { IObservableValue } from 'mobx'
 import { memoize } from '../../base/memoize'
+import { Vector2 } from '../../math/vector2'
 import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
-import { Vector2 } from '../../math/vector2'
-import { observable } from 'mobx'
 
 export class VisionModel {
   public constructor(private appModel: AppModel) {
@@ -22,6 +23,7 @@ export class VisionModel {
 type VisionRobotModelOpts = {
   balls: VisionBall[]
   goals: VisionGoal[]
+  image?: Uint8Array
 }
 
 type VisionBall = {
@@ -39,10 +41,12 @@ type VisionGoal = {
 export class VisionRobotModel {
   @observable public balls: VisionBall[]
   @observable public goals: VisionGoal[]
+  @observable.ref public image: IObservableValue<Uint8Array>
 
   constructor(private robotModel: RobotModel, opts: VisionRobotModelOpts) {
     this.balls = opts.balls
     this.goals = opts.goals
+    this.image = observable.box(opts.image)
   }
 
   public static of = memoize((robotModel: RobotModel) => {

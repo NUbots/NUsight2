@@ -47,7 +47,7 @@ export class RobotViewModel {
   public get layers(): LayerViewModel[] {
     // Layers should be ordered from top-to-bottom.
     return [
-      this.visionObjectsLayer,
+      // this.visionObjectsLayer,
       this.cameraImageLayer,
     ]
   }

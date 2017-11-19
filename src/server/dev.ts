@@ -69,16 +69,16 @@ function init() {
         { frequency: 5, simulator: VisionSimulator.of() },
       ],
     })
-    virtualRobots.startSimulators()
+    // virtualRobots.startSimulators()
   }
 
   async function playback() {
-    const fake = withVirtualRobots ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
-    fake.connect({ name: 'Fake Stream' })
+    const nuclearnetClient = withVirtualRobots ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+    nuclearnetClient.connect({ name: 'Fake Stream' })
     while (true) {
-      const file = fs.createReadStream('/Users/brendan/Lab/NUsight2/recordings/igus.nbz')
-      const out = NbsNUClearPlayback.fromRawStream(file, fake)
+      const out = NbsNUClearPlayback.fromFile('/Users/brendan/Lab/NUsight2/recordings/igus.nbs', nuclearnetClient)
       await new Promise(res => out.on('finish', res))
+      console.log('end')
     }
   }
 

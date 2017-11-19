@@ -6,12 +6,14 @@ import { RobotModel } from '../robot/model'
 import { VisionRobotModel } from './model'
 import NUsightBalls = message.vision.NUsightBalls
 import NUsightGoals = message.vision.NUsightGoals
+import Image = message.input.Image
 import { Vector2 } from '../../math/vector2'
 
 export class VisionNetwork {
   public constructor(private network: Network) {
     this.network.on(NUsightGoals, this.onGoals)
     this.network.on(NUsightBalls, this.onBalls)
+    this.network.on(Image, this.onImage)
   }
 
   public static of(nusightNetwork: NUsightNetwork): VisionNetwork {
@@ -43,5 +45,18 @@ export class VisionNetwork {
       radius: ball.circle!.radius!,
       centre: Vector2.from(ball.circle!.centre!),
     }))
+  }
+
+  @action
+  private onImage = (robotModel: RobotModel, image: Image) => {
+    const robot = VisionRobotModel.of(robotModel)
+    // TODO
+    console.log('new image');
+    const BGGR = 0x52474742
+    if (image.format === BGGR) {
+      robot.image.set(image.data)
+    } else {
+      throw new Error(`Unsupported image format: ${image.format}`)
+    }
   }
 }

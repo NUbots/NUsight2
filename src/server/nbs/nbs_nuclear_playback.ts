@@ -66,13 +66,16 @@ export class NbsNUClearPlayback extends stream.Writable {
     const localTimeOffset = this.firstLocalTimestamp + frameTimeOffset
     // Calculate how long that is from right now, ensure we keep it above 0.
     const timeout = Math.max(0, localTimeOffset - now)
+    console.log('timestamp', frame.timestampInMicroseconds)
 
     // Schedule the frame to be sent over the network at the precisely the right time in the future.
     this.clock.setTimeout(() => {
+      console.time('test')
       this.nuclearnetClient.send({
         type: frame.hash,
         payload: frame.payload,
       })
+      console.timeEnd('test')
       /*
        * Only signal we're done with the frame after we send it to the network, this should ensure we put back-pressure
        * upstream. e.g. if this was coming from a very large binary file recording, that upstream file reader would

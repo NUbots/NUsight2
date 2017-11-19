@@ -48,7 +48,7 @@ export class VisionView extends Component<Props> {
             <div className={styles.robot} key={robot.name}>
               <div className={styles.canvases}>
                 {robot.layers.map((layer, index) => (
-                  <canvas className={styles.canvas} key={index} ref={this.onRef(robot, index)}></canvas>
+                  <canvas className={styles.canvas} key={index} width={1280} height={1024} ref={this.onRef(robot, index)}></canvas>
                 ))}
               </div>
               <div>{robot.name}</div>

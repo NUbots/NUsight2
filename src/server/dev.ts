@@ -14,6 +14,7 @@ import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_si
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
+import { ClassifierSimulator } from '../virtual_robots/simulators/classifier_simulator'
 
 const compiler = webpack(webpackConfig)
 
@@ -59,8 +60,9 @@ function init() {
       fakeNetworking: true,
       numRobots: 3,
       simulators: [
-        { frequency: 1, simulator: OverviewSimulator.of() },
-        { frequency: 60, simulator: SensorDataSimulator.of() },
+        // { frequency: 1, simulator: OverviewSimulator.of() },
+        // { frequency: 60, simulator: SensorDataSimulator.of() },
+        { frequency: 1, simulator: ClassifierSimulator.of() },
       ],
     })
     virtualRobots.startSimulators()

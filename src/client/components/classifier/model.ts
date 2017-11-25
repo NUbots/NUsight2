@@ -27,14 +27,14 @@ export class ClassifierRobotModel {
   @observable.ref public bitsX: number
   @observable.ref public bitsY: number
   @observable.ref public bitsZ: number
-  @observable.ref public lut: IObservableValue<Uint8Array>
+  @observable.ref public lut: IObservableValue<{data: Uint8Array }>
 
   constructor(private model: RobotModel, { aspect, bitsX, bitsY, bitsZ, lut }: {
     aspect: number,
     bitsX: number,
     bitsY: number,
     bitsZ: number,
-    lut: IObservableValue<Uint8Array>
+    lut: IObservableValue<{ data: Uint8Array }>
   }) {
     this.aspect = aspect
     this.bitsX = bitsX
@@ -52,7 +52,7 @@ export class ClassifierRobotModel {
       bitsX,
       bitsY,
       bitsZ,
-      lut: observable.box(new Uint8Array(2 ** (bitsX + bitsY + bitsZ))),
+      lut: observable.box({ data: new Uint8Array(2 ** (bitsX + bitsY + bitsZ)) }),
     })
   })
 

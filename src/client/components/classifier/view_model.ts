@@ -112,7 +112,7 @@ export class ClassifierRobotViewModel {
   @computed
   get lutTexture(): Texture {
     const texture = new DataTexture(
-      this.model.lut.get(),
+      this.model.lut.get().data,
       512,
       512,
       LuminanceFormat,

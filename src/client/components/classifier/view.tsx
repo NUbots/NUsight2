@@ -53,8 +53,8 @@ export class ClassifierView extends Component<Props> {
     viewModel.robots.forEach(robot => {
       const canvas = this.canvases.get(robot.id)
       if (canvas) {
-        const renderer = viewModel.renderer(canvas)
-        renderer.render(viewModel.scene, viewModel.camera)
+        const renderer = robot.renderer(canvas)
+        renderer.render(robot.scene, robot.camera)
       }
     })
   }

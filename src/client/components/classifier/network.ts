@@ -26,12 +26,11 @@ export class ClassifierNetwork {
   private onLookUpTableDiff = (robotModel: RobotModel, lookUpTableDiff: LookUpTableDiff) => {
     const robot = ClassifierRobotModel.of(robotModel)
     const { diff } = lookUpTableDiff
-    console.log('diff', diff.length)
     diff.forEach(d => {
       const { lutIndex, classification } = d
-      const lut = this.model.lut.get()
+      const lut = robot.lut.get()
       lut[lutIndex!] = classification!
-      this.model.lut.set(new Uint8Array(lut))
+      robot.lut.set(new Uint8Array(lut))
     })
   }
 }

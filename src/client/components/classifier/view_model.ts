@@ -1,14 +1,11 @@
-///<reference path="../../../../node_modules/@types/three/three-core.d.ts"/>
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 import { WebGLRenderer } from 'three'
-import { PerspectiveCamera } from 'three'
 import { Camera } from 'three'
 import { Scene } from 'three'
 import { Mesh } from 'three'
 import { Material } from 'three'
 import { Geometry } from 'three'
-import { BoxGeometry } from 'three'
 import { ShaderMaterial } from 'three'
 import { Texture } from 'three'
 import { DataTexture } from 'three'
@@ -17,27 +14,16 @@ import { UnsignedByteType } from 'three'
 import { ClampToEdgeWrapping } from 'three'
 import { LinearFilter } from 'three'
 import { Renderer } from 'three'
+import { PlaneGeometry } from 'three'
+import { OrthographicCamera } from 'three'
 import { ClassifierModel } from './model'
 import { ClassifierRobotModel } from './model'
 // import * as fragmentShader from './shaders/visual_lut.frag'
 // import * as vertexShader from './shaders/visual_lut.vert'
 import * as fragmentShader from './shaders/simple.frag'
 import * as vertexShader from './shaders/simple.vert'
-import { PlaneGeometry } from 'three'
-import { OrthographicCamera } from 'three'
 
 export class ClassifierViewModel {
-  public renderer = createTransformer((canvas: HTMLCanvasElement): Renderer => {
-    const renderer = new WebGLRenderer({
-      canvas,
-      antialias: true,
-    })
-    renderer.setClearColor('#ffffff')
-    // renderer.setViewport(1, 1)
-    return renderer
-  })
-
-
   public static of = createTransformer((model: ClassifierModel) => {
     return new ClassifierViewModel(model)
   })
@@ -48,6 +34,31 @@ export class ClassifierViewModel {
   @computed
   get robots(): ClassifierRobotViewModel[] {
     return this.model.robots.map(robot => ClassifierRobotViewModel.of(robot))
+  }
+}
+
+export class ClassifierRobotViewModel {
+  public renderer = createTransformer((canvas: HTMLCanvasElement): Renderer => {
+    const renderer = new WebGLRenderer({
+      canvas,
+      antialias: true,
+    })
+    renderer.setClearColor('#ffffff')
+    // renderer.setViewport(1, 1)
+    return renderer
+  })
+
+  constructor(private model: ClassifierRobotModel) {
+
+  }
+
+  public static of = createTransformer((model: ClassifierRobotModel) => {
+    return new ClassifierRobotViewModel(model)
+  })
+
+  @computed
+  get id(): string {
+    return this.model.id
   }
 
   @computed
@@ -115,20 +126,5 @@ export class ClassifierViewModel {
     texture.flipY = true
     texture.needsUpdate = true
     return texture
-  }
-}
-
-export class ClassifierRobotViewModel {
-  constructor(private model: ClassifierRobotModel) {
-
-  }
-
-  public static of = createTransformer((model: ClassifierRobotModel) => {
-    return new ClassifierRobotViewModel(model)
-  })
-
-  @computed
-  get id(): string {
-    return this.model.id
   }
 }

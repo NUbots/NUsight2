@@ -41,7 +41,7 @@ export class ClassifierViewModel {
   public static of = createTransformer((model: ClassifierModel) => {
     return new ClassifierViewModel(model)
   })
-  
+
   constructor(private model: ClassifierModel) {
   }
 

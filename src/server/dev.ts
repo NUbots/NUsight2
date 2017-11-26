@@ -78,7 +78,7 @@ function init() {
     while (true) {
       const out = NbsNUClearPlayback.fromFile('/Users/brendan/Lab/NUsight2/recordings/igus.nbs', nuclearnetClient)
       await new Promise(res => out.on('finish', res))
-      console.log('end')
+      // console.log('end')
     }
   }
 

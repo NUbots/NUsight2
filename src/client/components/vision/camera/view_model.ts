@@ -15,16 +15,29 @@ import { UnsignedByteType } from 'three'
 import { ClampToEdgeWrapping } from 'three'
 import { LinearFilter } from 'three'
 import { PlaneGeometry } from 'three'
+import { Matrix4 } from 'three'
+import { CustomBlending } from 'three'
+import { AddEquation } from 'three'
+import { SrcAlphaFactor } from 'three'
+import { OneMinusSrcAlphaFactor } from 'three'
 import { memoize } from '../../../base/memoize'
 import { VisionRobotModel } from '../model'
+import * as fragmentShader2 from './shaders/horizon.frag'
 import * as fragmentShader from './shaders/image.frag'
+import * as vertexShader from './shaders/image.vert'
 // import * as fragmentShader from './shaders/simple2.frag'
 // import * as fragmentShader from './shaders/simple.frag'
-import * as vertexShader from './shaders/image.vert'
+import * as vertexShader2 from './shaders/simple.vert'
 
 export class CameraViewModel {
   public renderer = memoize((canvas: HTMLCanvasElement) => {
-    return new WebGLRenderer({ canvas })
+    const renderer = new WebGLRenderer({
+      canvas,
+      // alpha: false,
+      // premultipliedAlpha: false,
+    })
+    renderer.setClearColor('#000')
+    return renderer
   })
 
   public constructor(private robotModel: VisionRobotModel) {
@@ -46,6 +59,7 @@ export class CameraViewModel {
     const scene = new Scene()
     if (this.robotModel.image.get()) {
       scene.add(this.plane)
+      scene.add(this.plane2)
     }
     return scene
   }
@@ -56,13 +70,41 @@ export class CameraViewModel {
   }
 
   @computed
+  private get plane2(): Mesh {
+    return new Mesh(this.planeGeometry, this.planeMaterial2)
+  }
+
+  @computed
   private get planeGeometry(): Geometry {
     return new PlaneGeometry(2, 2)
   }
 
   @computed
+  private get planeMaterial2(): Material {
+    const material = new ShaderMaterial({
+      vertexShader: String(vertexShader2),
+      fragmentShader: String(fragmentShader2),
+      uniforms: {
+        imageSize: { value: [1280, 1024] },
+        Hcw: {
+          value: new Matrix4().set(
+            this.robotModel.Hcw.x.x, this.robotModel.Hcw.y.x, this.robotModel.Hcw.z.x, this.robotModel.Hcw.t.x,
+            this.robotModel.Hcw.x.y, this.robotModel.Hcw.y.y, this.robotModel.Hcw.z.y, this.robotModel.Hcw.t.y,
+            this.robotModel.Hcw.x.z, this.robotModel.Hcw.y.z, this.robotModel.Hcw.z.z, this.robotModel.Hcw.t.z,
+            this.robotModel.Hcw.x.t, this.robotModel.Hcw.y.t, this.robotModel.Hcw.z.t, this.robotModel.Hcw.t.t,
+          ),
+        },
+      },
+    })
+    material.depthTest = false
+    material.depthWrite = false
+    material.transparent = true
+    return material
+  }
+
+  @computed
   private get planeMaterial(): Material {
-    return new ShaderMaterial({
+    const material = new ShaderMaterial({
       vertexShader: String(vertexShader),
       fragmentShader: String(fragmentShader),
       uniforms: {
@@ -71,6 +113,14 @@ export class CameraViewModel {
         image: { value: this.imageTexture, type: 't' },
       },
     })
+    material.blending = CustomBlending
+    material.blendEquation = AddEquation
+    material.blendSrc = SrcAlphaFactor
+    material.blendDst = OneMinusSrcAlphaFactor
+    material.premultipliedAlpha = false
+    material.depthTest = false
+    material.depthWrite = false
+    return material
   }
 
   @computed

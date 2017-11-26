@@ -42,9 +42,7 @@ export class NbsFrameDecoder extends stream.Transform {
   }
 
   public _transform(buffer: Buffer, encoding: string, done: (err?: any, data?: any) => void) {
-    console.time('decode');
     this.push(decodeFrame(buffer))
-    console.timeEnd('decode');
     done()
   }
 }

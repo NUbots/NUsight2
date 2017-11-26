@@ -143,7 +143,6 @@ class PacketProcessor {
   }
 
   public onPacket(event: string, packet: NUClearNetPacket) {
-    console.log('sending', event, packet.hash)
     if (packet.reliable) {
       this.sendReliablePacket(event, packet)
     } else if (this.isEventBelowLimit(event)) {

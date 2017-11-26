@@ -8,6 +8,7 @@ import NUsightBalls = message.vision.NUsightBalls
 import NUsightGoals = message.vision.NUsightGoals
 import Image = message.input.Image
 import { Vector2 } from '../../math/vector2'
+import { Matrix4 } from '../../math/matrix4'
 
 export class VisionNetwork {
   public constructor(private network: Network) {
@@ -51,8 +52,8 @@ export class VisionNetwork {
   private onImage = (robotModel: RobotModel, image: Image) => {
     const robot = VisionRobotModel.of(robotModel)
     // TODO
-    console.log('new image');
     const BGGR = 0x52474742
+    robot.Hcw = Matrix4.from(image.Hcw)
     if (image.format === BGGR) {
       robot.image.set(image.data)
     } else {

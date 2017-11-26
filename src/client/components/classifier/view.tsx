@@ -5,13 +5,16 @@ import { action } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
+import { ColorSpaceVisualizer } from './color_space_visualizer/view'
 import { ClassifierModel } from './model'
 import { ClassifierNetwork } from './network'
 import { ClassifierViewModel } from './view_model'
+import { ComponentType } from 'react'
 
 type Props = {
   model: ClassifierModel
   network: ClassifierNetwork
+  ColorSpaceVisualizer: ComponentType
 }
 
 @observer
@@ -21,18 +24,20 @@ export class ClassifierView extends Component<Props> {
   private stopRendering: () => void
 
   public render() {
-    const viewModel = ClassifierViewModel.of(this.props.model)
+    const { model, ColorSpaceVisualizer } = this.props
+    const viewModel = ClassifierViewModel.of(model)
     return (
       <div>
         <h1>Classifier</h1>
         {viewModel.robots.map(robot => (
-          <div key={robot.id} style={{ border: '1px solid red', margin: '6px' }}>
+          <div key={robot.id} style={{ border: '1px solid red', margin: '6px', display: 'flex' }}>
             <canvas
               ref={el => this.onCanvasRef(robot.id, el)}
               style={{ display: 'block' }}
               width={512}
               height={512}
             />
+            <ColorSpaceVisualizer/>
           </div>
         ))}
       </div>

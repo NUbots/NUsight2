@@ -73,7 +73,7 @@ export class ClassifierRobotViewModel {
     // const camera = new PerspectiveCamera(75, this.model.aspect, 0.01, 100)
     const camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 100)
     camera.up.set(0, 0, 1)
-    camera.position.set(0, 0, 5)
+    camera.position.set(0, 0, 1)
     return camera
   }
 
@@ -91,7 +91,7 @@ export class ClassifierRobotViewModel {
 
   @computed
   get planeMaterial(): Material {
-    return new ShaderMaterial({
+    const material = new ShaderMaterial({
       vertexShader: String(vertexShader),
       fragmentShader: String(fragmentShader),
       uniforms: {
@@ -107,6 +107,8 @@ export class ClassifierRobotViewModel {
         outputColourSpace: { value: 1 },
       },
     })
+    material.depthTest = false
+    return material
   }
 
   @computed

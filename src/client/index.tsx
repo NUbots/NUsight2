@@ -29,6 +29,8 @@ import { Scatter } from './components/scatter_plot/view'
 import { Subsumption } from './components/subsumption/view'
 import { Vision } from './components/vision/view'
 import { NUsightNetwork } from './network/nusight_network'
+import { installClassifier } from './components/classifier/install'
+import { NavigationBuilder } from './navigation'
 
 // enable MobX strict mode
 useStrict(true)
@@ -39,15 +41,17 @@ nusightNetwork.connect({ name: 'nusight' })
 
 const localisationModel = LocalisationModel.of(appModel)
 const dashboardModel = DashboardModel.of(appModel.robots)
-const classifierModel = ClassifierModel.of(appModel)
 
 const appController = AppController.of()
 AppNetwork.of(nusightNetwork, appModel)
 const menu = withRobotSelectorMenuBar(appModel.robots, appController.toggleRobotEnabled)
 
+const nav = NavigationBuilder.of()
+installClassifier({ appModel, nusightNetwork, nav })
+
 ReactDOM.render(
   <BrowserRouter>
-    <AppView>
+    <AppView nav={nav}>
       <Switch>
         <Route exact path='/' render={() => {
           const model = dashboardModel
@@ -66,13 +70,9 @@ ReactDOM.render(
         <Route path='/chart' component={Chart}/>
         <Route path='/scatter' component={Scatter}/>
         <Route path='/nuclear' component={NUClear}/>
-        <Route path='/classifier' render={() => {
-          const model = classifierModel
-          const network = ClassifierNetwork.of(nusightNetwork, model)
-          return <ClassifierView model={model} network={network}/>
-        }}/>
         <Route path='/subsumption' component={Subsumption}/>
         <Route path='/gamestate' component={GameState}/>
+        {...nav.routes()}
       </Switch>
     </AppView>
   </BrowserRouter>,

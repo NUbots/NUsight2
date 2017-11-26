@@ -1,28 +1,26 @@
 import { ComponentType } from 'react'
 import * as React from 'react'
-import { Route } from 'react-router'
 
-type Config = {
+type Route = {
   exact?: boolean
-  route: string
-  tab: { icon: any, text: string }
-  Content: ComponentType,
+  path: string
+  Icon: any,
+  label: string,
+  Content: ComponentType
 }
 
-export class NavigationBuilder {
-  configs: Config[] = []
+export class NavigationConfiguration {
+  private routes: Route[] = []
 
-  static of() {
-    return new NavigationBuilder()
+  public static of() {
+    return new NavigationConfiguration()
   }
 
-  add(config: Config) {
-    this.configs.push(config)
+  public addRoute(route: Route) {
+    this.routes.push(route)
   }
 
-  routes() {
-    return this.configs.map(c => (
-      <Route exact={c.exact} path={c.route} render={() => <c.Content/>}/>
-    ))
+  public getRoutes() {
+    return this.routes
   }
 }

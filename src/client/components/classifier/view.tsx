@@ -5,11 +5,11 @@ import { action } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
+import { ComponentType } from 'react'
 import { ColorSpaceVisualizer } from './color_space_visualizer/view'
 import { ClassifierModel } from './model'
 import { ClassifierNetwork } from './network'
 import { ClassifierViewModel } from './view_model'
-import { ComponentType } from 'react'
 
 type Props = {
   model: ClassifierModel

@@ -1,18 +1,18 @@
 import * as React from 'react'
-import { NavigationBuilder } from '../../navigation'
+import { NavigationConfiguration } from '../../navigation'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { AppModel } from '../app/model'
 import { ColorSpaceVisualzerModel } from './color_space_visualizer/model'
 import { ColorSpaceVisualizer } from './color_space_visualizer/view'
+import Icon from './icon.svg'
 import { ClassifierModel } from './model'
 import { ClassifierNetwork } from './network'
 import { ClassifierView } from './view'
-import CubeIcon from '../navigation/icons/cube.svg'
 
-export function installClassifier({ appModel, nusightNetwork, nav }: {
+export function installClassifier({ nav, appModel, nusightNetwork }: {
   appModel: AppModel,
   nusightNetwork: NUsightNetwork,
-  nav: NavigationBuilder
+  nav: NavigationConfiguration
 }) {
   const model = ClassifierModel.of(appModel)
   const network = ClassifierNetwork.of(nusightNetwork, model)
@@ -20,11 +20,12 @@ export function installClassifier({ appModel, nusightNetwork, nav }: {
     ColorSpaceVisualizer() {
       const model = ColorSpaceVisualzerModel.of()
       return <ColorSpaceVisualizer model={model}/>
-    }
+    },
   }
-  nav.add({
-    route: '/classifier',
-    tab: { icon: CubeIcon, text: 'Classifier' },
+  nav.addRoute({
+    path: '/classifier',
+    Icon,
+    label: 'Classifier',
     Content: () => <ClassifierView model={model} network={network} ColorSpaceVisualizer={views.ColorSpaceVisualizer}/>,
   })
 }

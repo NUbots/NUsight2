@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { NavigationView } from '../navigation/view'
 import * as style from './style.css'
-import { NavigationBuilder } from '../../navigation'
-import { Component } from 'react'
+import { NavigationConfiguration } from '../../navigation'
 
-export class AppView extends Component<{ nav: NavigationBuilder }> {
+export class AppView extends React.Component<{ nav: NavigationConfiguration }> {
   public render() {
     const { nav, children } = this.props
     return (

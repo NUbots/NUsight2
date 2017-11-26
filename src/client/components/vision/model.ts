@@ -23,15 +23,10 @@ export class VisionModel {
 }
 
 type VisionRobotModelOpts = {
-  balls: VisionBall[]
+  balls: VisionBallModel[]
   goals: VisionGoal[]
   image: IObservableValue<Uint8Array>
   Hcw: Matrix4
-}
-
-type VisionBall = {
-  gradient: number
-  axis: Vector3
 }
 
 type VisionGoal = {
@@ -42,7 +37,7 @@ type VisionGoal = {
 }
 
 export class VisionRobotModel {
-  @observable public balls: VisionBall[]
+  @observable public balls: VisionBallModel[]
   @observable public goals: VisionGoal[]
   @observable.ref public image: IObservableValue<Uint8Array>
   @observable public Hcw: Matrix4
@@ -71,5 +66,26 @@ export class VisionRobotModel {
   @computed
   public get visible() {
     return this.robotModel.enabled
+  }
+}
+export class VisionBallModel {
+  @observable gradient: number
+  @observable axis: Vector3
+
+  constructor(private model: VisionRobotModel, { gradient, axis }: { gradient: number, axis: Vector3}) {
+    this.gradient = gradient
+    this.axis = axis
+  }
+
+  static of = memoize((robotModel: VisionRobotModel) => {
+    return new VisionBallModel(robotModel, {
+      gradient: 0,
+      axis: Vector3.of(),
+    })
+  })
+
+  @computed
+  get Hcw(): Matrix4 {
+    return this.model.Hcw
   }
 }

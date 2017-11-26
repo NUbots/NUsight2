@@ -7,6 +7,7 @@ import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
 import { VisionRobotModel } from './model'
 import Image = message.input.Image
+import { VisionBallModel } from './model'
 
 export class VisionNetwork {
   public constructor(private network: Network) {
@@ -59,7 +60,7 @@ export class VisionNetwork {
     }
 
     robot.balls = [
-      { axis: new Vector3(1, 0, 0), gradient: Math.cos(Math.PI / 8) },
+      new VisionBallModel(robot, { axis: new Vector3(1, 0, 0), gradient: Math.cos(Math.random() * 45 * Math.PI / 180) }),
     ]
   }
 }

@@ -1,9 +1,11 @@
-uniform mat4 Hcw;
+uniform vec3 axis;
+uniform float gradient;
 uniform vec2 imageSize;
 
 vec2 imageToScreen(vec2 point, vec2 imageSize);
 vec3 unprojectEquidistant(vec2 point, float focalLength);
 vec2 projectEquidistant(vec3 ray, float focalLength);
+vec3 rotateByAxisAngle(vec3 v, vec3 e, float theta);
 
 float focusLength = 1.0 / 0.0026997136600899543;
 float lineWidth = 4.0;
@@ -11,16 +13,16 @@ float lineWidth = 4.0;
 void main() {
   vec2 screenPoint = imageToScreen(gl_FragCoord.xy, imageSize);
   vec3 cam = unprojectEquidistant(screenPoint, focusLength);
-  vec3 normal = Hcw[2].xyz;
-//  vec3 normal = Hcw[1].xyz;
-  float distance = dot(cam, normal);
-  vec3 p = cam - normal * distance;
+  vec3 p = rotateByAxisAngle(axis, normalize(cross(axis, cam)), acos(gradient));
   vec2 nearestPixel = projectEquidistant(p, focusLength);
   float distance4Real = length(screenPoint - nearestPixel);
 	float alpha = smoothstep(0.0, lineWidth * 0.5, -distance4Real + lineWidth * 0.5);
-  gl_FragColor = vec4(0, 0, 1, alpha);
+  gl_FragColor = vec4(1, 0.5, 0, alpha);
 }
 
+vec3 rotateByAxisAngle(vec3 v, vec3 e, float theta) {
+  return cos(theta) * v + sin(theta) * cross(e, v) + (1.0 - cos(theta)) * (dot(e, v)) * e;
+}
 
 vec2 imageToScreen(vec2 point, vec2 imageSize) {
   return vec2(
@@ -48,3 +50,4 @@ vec2 projectEquidistant(vec3 ray, float focalLength) {
 		r * ray.z / sinTheta
   );
 }
+

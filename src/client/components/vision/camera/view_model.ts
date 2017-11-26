@@ -16,12 +16,12 @@ import { ClampToEdgeWrapping } from 'three'
 import { LinearFilter } from 'three'
 import { PlaneGeometry } from 'three'
 import { Matrix4 } from 'three'
-import { CustomBlending } from 'three'
-import { AddEquation } from 'three'
-import { SrcAlphaFactor } from 'three'
-import { OneMinusSrcAlphaFactor } from 'three'
+import { Vector3 } from 'three'
+import { Object3D } from 'three'
 import { memoize } from '../../../base/memoize'
 import { VisionRobotModel } from '../model'
+import { VisionBallModel } from '../model'
+import * as ballFragmentShader from './shaders/ball.frag'
 import * as horizonFragmentShader from './shaders/horizon.frag'
 import * as imageFragmentShader from './shaders/image.frag'
 import * as imageVertexShader from './shaders/image.vert'
@@ -52,6 +52,7 @@ export class CameraViewModel {
     if (this.robotModel.image.get()) {
       scene.add(this.plane)
       scene.add(this.horizon)
+      scene.add(this.balls)
     }
     return scene
   }
@@ -105,11 +106,6 @@ export class CameraViewModel {
         image: { value: this.imageTexture, type: 't' },
       },
     })
-    material.blending = CustomBlending
-    material.blendEquation = AddEquation
-    material.blendSrc = SrcAlphaFactor
-    material.blendDst = OneMinusSrcAlphaFactor
-    material.premultipliedAlpha = false
     material.depthTest = false
     material.depthWrite = false
     return material
@@ -132,5 +128,62 @@ export class CameraViewModel {
     texture.flipY = true
     texture.needsUpdate = true
     return texture
+  }
+
+  @computed
+  get balls(): Object3D {
+    const mesh = new Object3D()
+    this.robotModel.balls.forEach(ball => {
+      mesh.add(BallViewModel.of(ball).ball)
+    })
+    return mesh
+  }
+}
+
+class BallViewModel {
+  constructor(private model: VisionBallModel) {
+  }
+
+  static of = createTransformer((ball: VisionBallModel) => {
+    return new BallViewModel(ball)
+  })
+
+  @computed
+  get ball(): Mesh {
+    return new Mesh(this.geometry, this.material)
+  }
+
+  @computed
+  get geometry(): Geometry {
+    return new PlaneGeometry(2, 2)
+  }
+
+  @computed
+  get material(): Material {
+    const Hcw = new Matrix4().set(
+      this.model.Hcw.x.x, this.model.Hcw.y.x, this.model.Hcw.z.x, this.model.Hcw.t.x,
+      this.model.Hcw.x.y, this.model.Hcw.y.y, this.model.Hcw.z.y, this.model.Hcw.t.y,
+      this.model.Hcw.x.z, this.model.Hcw.y.z, this.model.Hcw.z.z, this.model.Hcw.t.z,
+      this.model.Hcw.x.t, this.model.Hcw.y.t, this.model.Hcw.z.t, this.model.Hcw.t.t,
+    )
+    const axis = new Vector3(this.model.axis.x, this.model.axis.y, this.model.axis.z)
+    // const Hwc = new Matrix4().getInverse(Hcw);
+    Hcw.setPosition(new Vector3(0, 0, 0))
+    axis.applyMatrix4(Hcw)
+    console.log(axis)
+    console.log(this.model.gradient)
+    const material = new ShaderMaterial({
+      vertexShader: String(simpleVertexShader),
+      fragmentShader: String(ballFragmentShader),
+      uniforms: {
+        axis: { value: axis },
+        gradient: { value: this.model.gradient },
+        imageSize: { value: [1280, 1024] },
+      },
+    })
+    material.depthTest = false
+    material.depthWrite = false
+    material.transparent = true
+    return material
   }
 }

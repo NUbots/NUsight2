@@ -32,42 +32,42 @@ export class VisionObjectsViewModel {
   public get scene(): Group {
     return Group.of({
       children: [
-        this.balls,
-        this.goals,
+        // this.balls,
+        // this.goals,
       ],
     })
   }
 
-  @computed
-  private get balls(): Group {
-    return Group.of({
-      children: this.robotModel.balls.map(ball => Shape.of(
-        CircleGeometry.of({
-          radius: ball.radius,
-          x: ball.centre.x,
-          y: ball.centre.y,
-        }),
-        BasicAppearance.of({
-          fillStyle: 'orange',
-        }),
-      )),
-    })
-  }
-
-  @computed
-  private get goals(): Group {
-    return Group.of({
-      children: this.robotModel.goals.map(goal => Shape.of(
-        PolygonGeometry.of([
-          goal.tl,
-          goal.tr,
-          goal.br,
-          goal.bl,
-        ]),
-        BasicAppearance.of({
-          fillStyle: 'yellow',
-        }),
-      )),
-    })
-  }
+  // @computed
+  // private get balls(): Group {
+  //   return Group.of({
+  //     children: this.robotModel.balls.map(ball => Shape.of(
+  //       CircleGeometry.of({
+  //         radius: ball.radius,
+  //         x: ball.centre.x,
+  //         y: ball.centre.y,
+  //       }),
+  //       BasicAppearance.of({
+  //         fillStyle: 'orange',
+  //       }),
+  //     )),
+  //   })
+  // }
+  //
+  // @computed
+  // private get goals(): Group {
+  //   return Group.of({
+  //     children: this.robotModel.goals.map(goal => Shape.of(
+  //       PolygonGeometry.of([
+  //         goal.tl,
+  //         goal.tr,
+  //         goal.br,
+  //         goal.bl,
+  //       ]),
+  //       BasicAppearance.of({
+  //         fillStyle: 'yellow',
+  //       }),
+  //     )),
+  //   })
+  // }
 }

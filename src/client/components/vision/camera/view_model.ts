@@ -22,22 +22,14 @@ import { SrcAlphaFactor } from 'three'
 import { OneMinusSrcAlphaFactor } from 'three'
 import { memoize } from '../../../base/memoize'
 import { VisionRobotModel } from '../model'
-import * as fragmentShader2 from './shaders/horizon.frag'
-import * as fragmentShader from './shaders/image.frag'
-import * as vertexShader from './shaders/image.vert'
-// import * as fragmentShader from './shaders/simple2.frag'
-// import * as fragmentShader from './shaders/simple.frag'
-import * as vertexShader2 from './shaders/simple.vert'
+import * as horizonFragmentShader from './shaders/horizon.frag'
+import * as imageFragmentShader from './shaders/image.frag'
+import * as imageVertexShader from './shaders/image.vert'
+import * as simpleVertexShader from './shaders/simple.vert'
 
 export class CameraViewModel {
   public renderer = memoize((canvas: HTMLCanvasElement) => {
-    const renderer = new WebGLRenderer({
-      canvas,
-      // alpha: false,
-      // premultipliedAlpha: false,
-    })
-    renderer.setClearColor('#000')
-    return renderer
+    return new WebGLRenderer({ canvas })
   })
 
   public constructor(private robotModel: VisionRobotModel) {
@@ -59,19 +51,19 @@ export class CameraViewModel {
     const scene = new Scene()
     if (this.robotModel.image.get()) {
       scene.add(this.plane)
-      scene.add(this.plane2)
+      scene.add(this.horizon)
     }
     return scene
   }
 
   @computed
   private get plane(): Mesh {
-    return new Mesh(this.planeGeometry, this.planeMaterial)
+    return new Mesh(this.planeGeometry, this.imageMaterial)
   }
 
   @computed
-  private get plane2(): Mesh {
-    return new Mesh(this.planeGeometry, this.planeMaterial2)
+  private get horizon(): Mesh {
+    return new Mesh(this.planeGeometry, this.horiztonMaterial)
   }
 
   @computed
@@ -80,10 +72,10 @@ export class CameraViewModel {
   }
 
   @computed
-  private get planeMaterial2(): Material {
+  private get horiztonMaterial(): Material {
     const material = new ShaderMaterial({
-      vertexShader: String(vertexShader2),
-      fragmentShader: String(fragmentShader2),
+      vertexShader: String(simpleVertexShader),
+      fragmentShader: String(horizonFragmentShader),
       uniforms: {
         imageSize: { value: [1280, 1024] },
         Hcw: {
@@ -103,10 +95,10 @@ export class CameraViewModel {
   }
 
   @computed
-  private get planeMaterial(): Material {
+  private get imageMaterial(): Material {
     const material = new ShaderMaterial({
-      vertexShader: String(vertexShader),
-      fragmentShader: String(fragmentShader),
+      vertexShader: String(imageVertexShader),
+      fragmentShader: String(imageFragmentShader),
       uniforms: {
         sourceSize: { value: [1280, 1024, 1 / 1280, 1 / 1024] },
         firstRed: { value: [1, 0] },

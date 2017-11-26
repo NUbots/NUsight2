@@ -8694,6 +8694,260 @@ export namespace message {
         public toJSON(): { [k: string]: any };
     }
 
+    type Frustum$Properties = {
+        tl?: vec3$Properties;
+        tr?: vec3$Properties;
+        bl?: vec3$Properties;
+        br?: vec3$Properties;
+    };
+
+    /**
+     * Constructs a new Frustum.
+     * @exports message.Frustum
+     * @constructor
+     * @param {message.Frustum$Properties=} [properties] Properties to set
+     */
+    class Frustum {
+
+        /**
+         * Constructs a new Frustum.
+         * @exports message.Frustum
+         * @constructor
+         * @param {message.Frustum$Properties=} [properties] Properties to set
+         */
+        constructor(properties?: message.Frustum$Properties);
+
+        /**
+         * Frustum tl.
+         * @type {(vec3$Properties|null)}
+         */
+        public tl: (vec3$Properties|null);
+
+        /**
+         * Frustum tr.
+         * @type {(vec3$Properties|null)}
+         */
+        public tr: (vec3$Properties|null);
+
+        /**
+         * Frustum bl.
+         * @type {(vec3$Properties|null)}
+         */
+        public bl: (vec3$Properties|null);
+
+        /**
+         * Frustum br.
+         * @type {(vec3$Properties|null)}
+         */
+        public br: (vec3$Properties|null);
+
+        /**
+         * Creates a new Frustum instance using the specified properties.
+         * @param {message.Frustum$Properties=} [properties] Properties to set
+         * @returns {message.Frustum} Frustum instance
+         */
+        public static create(properties?: message.Frustum$Properties): message.Frustum;
+
+        /**
+         * Encodes the specified Frustum message. Does not implicitly {@link message.Frustum.verify|verify} messages.
+         * @param {message.Frustum$Properties} message Frustum message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        public static encode(message: message.Frustum$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified Frustum message, length delimited. Does not implicitly {@link message.Frustum.verify|verify} messages.
+         * @param {message.Frustum$Properties} message Frustum message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        public static encodeDelimited(message: message.Frustum$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a Frustum message from the specified reader or buffer.
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {message.Frustum} Frustum
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): message.Frustum;
+
+        /**
+         * Decodes a Frustum message from the specified reader or buffer, length delimited.
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {message.Frustum} Frustum
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): message.Frustum;
+
+        /**
+         * Verifies a Frustum message.
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {?string} `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): string;
+
+        /**
+         * Creates a Frustum message from a plain object. Also converts values to their respective internal types.
+         * @param {Object.<string,*>} object Plain object
+         * @returns {message.Frustum} Frustum
+         */
+        public static fromObject(object: { [k: string]: any }): message.Frustum;
+
+        /**
+         * Creates a Frustum message from a plain object. Also converts values to their respective internal types.
+         * This is an alias of {@link message.Frustum.fromObject}.
+         * @function
+         * @param {Object.<string,*>} object Plain object
+         * @returns {message.Frustum} Frustum
+         */
+        public static from(object: { [k: string]: any }): message.Frustum;
+
+        /**
+         * Creates a plain object from a Frustum message. Also converts values to other types if specified.
+         * @param {message.Frustum} message Frustum
+         * @param {$protobuf.ConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        public static toObject(message: message.Frustum, options?: $protobuf.ConversionOptions): { [k: string]: any };
+
+        /**
+         * Creates a plain object from this Frustum message. Also converts values to other types if specified.
+         * @param {$protobuf.ConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        public toObject(options?: $protobuf.ConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this Frustum to JSON.
+         * @returns {Object.<string,*>} JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    type Cone$Properties = {
+        axis?: vec3$Properties;
+        gradient?: number;
+    };
+
+    /**
+     * Constructs a new Cone.
+     * @exports message.Cone
+     * @constructor
+     * @param {message.Cone$Properties=} [properties] Properties to set
+     */
+    class Cone {
+
+        /**
+         * Constructs a new Cone.
+         * @exports message.Cone
+         * @constructor
+         * @param {message.Cone$Properties=} [properties] Properties to set
+         */
+        constructor(properties?: message.Cone$Properties);
+
+        /**
+         * Cone axis.
+         * @type {(vec3$Properties|null)}
+         */
+        public axis: (vec3$Properties|null);
+
+        /**
+         * Cone gradient.
+         * @type {number}
+         */
+        public gradient: number;
+
+        /**
+         * Creates a new Cone instance using the specified properties.
+         * @param {message.Cone$Properties=} [properties] Properties to set
+         * @returns {message.Cone} Cone instance
+         */
+        public static create(properties?: message.Cone$Properties): message.Cone;
+
+        /**
+         * Encodes the specified Cone message. Does not implicitly {@link message.Cone.verify|verify} messages.
+         * @param {message.Cone$Properties} message Cone message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        public static encode(message: message.Cone$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified Cone message, length delimited. Does not implicitly {@link message.Cone.verify|verify} messages.
+         * @param {message.Cone$Properties} message Cone message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        public static encodeDelimited(message: message.Cone$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a Cone message from the specified reader or buffer.
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {message.Cone} Cone
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): message.Cone;
+
+        /**
+         * Decodes a Cone message from the specified reader or buffer, length delimited.
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {message.Cone} Cone
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): message.Cone;
+
+        /**
+         * Verifies a Cone message.
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {?string} `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): string;
+
+        /**
+         * Creates a Cone message from a plain object. Also converts values to their respective internal types.
+         * @param {Object.<string,*>} object Plain object
+         * @returns {message.Cone} Cone
+         */
+        public static fromObject(object: { [k: string]: any }): message.Cone;
+
+        /**
+         * Creates a Cone message from a plain object. Also converts values to their respective internal types.
+         * This is an alias of {@link message.Cone.fromObject}.
+         * @function
+         * @param {Object.<string,*>} object Plain object
+         * @returns {message.Cone} Cone
+         */
+        public static from(object: { [k: string]: any }): message.Cone;
+
+        /**
+         * Creates a plain object from a Cone message. Also converts values to other types if specified.
+         * @param {message.Cone} message Cone
+         * @param {$protobuf.ConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        public static toObject(message: message.Cone, options?: $protobuf.ConversionOptions): { [k: string]: any };
+
+        /**
+         * Creates a plain object from this Cone message. Also converts values to other types if specified.
+         * @param {$protobuf.ConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        public toObject(options?: $protobuf.ConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this Cone to JSON.
+         * @returns {Object.<string,*>} JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /**
      * Namespace behaviour.
      * @exports message.behaviour
@@ -11880,9 +12134,10 @@ export namespace message {
         type CameraParameters$Properties = {
             imageSizePixels?: uvec2$Properties;
             FOV?: vec2$Properties;
-            pixelsToTanThetaFactor?: vec2$Properties;
-            focalLengthPixels?: number;
-            distortionFactor?: number;
+            centreOffset?: ivec2$Properties;
+            pinhole?: message.input.CameraParameters.Pinhole$Properties;
+            radial?: message.input.CameraParameters.Radial$Properties;
+            lens?: message.input.CameraParameters.LensType;
         };
 
         /**
@@ -11914,22 +12169,28 @@ export namespace message {
             public FOV: (vec2$Properties|null);
 
             /**
-             * CameraParameters pixelsToTanThetaFactor.
-             * @type {(vec2$Properties|null)}
+             * CameraParameters centreOffset.
+             * @type {(ivec2$Properties|null)}
              */
-            public pixelsToTanThetaFactor: (vec2$Properties|null);
+            public centreOffset: (ivec2$Properties|null);
 
             /**
-             * CameraParameters focalLengthPixels.
-             * @type {number}
+             * CameraParameters pinhole.
+             * @type {(message.input.CameraParameters.Pinhole$Properties|null)}
              */
-            public focalLengthPixels: number;
+            public pinhole: (message.input.CameraParameters.Pinhole$Properties|null);
 
             /**
-             * CameraParameters distortionFactor.
-             * @type {number}
+             * CameraParameters radial.
+             * @type {(message.input.CameraParameters.Radial$Properties|null)}
              */
-            public distortionFactor: number;
+            public radial: (message.input.CameraParameters.Radial$Properties|null);
+
+            /**
+             * CameraParameters lens.
+             * @type {message.input.CameraParameters.LensType}
+             */
+            public lens: message.input.CameraParameters.LensType;
 
             /**
              * Creates a new CameraParameters instance using the specified properties.
@@ -12016,6 +12277,262 @@ export namespace message {
              * @returns {Object.<string,*>} JSON object
              */
             public toJSON(): { [k: string]: any };
+        }
+
+        namespace CameraParameters {
+
+            /**
+             * LensType enum.
+             * @name LensType
+             * @memberof message.input.CameraParameters
+             * @enum {number}
+             * @property {number} PINHOLE=0 PINHOLE value
+             * @property {number} RADIAL=1 RADIAL value
+             */
+            enum LensType {
+                PINHOLE = 0,
+                RADIAL = 1
+            }
+
+            type Pinhole$Properties = {
+                pixelsToTanThetaFactor?: vec2$Properties;
+                focalLengthPixels?: number;
+                distortionFactor?: number;
+            };
+
+            /**
+             * Constructs a new Pinhole.
+             * @exports message.input.CameraParameters.Pinhole
+             * @constructor
+             * @param {message.input.CameraParameters.Pinhole$Properties=} [properties] Properties to set
+             */
+            class Pinhole {
+
+                /**
+                 * Constructs a new Pinhole.
+                 * @exports message.input.CameraParameters.Pinhole
+                 * @constructor
+                 * @param {message.input.CameraParameters.Pinhole$Properties=} [properties] Properties to set
+                 */
+                constructor(properties?: message.input.CameraParameters.Pinhole$Properties);
+
+                /**
+                 * Pinhole pixelsToTanThetaFactor.
+                 * @type {(vec2$Properties|null)}
+                 */
+                public pixelsToTanThetaFactor: (vec2$Properties|null);
+
+                /**
+                 * Pinhole focalLengthPixels.
+                 * @type {number}
+                 */
+                public focalLengthPixels: number;
+
+                /**
+                 * Pinhole distortionFactor.
+                 * @type {number}
+                 */
+                public distortionFactor: number;
+
+                /**
+                 * Creates a new Pinhole instance using the specified properties.
+                 * @param {message.input.CameraParameters.Pinhole$Properties=} [properties] Properties to set
+                 * @returns {message.input.CameraParameters.Pinhole} Pinhole instance
+                 */
+                public static create(properties?: message.input.CameraParameters.Pinhole$Properties): message.input.CameraParameters.Pinhole;
+
+                /**
+                 * Encodes the specified Pinhole message. Does not implicitly {@link message.input.CameraParameters.Pinhole.verify|verify} messages.
+                 * @param {message.input.CameraParameters.Pinhole$Properties} message Pinhole message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                public static encode(message: message.input.CameraParameters.Pinhole$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified Pinhole message, length delimited. Does not implicitly {@link message.input.CameraParameters.Pinhole.verify|verify} messages.
+                 * @param {message.input.CameraParameters.Pinhole$Properties} message Pinhole message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                public static encodeDelimited(message: message.input.CameraParameters.Pinhole$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a Pinhole message from the specified reader or buffer.
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {message.input.CameraParameters.Pinhole} Pinhole
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): message.input.CameraParameters.Pinhole;
+
+                /**
+                 * Decodes a Pinhole message from the specified reader or buffer, length delimited.
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {message.input.CameraParameters.Pinhole} Pinhole
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): message.input.CameraParameters.Pinhole;
+
+                /**
+                 * Verifies a Pinhole message.
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {?string} `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): string;
+
+                /**
+                 * Creates a Pinhole message from a plain object. Also converts values to their respective internal types.
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {message.input.CameraParameters.Pinhole} Pinhole
+                 */
+                public static fromObject(object: { [k: string]: any }): message.input.CameraParameters.Pinhole;
+
+                /**
+                 * Creates a Pinhole message from a plain object. Also converts values to their respective internal types.
+                 * This is an alias of {@link message.input.CameraParameters.Pinhole.fromObject}.
+                 * @function
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {message.input.CameraParameters.Pinhole} Pinhole
+                 */
+                public static from(object: { [k: string]: any }): message.input.CameraParameters.Pinhole;
+
+                /**
+                 * Creates a plain object from a Pinhole message. Also converts values to other types if specified.
+                 * @param {message.input.CameraParameters.Pinhole} message Pinhole
+                 * @param {$protobuf.ConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                public static toObject(message: message.input.CameraParameters.Pinhole, options?: $protobuf.ConversionOptions): { [k: string]: any };
+
+                /**
+                 * Creates a plain object from this Pinhole message. Also converts values to other types if specified.
+                 * @param {$protobuf.ConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                public toObject(options?: $protobuf.ConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Pinhole to JSON.
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            type Radial$Properties = {
+                radiansPerPixel?: number;
+            };
+
+            /**
+             * Constructs a new Radial.
+             * @exports message.input.CameraParameters.Radial
+             * @constructor
+             * @param {message.input.CameraParameters.Radial$Properties=} [properties] Properties to set
+             */
+            class Radial {
+
+                /**
+                 * Constructs a new Radial.
+                 * @exports message.input.CameraParameters.Radial
+                 * @constructor
+                 * @param {message.input.CameraParameters.Radial$Properties=} [properties] Properties to set
+                 */
+                constructor(properties?: message.input.CameraParameters.Radial$Properties);
+
+                /**
+                 * Radial radiansPerPixel.
+                 * @type {number}
+                 */
+                public radiansPerPixel: number;
+
+                /**
+                 * Creates a new Radial instance using the specified properties.
+                 * @param {message.input.CameraParameters.Radial$Properties=} [properties] Properties to set
+                 * @returns {message.input.CameraParameters.Radial} Radial instance
+                 */
+                public static create(properties?: message.input.CameraParameters.Radial$Properties): message.input.CameraParameters.Radial;
+
+                /**
+                 * Encodes the specified Radial message. Does not implicitly {@link message.input.CameraParameters.Radial.verify|verify} messages.
+                 * @param {message.input.CameraParameters.Radial$Properties} message Radial message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                public static encode(message: message.input.CameraParameters.Radial$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified Radial message, length delimited. Does not implicitly {@link message.input.CameraParameters.Radial.verify|verify} messages.
+                 * @param {message.input.CameraParameters.Radial$Properties} message Radial message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                public static encodeDelimited(message: message.input.CameraParameters.Radial$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a Radial message from the specified reader or buffer.
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {message.input.CameraParameters.Radial} Radial
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): message.input.CameraParameters.Radial;
+
+                /**
+                 * Decodes a Radial message from the specified reader or buffer, length delimited.
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {message.input.CameraParameters.Radial} Radial
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): message.input.CameraParameters.Radial;
+
+                /**
+                 * Verifies a Radial message.
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {?string} `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): string;
+
+                /**
+                 * Creates a Radial message from a plain object. Also converts values to their respective internal types.
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {message.input.CameraParameters.Radial} Radial
+                 */
+                public static fromObject(object: { [k: string]: any }): message.input.CameraParameters.Radial;
+
+                /**
+                 * Creates a Radial message from a plain object. Also converts values to their respective internal types.
+                 * This is an alias of {@link message.input.CameraParameters.Radial.fromObject}.
+                 * @function
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {message.input.CameraParameters.Radial} Radial
+                 */
+                public static from(object: { [k: string]: any }): message.input.CameraParameters.Radial;
+
+                /**
+                 * Creates a plain object from a Radial message. Also converts values to other types if specified.
+                 * @param {message.input.CameraParameters.Radial} message Radial
+                 * @param {$protobuf.ConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                public static toObject(message: message.input.CameraParameters.Radial, options?: $protobuf.ConversionOptions): { [k: string]: any };
+
+                /**
+                 * Creates a plain object from this Radial message. Also converts values to other types if specified.
+                 * @param {$protobuf.ConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                public toObject(options?: $protobuf.ConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Radial to JSON.
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
         }
 
         type GameEvents$Properties = {};
@@ -16210,7 +16727,7 @@ export namespace message {
             robotToIMU?: mat22$Properties;
             leftFootDown?: boolean;
             rightFootDown?: boolean;
-            forwardKinematics?: { [k: string]: mat44$Properties };
+            forwardKinematics?: mat44$Properties[];
             bodyCentreHeight?: number;
             centreOfMass?: vec4$Properties;
             bodyToGround?: mat44$Properties;
@@ -16319,9 +16836,9 @@ export namespace message {
 
             /**
              * Sensors forwardKinematics.
-             * @type {Object.<string,mat44$Properties>}
+             * @type {Array.<mat44$Properties>}
              */
-            public forwardKinematics: { [k: string]: mat44$Properties };
+            public forwardKinematics: mat44$Properties[];
 
             /**
              * Sensors bodyCentreHeight.
@@ -20959,6 +21476,7 @@ export namespace message {
                 NECK_TO_CAMERA_Y?: number;
                 NECK_TO_CAMERA_Z?: number;
                 CAMERA_DECLINATION_ANGLE_OFFSET?: number;
+                INTERPUPILLARY_DISTANCE?: number;
                 MAX_YAW?: number;
                 MIN_YAW?: number;
                 MAX_PITCH?: number;
@@ -21028,6 +21546,12 @@ export namespace message {
                  * @type {number}
                  */
                 public CAMERA_DECLINATION_ANGLE_OFFSET: number;
+
+                /**
+                 * Head INTERPUPILLARY_DISTANCE.
+                 * @type {number}
+                 */
+                public INTERPUPILLARY_DISTANCE: number;
 
                 /**
                  * Head MAX_YAW.
@@ -23178,7 +23702,6 @@ export namespace message {
                  * @property {number} INSTRUCTION=64 INSTRUCTION value
                  * @property {number} CORRUPT_DATA=128 CORRUPT_DATA value
                  * @property {number} TIMEOUT=256 TIMEOUT value
-                 * @property {number} TIMEOUT_VICTIM=512 TIMEOUT_VICTIM value
                  */
                 enum Error {
                     OK = 0,
@@ -23190,8 +23713,7 @@ export namespace message {
                     OVERLOAD = 32,
                     INSTRUCTION = 64,
                     CORRUPT_DATA = 128,
-                    TIMEOUT = 256,
-                    TIMEOUT_VICTIM = 512
+                    TIMEOUT = 256
                 }
 
                 type LEDPanel$Properties = {
@@ -29170,10 +29692,11 @@ export namespace message {
             dimensions?: uvec2$Properties;
             ballSeedPoints?: message.vision.ClassifiedImage.SeedPoints$Properties[];
             ballPoints?: ivec2$Properties[];
-            horizon?: message.vision.Line$Properties;
+            horizonNormal?: vec3$Properties;
             visualHorizon?: ivec2$Properties[];
             horizontalSegments?: message.vision.ClassifiedImage.Segment$Properties[];
             verticalSegments?: message.vision.ClassifiedImage.Segment$Properties[];
+            horizon?: message.vision.Line$Properties;
         };
 
         /**
@@ -29223,10 +29746,10 @@ export namespace message {
             public ballPoints: ivec2$Properties[];
 
             /**
-             * ClassifiedImage horizon.
-             * @type {(message.vision.Line$Properties|null)}
+             * ClassifiedImage horizonNormal.
+             * @type {(vec3$Properties|null)}
              */
-            public horizon: (message.vision.Line$Properties|null);
+            public horizonNormal: (vec3$Properties|null);
 
             /**
              * ClassifiedImage visualHorizon.
@@ -29245,6 +29768,12 @@ export namespace message {
              * @type {Array.<message.vision.ClassifiedImage.Segment$Properties>}
              */
             public verticalSegments: message.vision.ClassifiedImage.Segment$Properties[];
+
+            /**
+             * ClassifiedImage horizon.
+             * @type {(message.vision.Line$Properties|null)}
+             */
+            public horizon: (message.vision.Line$Properties|null);
 
             /**
              * Creates a new ClassifiedImage instance using the specified properties.
@@ -30261,7 +30790,7 @@ export namespace message {
             visObject?: message.vision.VisionObject$Properties;
             measurements?: message.vision.Ball.Measurement$Properties[];
             edgePoints?: vec3$Properties[];
-            circle?: message.Circle$Properties;
+            cone?: message.Cone$Properties;
         };
 
         /**
@@ -30299,10 +30828,10 @@ export namespace message {
             public edgePoints: vec3$Properties[];
 
             /**
-             * Ball circle.
-             * @type {(message.Circle$Properties|null)}
+             * Ball cone.
+             * @type {(message.Cone$Properties|null)}
              */
-            public circle: (message.Circle$Properties|null);
+            public cone: (message.Cone$Properties|null);
 
             /**
              * Creates a new Ball instance using the specified properties.
@@ -30538,6 +31067,7 @@ export namespace message {
             visObject?: message.vision.VisionObject$Properties;
             side?: message.vision.Goal.Side;
             team?: message.vision.Goal.Team;
+            frustum?: message.Frustum$Properties;
             quad?: message.Quad$Properties;
             measurement?: message.vision.Goal.Measurement$Properties[];
         };
@@ -30575,6 +31105,12 @@ export namespace message {
              * @type {message.vision.Goal.Team}
              */
             public team: message.vision.Goal.Team;
+
+            /**
+             * Goal frustum.
+             * @type {(message.Frustum$Properties|null)}
+             */
+            public frustum: (message.Frustum$Properties|null);
 
             /**
              * Goal quad.

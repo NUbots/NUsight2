@@ -16189,6 +16189,461 @@ $root.message = (function() {
         return Polygon;
     })();
 
+    message.Frustum = (function() {
+
+        /**
+         * Properties of a Frustum.
+         * @typedef message.Frustum$Properties
+         * @type {Object}
+         * @property {vec3$Properties} [tl] Frustum tl.
+         * @property {vec3$Properties} [tr] Frustum tr.
+         * @property {vec3$Properties} [bl] Frustum bl.
+         * @property {vec3$Properties} [br] Frustum br.
+         */
+
+        /**
+         * Constructs a new Frustum.
+         * @exports message.Frustum
+         * @constructor
+         * @param {message.Frustum$Properties=} [properties] Properties to set
+         */
+        function Frustum(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Frustum tl.
+         * @type {(vec3$Properties|null)}
+         */
+        Frustum.prototype.tl = null;
+
+        /**
+         * Frustum tr.
+         * @type {(vec3$Properties|null)}
+         */
+        Frustum.prototype.tr = null;
+
+        /**
+         * Frustum bl.
+         * @type {(vec3$Properties|null)}
+         */
+        Frustum.prototype.bl = null;
+
+        /**
+         * Frustum br.
+         * @type {(vec3$Properties|null)}
+         */
+        Frustum.prototype.br = null;
+
+        /**
+         * Creates a new Frustum instance using the specified properties.
+         * @param {message.Frustum$Properties=} [properties] Properties to set
+         * @returns {message.Frustum} Frustum instance
+         */
+        Frustum.create = function create(properties) {
+            return new Frustum(properties);
+        };
+
+        /**
+         * Encodes the specified Frustum message. Does not implicitly {@link message.Frustum.verify|verify} messages.
+         * @param {message.Frustum$Properties} message Frustum message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Frustum.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.tl != null && message.hasOwnProperty("tl"))
+                $root.vec3.encode(message.tl, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.tr != null && message.hasOwnProperty("tr"))
+                $root.vec3.encode(message.tr, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            if (message.bl != null && message.hasOwnProperty("bl"))
+                $root.vec3.encode(message.bl, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+            if (message.br != null && message.hasOwnProperty("br"))
+                $root.vec3.encode(message.br, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified Frustum message, length delimited. Does not implicitly {@link message.Frustum.verify|verify} messages.
+         * @param {message.Frustum$Properties} message Frustum message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Frustum.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a Frustum message from the specified reader or buffer.
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {message.Frustum} Frustum
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Frustum.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.message.Frustum();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.tl = $root.vec3.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.tr = $root.vec3.decode(reader, reader.uint32());
+                    break;
+                case 3:
+                    message.bl = $root.vec3.decode(reader, reader.uint32());
+                    break;
+                case 4:
+                    message.br = $root.vec3.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a Frustum message from the specified reader or buffer, length delimited.
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {message.Frustum} Frustum
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Frustum.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a Frustum message.
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {?string} `null` if valid, otherwise the reason why it is not
+         */
+        Frustum.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.tl != null && message.hasOwnProperty("tl")) {
+                var error = $root.vec3.verify(message.tl);
+                if (error)
+                    return "tl." + error;
+            }
+            if (message.tr != null && message.hasOwnProperty("tr")) {
+                var error = $root.vec3.verify(message.tr);
+                if (error)
+                    return "tr." + error;
+            }
+            if (message.bl != null && message.hasOwnProperty("bl")) {
+                var error = $root.vec3.verify(message.bl);
+                if (error)
+                    return "bl." + error;
+            }
+            if (message.br != null && message.hasOwnProperty("br")) {
+                var error = $root.vec3.verify(message.br);
+                if (error)
+                    return "br." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a Frustum message from a plain object. Also converts values to their respective internal types.
+         * @param {Object.<string,*>} object Plain object
+         * @returns {message.Frustum} Frustum
+         */
+        Frustum.fromObject = function fromObject(object) {
+            if (object instanceof $root.message.Frustum)
+                return object;
+            var message = new $root.message.Frustum();
+            if (object.tl != null) {
+                if (typeof object.tl !== "object")
+                    throw TypeError(".message.Frustum.tl: object expected");
+                message.tl = $root.vec3.fromObject(object.tl);
+            }
+            if (object.tr != null) {
+                if (typeof object.tr !== "object")
+                    throw TypeError(".message.Frustum.tr: object expected");
+                message.tr = $root.vec3.fromObject(object.tr);
+            }
+            if (object.bl != null) {
+                if (typeof object.bl !== "object")
+                    throw TypeError(".message.Frustum.bl: object expected");
+                message.bl = $root.vec3.fromObject(object.bl);
+            }
+            if (object.br != null) {
+                if (typeof object.br !== "object")
+                    throw TypeError(".message.Frustum.br: object expected");
+                message.br = $root.vec3.fromObject(object.br);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a Frustum message from a plain object. Also converts values to their respective internal types.
+         * This is an alias of {@link message.Frustum.fromObject}.
+         * @function
+         * @param {Object.<string,*>} object Plain object
+         * @returns {message.Frustum} Frustum
+         */
+        Frustum.from = Frustum.fromObject;
+
+        /**
+         * Creates a plain object from a Frustum message. Also converts values to other types if specified.
+         * @param {message.Frustum} message Frustum
+         * @param {$protobuf.ConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Frustum.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.tl = null;
+                object.tr = null;
+                object.bl = null;
+                object.br = null;
+            }
+            if (message.tl != null && message.hasOwnProperty("tl"))
+                object.tl = $root.vec3.toObject(message.tl, options);
+            if (message.tr != null && message.hasOwnProperty("tr"))
+                object.tr = $root.vec3.toObject(message.tr, options);
+            if (message.bl != null && message.hasOwnProperty("bl"))
+                object.bl = $root.vec3.toObject(message.bl, options);
+            if (message.br != null && message.hasOwnProperty("br"))
+                object.br = $root.vec3.toObject(message.br, options);
+            return object;
+        };
+
+        /**
+         * Creates a plain object from this Frustum message. Also converts values to other types if specified.
+         * @param {$protobuf.ConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Frustum.prototype.toObject = function toObject(options) {
+            return this.constructor.toObject(this, options);
+        };
+
+        /**
+         * Converts this Frustum to JSON.
+         * @returns {Object.<string,*>} JSON object
+         */
+        Frustum.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return Frustum;
+    })();
+
+    message.Cone = (function() {
+
+        /**
+         * Properties of a Cone.
+         * @typedef message.Cone$Properties
+         * @type {Object}
+         * @property {vec3$Properties} [axis] Cone axis.
+         * @property {number} [gradient] Cone gradient.
+         */
+
+        /**
+         * Constructs a new Cone.
+         * @exports message.Cone
+         * @constructor
+         * @param {message.Cone$Properties=} [properties] Properties to set
+         */
+        function Cone(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Cone axis.
+         * @type {(vec3$Properties|null)}
+         */
+        Cone.prototype.axis = null;
+
+        /**
+         * Cone gradient.
+         * @type {number}
+         */
+        Cone.prototype.gradient = 0;
+
+        /**
+         * Creates a new Cone instance using the specified properties.
+         * @param {message.Cone$Properties=} [properties] Properties to set
+         * @returns {message.Cone} Cone instance
+         */
+        Cone.create = function create(properties) {
+            return new Cone(properties);
+        };
+
+        /**
+         * Encodes the specified Cone message. Does not implicitly {@link message.Cone.verify|verify} messages.
+         * @param {message.Cone$Properties} message Cone message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Cone.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.axis != null && message.hasOwnProperty("axis"))
+                $root.vec3.encode(message.axis, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.gradient != null && message.hasOwnProperty("gradient"))
+                writer.uint32(/* id 2, wireType 1 =*/17).double(message.gradient);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified Cone message, length delimited. Does not implicitly {@link message.Cone.verify|verify} messages.
+         * @param {message.Cone$Properties} message Cone message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Cone.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a Cone message from the specified reader or buffer.
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {message.Cone} Cone
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Cone.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.message.Cone();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.axis = $root.vec3.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.gradient = reader.double();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a Cone message from the specified reader or buffer, length delimited.
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {message.Cone} Cone
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Cone.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a Cone message.
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {?string} `null` if valid, otherwise the reason why it is not
+         */
+        Cone.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.axis != null && message.hasOwnProperty("axis")) {
+                var error = $root.vec3.verify(message.axis);
+                if (error)
+                    return "axis." + error;
+            }
+            if (message.gradient != null && message.hasOwnProperty("gradient"))
+                if (typeof message.gradient !== "number")
+                    return "gradient: number expected";
+            return null;
+        };
+
+        /**
+         * Creates a Cone message from a plain object. Also converts values to their respective internal types.
+         * @param {Object.<string,*>} object Plain object
+         * @returns {message.Cone} Cone
+         */
+        Cone.fromObject = function fromObject(object) {
+            if (object instanceof $root.message.Cone)
+                return object;
+            var message = new $root.message.Cone();
+            if (object.axis != null) {
+                if (typeof object.axis !== "object")
+                    throw TypeError(".message.Cone.axis: object expected");
+                message.axis = $root.vec3.fromObject(object.axis);
+            }
+            if (object.gradient != null)
+                message.gradient = Number(object.gradient);
+            return message;
+        };
+
+        /**
+         * Creates a Cone message from a plain object. Also converts values to their respective internal types.
+         * This is an alias of {@link message.Cone.fromObject}.
+         * @function
+         * @param {Object.<string,*>} object Plain object
+         * @returns {message.Cone} Cone
+         */
+        Cone.from = Cone.fromObject;
+
+        /**
+         * Creates a plain object from a Cone message. Also converts values to other types if specified.
+         * @param {message.Cone} message Cone
+         * @param {$protobuf.ConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Cone.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.axis = null;
+                object.gradient = 0;
+            }
+            if (message.axis != null && message.hasOwnProperty("axis"))
+                object.axis = $root.vec3.toObject(message.axis, options);
+            if (message.gradient != null && message.hasOwnProperty("gradient"))
+                object.gradient = message.gradient;
+            return object;
+        };
+
+        /**
+         * Creates a plain object from this Cone message. Also converts values to other types if specified.
+         * @param {$protobuf.ConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Cone.prototype.toObject = function toObject(options) {
+            return this.constructor.toObject(this, options);
+        };
+
+        /**
+         * Converts this Cone to JSON.
+         * @returns {Object.<string,*>} JSON object
+         */
+        Cone.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return Cone;
+    })();
+
     message.behaviour = (function() {
 
         /**
@@ -21756,9 +22211,10 @@ $root.message = (function() {
              * @type {Object}
              * @property {uvec2$Properties} [imageSizePixels] CameraParameters imageSizePixels.
              * @property {vec2$Properties} [FOV] CameraParameters FOV.
-             * @property {vec2$Properties} [pixelsToTanThetaFactor] CameraParameters pixelsToTanThetaFactor.
-             * @property {number} [focalLengthPixels] CameraParameters focalLengthPixels.
-             * @property {number} [distortionFactor] CameraParameters distortionFactor.
+             * @property {ivec2$Properties} [centreOffset] CameraParameters centreOffset.
+             * @property {message.input.CameraParameters.Pinhole$Properties} [pinhole] CameraParameters pinhole.
+             * @property {message.input.CameraParameters.Radial$Properties} [radial] CameraParameters radial.
+             * @property {message.input.CameraParameters.LensType} [lens] CameraParameters lens.
              */
 
             /**
@@ -21787,22 +22243,28 @@ $root.message = (function() {
             CameraParameters.prototype.FOV = null;
 
             /**
-             * CameraParameters pixelsToTanThetaFactor.
-             * @type {(vec2$Properties|null)}
+             * CameraParameters centreOffset.
+             * @type {(ivec2$Properties|null)}
              */
-            CameraParameters.prototype.pixelsToTanThetaFactor = null;
+            CameraParameters.prototype.centreOffset = null;
 
             /**
-             * CameraParameters focalLengthPixels.
-             * @type {number}
+             * CameraParameters pinhole.
+             * @type {(message.input.CameraParameters.Pinhole$Properties|null)}
              */
-            CameraParameters.prototype.focalLengthPixels = 0;
+            CameraParameters.prototype.pinhole = null;
 
             /**
-             * CameraParameters distortionFactor.
-             * @type {number}
+             * CameraParameters radial.
+             * @type {(message.input.CameraParameters.Radial$Properties|null)}
              */
-            CameraParameters.prototype.distortionFactor = 0;
+            CameraParameters.prototype.radial = null;
+
+            /**
+             * CameraParameters lens.
+             * @type {message.input.CameraParameters.LensType}
+             */
+            CameraParameters.prototype.lens = 0;
 
             /**
              * Creates a new CameraParameters instance using the specified properties.
@@ -21826,12 +22288,14 @@ $root.message = (function() {
                     $root.uvec2.encode(message.imageSizePixels, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
                 if (message.FOV != null && message.hasOwnProperty("FOV"))
                     $root.vec2.encode(message.FOV, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-                if (message.pixelsToTanThetaFactor != null && message.hasOwnProperty("pixelsToTanThetaFactor"))
-                    $root.vec2.encode(message.pixelsToTanThetaFactor, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-                if (message.focalLengthPixels != null && message.hasOwnProperty("focalLengthPixels"))
-                    writer.uint32(/* id 4, wireType 1 =*/33).double(message.focalLengthPixels);
-                if (message.distortionFactor != null && message.hasOwnProperty("distortionFactor"))
-                    writer.uint32(/* id 5, wireType 1 =*/41).double(message.distortionFactor);
+                if (message.centreOffset != null && message.hasOwnProperty("centreOffset"))
+                    $root.ivec2.encode(message.centreOffset, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                if (message.pinhole != null && message.hasOwnProperty("pinhole"))
+                    $root.message.input.CameraParameters.Pinhole.encode(message.pinhole, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                if (message.radial != null && message.hasOwnProperty("radial"))
+                    $root.message.input.CameraParameters.Radial.encode(message.radial, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                if (message.lens != null && message.hasOwnProperty("lens"))
+                    writer.uint32(/* id 6, wireType 0 =*/48).uint32(message.lens);
                 return writer;
             };
 
@@ -21867,13 +22331,16 @@ $root.message = (function() {
                         message.FOV = $root.vec2.decode(reader, reader.uint32());
                         break;
                     case 3:
-                        message.pixelsToTanThetaFactor = $root.vec2.decode(reader, reader.uint32());
+                        message.centreOffset = $root.ivec2.decode(reader, reader.uint32());
                         break;
                     case 4:
-                        message.focalLengthPixels = reader.double();
+                        message.pinhole = $root.message.input.CameraParameters.Pinhole.decode(reader, reader.uint32());
                         break;
                     case 5:
-                        message.distortionFactor = reader.double();
+                        message.radial = $root.message.input.CameraParameters.Radial.decode(reader, reader.uint32());
+                        break;
+                    case 6:
+                        message.lens = reader.uint32();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -21914,17 +22381,29 @@ $root.message = (function() {
                     if (error)
                         return "FOV." + error;
                 }
-                if (message.pixelsToTanThetaFactor != null && message.hasOwnProperty("pixelsToTanThetaFactor")) {
-                    var error = $root.vec2.verify(message.pixelsToTanThetaFactor);
+                if (message.centreOffset != null && message.hasOwnProperty("centreOffset")) {
+                    var error = $root.ivec2.verify(message.centreOffset);
                     if (error)
-                        return "pixelsToTanThetaFactor." + error;
+                        return "centreOffset." + error;
                 }
-                if (message.focalLengthPixels != null && message.hasOwnProperty("focalLengthPixels"))
-                    if (typeof message.focalLengthPixels !== "number")
-                        return "focalLengthPixels: number expected";
-                if (message.distortionFactor != null && message.hasOwnProperty("distortionFactor"))
-                    if (typeof message.distortionFactor !== "number")
-                        return "distortionFactor: number expected";
+                if (message.pinhole != null && message.hasOwnProperty("pinhole")) {
+                    var error = $root.message.input.CameraParameters.Pinhole.verify(message.pinhole);
+                    if (error)
+                        return "pinhole." + error;
+                }
+                if (message.radial != null && message.hasOwnProperty("radial")) {
+                    var error = $root.message.input.CameraParameters.Radial.verify(message.radial);
+                    if (error)
+                        return "radial." + error;
+                }
+                if (message.lens != null && message.hasOwnProperty("lens"))
+                    switch (message.lens) {
+                    default:
+                        return "lens: enum value expected";
+                    case 0:
+                    case 1:
+                        break;
+                    }
                 return null;
             };
 
@@ -21947,15 +22426,31 @@ $root.message = (function() {
                         throw TypeError(".message.input.CameraParameters.FOV: object expected");
                     message.FOV = $root.vec2.fromObject(object.FOV);
                 }
-                if (object.pixelsToTanThetaFactor != null) {
-                    if (typeof object.pixelsToTanThetaFactor !== "object")
-                        throw TypeError(".message.input.CameraParameters.pixelsToTanThetaFactor: object expected");
-                    message.pixelsToTanThetaFactor = $root.vec2.fromObject(object.pixelsToTanThetaFactor);
+                if (object.centreOffset != null) {
+                    if (typeof object.centreOffset !== "object")
+                        throw TypeError(".message.input.CameraParameters.centreOffset: object expected");
+                    message.centreOffset = $root.ivec2.fromObject(object.centreOffset);
                 }
-                if (object.focalLengthPixels != null)
-                    message.focalLengthPixels = Number(object.focalLengthPixels);
-                if (object.distortionFactor != null)
-                    message.distortionFactor = Number(object.distortionFactor);
+                if (object.pinhole != null) {
+                    if (typeof object.pinhole !== "object")
+                        throw TypeError(".message.input.CameraParameters.pinhole: object expected");
+                    message.pinhole = $root.message.input.CameraParameters.Pinhole.fromObject(object.pinhole);
+                }
+                if (object.radial != null) {
+                    if (typeof object.radial !== "object")
+                        throw TypeError(".message.input.CameraParameters.radial: object expected");
+                    message.radial = $root.message.input.CameraParameters.Radial.fromObject(object.radial);
+                }
+                switch (object.lens) {
+                case "PINHOLE":
+                case 0:
+                    message.lens = 0;
+                    break;
+                case "RADIAL":
+                case 1:
+                    message.lens = 1;
+                    break;
+                }
                 return message;
             };
 
@@ -21981,20 +22476,23 @@ $root.message = (function() {
                 if (options.defaults) {
                     object.imageSizePixels = null;
                     object.FOV = null;
-                    object.pixelsToTanThetaFactor = null;
-                    object.focalLengthPixels = 0;
-                    object.distortionFactor = 0;
+                    object.centreOffset = null;
+                    object.pinhole = null;
+                    object.radial = null;
+                    object.lens = options.enums === String ? "PINHOLE" : 0;
                 }
                 if (message.imageSizePixels != null && message.hasOwnProperty("imageSizePixels"))
                     object.imageSizePixels = $root.uvec2.toObject(message.imageSizePixels, options);
                 if (message.FOV != null && message.hasOwnProperty("FOV"))
                     object.FOV = $root.vec2.toObject(message.FOV, options);
-                if (message.pixelsToTanThetaFactor != null && message.hasOwnProperty("pixelsToTanThetaFactor"))
-                    object.pixelsToTanThetaFactor = $root.vec2.toObject(message.pixelsToTanThetaFactor, options);
-                if (message.focalLengthPixels != null && message.hasOwnProperty("focalLengthPixels"))
-                    object.focalLengthPixels = message.focalLengthPixels;
-                if (message.distortionFactor != null && message.hasOwnProperty("distortionFactor"))
-                    object.distortionFactor = message.distortionFactor;
+                if (message.centreOffset != null && message.hasOwnProperty("centreOffset"))
+                    object.centreOffset = $root.ivec2.toObject(message.centreOffset, options);
+                if (message.pinhole != null && message.hasOwnProperty("pinhole"))
+                    object.pinhole = $root.message.input.CameraParameters.Pinhole.toObject(message.pinhole, options);
+                if (message.radial != null && message.hasOwnProperty("radial"))
+                    object.radial = $root.message.input.CameraParameters.Radial.toObject(message.radial, options);
+                if (message.lens != null && message.hasOwnProperty("lens"))
+                    object.lens = options.enums === String ? $root.message.input.CameraParameters.LensType[message.lens] : message.lens;
                 return object;
             };
 
@@ -22014,6 +22512,415 @@ $root.message = (function() {
             CameraParameters.prototype.toJSON = function toJSON() {
                 return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
             };
+
+            /**
+             * LensType enum.
+             * @name LensType
+             * @memberof message.input.CameraParameters
+             * @enum {number}
+             * @property {number} PINHOLE=0 PINHOLE value
+             * @property {number} RADIAL=1 RADIAL value
+             */
+            CameraParameters.LensType = (function() {
+                var valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "PINHOLE"] = 0;
+                values[valuesById[1] = "RADIAL"] = 1;
+                return values;
+            })();
+
+            CameraParameters.Pinhole = (function() {
+
+                /**
+                 * Properties of a Pinhole.
+                 * @typedef message.input.CameraParameters.Pinhole$Properties
+                 * @type {Object}
+                 * @property {vec2$Properties} [pixelsToTanThetaFactor] Pinhole pixelsToTanThetaFactor.
+                 * @property {number} [focalLengthPixels] Pinhole focalLengthPixels.
+                 * @property {number} [distortionFactor] Pinhole distortionFactor.
+                 */
+
+                /**
+                 * Constructs a new Pinhole.
+                 * @exports message.input.CameraParameters.Pinhole
+                 * @constructor
+                 * @param {message.input.CameraParameters.Pinhole$Properties=} [properties] Properties to set
+                 */
+                function Pinhole(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Pinhole pixelsToTanThetaFactor.
+                 * @type {(vec2$Properties|null)}
+                 */
+                Pinhole.prototype.pixelsToTanThetaFactor = null;
+
+                /**
+                 * Pinhole focalLengthPixels.
+                 * @type {number}
+                 */
+                Pinhole.prototype.focalLengthPixels = 0;
+
+                /**
+                 * Pinhole distortionFactor.
+                 * @type {number}
+                 */
+                Pinhole.prototype.distortionFactor = 0;
+
+                /**
+                 * Creates a new Pinhole instance using the specified properties.
+                 * @param {message.input.CameraParameters.Pinhole$Properties=} [properties] Properties to set
+                 * @returns {message.input.CameraParameters.Pinhole} Pinhole instance
+                 */
+                Pinhole.create = function create(properties) {
+                    return new Pinhole(properties);
+                };
+
+                /**
+                 * Encodes the specified Pinhole message. Does not implicitly {@link message.input.CameraParameters.Pinhole.verify|verify} messages.
+                 * @param {message.input.CameraParameters.Pinhole$Properties} message Pinhole message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Pinhole.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.pixelsToTanThetaFactor != null && message.hasOwnProperty("pixelsToTanThetaFactor"))
+                        $root.vec2.encode(message.pixelsToTanThetaFactor, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                    if (message.focalLengthPixels != null && message.hasOwnProperty("focalLengthPixels"))
+                        writer.uint32(/* id 2, wireType 1 =*/17).double(message.focalLengthPixels);
+                    if (message.distortionFactor != null && message.hasOwnProperty("distortionFactor"))
+                        writer.uint32(/* id 3, wireType 1 =*/25).double(message.distortionFactor);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified Pinhole message, length delimited. Does not implicitly {@link message.input.CameraParameters.Pinhole.verify|verify} messages.
+                 * @param {message.input.CameraParameters.Pinhole$Properties} message Pinhole message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Pinhole.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a Pinhole message from the specified reader or buffer.
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {message.input.CameraParameters.Pinhole} Pinhole
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Pinhole.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.message.input.CameraParameters.Pinhole();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.pixelsToTanThetaFactor = $root.vec2.decode(reader, reader.uint32());
+                            break;
+                        case 2:
+                            message.focalLengthPixels = reader.double();
+                            break;
+                        case 3:
+                            message.distortionFactor = reader.double();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a Pinhole message from the specified reader or buffer, length delimited.
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {message.input.CameraParameters.Pinhole} Pinhole
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Pinhole.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a Pinhole message.
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {?string} `null` if valid, otherwise the reason why it is not
+                 */
+                Pinhole.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.pixelsToTanThetaFactor != null && message.hasOwnProperty("pixelsToTanThetaFactor")) {
+                        var error = $root.vec2.verify(message.pixelsToTanThetaFactor);
+                        if (error)
+                            return "pixelsToTanThetaFactor." + error;
+                    }
+                    if (message.focalLengthPixels != null && message.hasOwnProperty("focalLengthPixels"))
+                        if (typeof message.focalLengthPixels !== "number")
+                            return "focalLengthPixels: number expected";
+                    if (message.distortionFactor != null && message.hasOwnProperty("distortionFactor"))
+                        if (typeof message.distortionFactor !== "number")
+                            return "distortionFactor: number expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a Pinhole message from a plain object. Also converts values to their respective internal types.
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {message.input.CameraParameters.Pinhole} Pinhole
+                 */
+                Pinhole.fromObject = function fromObject(object) {
+                    if (object instanceof $root.message.input.CameraParameters.Pinhole)
+                        return object;
+                    var message = new $root.message.input.CameraParameters.Pinhole();
+                    if (object.pixelsToTanThetaFactor != null) {
+                        if (typeof object.pixelsToTanThetaFactor !== "object")
+                            throw TypeError(".message.input.CameraParameters.Pinhole.pixelsToTanThetaFactor: object expected");
+                        message.pixelsToTanThetaFactor = $root.vec2.fromObject(object.pixelsToTanThetaFactor);
+                    }
+                    if (object.focalLengthPixels != null)
+                        message.focalLengthPixels = Number(object.focalLengthPixels);
+                    if (object.distortionFactor != null)
+                        message.distortionFactor = Number(object.distortionFactor);
+                    return message;
+                };
+
+                /**
+                 * Creates a Pinhole message from a plain object. Also converts values to their respective internal types.
+                 * This is an alias of {@link message.input.CameraParameters.Pinhole.fromObject}.
+                 * @function
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {message.input.CameraParameters.Pinhole} Pinhole
+                 */
+                Pinhole.from = Pinhole.fromObject;
+
+                /**
+                 * Creates a plain object from a Pinhole message. Also converts values to other types if specified.
+                 * @param {message.input.CameraParameters.Pinhole} message Pinhole
+                 * @param {$protobuf.ConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Pinhole.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults) {
+                        object.pixelsToTanThetaFactor = null;
+                        object.focalLengthPixels = 0;
+                        object.distortionFactor = 0;
+                    }
+                    if (message.pixelsToTanThetaFactor != null && message.hasOwnProperty("pixelsToTanThetaFactor"))
+                        object.pixelsToTanThetaFactor = $root.vec2.toObject(message.pixelsToTanThetaFactor, options);
+                    if (message.focalLengthPixels != null && message.hasOwnProperty("focalLengthPixels"))
+                        object.focalLengthPixels = message.focalLengthPixels;
+                    if (message.distortionFactor != null && message.hasOwnProperty("distortionFactor"))
+                        object.distortionFactor = message.distortionFactor;
+                    return object;
+                };
+
+                /**
+                 * Creates a plain object from this Pinhole message. Also converts values to other types if specified.
+                 * @param {$protobuf.ConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Pinhole.prototype.toObject = function toObject(options) {
+                    return this.constructor.toObject(this, options);
+                };
+
+                /**
+                 * Converts this Pinhole to JSON.
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Pinhole.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Pinhole;
+            })();
+
+            CameraParameters.Radial = (function() {
+
+                /**
+                 * Properties of a Radial.
+                 * @typedef message.input.CameraParameters.Radial$Properties
+                 * @type {Object}
+                 * @property {number} [radiansPerPixel] Radial radiansPerPixel.
+                 */
+
+                /**
+                 * Constructs a new Radial.
+                 * @exports message.input.CameraParameters.Radial
+                 * @constructor
+                 * @param {message.input.CameraParameters.Radial$Properties=} [properties] Properties to set
+                 */
+                function Radial(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Radial radiansPerPixel.
+                 * @type {number}
+                 */
+                Radial.prototype.radiansPerPixel = 0;
+
+                /**
+                 * Creates a new Radial instance using the specified properties.
+                 * @param {message.input.CameraParameters.Radial$Properties=} [properties] Properties to set
+                 * @returns {message.input.CameraParameters.Radial} Radial instance
+                 */
+                Radial.create = function create(properties) {
+                    return new Radial(properties);
+                };
+
+                /**
+                 * Encodes the specified Radial message. Does not implicitly {@link message.input.CameraParameters.Radial.verify|verify} messages.
+                 * @param {message.input.CameraParameters.Radial$Properties} message Radial message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Radial.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.radiansPerPixel != null && message.hasOwnProperty("radiansPerPixel"))
+                        writer.uint32(/* id 1, wireType 1 =*/9).double(message.radiansPerPixel);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified Radial message, length delimited. Does not implicitly {@link message.input.CameraParameters.Radial.verify|verify} messages.
+                 * @param {message.input.CameraParameters.Radial$Properties} message Radial message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Radial.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a Radial message from the specified reader or buffer.
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {message.input.CameraParameters.Radial} Radial
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Radial.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.message.input.CameraParameters.Radial();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.radiansPerPixel = reader.double();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a Radial message from the specified reader or buffer, length delimited.
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {message.input.CameraParameters.Radial} Radial
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Radial.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a Radial message.
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {?string} `null` if valid, otherwise the reason why it is not
+                 */
+                Radial.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.radiansPerPixel != null && message.hasOwnProperty("radiansPerPixel"))
+                        if (typeof message.radiansPerPixel !== "number")
+                            return "radiansPerPixel: number expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a Radial message from a plain object. Also converts values to their respective internal types.
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {message.input.CameraParameters.Radial} Radial
+                 */
+                Radial.fromObject = function fromObject(object) {
+                    if (object instanceof $root.message.input.CameraParameters.Radial)
+                        return object;
+                    var message = new $root.message.input.CameraParameters.Radial();
+                    if (object.radiansPerPixel != null)
+                        message.radiansPerPixel = Number(object.radiansPerPixel);
+                    return message;
+                };
+
+                /**
+                 * Creates a Radial message from a plain object. Also converts values to their respective internal types.
+                 * This is an alias of {@link message.input.CameraParameters.Radial.fromObject}.
+                 * @function
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {message.input.CameraParameters.Radial} Radial
+                 */
+                Radial.from = Radial.fromObject;
+
+                /**
+                 * Creates a plain object from a Radial message. Also converts values to other types if specified.
+                 * @param {message.input.CameraParameters.Radial} message Radial
+                 * @param {$protobuf.ConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Radial.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults)
+                        object.radiansPerPixel = 0;
+                    if (message.radiansPerPixel != null && message.hasOwnProperty("radiansPerPixel"))
+                        object.radiansPerPixel = message.radiansPerPixel;
+                    return object;
+                };
+
+                /**
+                 * Creates a plain object from this Radial message. Also converts values to other types if specified.
+                 * @param {$protobuf.ConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Radial.prototype.toObject = function toObject(options) {
+                    return this.constructor.toObject(this, options);
+                };
+
+                /**
+                 * Converts this Radial to JSON.
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Radial.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Radial;
+            })();
 
             return CameraParameters;
         })();
@@ -29828,7 +30735,7 @@ $root.message = (function() {
              * @property {mat22$Properties} [robotToIMU] Sensors robotToIMU.
              * @property {boolean} [leftFootDown] Sensors leftFootDown.
              * @property {boolean} [rightFootDown] Sensors rightFootDown.
-             * @property {Object.<string,mat44$Properties>} [forwardKinematics] Sensors forwardKinematics.
+             * @property {Array.<mat44$Properties>} [forwardKinematics] Sensors forwardKinematics.
              * @property {number} [bodyCentreHeight] Sensors bodyCentreHeight.
              * @property {vec4$Properties} [centreOfMass] Sensors centreOfMass.
              * @property {mat44$Properties} [bodyToGround] Sensors bodyToGround.
@@ -29846,7 +30753,7 @@ $root.message = (function() {
                 this.servo = [];
                 this.button = [];
                 this.led = [];
-                this.forwardKinematics = {};
+                this.forwardKinematics = [];
                 if (properties)
                     for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null)
@@ -29939,9 +30846,9 @@ $root.message = (function() {
 
             /**
              * Sensors forwardKinematics.
-             * @type {Object.<string,mat44$Properties>}
+             * @type {Array.<mat44$Properties>}
              */
-            Sensors.prototype.forwardKinematics = $util.emptyObject;
+            Sensors.prototype.forwardKinematics = $util.emptyArray;
 
             /**
              * Sensors bodyCentreHeight.
@@ -30017,11 +30924,9 @@ $root.message = (function() {
                     writer.uint32(/* id 13, wireType 0 =*/104).bool(message.leftFootDown);
                 if (message.rightFootDown != null && message.hasOwnProperty("rightFootDown"))
                     writer.uint32(/* id 14, wireType 0 =*/112).bool(message.rightFootDown);
-                if (message.forwardKinematics != null && message.hasOwnProperty("forwardKinematics"))
-                    for (var keys = Object.keys(message.forwardKinematics), i = 0; i < keys.length; ++i) {
-                        writer.uint32(/* id 15, wireType 2 =*/122).fork().uint32(/* id 1, wireType 0 =*/8).uint32(keys[i]);
-                        $root.mat44.encode(message.forwardKinematics[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
-                    }
+                if (message.forwardKinematics != null && message.forwardKinematics.length)
+                    for (var i = 0; i < message.forwardKinematics.length; ++i)
+                        $root.mat44.encode(message.forwardKinematics[i], writer.uint32(/* id 15, wireType 2 =*/122).fork()).ldelim();
                 if (message.bodyCentreHeight != null && message.hasOwnProperty("bodyCentreHeight"))
                     writer.uint32(/* id 16, wireType 5 =*/133).float(message.bodyCentreHeight);
                 if (message.centreOfMass != null && message.hasOwnProperty("centreOfMass"))
@@ -30054,7 +30959,7 @@ $root.message = (function() {
             Sensors.decode = function decode(reader, length) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.message.input.Sensors(), key;
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.message.input.Sensors();
                 while (reader.pos < end) {
                     var tag = reader.uint32();
                     switch (tag >>> 3) {
@@ -30109,12 +31014,9 @@ $root.message = (function() {
                         message.rightFootDown = reader.bool();
                         break;
                     case 15:
-                        reader.skip().pos++;
-                        if (message.forwardKinematics === $util.emptyObject)
-                            message.forwardKinematics = {};
-                        key = reader.uint32();
-                        reader.pos++;
-                        message.forwardKinematics[key] = $root.mat44.decode(reader, reader.uint32());
+                        if (!(message.forwardKinematics && message.forwardKinematics.length))
+                            message.forwardKinematics = [];
+                        message.forwardKinematics.push($root.mat44.decode(reader, reader.uint32()));
                         break;
                     case 16:
                         message.bodyCentreHeight = reader.float();
@@ -30236,13 +31138,10 @@ $root.message = (function() {
                     if (typeof message.rightFootDown !== "boolean")
                         return "rightFootDown: boolean expected";
                 if (message.forwardKinematics != null && message.hasOwnProperty("forwardKinematics")) {
-                    if (!$util.isObject(message.forwardKinematics))
-                        return "forwardKinematics: object expected";
-                    var key = Object.keys(message.forwardKinematics);
-                    for (var i = 0; i < key.length; ++i) {
-                        if (!$util.key32Re.test(key[i]))
-                            return "forwardKinematics: integer key{k:uint32} expected";
-                        var error = $root.mat44.verify(message.forwardKinematics[key[i]]);
+                    if (!Array.isArray(message.forwardKinematics))
+                        return "forwardKinematics: array expected";
+                    for (var i = 0; i < message.forwardKinematics.length; ++i) {
+                        var error = $root.mat44.verify(message.forwardKinematics[i]);
                         if (error)
                             return "forwardKinematics." + error;
                     }
@@ -30356,13 +31255,13 @@ $root.message = (function() {
                 if (object.rightFootDown != null)
                     message.rightFootDown = Boolean(object.rightFootDown);
                 if (object.forwardKinematics) {
-                    if (typeof object.forwardKinematics !== "object")
-                        throw TypeError(".message.input.Sensors.forwardKinematics: object expected");
-                    message.forwardKinematics = {};
-                    for (var keys = Object.keys(object.forwardKinematics), i = 0; i < keys.length; ++i) {
-                        if (typeof object.forwardKinematics[keys[i]] !== "object")
+                    if (!Array.isArray(object.forwardKinematics))
+                        throw TypeError(".message.input.Sensors.forwardKinematics: array expected");
+                    message.forwardKinematics = [];
+                    for (var i = 0; i < object.forwardKinematics.length; ++i) {
+                        if (typeof object.forwardKinematics[i] !== "object")
                             throw TypeError(".message.input.Sensors.forwardKinematics: object expected");
-                        message.forwardKinematics[keys[i]] = $root.mat44.fromObject(object.forwardKinematics[keys[i]]);
+                        message.forwardKinematics[i] = $root.mat44.fromObject(object.forwardKinematics[i]);
                     }
                 }
                 if (object.bodyCentreHeight != null)
@@ -30409,9 +31308,8 @@ $root.message = (function() {
                     object.servo = [];
                     object.button = [];
                     object.led = [];
+                    object.forwardKinematics = [];
                 }
-                if (options.objects || options.defaults)
-                    object.forwardKinematics = {};
                 if (options.defaults) {
                     object.timestamp = null;
                     object.accelerometer = null;
@@ -30468,11 +31366,10 @@ $root.message = (function() {
                     object.leftFootDown = message.leftFootDown;
                 if (message.rightFootDown != null && message.hasOwnProperty("rightFootDown"))
                     object.rightFootDown = message.rightFootDown;
-                var keys2;
-                if (message.forwardKinematics && (keys2 = Object.keys(message.forwardKinematics)).length) {
-                    object.forwardKinematics = {};
-                    for (var j = 0; j < keys2.length; ++j)
-                        object.forwardKinematics[keys2[j]] = $root.mat44.toObject(message.forwardKinematics[keys2[j]], options);
+                if (message.forwardKinematics && message.forwardKinematics.length) {
+                    object.forwardKinematics = [];
+                    for (var j = 0; j < message.forwardKinematics.length; ++j)
+                        object.forwardKinematics[j] = $root.mat44.toObject(message.forwardKinematics[j], options);
                 }
                 if (message.bodyCentreHeight != null && message.hasOwnProperty("bodyCentreHeight"))
                     object.bodyCentreHeight = message.bodyCentreHeight;
@@ -38146,6 +39043,7 @@ $root.message = (function() {
                  * @property {number} [NECK_TO_CAMERA_Y] Head NECK_TO_CAMERA_Y.
                  * @property {number} [NECK_TO_CAMERA_Z] Head NECK_TO_CAMERA_Z.
                  * @property {number} [CAMERA_DECLINATION_ANGLE_OFFSET] Head CAMERA_DECLINATION_ANGLE_OFFSET.
+                 * @property {number} [INTERPUPILLARY_DISTANCE] Head INTERPUPILLARY_DISTANCE.
                  * @property {number} [MAX_YAW] Head MAX_YAW.
                  * @property {number} [MIN_YAW] Head MIN_YAW.
                  * @property {number} [MAX_PITCH] Head MAX_PITCH.
@@ -38214,6 +39112,12 @@ $root.message = (function() {
                 Head.prototype.CAMERA_DECLINATION_ANGLE_OFFSET = 0;
 
                 /**
+                 * Head INTERPUPILLARY_DISTANCE.
+                 * @type {number}
+                 */
+                Head.prototype.INTERPUPILLARY_DISTANCE = 0;
+
+                /**
                  * Head MAX_YAW.
                  * @type {number}
                  */
@@ -38279,6 +39183,8 @@ $root.message = (function() {
                         writer.uint32(/* id 11, wireType 5 =*/93).float(message.MAX_PITCH);
                     if (message.MIN_PITCH != null && message.hasOwnProperty("MIN_PITCH"))
                         writer.uint32(/* id 12, wireType 5 =*/101).float(message.MIN_PITCH);
+                    if (message.INTERPUPILLARY_DISTANCE != null && message.hasOwnProperty("INTERPUPILLARY_DISTANCE"))
+                        writer.uint32(/* id 13, wireType 5 =*/109).float(message.INTERPUPILLARY_DISTANCE);
                     return writer;
                 };
 
@@ -38330,6 +39236,9 @@ $root.message = (function() {
                             break;
                         case 8:
                             message.CAMERA_DECLINATION_ANGLE_OFFSET = reader.float();
+                            break;
+                        case 13:
+                            message.INTERPUPILLARY_DISTANCE = reader.float();
                             break;
                         case 9:
                             message.MAX_YAW = reader.float();
@@ -38396,6 +39305,9 @@ $root.message = (function() {
                     if (message.CAMERA_DECLINATION_ANGLE_OFFSET != null && message.hasOwnProperty("CAMERA_DECLINATION_ANGLE_OFFSET"))
                         if (typeof message.CAMERA_DECLINATION_ANGLE_OFFSET !== "number")
                             return "CAMERA_DECLINATION_ANGLE_OFFSET: number expected";
+                    if (message.INTERPUPILLARY_DISTANCE != null && message.hasOwnProperty("INTERPUPILLARY_DISTANCE"))
+                        if (typeof message.INTERPUPILLARY_DISTANCE !== "number")
+                            return "INTERPUPILLARY_DISTANCE: number expected";
                     if (message.MAX_YAW != null && message.hasOwnProperty("MAX_YAW"))
                         if (typeof message.MAX_YAW !== "number")
                             return "MAX_YAW: number expected";
@@ -38436,6 +39348,8 @@ $root.message = (function() {
                         message.NECK_TO_CAMERA_Z = Number(object.NECK_TO_CAMERA_Z);
                     if (object.CAMERA_DECLINATION_ANGLE_OFFSET != null)
                         message.CAMERA_DECLINATION_ANGLE_OFFSET = Number(object.CAMERA_DECLINATION_ANGLE_OFFSET);
+                    if (object.INTERPUPILLARY_DISTANCE != null)
+                        message.INTERPUPILLARY_DISTANCE = Number(object.INTERPUPILLARY_DISTANCE);
                     if (object.MAX_YAW != null)
                         message.MAX_YAW = Number(object.MAX_YAW);
                     if (object.MIN_YAW != null)
@@ -38479,6 +39393,7 @@ $root.message = (function() {
                         object.MIN_YAW = 0;
                         object.MAX_PITCH = 0;
                         object.MIN_PITCH = 0;
+                        object.INTERPUPILLARY_DISTANCE = 0;
                     }
                     if (message.NECK_BASE_POS_FROM_ORIGIN_X != null && message.hasOwnProperty("NECK_BASE_POS_FROM_ORIGIN_X"))
                         object.NECK_BASE_POS_FROM_ORIGIN_X = message.NECK_BASE_POS_FROM_ORIGIN_X;
@@ -38504,6 +39419,8 @@ $root.message = (function() {
                         object.MAX_PITCH = message.MAX_PITCH;
                     if (message.MIN_PITCH != null && message.hasOwnProperty("MIN_PITCH"))
                         object.MIN_PITCH = message.MIN_PITCH;
+                    if (message.INTERPUPILLARY_DISTANCE != null && message.hasOwnProperty("INTERPUPILLARY_DISTANCE"))
+                        object.INTERPUPILLARY_DISTANCE = message.INTERPUPILLARY_DISTANCE;
                     return object;
                 };
 
@@ -42016,7 +42933,6 @@ $root.message = (function() {
                  * @property {number} INSTRUCTION=64 INSTRUCTION value
                  * @property {number} CORRUPT_DATA=128 CORRUPT_DATA value
                  * @property {number} TIMEOUT=256 TIMEOUT value
-                 * @property {number} TIMEOUT_VICTIM=512 TIMEOUT_VICTIM value
                  */
                 DarwinSensors.Error = (function() {
                     var valuesById = {}, values = Object.create(valuesById);
@@ -42030,7 +42946,6 @@ $root.message = (function() {
                     values[valuesById[64] = "INSTRUCTION"] = 64;
                     values[valuesById[128] = "CORRUPT_DATA"] = 128;
                     values[valuesById[256] = "TIMEOUT"] = 256;
-                    values[valuesById[512] = "TIMEOUT_VICTIM"] = 512;
                     return values;
                 })();
 
@@ -53620,10 +54535,11 @@ $root.message = (function() {
              * @property {uvec2$Properties} [dimensions] ClassifiedImage dimensions.
              * @property {Array.<message.vision.ClassifiedImage.SeedPoints$Properties>} [ballSeedPoints] ClassifiedImage ballSeedPoints.
              * @property {Array.<ivec2$Properties>} [ballPoints] ClassifiedImage ballPoints.
-             * @property {message.vision.Line$Properties} [horizon] ClassifiedImage horizon.
+             * @property {vec3$Properties} [horizonNormal] ClassifiedImage horizonNormal.
              * @property {Array.<ivec2$Properties>} [visualHorizon] ClassifiedImage visualHorizon.
              * @property {Array.<message.vision.ClassifiedImage.Segment$Properties>} [horizontalSegments] ClassifiedImage horizontalSegments.
              * @property {Array.<message.vision.ClassifiedImage.Segment$Properties>} [verticalSegments] ClassifiedImage verticalSegments.
+             * @property {message.vision.Line$Properties} [horizon] ClassifiedImage horizon.
              */
 
             /**
@@ -53675,10 +54591,10 @@ $root.message = (function() {
             ClassifiedImage.prototype.ballPoints = $util.emptyArray;
 
             /**
-             * ClassifiedImage horizon.
-             * @type {(message.vision.Line$Properties|null)}
+             * ClassifiedImage horizonNormal.
+             * @type {(vec3$Properties|null)}
              */
-            ClassifiedImage.prototype.horizon = null;
+            ClassifiedImage.prototype.horizonNormal = null;
 
             /**
              * ClassifiedImage visualHorizon.
@@ -53697,6 +54613,12 @@ $root.message = (function() {
              * @type {Array.<message.vision.ClassifiedImage.Segment$Properties>}
              */
             ClassifiedImage.prototype.verticalSegments = $util.emptyArray;
+
+            /**
+             * ClassifiedImage horizon.
+             * @type {(message.vision.Line$Properties|null)}
+             */
+            ClassifiedImage.prototype.horizon = null;
 
             /**
              * Creates a new ClassifiedImage instance using the specified properties.
@@ -53728,8 +54650,8 @@ $root.message = (function() {
                 if (message.ballPoints != null && message.ballPoints.length)
                     for (var i = 0; i < message.ballPoints.length; ++i)
                         $root.ivec2.encode(message.ballPoints[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
-                if (message.horizon != null && message.hasOwnProperty("horizon"))
-                    $root.message.vision.Line.encode(message.horizon, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+                if (message.horizonNormal != null && message.hasOwnProperty("horizonNormal"))
+                    $root.vec3.encode(message.horizonNormal, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
                 if (message.visualHorizon != null && message.visualHorizon.length)
                     for (var i = 0; i < message.visualHorizon.length; ++i)
                         $root.ivec2.encode(message.visualHorizon[i], writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
@@ -53739,6 +54661,8 @@ $root.message = (function() {
                 if (message.verticalSegments != null && message.verticalSegments.length)
                     for (var i = 0; i < message.verticalSegments.length; ++i)
                         $root.message.vision.ClassifiedImage.Segment.encode(message.verticalSegments[i], writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
+                if (message.horizon != null && message.hasOwnProperty("horizon"))
+                    $root.message.vision.Line.encode(message.horizon, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
                 return writer;
             };
 
@@ -53787,7 +54711,7 @@ $root.message = (function() {
                         message.ballPoints.push($root.ivec2.decode(reader, reader.uint32()));
                         break;
                     case 6:
-                        message.horizon = $root.message.vision.Line.decode(reader, reader.uint32());
+                        message.horizonNormal = $root.vec3.decode(reader, reader.uint32());
                         break;
                     case 7:
                         if (!(message.visualHorizon && message.visualHorizon.length))
@@ -53803,6 +54727,9 @@ $root.message = (function() {
                         if (!(message.verticalSegments && message.verticalSegments.length))
                             message.verticalSegments = [];
                         message.verticalSegments.push($root.message.vision.ClassifiedImage.Segment.decode(reader, reader.uint32()));
+                        break;
+                    case 10:
+                        message.horizon = $root.message.vision.Line.decode(reader, reader.uint32());
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -53866,10 +54793,10 @@ $root.message = (function() {
                             return "ballPoints." + error;
                     }
                 }
-                if (message.horizon != null && message.hasOwnProperty("horizon")) {
-                    var error = $root.message.vision.Line.verify(message.horizon);
+                if (message.horizonNormal != null && message.hasOwnProperty("horizonNormal")) {
+                    var error = $root.vec3.verify(message.horizonNormal);
                     if (error)
-                        return "horizon." + error;
+                        return "horizonNormal." + error;
                 }
                 if (message.visualHorizon != null && message.hasOwnProperty("visualHorizon")) {
                     if (!Array.isArray(message.visualHorizon))
@@ -53897,6 +54824,11 @@ $root.message = (function() {
                         if (error)
                             return "verticalSegments." + error;
                     }
+                }
+                if (message.horizon != null && message.hasOwnProperty("horizon")) {
+                    var error = $root.message.vision.Line.verify(message.horizon);
+                    if (error)
+                        return "horizon." + error;
                 }
                 return null;
             };
@@ -53945,10 +54877,10 @@ $root.message = (function() {
                         message.ballPoints[i] = $root.ivec2.fromObject(object.ballPoints[i]);
                     }
                 }
-                if (object.horizon != null) {
-                    if (typeof object.horizon !== "object")
-                        throw TypeError(".message.vision.ClassifiedImage.horizon: object expected");
-                    message.horizon = $root.message.vision.Line.fromObject(object.horizon);
+                if (object.horizonNormal != null) {
+                    if (typeof object.horizonNormal !== "object")
+                        throw TypeError(".message.vision.ClassifiedImage.horizonNormal: object expected");
+                    message.horizonNormal = $root.vec3.fromObject(object.horizonNormal);
                 }
                 if (object.visualHorizon) {
                     if (!Array.isArray(object.visualHorizon))
@@ -53979,6 +54911,11 @@ $root.message = (function() {
                             throw TypeError(".message.vision.ClassifiedImage.verticalSegments: object expected");
                         message.verticalSegments[i] = $root.message.vision.ClassifiedImage.Segment.fromObject(object.verticalSegments[i]);
                     }
+                }
+                if (object.horizon != null) {
+                    if (typeof object.horizon !== "object")
+                        throw TypeError(".message.vision.ClassifiedImage.horizon: object expected");
+                    message.horizon = $root.message.vision.Line.fromObject(object.horizon);
                 }
                 return message;
             };
@@ -54013,6 +54950,7 @@ $root.message = (function() {
                     object.sensors = null;
                     object.image = null;
                     object.dimensions = null;
+                    object.horizonNormal = null;
                     object.horizon = null;
                 }
                 if (message.sensors != null && message.hasOwnProperty("sensors"))
@@ -54031,8 +54969,8 @@ $root.message = (function() {
                     for (var j = 0; j < message.ballPoints.length; ++j)
                         object.ballPoints[j] = $root.ivec2.toObject(message.ballPoints[j], options);
                 }
-                if (message.horizon != null && message.hasOwnProperty("horizon"))
-                    object.horizon = $root.message.vision.Line.toObject(message.horizon, options);
+                if (message.horizonNormal != null && message.hasOwnProperty("horizonNormal"))
+                    object.horizonNormal = $root.vec3.toObject(message.horizonNormal, options);
                 if (message.visualHorizon && message.visualHorizon.length) {
                     object.visualHorizon = [];
                     for (var j = 0; j < message.visualHorizon.length; ++j)
@@ -54048,6 +54986,8 @@ $root.message = (function() {
                     for (var j = 0; j < message.verticalSegments.length; ++j)
                         object.verticalSegments[j] = $root.message.vision.ClassifiedImage.Segment.toObject(message.verticalSegments[j], options);
                 }
+                if (message.horizon != null && message.hasOwnProperty("horizon"))
+                    object.horizon = $root.message.vision.Line.toObject(message.horizon, options);
                 return object;
             };
 
@@ -55745,7 +56685,7 @@ $root.message = (function() {
              * @property {message.vision.VisionObject$Properties} [visObject] Ball visObject.
              * @property {Array.<message.vision.Ball.Measurement$Properties>} [measurements] Ball measurements.
              * @property {Array.<vec3$Properties>} [edgePoints] Ball edgePoints.
-             * @property {message.Circle$Properties} [circle] Ball circle.
+             * @property {message.Cone$Properties} [cone] Ball cone.
              */
 
             /**
@@ -55782,10 +56722,10 @@ $root.message = (function() {
             Ball.prototype.edgePoints = $util.emptyArray;
 
             /**
-             * Ball circle.
-             * @type {(message.Circle$Properties|null)}
+             * Ball cone.
+             * @type {(message.Cone$Properties|null)}
              */
-            Ball.prototype.circle = null;
+            Ball.prototype.cone = null;
 
             /**
              * Creates a new Ball instance using the specified properties.
@@ -55813,8 +56753,8 @@ $root.message = (function() {
                 if (message.edgePoints != null && message.edgePoints.length)
                     for (var i = 0; i < message.edgePoints.length; ++i)
                         $root.vec3.encode(message.edgePoints[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-                if (message.circle != null && message.hasOwnProperty("circle"))
-                    $root.message.Circle.encode(message.circle, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                if (message.cone != null && message.hasOwnProperty("cone"))
+                    $root.message.Cone.encode(message.cone, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
                 return writer;
             };
 
@@ -55857,7 +56797,7 @@ $root.message = (function() {
                         message.edgePoints.push($root.vec3.decode(reader, reader.uint32()));
                         break;
                     case 4:
-                        message.circle = $root.message.Circle.decode(reader, reader.uint32());
+                        message.cone = $root.message.Cone.decode(reader, reader.uint32());
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -55911,10 +56851,10 @@ $root.message = (function() {
                             return "edgePoints." + error;
                     }
                 }
-                if (message.circle != null && message.hasOwnProperty("circle")) {
-                    var error = $root.message.Circle.verify(message.circle);
+                if (message.cone != null && message.hasOwnProperty("cone")) {
+                    var error = $root.message.Cone.verify(message.cone);
                     if (error)
-                        return "circle." + error;
+                        return "cone." + error;
                 }
                 return null;
             };
@@ -55953,10 +56893,10 @@ $root.message = (function() {
                         message.edgePoints[i] = $root.vec3.fromObject(object.edgePoints[i]);
                     }
                 }
-                if (object.circle != null) {
-                    if (typeof object.circle !== "object")
-                        throw TypeError(".message.vision.Ball.circle: object expected");
-                    message.circle = $root.message.Circle.fromObject(object.circle);
+                if (object.cone != null) {
+                    if (typeof object.cone !== "object")
+                        throw TypeError(".message.vision.Ball.cone: object expected");
+                    message.cone = $root.message.Cone.fromObject(object.cone);
                 }
                 return message;
             };
@@ -55986,7 +56926,7 @@ $root.message = (function() {
                 }
                 if (options.defaults) {
                     object.visObject = null;
-                    object.circle = null;
+                    object.cone = null;
                 }
                 if (message.visObject != null && message.hasOwnProperty("visObject"))
                     object.visObject = $root.message.vision.VisionObject.toObject(message.visObject, options);
@@ -56000,8 +56940,8 @@ $root.message = (function() {
                     for (var j = 0; j < message.edgePoints.length; ++j)
                         object.edgePoints[j] = $root.vec3.toObject(message.edgePoints[j], options);
                 }
-                if (message.circle != null && message.hasOwnProperty("circle"))
-                    object.circle = $root.message.Circle.toObject(message.circle, options);
+                if (message.cone != null && message.hasOwnProperty("cone"))
+                    object.cone = $root.message.Cone.toObject(message.cone, options);
                 return object;
             };
 
@@ -56287,6 +57227,7 @@ $root.message = (function() {
              * @property {message.vision.VisionObject$Properties} [visObject] Goal visObject.
              * @property {message.vision.Goal.Side} [side] Goal side.
              * @property {message.vision.Goal.Team} [team] Goal team.
+             * @property {message.Frustum$Properties} [frustum] Goal frustum.
              * @property {message.Quad$Properties} [quad] Goal quad.
              * @property {Array.<message.vision.Goal.Measurement$Properties>} [measurement] Goal measurement.
              */
@@ -56324,6 +57265,12 @@ $root.message = (function() {
             Goal.prototype.team = 0;
 
             /**
+             * Goal frustum.
+             * @type {(message.Frustum$Properties|null)}
+             */
+            Goal.prototype.frustum = null;
+
+            /**
              * Goal quad.
              * @type {(message.Quad$Properties|null)}
              */
@@ -56359,11 +57306,13 @@ $root.message = (function() {
                     writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.side);
                 if (message.team != null && message.hasOwnProperty("team"))
                     writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.team);
+                if (message.frustum != null && message.hasOwnProperty("frustum"))
+                    $root.message.Frustum.encode(message.frustum, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
                 if (message.quad != null && message.hasOwnProperty("quad"))
-                    $root.message.Quad.encode(message.quad, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                    $root.message.Quad.encode(message.quad, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
                 if (message.measurement != null && message.measurement.length)
                     for (var i = 0; i < message.measurement.length; ++i)
-                        $root.message.vision.Goal.Measurement.encode(message.measurement[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                        $root.message.vision.Goal.Measurement.encode(message.measurement[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
                 return writer;
             };
 
@@ -56402,9 +57351,12 @@ $root.message = (function() {
                         message.team = reader.uint32();
                         break;
                     case 4:
-                        message.quad = $root.message.Quad.decode(reader, reader.uint32());
+                        message.frustum = $root.message.Frustum.decode(reader, reader.uint32());
                         break;
                     case 5:
+                        message.quad = $root.message.Quad.decode(reader, reader.uint32());
+                        break;
+                    case 6:
                         if (!(message.measurement && message.measurement.length))
                             message.measurement = [];
                         message.measurement.push($root.message.vision.Goal.Measurement.decode(reader, reader.uint32()));
@@ -56461,6 +57413,11 @@ $root.message = (function() {
                     case 2:
                         break;
                     }
+                if (message.frustum != null && message.hasOwnProperty("frustum")) {
+                    var error = $root.message.Frustum.verify(message.frustum);
+                    if (error)
+                        return "frustum." + error;
+                }
                 if (message.quad != null && message.hasOwnProperty("quad")) {
                     var error = $root.message.Quad.verify(message.quad);
                     if (error)
@@ -56520,6 +57477,11 @@ $root.message = (function() {
                     message.team = 2;
                     break;
                 }
+                if (object.frustum != null) {
+                    if (typeof object.frustum !== "object")
+                        throw TypeError(".message.vision.Goal.frustum: object expected");
+                    message.frustum = $root.message.Frustum.fromObject(object.frustum);
+                }
                 if (object.quad != null) {
                     if (typeof object.quad !== "object")
                         throw TypeError(".message.vision.Goal.quad: object expected");
@@ -56563,6 +57525,7 @@ $root.message = (function() {
                     object.visObject = null;
                     object.side = options.enums === String ? "UNKNOWN_SIDE" : 0;
                     object.team = options.enums === String ? "UNKNOWN_TEAM" : 0;
+                    object.frustum = null;
                     object.quad = null;
                 }
                 if (message.visObject != null && message.hasOwnProperty("visObject"))
@@ -56571,6 +57534,8 @@ $root.message = (function() {
                     object.side = options.enums === String ? $root.message.vision.Goal.Side[message.side] : message.side;
                 if (message.team != null && message.hasOwnProperty("team"))
                     object.team = options.enums === String ? $root.message.vision.Goal.Team[message.team] : message.team;
+                if (message.frustum != null && message.hasOwnProperty("frustum"))
+                    object.frustum = $root.message.Frustum.toObject(message.frustum, options);
                 if (message.quad != null && message.hasOwnProperty("quad"))
                     object.quad = $root.message.Quad.toObject(message.quad, options);
                 if (message.measurement && message.measurement.length) {

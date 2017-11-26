@@ -6,6 +6,7 @@ import { Matrix4 } from '../../math/matrix4'
 import { Vector2 } from '../../math/vector2'
 import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
+import { Vector3 } from '../../math/vector3'
 
 export class VisionModel {
   public constructor(private appModel: AppModel) {
@@ -29,8 +30,8 @@ type VisionRobotModelOpts = {
 }
 
 type VisionBall = {
-  radius: number
-  centre: Vector2
+  gradient: number
+  axis: Vector3
 }
 
 type VisionGoal = {

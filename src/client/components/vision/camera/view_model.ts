@@ -41,8 +41,8 @@ export class CameraViewModel {
 
   @computed
   public get camera(): Camera {
-    const camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 100)
-    camera.position.z = 1
+    const camera = new OrthographicCamera(-1, 1, 1, -1, 1, 3)
+    camera.position.z = 2
     return camera
   }
 
@@ -74,7 +74,7 @@ export class CameraViewModel {
 
   @computed
   private get horiztonMaterial(): Material {
-    const material = new ShaderMaterial({
+    return new ShaderMaterial({
       vertexShader: String(simpleVertexShader),
       fragmentShader: String(horizonFragmentShader),
       uniforms: {
@@ -88,16 +88,15 @@ export class CameraViewModel {
           ),
         },
       },
+      depthTest: false,
+      depthWrite: false,
+      transparent: true,
     })
-    material.depthTest = false
-    material.depthWrite = false
-    material.transparent = true
-    return material
   }
 
   @computed
   private get imageMaterial(): Material {
-    const material = new ShaderMaterial({
+    return new ShaderMaterial({
       vertexShader: String(imageVertexShader),
       fragmentShader: String(imageFragmentShader),
       uniforms: {
@@ -105,10 +104,9 @@ export class CameraViewModel {
         firstRed: { value: [1, 0] },
         image: { value: this.imageTexture, type: 't' },
       },
+      depthTest: false,
+      depthWrite: false,
     })
-    material.depthTest = false
-    material.depthWrite = false
-    return material
   }
 
   @computed
@@ -166,13 +164,9 @@ class BallViewModel {
       this.model.Hcw.x.z, this.model.Hcw.y.z, this.model.Hcw.z.z, this.model.Hcw.t.z,
       this.model.Hcw.x.t, this.model.Hcw.y.t, this.model.Hcw.z.t, this.model.Hcw.t.t,
     )
-    const axis = new Vector3(this.model.axis.x, this.model.axis.y, this.model.axis.z)
-    // const Hwc = new Matrix4().getInverse(Hcw);
-    Hcw.setPosition(new Vector3(0, 0, 0))
-    axis.applyMatrix4(Hcw)
-    console.log(axis)
-    console.log(this.model.gradient)
-    const material = new ShaderMaterial({
+    const Rcw = new Matrix4().extractRotation(Hcw);
+    const axis = new Vector3(this.model.axis.x, this.model.axis.y, this.model.axis.z).applyMatrix4(Rcw);
+    return new ShaderMaterial({
       vertexShader: String(simpleVertexShader),
       fragmentShader: String(ballFragmentShader),
       uniforms: {
@@ -180,10 +174,9 @@ class BallViewModel {
         gradient: { value: this.model.gradient },
         imageSize: { value: [1280, 1024] },
       },
+      depthTest: false,
+      depthWrite: false,
+      transparent: true,
     })
-    material.depthTest = false
-    material.depthWrite = false
-    material.transparent = true
-    return material
   }
 }

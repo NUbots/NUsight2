@@ -59,21 +59,21 @@ export class CameraViewModel {
 
   @computed
   private get plane(): Mesh {
-    return new Mesh(this.planeGeometry, this.imageMaterial)
+    return new Mesh(this.quadGeometry, this.imageMaterial)
   }
 
   @computed
   private get horizon(): Mesh {
-    return new Mesh(this.planeGeometry, this.horiztonMaterial)
+    return new Mesh(this.quadGeometry, this.horizonMaterial)
   }
 
   @computed
-  private get planeGeometry(): Geometry {
+  private get quadGeometry(): Geometry {
     return new PlaneGeometry(2, 2)
   }
 
   @computed
-  private get horiztonMaterial(): Material {
+  private get horizonMaterial(): Material {
     return new ShaderMaterial({
       vertexShader: String(simpleVertexShader),
       fragmentShader: String(horizonFragmentShader),
@@ -164,8 +164,8 @@ class BallViewModel {
       this.model.Hcw.x.z, this.model.Hcw.y.z, this.model.Hcw.z.z, this.model.Hcw.t.z,
       this.model.Hcw.x.t, this.model.Hcw.y.t, this.model.Hcw.z.t, this.model.Hcw.t.t,
     )
-    const Rcw = new Matrix4().extractRotation(Hcw);
-    const axis = new Vector3(this.model.axis.x, this.model.axis.y, this.model.axis.z).applyMatrix4(Rcw);
+    const Rcw = new Matrix4().extractRotation(Hcw)
+    const axis = new Vector3(this.model.axis.x, this.model.axis.y, this.model.axis.z).applyMatrix4(Rcw)
     return new ShaderMaterial({
       vertexShader: String(simpleVertexShader),
       fragmentShader: String(ballFragmentShader),

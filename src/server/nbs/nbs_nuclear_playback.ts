@@ -32,13 +32,13 @@ export class NbsNUClearPlayback extends stream.Writable {
     })
   }
 
-  public static of(nuclearnetClient: NUClearNetClient) {
+  public static create(nuclearnetClient: NUClearNetClient) {
     return new NbsNUClearPlayback(nuclearnetClient, NodeSystemClock)
   }
 
   /** Convenience method for directly streaming a file to the network. */
   public static fromFile(filename: string, nuclearnetClient: NUClearNetClient) {
-    const playback = NbsNUClearPlayback.of(nuclearnetClient)
+    const playback = NbsNUClearPlayback.create(nuclearnetClient)
     let rawStream = fs.createReadStream(filename)
     const isGzipped = filename.endsWith('.nbz') || filename.endsWith('.nbs.gz')
     const decompress = isGzipped ? createGunzip() : new PassThrough()
@@ -47,7 +47,7 @@ export class NbsNUClearPlayback extends stream.Writable {
   }
 
   public static fromRawStream(rawStream: ReadStream, nuclearnetClient: NUClearNetClient) {
-    const playback = NbsNUClearPlayback.of(nuclearnetClient)
+    const playback = NbsNUClearPlayback.create(nuclearnetClient)
     rawStream.pipe(new NbsFrameChunker()).pipe(new NbsFrameDecoder()).pipe(playback)
     return playback
   }

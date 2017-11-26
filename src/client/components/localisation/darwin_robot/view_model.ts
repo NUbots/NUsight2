@@ -11,7 +11,7 @@ export class RobotViewModel {
   public constructor(private model: LocalisationRobotModel) {
   }
 
-  public static of = createTransformer((model: LocalisationRobotModel): RobotViewModel => {
+  public static create = createTransformer((model: LocalisationRobotModel): RobotViewModel => {
     return new RobotViewModel(model)
   })
 
@@ -23,7 +23,7 @@ export class RobotViewModel {
     robot.position.z = this.model.rWTt.z
     const rotation = new Quaternion(this.model.Rwt.x, this.model.Rwt.y, this.model.Rwt.z, this.model.Rwt.w)
     robot.setRotationFromQuaternion(rotation)
-    robot.add(BodyViewModel.of(this.model).body)
+    robot.add(BodyViewModel.create(this.model).body)
     return robot
   }
 }

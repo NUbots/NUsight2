@@ -2,7 +2,7 @@ import { DashboardModel } from './model'
 import { action } from 'mobx'
 
 export class DashboardController {
-  public static of() {
+  public static create() {
     return new DashboardController()
   }
 

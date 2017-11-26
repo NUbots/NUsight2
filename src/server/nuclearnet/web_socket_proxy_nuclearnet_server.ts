@@ -23,13 +23,15 @@ export class WebSocketProxyNUClearNetServer {
     server.onConnection(this.onClientConnection)
   }
 
-  public static of(server: WebSocketServer, { fakeNetworking }: Opts): WebSocketProxyNUClearNetServer {
-    const nuclearnetClient: NUClearNetClient = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+  public static create(server: WebSocketServer, { fakeNetworking }: Opts): WebSocketProxyNUClearNetServer {
+    const nuclearnetClient: NUClearNetClient = fakeNetworking
+      ? FakeNUClearNetClient.create()
+      : DirectNUClearNetClient.create()
     return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
   }
 
   private onClientConnection = (socket: WebSocket) => {
-    WebSocketServerClient.of(this.nuclearnetClient, socket)
+    WebSocketServerClient.create(this.nuclearnetClient, socket)
   }
 }
 
@@ -53,13 +55,13 @@ class WebSocketServerClient {
     this.socket.on('disconnect', this.onDisconnect)
   }
 
-  public static of(nuclearNetClient: NUClearNetClient, socket: WebSocket) {
+  public static create(nuclearNetClient: NUClearNetClient, socket: WebSocket) {
     return new WebSocketServerClient(nuclearNetClient, socket)
   }
 
   private onJoin = (peer: NUClearNetPeer) => {
     this.socket.send('nuclear_join', peer)
-    this.processors.set(peer, PacketProcessor.of(this.socket))
+    this.processors.set(peer, PacketProcessor.create(this.socket))
   }
 
   private onLeave = (peer: NUClearNetPeer) => {
@@ -138,7 +140,7 @@ class PacketProcessor {
     this.eventQueueSize = new Map()
   }
 
-  public static of(socket: WebSocket) {
+  public static create(socket: WebSocket) {
     return new PacketProcessor(socket, NodeSystemClock, { limit: 1, timeout: 5 })
   }
 

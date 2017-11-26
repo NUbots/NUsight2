@@ -21,7 +21,7 @@ export class FakeClock implements Clock {
     this.tasks = []
   }
 
-  public static of(time: number = 0) {
+  public static create(time: number = 0) {
     return new FakeClock(time)
   }
 

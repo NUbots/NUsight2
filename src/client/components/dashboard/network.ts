@@ -17,8 +17,8 @@ export class DashboardNetwork {
     this.network.on(Overview, this.onOverview)
   }
 
-  public static of(nusightNetwork: NUsightNetwork): DashboardNetwork {
-    const network = Network.of(nusightNetwork)
+  public static create(nusightNetwork: NUsightNetwork): DashboardNetwork {
+    const network = Network.create(nusightNetwork)
     return new DashboardNetwork(network)
   }
 
@@ -28,7 +28,7 @@ export class DashboardNetwork {
 
   @action
   private onOverview = (robotModel: RobotModel, overview: Overview) => {
-    const robot = DashboardRobotModel.of(robotModel)
+    const robot = DashboardRobotModel.create(robotModel)
 
     // Timestamp this message was sent (for comparison with last seen)
     robot.time = toSeconds(overview.timestamp)

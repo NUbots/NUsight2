@@ -10,7 +10,7 @@ import Sensors = message.input.Sensors
 export const HIP_TO_FOOT = 0.2465
 
 export class SensorDataSimulator implements Simulator {
-  public static of() {
+  public static create() {
     return new SensorDataSimulator()
   }
 

@@ -11,9 +11,9 @@ export class CircleGeometry {
     this.y = opts.y
   }
 
-  public static of({
-    radius = 1, 
-    x = 0, 
+  public static create({
+    radius = 1,
+    x = 0,
     y = 0,
   }: Partial<CircleGeometry> = {}): CircleGeometry {
     return new CircleGeometry({

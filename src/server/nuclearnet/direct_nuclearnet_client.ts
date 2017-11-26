@@ -1,7 +1,6 @@
 import { NUClearNet } from 'nuclearnet.js'
 import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
-import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
@@ -13,7 +12,7 @@ export class DirectNUClearNetClient implements NUClearNetClient {
   public constructor(private nuclearNetwork: NUClearNet) {
   }
 
-  public static of(): DirectNUClearNetClient {
+  public static create(): DirectNUClearNetClient {
     const nuclearNetwork = new NUClearNet()
     return new DirectNUClearNetClient(nuclearNetwork)
   }

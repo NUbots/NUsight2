@@ -15,7 +15,7 @@ export class Network {
     this.offNUClearMessages = new Set()
   }
 
-  public static of(nusightNetwork: NUsightNetwork): Network {
+  public static create(nusightNetwork: NUsightNetwork): Network {
     return new Network(nusightNetwork)
   }
 

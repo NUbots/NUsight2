@@ -12,13 +12,13 @@ export class Vector3 {
     this.z = z
   }
 
-  public static of() {
+  public static create() {
     return new Vector3(0, 0, 0)
   }
 
   public static from(vec?: { x?: number, y?: number, z?: number } | null): Vector3 {
     if (!vec) {
-      return Vector3.of()
+      return Vector3.create()
     }
     return new Vector3(vec.x || 0, vec.y || 0, vec.z || 0)
   }

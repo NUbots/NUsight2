@@ -31,17 +31,17 @@ server.listen(port, () => {
 })
 
 if (withVirtualRobots) {
-  const virtualRobots = VirtualRobots.of({
+  const virtualRobots = VirtualRobots.create({
     fakeNetworking: true,
     numRobots: 3,
     simulators: [
-      { frequency: 1, simulator: OverviewSimulator.of() },
-      { frequency: 60, simulator: SensorDataSimulator.of() },
+      { frequency: 1, simulator: OverviewSimulator.create() },
+      { frequency: 60, simulator: SensorDataSimulator.create() },
     ],
   })
   virtualRobots.startSimulators()
 }
 
-WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
+WebSocketProxyNUClearNetServer.create(WebSocketServer.create(sioNetwork.of('/nuclearnet')), {
   fakeNetworking: withVirtualRobots,
 })

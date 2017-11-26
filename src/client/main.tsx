@@ -24,15 +24,15 @@ import { NUsightNetwork } from './network/nusight_network'
 // enable MobX strict mode
 useStrict(true)
 
-const appModel = AppModel.of()
-const nusightNetwork = NUsightNetwork.of(appModel)
+const appModel = AppModel.create()
+const nusightNetwork = NUsightNetwork.create(appModel)
 nusightNetwork.connect({ name: 'nusight' })
 
-const appController = AppController.of()
-AppNetwork.of(nusightNetwork, appModel)
+const appController = AppController.create()
+AppNetwork.create(nusightNetwork, appModel)
 const menu = withRobotSelectorMenuBar(appModel.robots, appController.toggleRobotEnabled)
 
-const nav = NavigationConfiguration.of()
+const nav = NavigationConfiguration.create()
 installDashboard({ nav, appModel, nusightNetwork, menu })
 installLocalisation({ nav, appModel, nusightNetwork, menu })
 installVision({ nav })

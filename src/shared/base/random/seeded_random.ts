@@ -9,7 +9,7 @@ export class SeededRandom {
   public constructor(private prng: () => number) {
   }
 
-  public static of(seed: string) {
+  public static create(seed: string) {
     return new SeededRandom(seedrandom(seed))
   }
 

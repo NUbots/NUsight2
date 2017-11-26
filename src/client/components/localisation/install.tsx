@@ -15,14 +15,14 @@ export function installLocalisation({ nav, appModel, nusightNetwork, menu }: {
   nusightNetwork: NUsightNetwork,
   menu: ComponentType
 }) {
-  const model = LocalisationModel.of(appModel)
+  const model = LocalisationModel.create(appModel)
   nav.addRoute({
     path: '/localisation',
     Icon,
     label: 'Localisation',
     Content: () => {
-      const network = LocalisationNetwork.of(nusightNetwork, model)
-      const controller = LocalisationController.of()
+      const network = LocalisationNetwork.create(nusightNetwork, model)
+      const controller = LocalisationController.create()
       return <LocalisationView controller={controller} menu={menu} model={model} network={network}/>
     },
   })

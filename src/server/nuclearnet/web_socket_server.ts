@@ -10,13 +10,13 @@ export class WebSocketServer {
   public constructor(private sioServer: SocketIO.Namespace) {
   }
 
-  public static of(server: SocketIO.Namespace) {
+  public static create(server: SocketIO.Namespace) {
     return new WebSocketServer(server)
   }
 
   public onConnection(cb: (socket: WebSocket) => void) {
     this.sioServer.on('connection', (socket: SocketIO.Socket) => {
-      const webSocket = WebSocket.of(socket)
+      const webSocket = WebSocket.create(socket)
       cb(webSocket)
     })
   }
@@ -26,7 +26,7 @@ export class WebSocket {
   public constructor(private sioSocket: SocketIO.Socket) {
   }
 
-  public static of(socket: SocketIO.Socket) {
+  public static create(socket: SocketIO.Socket) {
     return new WebSocket(socket)
   }
 

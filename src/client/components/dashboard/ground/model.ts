@@ -12,7 +12,7 @@ export class GroundModel {
     Object.assign(this, opts)
   }
 
-  public static of() {
+  public static create() {
     return new GroundModel({
       bottomGoalColor: 'blue',
       dimensions: FieldDimensions.postYear2017(),

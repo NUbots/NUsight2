@@ -28,8 +28,8 @@ export class VirtualRobot {
     this.simulators = opts.simulators
   }
 
-  public static of(opts: Opts): VirtualRobot {
-    const network = opts.fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+  public static create(opts: Opts): VirtualRobot {
+    const network = opts.fakeNetworking ? FakeNUClearNetClient.create() : DirectNUClearNetClient.create()
     const clock = NodeSystemClock
     return new VirtualRobot(network, clock, opts)
   }

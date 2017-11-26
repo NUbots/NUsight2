@@ -17,8 +17,8 @@ export class LocalisationNetwork {
     this.network.on(Sensors, this.onSensors)
   }
 
-  public static of(nusightNetwork: NUsightNetwork, model: LocalisationModel): LocalisationNetwork {
-    const network = Network.of(nusightNetwork)
+  public static create(nusightNetwork: NUsightNetwork, model: LocalisationModel): LocalisationNetwork {
+    const network = Network.create(nusightNetwork)
     return new LocalisationNetwork(network, model)
   }
 
@@ -28,7 +28,7 @@ export class LocalisationNetwork {
 
   @action
   private onSensors = (robotModel: RobotModel, sensors: Sensors) => {
-    const robot = LocalisationRobotModel.of(robotModel)
+    const robot = LocalisationRobotModel.create(robotModel)
 
     const { translation: rWTt, rotation: Rwt } = decompose(new Matrix4().getInverse(fromProtoMat44(sensors.world!)))
     robot.rWTt.set(rWTt.x, rWTt.y, rWTt.z)

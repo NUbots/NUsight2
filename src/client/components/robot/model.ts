@@ -12,7 +12,7 @@ export class RobotModel {
     Object.assign(this, opts)
   }
 
-  public static of(opts: RobotModel) {
+  public static create(opts: RobotModel) {
     return new RobotModel(opts)
   }
 }

@@ -20,9 +20,9 @@ export class NUsightNetwork {
                      private messageTypePath: MessageTypePath) {
   }
 
-  public static of(appModel: AppModel) {
-    const messageTypePath = MessageTypePath.of()
-    const nuclearnetClient: NUClearNetClient = WebSocketProxyNUClearNetClient.of()
+  public static create(appModel: AppModel) {
+    const messageTypePath = MessageTypePath.create()
+    const nuclearnetClient: NUClearNetClient = WebSocketProxyNUClearNetClient.create()
     return new NUsightNetwork(nuclearnetClient, appModel, messageTypePath)
   }
 

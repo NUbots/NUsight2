@@ -15,7 +15,7 @@ export class SkyboxModel {
     Object.assign(this, opts)
   }
 
-  public static of() {
+  public static create() {
     return new SkyboxModel({
       turbidity: 10,
       rayleigh: 2,

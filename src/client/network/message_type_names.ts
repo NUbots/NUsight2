@@ -16,7 +16,7 @@ export class MessageTypePath {
     this.cache = new Map()
   }
 
-  public static of = createSingletonFactory(() => {
+  public static create = createSingletonFactory(() => {
     return new MessageTypePath()
   })
 

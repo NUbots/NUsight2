@@ -10,14 +10,14 @@ export class FieldViewModel {
   public constructor(private model: FieldModel) {
   }
 
-  public static of = createTransformer((model: FieldModel): FieldViewModel => {
+  public static create = createTransformer((model: FieldModel): FieldViewModel => {
     return new FieldViewModel(model)
   })
 
   @computed
   public get scene(): Group {
-    return Group.of({
-      transform: Transform.of({
+    return Group.create({
+      transform: Transform.create({
         // TODO (Annable): move camera to the view model and put this transform there.
         rotate: this.model.orientation === 'left' ? Math.PI : 0,
       }),
@@ -30,15 +30,15 @@ export class FieldViewModel {
 
   @computed
   private get ground() {
-    return GroundViewModel.of(this.model.ground).ground
+    return GroundViewModel.create(this.model.ground).ground
   }
 
   @computed
   private get robots() {
-    return Group.of({
+    return Group.create({
       children: this.model.robots
         .filter(robot => robot.enabled && robot.connected)
-        .map(robot => DashboardRobotViewModel.of(robot).robot),
+        .map(robot => DashboardRobotViewModel.create(robot).robot),
     })
   }
 }

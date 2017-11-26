@@ -76,19 +76,19 @@ export class DashboardRobotModel {
     Object.assign(this, opts)
   }
 
-  public static of = memoize((robot: RobotModel): DashboardRobotModel => {
+  public static create = memoize((robot: RobotModel): DashboardRobotModel => {
     return new DashboardRobotModel(robot, {
       ballColor: '#ff9800',
-      ballCovariance: Matrix2.of(),
-      ballPosition: Vector2.of(),
+      ballCovariance: Matrix2.create(),
+      ballPosition: Vector2.create(),
       ballSightColor: '#4DB6AC',
       battery: -1,
       behaviourState: State.UNKNOWN,
-      camera: Transform.of(),
+      camera: Transform.create(),
       gameMode: Mode.UNKNOWN_MODE,
       gamePhase: Phase.UNKNOWN_PHASE,
       playerId: -1,
-      kickTarget: Vector2.of(),
+      kickTarget: Vector2.create(),
       kickTargetColor: '#00796B',
       lastCameraImage: 0,
       lastSeenBall: 0,
@@ -96,13 +96,13 @@ export class DashboardRobotModel {
       penaltyReason: PenaltyReason.UNKNOWN_PENALTY_REASON,
       robotBorderColor: 'transparent',
       robotColor: '#015457',
-      robotPosition: Vector3.of(),
-      robotPositionCovariance: Matrix3.of(),
+      robotPosition: Vector3.create(),
+      robotPositionCovariance: Matrix3.create(),
       roleName: '',
       textColor: '#fff',
       time: BrowserSystemClock.now(),
       voltage: -1,
-      walkCommand: Vector3.of(),
+      walkCommand: Vector3.create(),
       walkPathPlan: [],
     })
   })

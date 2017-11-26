@@ -17,9 +17,9 @@ export function installDashboard({ nav, appModel, nusightNetwork, menu }: {
   nusightNetwork: NUsightNetwork,
   menu: ComponentType
 }) {
-  const model = DashboardModel.of(appModel.robots)
+  const model = DashboardModel.create(appModel.robots)
   const views = {
-    Field: () => <Field controller={FieldController.of()} model={model.field}/>,
+    Field: () => <Field controller={FieldController.create()} model={model.field}/>,
   }
   nav.addRoute({
     path: '/',
@@ -27,8 +27,8 @@ export function installDashboard({ nav, appModel, nusightNetwork, menu }: {
     Icon,
     label: 'Dashboard',
     Content: () => {
-      const network = DashboardNetwork.of(nusightNetwork)
-      const controller = DashboardController.of()
+      const network = DashboardNetwork.create(nusightNetwork)
+      const controller = DashboardController.create()
       return <Dashboard controller={controller} Field={views.Field} menu={menu} model={model} network={network}/>
     },
   })

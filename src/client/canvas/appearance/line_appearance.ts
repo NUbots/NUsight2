@@ -15,7 +15,7 @@ export class LineAppearance {
     this.strokeStyle = opts.strokeStyle
   }
 
-  public static of({
+  public static create({
     lineCap = 'butt',
     lineDashOffset = 0,
     lineJoin = 'miter',

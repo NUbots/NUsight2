@@ -18,13 +18,13 @@ export class DashboardRobotViewModel {
   public constructor(private model: DashboardRobotModel) {
   }
 
-  public static of = createTransformer((model: DashboardRobotModel): DashboardRobotViewModel => {
+  public static create = createTransformer((model: DashboardRobotModel): DashboardRobotViewModel => {
     return new DashboardRobotViewModel(model)
   })
 
   @computed
   public get robot(): Group {
-    return Group.of({
+    return Group.create({
       children: [
         this.fieldSpaceGroup,
         this.robotSpaceGroup,
@@ -34,7 +34,7 @@ export class DashboardRobotViewModel {
 
   @computed
   get fieldSpaceGroup() {
-    return Group.of({
+    return Group.create({
       children: [
         this.ballSight,
         this.kickTarget,
@@ -45,12 +45,12 @@ export class DashboardRobotViewModel {
 
   @computed
   get robotSpaceGroup() {
-    return Group.of({
+    return Group.create({
       children: [
         this.walkCommand,
         this.robotMarker,
       ],
-      transform: Transform.of({
+      transform: Transform.create({
         rotate: this.model.robotPosition.z,
         translate: {
           x: this.model.robotPosition.x,
@@ -66,22 +66,22 @@ export class DashboardRobotViewModel {
     const translation = Vector2.from(this.model.walkCommand)
     const rotation = this.model.walkCommand.z
     const radius = translation.length / Math.abs(rotation)
-    const origin = Vector2.of(-translation.y, translation.x).divideScalar(rotation)
+    const origin = Vector2.create(-translation.y, translation.x).divideScalar(rotation)
     const arcLength = rotation * t
     const angle = Math.atan2(translation.y / rotation, translation.x / rotation) - Math.PI / 2
 
     const startAngle = angle
     const endAngle = startAngle + arcLength
 
-    return Shape.of(
-      ArcGeometry.of({
+    return Shape.create(
+      ArcGeometry.create({
         origin,
         radius,
         startAngle,
         endAngle,
         anticlockwise: rotation < 0,
       }),
-      BasicAppearance.of({
+      BasicAppearance.create({
         lineWidth: 0.025,
         fillStyle: 'transparent',
         strokeStyle: '#000',
@@ -91,13 +91,13 @@ export class DashboardRobotViewModel {
 
   @computed
   private get ball() {
-    return Shape.of(
-      CircleGeometry.of({
+    return Shape.create(
+      CircleGeometry.create({
         radius: 0.1,
         x: this.model.ballPosition.x,
         y: this.model.ballPosition.y,
       }),
-      BasicAppearance.of({
+      BasicAppearance.create({
         fillStyle: this.model.ballColor,
         strokeStyle: 'transparent',
       }),
@@ -106,12 +106,12 @@ export class DashboardRobotViewModel {
 
   @computed
   private get ballSight() {
-    return Shape.of(
-      LineGeometry.of({
+    return Shape.create(
+      LineGeometry.create({
         origin: Vector2.from(this.model.robotPosition),
         target: this.model.ballPosition.clone(),
       }),
-      LineAppearance.of({
+      LineAppearance.create({
         lineWidth: 0.025,
         strokeStyle: this.model.ballSightColor,
       }),
@@ -122,8 +122,8 @@ export class DashboardRobotViewModel {
   private get kickTarget() {
     const origin = this.model.ballPosition
     const difference = this.model.kickTarget.clone().subtract(origin)
-    return Shape.of(
-      ArrowGeometry.of({
+    return Shape.create(
+      ArrowGeometry.create({
         direction: difference.clone().normalize(),
         headLength: 0.3,
         headWidth: 0.15,
@@ -131,7 +131,7 @@ export class DashboardRobotViewModel {
         origin: origin.clone(),
         width: 0.025,
       }),
-      BasicAppearance.of({
+      BasicAppearance.create({
         fillStyle: this.model.kickTargetColor,
         lineWidth: 0,
         strokeStyle: 'transparent',
@@ -142,22 +142,22 @@ export class DashboardRobotViewModel {
   @computed
   private get robotMarker() {
     const radius = 0.15
-    return Group.of({
+    return Group.create({
       children: [
-        Shape.of(
-          MarkerGeometry.of({
+        Shape.create(
+          MarkerGeometry.create({
             radius,
             x: 0,
             y: 0,
           }),
-          BasicAppearance.of({
+          BasicAppearance.create({
             fillStyle: this.model.robotColor,
             lineWidth: 0.01,
             strokeStyle: this.model.robotBorderColor,
           }),
         ),
-        Shape.of(
-          TextGeometry.of({
+        Shape.create(
+          TextGeometry.create({
             text: this.model.playerId.toString(),
             textAlign: 'center',
             textBaseline: 'middle',
@@ -165,7 +165,7 @@ export class DashboardRobotViewModel {
             x: 0,
             y: 0,
           }),
-          BasicAppearance.of({
+          BasicAppearance.create({
             fillStyle: this.model.textColor,
             strokeStyle: 'transparent',
           }),

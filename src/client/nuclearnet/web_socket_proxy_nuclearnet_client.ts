@@ -28,9 +28,9 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
     this.packetListeners = new Map()
   }
 
-  public static of() {
+  public static create() {
     const uri = `${document.location.origin}/nuclearnet`
-    return new WebSocketProxyNUClearNetClient(WebSocketClient.of(uri, {
+    return new WebSocketProxyNUClearNetClient(WebSocketClient.create(uri, {
       upgrade: false,
       transports: ['websocket'],
     }))

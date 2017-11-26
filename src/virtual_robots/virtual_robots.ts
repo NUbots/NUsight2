@@ -15,8 +15,8 @@ export class VirtualRobots {
     this.robots = opts.robots
   }
 
-  public static of(opts: Opts): VirtualRobots {
-    const robots = range(opts.numRobots).map(index => VirtualRobot.of({
+  public static create(opts: Opts): VirtualRobots {
+    const robots = range(opts.numRobots).map(index => VirtualRobot.create({
       fakeNetworking: opts.fakeNetworking,
       name: `Virtual Robot #${index + 1}`,
       simulators: opts.simulators,

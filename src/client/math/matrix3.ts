@@ -13,7 +13,7 @@ export class Matrix3 {
     this.z = z
   }
 
-  public static of() {
+  public static create() {
     return new Matrix3(new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1))
   }
 
@@ -23,7 +23,7 @@ export class Matrix3 {
     z?: { x?: number, y?: number, z? :number }
   } | null): Matrix3 {
     if (!mat) {
-      return Matrix3.of()
+      return Matrix3.create()
     }
     return new Matrix3(Vector3.from(mat.x), Vector3.from(mat.y), Vector3.from(mat.z))
   }

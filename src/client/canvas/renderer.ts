@@ -18,18 +18,18 @@ export class CanvasRenderer {
   constructor(private context: CanvasRenderingContext2D) {
   }
 
-  public static of(context: CanvasRenderingContext2D): CanvasRenderer {
+  public static create(context: CanvasRenderingContext2D): CanvasRenderer {
     return new CanvasRenderer(context)
   }
 
-  public render(scene: Group, camera: Transform = Transform.of()): void {
+  public render(scene: Group, camera: Transform = Transform.create()): void {
     const canvas = this.context.canvas
     this.context.clearRect(0, 0, canvas.width, canvas.height)
     this.renderObjects(scene.children, camera.inverse().then(scene.transform))
   }
 
   private applyTransform(transform: Transform): void {
-    const translationDash = Vector2.from(transform.translate).transform(Transform.of({
+    const translationDash = Vector2.from(transform.translate).transform(Transform.create({
       rotate: transform.rotate * (transform.anticlockwise ? 1 : -1),
       scale: { x: 1 / transform.scale.x, y: 1 / transform.scale.y },
     }))
@@ -166,7 +166,7 @@ export class CanvasRenderer {
 
   private renderMarker(opts: { appearance: Appearance, geometry: MarkerGeometry }): void {
     const { appearance, geometry } = opts
-    const position = Vector2.of(geometry.x, geometry.y)
+    const position = Vector2.create(geometry.x, geometry.y)
 
     const headingAngle = Math.atan2(geometry.heading.y, geometry.heading.x)
     const arcDistance = 3 * Math.PI * 0.5
@@ -228,7 +228,7 @@ export class CanvasRenderer {
       // Ensure the text is always rendered without rotation such that it is aligned with the screen.
       this.context.scale(Math.sign(worldTransform.scale.x), Math.sign(worldTransform.scale.y))
       this.context.rotate(-worldTransform.rotate)
-      position.transform(Transform.of({
+      position.transform(Transform.create({
         rotate: -worldTransform.rotate,
         scale: { x: Math.sign(worldTransform.scale.x), y: Math.sign(worldTransform.scale.y) },
       }))

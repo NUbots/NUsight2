@@ -2,7 +2,7 @@ import { action } from 'mobx'
 import { FieldModel } from './model'
 
 export class FieldController {
-  public static of(): FieldController {
+  public static create(): FieldController {
     return new FieldController()
   }
 

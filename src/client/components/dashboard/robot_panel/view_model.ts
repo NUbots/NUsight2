@@ -14,7 +14,7 @@ export class RobotPanelViewModel {
   public constructor(private model: DashboardRobotModel) {
   }
 
-  public static of = createTransformer((model: DashboardRobotModel): RobotPanelViewModel => {
+  public static create = createTransformer((model: DashboardRobotModel): RobotPanelViewModel => {
     return new RobotPanelViewModel(model)
   })
 

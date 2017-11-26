@@ -12,7 +12,7 @@ export class PolygonGeometry {
     this.points = points
   }
 
-  public static of(points: Vector2[]): PolygonGeometry {
+  public static create(points: Vector2[]): PolygonGeometry {
     return new PolygonGeometry({ points })
   }
 }

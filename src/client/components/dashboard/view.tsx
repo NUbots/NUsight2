@@ -43,7 +43,7 @@ export class Dashboard extends Component<DashboardProps> {
           {showPanels &&
           <div className={style.panels}>
             {model.robots.map(robot => {
-              const model = RobotPanelViewModel.of(robot)
+              const model = RobotPanelViewModel.create(robot)
               return (
                 robot.enabled &&
                 <div className={style.panel} key={robot.id}>

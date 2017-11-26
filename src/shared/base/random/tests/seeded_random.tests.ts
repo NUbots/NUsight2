@@ -5,7 +5,7 @@ describe('SeededRandom', () => {
   let random: SeededRandom
 
   beforeEach(() => {
-    random = SeededRandom.of('random_seed')
+    random = SeededRandom.create('random_seed')
   })
 
   describe('#integer', () => {
@@ -15,8 +15,8 @@ describe('SeededRandom', () => {
     })
 
     it('should generate different sets of values for a different seeds', () => {
-      const randomA = SeededRandom.of('random_seed_a')
-      const randomB = SeededRandom.of('random_seed_b')
+      const randomA = SeededRandom.create('random_seed_a')
+      const randomB = SeededRandom.create('random_seed_b')
 
       const numbersA = range(100).map(() => randomA.integer(0, 100))
       const numbersB = range(100).map(() => randomB.integer(0, 100))

@@ -1,4 +1,3 @@
-import { action } from 'mobx'
 import { computed } from 'mobx'
 import { observable } from 'mobx'
 import { Transform } from '../../math/transform'
@@ -35,15 +34,15 @@ export class Shape implements Object2d {
   constructor(opts: ShapeOpts) {
     this.appearance = opts.appearance
     this.geometry = opts.geometry
-    this.group = Group.of(opts)
+    this.group = Group.create(opts)
   }
 
-  public static of(geometry: Geometry, appearance: Appearance = BasicAppearance.of()) {
+  public static create(geometry: Geometry, appearance: Appearance = BasicAppearance.create()) {
     return new Shape({
       appearance,
       children: [],
       geometry,
-      transform: Transform.of(),
+      transform: Transform.create(),
     })
   }
 

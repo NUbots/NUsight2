@@ -15,7 +15,7 @@ export class BodyViewModel {
   public constructor(private model: LocalisationRobotModel) {
   }
 
-  public static of = createTransformer((model: LocalisationRobotModel): BodyViewModel => {
+  public static create = createTransformer((model: LocalisationRobotModel): BodyViewModel => {
     return new BodyViewModel(model)
   })
 
@@ -41,26 +41,26 @@ export class BodyViewModel {
 
   @computed
   private get head() {
-    return HeadViewModel.of(this.model).head
+    return HeadViewModel.create(this.model).head
   }
 
   @computed
   private get leftArm() {
-    return LeftArmViewModel.of(this.model).leftArm
+    return LeftArmViewModel.create(this.model).leftArm
   }
 
   @computed
   private get rightArm() {
-    return RightArmViewModel.of(this.model).rightArm
+    return RightArmViewModel.create(this.model).rightArm
   }
 
   @computed
   private get leftLeg() {
-    return LeftLegViewModel.of(this.model).leftLeg
+    return LeftLegViewModel.create(this.model).leftLeg
   }
 
   @computed
   private get rightLeg() {
-    return RightLegViewModel.of(this.model).rightLeg
+    return RightLegViewModel.create(this.model).rightLeg
   }
 }

@@ -13,7 +13,7 @@ export class RightArmViewModel {
   constructor(private model: LocalisationRobotModel) {
   }
 
-  public static of = createTransformer((model: LocalisationRobotModel): RightArmViewModel => {
+  public static create = createTransformer((model: LocalisationRobotModel): RightArmViewModel => {
     return new RightArmViewModel(model)
   })
 

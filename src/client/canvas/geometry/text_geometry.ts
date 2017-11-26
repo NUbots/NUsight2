@@ -25,14 +25,14 @@ export class TextGeometry implements Geometry {
     this.y = opts.y
   }
 
-  public static of({
+  public static create({
     alignToView = true,
     fontFamily = 'sans-serif',
     maxWidth = 0.5,
     text = '',
     textAlign = 'start',
     textBaseline = 'alphabetic',
-    transform = Transform.of(),
+    transform = Transform.create(),
     x = 0,
     y = 0,
   }: Partial<TextGeometry> = {}): TextGeometry {

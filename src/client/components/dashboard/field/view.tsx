@@ -27,7 +27,7 @@ export class Field extends Component<FieldProps> {
       return
     }
     const context: CanvasRenderingContext2D = this.field.getContext('2d')!
-    this.renderer = CanvasRenderer.of(context)
+    this.renderer = CanvasRenderer.create(context)
     this.stopAutorun = autorun(() => this.renderField())
     this.rafId = requestAnimationFrame(this.onAnimationFrame)
   }
@@ -54,7 +54,7 @@ export class Field extends Component<FieldProps> {
   }
 
   private renderField(): void {
-    const viewModel = FieldViewModel.of(this.props.model)
+    const viewModel = FieldViewModel.create(this.props.model)
     this.renderer.render(viewModel.scene, this.props.model.camera)
   }
 

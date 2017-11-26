@@ -16,8 +16,8 @@ export class ArcGeometry {
     this.anticlockwise = opts.anticlockwise
   }
 
-  public static of({
-                     origin = Vector2.of(0, 0),
+  public static create({
+                     origin = Vector2.create(0, 0),
                      radius = 1,
                      startAngle = 0,
                      endAngle = 2 * Math.PI,

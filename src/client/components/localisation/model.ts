@@ -15,7 +15,7 @@ export class TimeModel {
     Object.assign(this, opts)
   }
 
-  public static of() {
+  public static create() {
     return new TimeModel({
       time: 0,
       lastRenderTime: 0,
@@ -50,21 +50,21 @@ export class LocalisationModel {
     Object.assign(this, opts)
   }
 
-  public static of = memoize((appModel: AppModel): LocalisationModel => {
+  public static create = memoize((appModel: AppModel): LocalisationModel => {
     return new LocalisationModel(appModel, {
       aspect: 300 / 150,
-      field: FieldModel.of(),
-      skybox: SkyboxModel.of(),
-      camera: CameraModel.of(),
+      field: FieldModel.create(),
+      skybox: SkyboxModel.create(),
+      camera: CameraModel.create(),
       locked: false,
-      controls: ControlsModel.of(),
+      controls: ControlsModel.create(),
       viewMode: ViewMode.FreeCamera,
-      time: TimeModel.of(),
+      time: TimeModel.create(),
     })
   })
 
   @computed get robots(): LocalisationRobotModel[] {
-    return this.appModel.robots.map(robot => LocalisationRobotModel.of(robot))
+    return this.appModel.robots.map(robot => LocalisationRobotModel.create(robot))
   }
 }
 
@@ -78,7 +78,7 @@ class CameraModel {
     Object.assign(this, opts)
   }
 
-  public static of() {
+  public static create() {
     return new CameraModel({
       position: new Vector3(-1, 0, 1),
       yaw: 0,
@@ -102,7 +102,7 @@ export class ControlsModel {
     Object.assign(this, opts)
   }
 
-  public static of() {
+  public static create() {
     return new ControlsModel({
       forward: false,
       left: false,
@@ -129,7 +129,7 @@ export class Quaternion {
     this.w = w
   }
 
-  public static of() {
+  public static create() {
     return new Quaternion(0, 0, 0, 1)
   }
 

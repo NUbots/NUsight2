@@ -34,8 +34,8 @@ describe('Networking Integration', () => {
           {
             name: 'Robot #1',
             simulators: [
-              { frequency: 1, simulator: OverviewSimulator.of() },
-              { frequency: 60, simulator: SensorDataSimulator.of() },
+              { frequency: 1, simulator: OverviewSimulator.create() },
+              { frequency: 60, simulator: SensorDataSimulator.create() },
             ],
           },
         ),
@@ -45,11 +45,11 @@ describe('Networking Integration', () => {
   })
 
   function createNUsightNetwork() {
-    const appModel = AppModel.of()
+    const appModel = AppModel.create()
     const nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
     const messageTypePath = new MessageTypePath()
     const nusightNetwork = new NUsightNetwork(nuclearnetClient, appModel, messageTypePath)
-    AppNetwork.of(nusightNetwork, appModel)
+    AppNetwork.create(nusightNetwork, appModel)
     return nusightNetwork
   }
 

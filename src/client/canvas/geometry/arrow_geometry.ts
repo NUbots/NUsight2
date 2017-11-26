@@ -18,12 +18,12 @@ export class ArrowGeometry {
     this.width = opts.width
   }
 
-  public static of({
+  public static create({
     length = 1,
-    direction = Vector2.of(1, 0),
+    direction = Vector2.create(1, 0),
     headLength = 0.2 * length,
     headWidth = 0.04 * length,
-    origin = Vector2.of(),
+    origin = Vector2.create(),
     width = 1,
   }: Partial<ArrowGeometry> = {}): ArrowGeometry {
     return new ArrowGeometry({

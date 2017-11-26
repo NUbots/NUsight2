@@ -9,7 +9,7 @@ describe('NbsNUClearPlayback', () => {
   it('sends packets at the rate specified by the frame timestamps', () => {
     const nuclearnetServer = new FakeNUClearNetServer()
     const nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
-    const clock = FakeClock.of()
+    const clock = FakeClock.create()
     const playback = new NbsNUClearPlayback(nuclearnetClient, clock)
 
     const frame1: NbsFrame = {

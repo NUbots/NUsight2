@@ -17,10 +17,10 @@ export class OverviewSimulator implements Simulator {
               private random: SeededRandom) {
   }
 
-  public static of() {
+  public static create() {
     return new OverviewSimulator(
       FieldDimensions.postYear2017(),
-      SeededRandom.of('overview_simulator'),
+      SeededRandom.create('overview_simulator'),
     )
   }
 

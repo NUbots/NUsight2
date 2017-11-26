@@ -8,7 +8,7 @@ function main() {
   const args = minimist(process.argv.slice(2))
 
   const simulators = getSimulators(args)
-  const virtualRobots = VirtualRobots.of({
+  const virtualRobots = VirtualRobots.create({
     fakeNetworking: false,
     numRobots: 6,
     simulators,
@@ -19,10 +19,10 @@ function main() {
 function getSimulators(args: minimist.ParsedArgs): SimulatorOpts[] {
   const simulators = []
   if (args.overview || args.all) {
-    simulators.push({ frequency: 1, simulator: OverviewSimulator.of() })
+    simulators.push({ frequency: 1, simulator: OverviewSimulator.create() })
   }
   if (args.sensors || args.all) {
-    simulators.push({ frequency: 60, simulator: SensorDataSimulator.of() })
+    simulators.push({ frequency: 60, simulator: SensorDataSimulator.create() })
   }
   if (simulators.length === 0) {
     // If no simulators given, enable them all.

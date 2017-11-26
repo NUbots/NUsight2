@@ -8,8 +8,8 @@ describe('NbsFrameChunker', () => {
   let random: SeededRandom
 
   beforeEach(() => {
-    chunker = NbsFrameChunker.of()
-    random = SeededRandom.of('NbsFrameChunker')
+    chunker = NbsFrameChunker.create()
+    random = SeededRandom.create('NbsFrameChunker')
   })
 
   function fakeFrameBuffer(timestampInMicroseconds: number) {

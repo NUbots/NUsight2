@@ -8,7 +8,7 @@ export class AppModel {
     Object.assign(this, opts)
   }
 
-  public static of(options: { robots: RobotModel[] } = { robots: [] }) {
+  public static create(options: { robots: RobotModel[] } = { robots: [] }) {
     return new AppModel(options)
   }
 }

@@ -10,7 +10,7 @@ export class WebSocketClient {
   public constructor(private socket: SocketIOClient.Socket) {
   }
 
-  public static of(uri: string, opts: SocketIOClient.ConnectOpts) {
+  public static create(uri: string, opts: SocketIOClient.ConnectOpts) {
     const socket = SocketIO(uri, opts)
     return new WebSocketClient(socket)
   }

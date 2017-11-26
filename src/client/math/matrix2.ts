@@ -11,7 +11,7 @@ export class Matrix2 {
     this.y = y
   }
 
-  public static of() {
+  public static create() {
     return new Matrix2(new Vector2(1, 0), new Vector2(0, 1))
   }
 
@@ -20,7 +20,7 @@ export class Matrix2 {
     y?: { x?: number, y?: number }
   } | null): Matrix2 {
     if (!mat) {
-      return Matrix2.of()
+      return Matrix2.create()
     }
     return new Matrix2(Vector2.from(mat.x), Vector2.from(mat.y))
   }

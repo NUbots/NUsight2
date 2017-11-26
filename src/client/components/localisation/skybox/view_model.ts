@@ -17,7 +17,7 @@ export class SkyboxViewModel {
   public constructor(private model: SkyboxModel) {
   }
 
-  public static of = createTransformer((model: SkyboxModel): SkyboxViewModel => {
+  public static create = createTransformer((model: SkyboxModel): SkyboxViewModel => {
     return new SkyboxViewModel(model)
   })
 

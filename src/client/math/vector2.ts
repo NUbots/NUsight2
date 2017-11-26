@@ -11,13 +11,13 @@ export class Vector2 {
     this.y = y
   }
 
-  public static of(x?: number, y?: number): Vector2 {
+  public static create(x?: number, y?: number): Vector2 {
     return new Vector2(x || 0, y || 0)
   }
 
   public static from(vec?: { x?: number, y?: number } | null): Vector2 {
     if (!vec) {
-      return Vector2.of()
+      return Vector2.create()
     }
     return new Vector2(vec.x || 0, vec.y || 0)
   }

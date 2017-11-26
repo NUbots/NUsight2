@@ -11,7 +11,7 @@ export class BasicAppearance {
     this.strokeStyle = opts.strokeStyle
   }
 
-  public static of({
+  public static create({
     fillStyle = '#000',
     lineWidth = 1,
     strokeStyle = '#000',

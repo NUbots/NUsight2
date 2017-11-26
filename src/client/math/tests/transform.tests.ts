@@ -3,46 +3,46 @@ import { Transform } from '../transform'
 describe('Transform', () => {
   describe('#then', () => {
     it('composes rotations', () => {
-      const transform1 = Transform.of({ rotate: Math.PI })
-      const transform2 = Transform.of({ rotate: Math.PI / 2 })
+      const transform1 = Transform.create({ rotate: Math.PI })
+      const transform2 = Transform.create({ rotate: Math.PI / 2 })
 
       const actual = transform1.then(transform2)
-      const expected = Transform.of({ rotate: Math.PI * 1.5 })
+      const expected = Transform.create({ rotate: Math.PI * 1.5 })
       expect(actual).toEqual(expected)
     })
 
     it('composes scales', () => {
-      const transform1 = Transform.of({ scale: { x: 2, y: 3 } })
-      const transform2 = Transform.of({ scale: { x: 4, y: -5 } })
+      const transform1 = Transform.create({ scale: { x: 2, y: 3 } })
+      const transform2 = Transform.create({ scale: { x: 4, y: -5 } })
 
       const actual = transform1.then(transform2)
-      const expected = Transform.of({ scale: { x: 8, y: -15 } })
+      const expected = Transform.create({ scale: { x: 8, y: -15 } })
       expect(actual).toEqual(expected)
     })
 
     it('composes translations', () => {
-      const transform1 = Transform.of({ translate: { x: 2, y: 3 } })
-      const transform2 = Transform.of({ translate: { x: 4, y: -5 } })
+      const transform1 = Transform.create({ translate: { x: 2, y: 3 } })
+      const transform2 = Transform.create({ translate: { x: 4, y: -5 } })
 
       const actual = transform1.then(transform2)
-      const expected = Transform.of({ translate: { x: 6, y: -2 } })
+      const expected = Transform.create({ translate: { x: 6, y: -2 } })
       expect(actual).toEqual(expected)
     })
 
     it('composes rotations, scales and translations together', () => {
-      const transform1 = Transform.of({
+      const transform1 = Transform.create({
         rotate: Math.PI / 2,
         scale: { x: 2, y: 2 },
         translate: { x: 2, y: 1 },
       })
-      const transform2 = Transform.of({
+      const transform2 = Transform.create({
         rotate: Math.PI,
         scale: { x: 1, y: 1 },
         translate: { x: 1, y: -2 },
       })
 
       const actual = transform1.then(transform2)
-      const expected = Transform.of({
+      const expected = Transform.create({
         rotate: 3 * Math.PI / 2,
         scale: { x: 2, y: 2 },
         translate: { x: 6, y: 3 },

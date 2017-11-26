@@ -12,7 +12,7 @@ type Route = {
 export class NavigationConfiguration {
   private routes: Route[] = []
 
-  public static of() {
+  public static create() {
     return new NavigationConfiguration()
   }
 

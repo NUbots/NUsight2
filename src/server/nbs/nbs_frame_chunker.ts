@@ -23,7 +23,7 @@ export class NbsFrameChunker extends stream.Transform {
     this.foundPacketSize = false
   }
 
-  public static of(): NbsFrameChunker {
+  public static create(): NbsFrameChunker {
     return new NbsFrameChunker()
   }
 

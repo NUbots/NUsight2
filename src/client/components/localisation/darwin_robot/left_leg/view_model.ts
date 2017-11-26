@@ -16,7 +16,7 @@ export class LeftLegViewModel {
   constructor(private model: LocalisationRobotModel) {
   }
 
-  public static of = createTransformer((model: LocalisationRobotModel): LeftLegViewModel => {
+  public static create = createTransformer((model: LocalisationRobotModel): LeftLegViewModel => {
     return new LeftLegViewModel(model)
   })
 

@@ -18,12 +18,12 @@ export class LocalisationRobotModel {
     Object.assign(this, opts)
   }
 
-  public static of = memoize((model: RobotModel): LocalisationRobotModel => {
+  public static create = memoize((model: RobotModel): LocalisationRobotModel => {
     return new LocalisationRobotModel(model, {
       name: model.name,
-      rWTt: Vector3.of(),
-      Rwt: Quaternion.of(),
-      motors: DarwinMotorSet.of(),
+      rWTt: Vector3.create(),
+      Rwt: Quaternion.create(),
+      motors: DarwinMotorSet.create(),
     })
   })
 
@@ -58,28 +58,28 @@ export class DarwinMotorSet {
     Object.assign(this, opts)
   }
 
-  public static of() {
+  public static create() {
     return new DarwinMotorSet({
-      rightShoulderPitch: DarwinMotor.of(),
-      leftShoulderPitch: DarwinMotor.of(),
-      rightShoulderRoll: DarwinMotor.of(),
-      leftShoulderRoll: DarwinMotor.of(),
-      rightElbow: DarwinMotor.of(),
-      leftElbow: DarwinMotor.of(),
-      rightHipYaw: DarwinMotor.of(),
-      leftHipYaw: DarwinMotor.of(),
-      rightHipRoll: DarwinMotor.of(),
-      leftHipRoll: DarwinMotor.of(),
-      rightHipPitch: DarwinMotor.of(),
-      leftHipPitch: DarwinMotor.of(),
-      rightKnee: DarwinMotor.of(),
-      leftKnee: DarwinMotor.of(),
-      rightAnklePitch: DarwinMotor.of(),
-      leftAnklePitch: DarwinMotor.of(),
-      rightAnkleRoll: DarwinMotor.of(),
-      leftAnkleRoll: DarwinMotor.of(),
-      headPan: DarwinMotor.of(),
-      headTilt: DarwinMotor.of(),
+      rightShoulderPitch: DarwinMotor.create(),
+      leftShoulderPitch: DarwinMotor.create(),
+      rightShoulderRoll: DarwinMotor.create(),
+      leftShoulderRoll: DarwinMotor.create(),
+      rightElbow: DarwinMotor.create(),
+      leftElbow: DarwinMotor.create(),
+      rightHipYaw: DarwinMotor.create(),
+      leftHipYaw: DarwinMotor.create(),
+      rightHipRoll: DarwinMotor.create(),
+      leftHipRoll: DarwinMotor.create(),
+      rightHipPitch: DarwinMotor.create(),
+      leftHipPitch: DarwinMotor.create(),
+      rightKnee: DarwinMotor.create(),
+      leftKnee: DarwinMotor.create(),
+      rightAnklePitch: DarwinMotor.create(),
+      leftAnklePitch: DarwinMotor.create(),
+      rightAnkleRoll: DarwinMotor.create(),
+      leftAnkleRoll: DarwinMotor.create(),
+      headPan: DarwinMotor.create(),
+      headTilt: DarwinMotor.create(),
     })
   }
 }
@@ -91,7 +91,7 @@ class DarwinMotor {
     Object.assign(this, opts)
   }
 
-  public static of() {
+  public static create() {
     return new DarwinMotor({ angle: 0 })
   }
 }

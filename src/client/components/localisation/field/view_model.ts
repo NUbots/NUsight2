@@ -13,7 +13,7 @@ export class FieldViewModel {
   public constructor(private model: FieldModel) {
   }
 
-  public static of = createTransformer((model: FieldModel): FieldViewModel => {
+  public static create = createTransformer((model: FieldModel): FieldViewModel => {
     return new FieldViewModel(model)
   })
 

@@ -15,7 +15,7 @@ export class NbsFrameEncoder extends stream.Transform {
     })
   }
 
-  public static of() {
+  public static create() {
     return new NbsFrameEncoder()
   }
 
@@ -37,7 +37,7 @@ export class NbsFrameDecoder extends stream.Transform {
     })
   }
 
-  public static of() {
+  public static create() {
     return new NbsFrameDecoder()
   }
 

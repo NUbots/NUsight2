@@ -15,7 +15,7 @@ export class HeadViewModel {
   constructor(private model: LocalisationRobotModel) {
   }
 
-  public static of = createTransformer((model: LocalisationRobotModel): HeadViewModel => {
+  public static create = createTransformer((model: LocalisationRobotModel): HeadViewModel => {
     return new HeadViewModel(model)
   })
 

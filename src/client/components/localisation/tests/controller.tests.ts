@@ -9,7 +9,7 @@ describe('LocalisationController', () => {
   let model: LocalisationModel
 
   beforeEach(() => {
-    model = LocalisationModel.of(createMockInstance(AppModel))
+    model = LocalisationModel.create(createMockInstance(AppModel))
     controller = new LocalisationController()
   })
 

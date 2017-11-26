@@ -24,7 +24,7 @@ export class Transform {
     this.translate = opts.translate
   }
 
-  public static of({
+  public static create({
                      anticlockwise = true,
                      rotate = 0,
                      scale = { x: 1, y: 1 },

@@ -14,8 +14,8 @@ export class MarkerGeometry {
     this.y = opts.y
   }
 
-  public static of({
-    heading = Vector2.of(1, 0),
+  public static create({
+    heading = Vector2.create(1, 0),
     radius = 1,
     x = 0,
     y = 0,

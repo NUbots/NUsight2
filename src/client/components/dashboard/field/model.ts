@@ -25,11 +25,11 @@ export class FieldModel {
     this.robots = opts.robots
   }
 
-  public static of = memoize((robots: DashboardRobotModel[]): FieldModel => {
+  public static create = memoize((robots: DashboardRobotModel[]): FieldModel => {
     return new FieldModel({
-      camera: Transform.of({ anticlockwise: false }),
+      camera: Transform.create({ anticlockwise: false }),
       orientation: 'right',
-      ground: GroundModel.of(),
+      ground: GroundModel.create(),
       robots,
     })
   })

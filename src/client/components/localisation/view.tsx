@@ -86,7 +86,7 @@ export class LocalisationView extends React.Component<LocalisationViewProps> {
       runInAction(() => this.props.model.aspect = canvas.clientWidth / canvas.clientHeight)
     }
 
-    const viewModel = LocalisationViewModel.of(this.props.model)
+    const viewModel = LocalisationViewModel.create(this.props.model)
 
     this.renderer.render(viewModel.scene, viewModel.camera)
 

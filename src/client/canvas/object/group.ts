@@ -16,9 +16,9 @@ export class Group implements Object2d {
     this.transform = opts.transform
   }
 
-  public static of({
+  public static create({
     children = [],
-    transform = Transform.of(),
+    transform = Transform.create(),
   }: Partial<GroupOpts> = {}): Group {
     return new Group({
       children,

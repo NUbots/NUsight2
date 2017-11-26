@@ -14,7 +14,7 @@ export class AppNetwork {
     nusightNetwork.onNUClearLeave(this.onLeave)
   }
 
-  public static of(nusightNetwork: NUsightNetwork, model: AppModel) {
+  public static create(nusightNetwork: NUsightNetwork, model: AppModel) {
     return new AppNetwork(nusightNetwork, model)
   }
 
@@ -32,7 +32,7 @@ export class AppNetwork {
       robot.port = peer.port
     } else {
       const robotId = String(this.nextRobotId++)
-      this.model.robots.push(RobotModel.of({
+      this.model.robots.push(RobotModel.create({
         id: robotId,
         name: peer.name,
         address: peer.address,

@@ -14,7 +14,7 @@ export class LocalisationViewModel {
   public constructor(private model: LocalisationModel) {
   }
 
-  public static of = createTransformer((model: LocalisationModel) => {
+  public static create = createTransformer((model: LocalisationModel) => {
     return new LocalisationViewModel(model)
   })
 
@@ -41,14 +41,14 @@ export class LocalisationViewModel {
 
   @computed
   private get field() {
-    return FieldViewModel.of(this.model.field).field
+    return FieldViewModel.create(this.model.field).field
   }
 
   @computed
   private get robots(): Object3D[] {
     return this.model.robots
       .filter(robotModel => robotModel.visible)
-      .map(robotModel => RobotViewModel.of(robotModel).robot)
+      .map(robotModel => RobotViewModel.create(robotModel).robot)
   }
 
   @computed
@@ -58,7 +58,7 @@ export class LocalisationViewModel {
 
   @computed
   private get skybox() {
-    return SkyboxViewModel.of(this.model.skybox).skybox
+    return SkyboxViewModel.create(this.model.skybox).skybox
   }
 
   @computed

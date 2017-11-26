@@ -39,7 +39,7 @@ installVision({ nav })
 installChart({ nav })
 installScatterPlot({ nav })
 installNUClear({ nav })
-installClassifier({ nav })
+installClassifier({ nav, appModel, nusightNetwork })
 installSubsumption({ nav })
 installGameState({ nav })
 

@@ -15,7 +15,6 @@ export function installClassifier({ nav, appModel, nusightNetwork }: {
   nav: NavigationConfiguration
 }) {
   const model = ClassifierModel.of(appModel)
-  const network = ClassifierNetwork.of(nusightNetwork, model)
   const views = {
     ColorSpaceVisualizer() {
       const model = ColorSpaceVisualzerModel.of()
@@ -26,6 +25,9 @@ export function installClassifier({ nav, appModel, nusightNetwork }: {
     path: '/classifier',
     Icon,
     label: 'Classifier',
-    Content: () => <ClassifierView model={model} network={network} ColorSpaceVisualizer={views.ColorSpaceVisualizer}/>,
+    Content: () => {
+      const network = ClassifierNetwork.of(nusightNetwork, model)
+      return <ClassifierView model={model} network={network} ColorSpaceVisualizer={views.ColorSpaceVisualizer}/>
+    },
   })
 }

@@ -15,7 +15,7 @@ void main() {
 //  vec3 normal = Hcw[1].xyz;
   float distance = dot(cam, normal);
   vec3 p = cam - normal * distance;
-  vec2 nearestPixel = projectEquidistant(p, focusLength);
+  vec2 nearestPixel = projectEquidistant(normalize(p), focusLength);
   float distance4Real = length(screenPoint - nearestPixel);
 	float alpha = smoothstep(0.0, lineWidth * 0.5, -distance4Real + lineWidth * 0.5);
   gl_FragColor = vec4(0, 0, 1, alpha);

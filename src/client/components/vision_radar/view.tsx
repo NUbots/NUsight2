@@ -1,8 +1,9 @@
 import { autorun } from 'mobx'
 import { Component } from 'react'
 import * as React from 'react'
+import { VisionRadarModel } from './model'
 
-export class VisionRadarView extends Component<{}> {
+export class VisionRadarView extends Component<{ model: VisionRadarModel }> {
   private canvas: HTMLCanvasElement | null
   private destroy: () => void
 

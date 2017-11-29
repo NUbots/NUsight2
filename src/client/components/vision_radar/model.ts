@@ -4,6 +4,7 @@ import { createTransformer } from 'mobx'
 import { memoize } from '../../base/memoize'
 import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
+import { fakeSegments } from './fakes'
 
 export class VisionRadarModel {
 
@@ -29,7 +30,7 @@ export class VisionRadarRobotModel {
 
   public static of = createTransformer((model: RobotModel): VisionRadarRobotModel => {
     return new VisionRadarRobotModel(model, {
-      ringSegments: [],
+      ringSegments: fakeSegments,
     })
   })
 

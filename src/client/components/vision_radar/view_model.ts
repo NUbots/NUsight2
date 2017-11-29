@@ -73,9 +73,11 @@ export class VisionRadarRobotViewModel {
 
     // Create the vertices from the segments
     this.model.ringSegments.forEach((segments, i) => {
+      const r = i / this.model.ringSegments.length
+
       for(let s = 0; s < segments; ++s) {
         const theta = s * (2 * Math.PI / segments)
-        vertices.push(Math.cos(theta) * (i / this.model.ringSegments.length), Math.sin(theta) * (i / this.model.ringSegments.length))
+        vertices.push(Math.cos(theta) * r, Math.sin(theta) * r)
       }
     })
 
@@ -111,7 +113,7 @@ export class VisionRadarRobotViewModel {
 
         // Create our triangles
         indices.push(p0, p1, p3)
-        indices.push(p0, p2, p3)
+        indices.push(p2, p0, p3)
       }
     }
 

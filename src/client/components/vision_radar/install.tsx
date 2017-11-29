@@ -12,7 +12,7 @@ export function installVisionRadar({ nav, appModel, nusightNetwork }: {
 }) {
   const model = VisionRadarModel.of(appModel)
   nav.addRoute({
-    path: 'radar',
+    path: '/radar',
     Icon: () => <div>Radar Icon Here</div>,
     label: 'Vision Radar',
     Content: () => <VisionRadarView model={model}/>,

@@ -35,7 +35,7 @@ export class VisionRadarRobotView extends Component<{ model: VisionRadarRobotMod
   public render() {
     return (
       <div>
-        <canvas ref={this.onRef} style={{ display: 'block', border: '1px solid red', margin: '6px' }}/>
+        <canvas width={1000} height={1000} ref={this.onRef} style={{ display: 'block', border: '1px solid red', margin: '6px' }}/>
       </div>
     )
   }

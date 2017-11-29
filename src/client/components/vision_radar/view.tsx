@@ -4,6 +4,7 @@ import { Component } from 'react'
 import * as React from 'react'
 import { VisionRadarModel } from './model'
 import { VisionRadarRobotModel } from './model'
+import * as style from './style.css'
 import { VisionRadarRobotViewModel } from './view_model'
 
 @observer
@@ -35,7 +36,7 @@ export class VisionRadarRobotView extends Component<{ model: VisionRadarRobotMod
   public render() {
     return (
       <div>
-        <canvas width={1000} height={1000} ref={this.onRef} style={{ display: 'block', border: '1px solid red', margin: '6px' }}/>
+        <canvas width={1000} height={1000} ref={this.onRef} className={style.canvas}/>
       </div>
     )
   }

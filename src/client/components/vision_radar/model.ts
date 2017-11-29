@@ -3,7 +3,7 @@ import { AppModel } from '../app/model'
 import { memoize } from '../../base/memoize'
 
 export class VisionRadarModel {
-  @observable ringSegments: number[]
+  @observable public ringSegments: number[]
 
   constructor(private appModel: AppModel, { ringSegments }: { ringSegments: number[] }) {
     this.ringSegments = ringSegments

@@ -45,7 +45,10 @@ export class VisionRadarRobotView extends Component<{ model: VisionRadarRobotMod
   }
 
   private renderScene() {
-    const { model } = this.props
+    const { props, canvas } = this
+    const { model } = props
     const viewModel = VisionRadarRobotViewModel.of(model)
+    const renderer = viewModel.renderer(canvas!)
+    renderer.render(viewModel.scene, viewModel.camera)
   }
 }

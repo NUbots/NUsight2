@@ -7,12 +7,14 @@ import { OrthographicCamera } from 'three'
 import { Camera } from 'three'
 import { Mesh } from 'three'
 import { Material } from 'three'
-import { MeshBasicMaterial } from 'three'
-import { Vector3 } from 'three'
 import { BufferGeometry } from 'three'
 import { Float32BufferAttribute } from 'three'
+import { RawShaderMaterial } from 'three'
+import { Vector2 } from 'three'
 import { VisionRadarModel } from './model'
 import { VisionRadarRobotModel } from './model'
+import * as fragmentShader from './shaders/radar.frag'
+import * as vertexShader from './shaders/radar.vert'
 
 export class VisionRadarViewModel {
   constructor(private model: VisionRadarModel) {
@@ -56,7 +58,9 @@ export class VisionRadarRobotViewModel {
 
   @computed
   get radar(): Mesh {
-    return new Mesh(this.radarGeometry, this.radarMaterial)
+    const mesh = new Mesh(this.radarGeometry, this.radarMaterial)
+    mesh.frustumCulled = false
+    return mesh
   }
 
   @computed
@@ -64,25 +68,28 @@ export class VisionRadarRobotViewModel {
     const geometry = new BufferGeometry()
     const indices = []
     const vertices = []
-    const vertex = new Vector3()
-    vertices.push(0, 0, 0)
+    const vertex = new Vector2()
+    vertices.push(0, 0)
     const numSegments = 50
     for (let i = 0; i <= numSegments; i++) {
       const theta = i * 2 * Math.PI / numSegments
       vertex.x = Math.cos(theta)
       vertex.y = Math.sin(theta)
-      vertices.push(vertex.x, vertex.y, vertex.z)
+      vertices.push(vertex.x, vertex.y)
     }
     for (let i = 1; i <= numSegments; i++) {
       indices.push(i, i + 1, 0)
     }
     geometry.setIndex(indices)
-    geometry.addAttribute('position', new Float32BufferAttribute(vertices, 3))
+    geometry.addAttribute('position', new Float32BufferAttribute(vertices, 2))
     return geometry
   }
 
   @computed
   get radarMaterial(): Material {
-    return new MeshBasicMaterial({ color: 'red' })
+    return new RawShaderMaterial({
+      vertexShader: String(vertexShader),
+      fragmentShader: String(fragmentShader),
+    })
   }
 }

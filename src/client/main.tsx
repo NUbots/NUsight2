@@ -28,13 +28,6 @@ const menu = withRobotSelectorMenuBar(appModel.robots, appController.toggleRobot
 const nav = NavigationConfiguration.of()
 installDashboard({ nav, appModel, nusightNetwork, menu })
 installLocalisation({ nav, appModel, nusightNetwork, menu })
-//installVision({ nav })
-//installChart({ nav })
-//installScatterPlot({ nav })
-//installNUClear({ nav })
-//installClassifier({ nav })
-//installSubsumption({ nav })
-//installGameState({ nav })
 
 ReactDOM.render(
   <BrowserRouter>

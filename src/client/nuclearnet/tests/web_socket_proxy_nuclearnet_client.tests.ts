@@ -10,7 +10,7 @@ describe('WebSocketProxyNUClearNetClient', () => {
 
   beforeEach(() => {
     mockWebSocket = createMockInstance(WebSocketClient)
-    client = new WebSocketProxyNUClearNetClient(mockWebSocket, FakeClock)
+    client = new WebSocketProxyNUClearNetClient(mockWebSocket, FakeClock.of())
   })
 
   it('forwards connect calls to socket', () => {

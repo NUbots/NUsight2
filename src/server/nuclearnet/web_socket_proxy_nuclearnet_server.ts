@@ -122,24 +122,22 @@ class WebSocketServerClient {
 }
 
 class PacketProcessor {
-  private eventQueueSize: Map<string, number>
 
-  // The maximum number of packets of a unique type to send before receiving acknowledgements.
-  private limit: number
+  // For each event holds the current latency and execution time
+  private eventTracking: Map<string, {active: number, latency: number, processing: number}>
 
   // The number of seconds before giving up on an acknowledge
   private timeout: number
 
   constructor(private socket: WebSocket,
               private clock: Clock,
-              opts: { limit: number, timeout: number }) {
-    this.limit = opts.limit
+              opts: { timeout: number }) {
     this.timeout = opts.timeout
-    this.eventQueueSize = new Map()
+    this.eventTracking = new Map()
   }
 
   public static of(socket: WebSocket) {
-    return new PacketProcessor(socket, NodeSystemClock, { limit: 1, timeout: 5 })
+    return new PacketProcessor(socket, NodeSystemClock, { timeout: 5 })
   }
 
   public onPacket(event: string, packet: NUClearNetPacket) {
@@ -153,7 +151,8 @@ class PacketProcessor {
   }
 
   private isEventBelowLimit(event: string) {
-    return (this.eventQueueSize.get(event) || 0) < this.limit
+    const et = this.eventTracking.get(event) || { active: 0, latency: 1.0, processing: 0.5 }
+    return et.active < (et.processing / et.latency)
   }
 
   private sendReliablePacket(event: string, packet: NUClearNetPacket) {
@@ -163,20 +162,29 @@ class PacketProcessor {
 
   private sendUnreliablePacket(event: string, packet: NUClearNetPacket) {
     // Throttle unreliable packets so that we do not overwhelm the client with traffic.
-    const done = this.enqueue(event)
+    const done = this.enqueue(event, this.clock.performanceNow())
     this.socket.send(event, packet, done)
-    this.clock.setTimeout(done, this.timeout)
+    this.clock.setTimeout(done.bind(this.clock.performanceNow() + this.timeout), this.timeout)
   }
 
-  private enqueue(event: string): () => void {
+  private enqueue(event: string, start: number): (time: number) => void {
     let isDone = false
-    const eventQueueSize = this.eventQueueSize.get(event) || 0
-    this.eventQueueSize.set(event, eventQueueSize + 1)
+    const tracking = this.eventTracking.get(event) || { active: 0, latency: 1.0, processing: 0.5 }
+    tracking.active += 1
+    this.eventTracking.set(event, tracking)
 
-    return () => {
+    return (processing: number) => {
       if (!isDone) {
-        const eventQueueSize = this.eventQueueSize.get(event) || 0
-        this.eventQueueSize.set(event, eventQueueSize - 1)
+        // Calculate network latency
+        const latency = this.clock.performanceNow() - start
+
+        // Update our performance tracking information
+        const tracking = this.eventTracking.get(event) || { active: 0, latency: 1.0, processing: 0.5 }
+        tracking.active -= 1
+        tracking.latency = (tracking.latency * 10 + latency) / 11
+        tracking.processing = (tracking.processing * 10 + processing) / 11
+
+        this.eventTracking.set(event, tracking)
         isDone = true
       }
     }

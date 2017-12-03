@@ -41,7 +41,7 @@ export class RobotVisionView extends Component<{ viewModel: RobotViewModel }> {
     this.destroy()
   }
 
-  render() {
+  public render() {
     return (
       <canvas className={styles.canvas} width={1280} height={1024} ref={this.onRef}/>
     )

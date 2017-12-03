@@ -23,7 +23,7 @@ export class Matrix4 {
     x?: { x?: number, y?: number, z? :number, t? :number },
     y?: { x?: number, y?: number, z? :number, t? :number },
     z?: { x?: number, y?: number, z? :number, t? :number },
-    t?: { x?: number, y?: number, z? :number, t? :number },
+    t?: { x?: number, y?: number, z? :number, t? :number }
   } | null): Matrix4 {
     if (!mat) {
       return Matrix4.of()

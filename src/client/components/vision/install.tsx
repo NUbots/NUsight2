@@ -12,7 +12,7 @@ export function installVision({ nav, appModel, nusightNetwork, Menu }: {
   nav: NavigationConfiguration,
   appModel: AppModel,
   nusightNetwork: NUsightNetwork,
-  Menu: ComponentType,
+  Menu: ComponentType
 }) {
   const model = VisionModel.of(appModel)
   nav.addRoute({

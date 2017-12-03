@@ -69,15 +69,15 @@ export class VisionRobotModel {
   }
 }
 export class VisionBallModel {
-  @observable gradient: number
-  @observable axis: Vector3
+  @observable public gradient: number
+  @observable public axis: Vector3
 
   constructor(private model: VisionRobotModel, { gradient, axis }: { gradient: number, axis: Vector3}) {
     this.gradient = gradient
     this.axis = axis
   }
 
-  static of = memoize((robotModel: VisionRobotModel) => {
+  public static of = memoize((robotModel: VisionRobotModel) => {
     return new VisionBallModel(robotModel, {
       gradient: 0,
       axis: Vector3.of(),

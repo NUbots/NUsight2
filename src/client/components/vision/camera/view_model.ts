@@ -142,7 +142,7 @@ class BallViewModel {
   constructor(private model: VisionBallModel) {
   }
 
-  static of = createTransformer((ball: VisionBallModel) => {
+  public static of = createTransformer((ball: VisionBallModel) => {
     return new BallViewModel(ball)
   })
 

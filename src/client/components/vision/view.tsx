@@ -8,14 +8,12 @@ import * as styles from './styles.css'
 import { VisionViewModel } from './view_model'
 import { RobotViewModel } from './view_model'
 
-type Props = {
+@observer
+export class VisionView extends Component<{
   viewModel: VisionViewModel
   network: VisionNetwork
   Menu: ComponentType
-}
-
-@observer
-export class VisionView extends Component<Props> {
+}> {
   public render() {
     const { viewModel, Menu } = this.props
     // TODO: Some kind of intelligent layout resizing to make it look good.

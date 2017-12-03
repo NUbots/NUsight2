@@ -59,6 +59,7 @@ export class RobotVisionView extends Component<{ viewModel: RobotViewModel }> {
   private renderScene() {
     const { viewModel } = this.props
     const { cameraViewModel } = viewModel
-    cameraViewModel.renderer(this.canvas!).render(cameraViewModel.scene, cameraViewModel.camera)
+    const renderer = cameraViewModel.renderer(this.canvas!)
+    renderer.render(cameraViewModel.scene, cameraViewModel.camera)
   }
 }

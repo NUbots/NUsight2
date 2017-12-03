@@ -15,7 +15,7 @@ import { RobotViewModel } from './view_model'
 type Props = {
   model: VisionModel
   network: VisionNetwork
-  menu: ComponentType
+  Menu: ComponentType
 }
 
 @observer
@@ -39,8 +39,8 @@ export class VisionView extends Component<Props> {
   }
 
   public render() {
-    const viewModel = VisionViewModel.of(this.props.model)
-    const Menu = this.props.menu
+    const { model, Menu } = this.props
+    const viewModel = VisionViewModel.of(model)
 
     // TODO: Some kind of intelligent layout resizing to make it look good.
     return (

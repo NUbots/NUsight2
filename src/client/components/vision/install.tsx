@@ -8,11 +8,11 @@ import { VisionNetwork } from './network'
 import { VisionView } from './view'
 import { ComponentType } from 'react'
 
-export function installVision({ nav, appModel, nusightNetwork, menu }: {
+export function installVision({ nav, appModel, nusightNetwork, Menu }: {
   nav: NavigationConfiguration,
   appModel: AppModel,
   nusightNetwork: NUsightNetwork,
-  menu: ComponentType,
+  Menu: ComponentType,
 }) {
   const model = VisionModel.of(appModel)
   nav.addRoute({
@@ -21,7 +21,7 @@ export function installVision({ nav, appModel, nusightNetwork, menu }: {
     label: 'Vision',
     Content: () => {
       const network = VisionNetwork.of(nusightNetwork)
-      return <VisionView model={model} network={network} menu={menu}/>
+      return <VisionView model={model} network={network} Menu={Menu}/>
     },
   })
 }

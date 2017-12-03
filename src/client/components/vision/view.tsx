@@ -20,23 +20,23 @@ type Props = {
 
 @observer
 export class VisionView extends Component<Props> {
-  @observable private canvases: Map<string, HTMLCanvasElement>
-  private stopRendering: IReactionDisposer
+  // @observable private canvases: Map<string, HTMLCanvasElement>
+  // private stopRendering: IReactionDisposer
 
-  public constructor(props: Props) {
-    super(props)
+  // public constructor(props: Props) {
+  //   super(props)
+  //
+  //   // this.canvases = new Map()
+  // }
 
-    this.canvases = new Map()
-  }
-
-  public componentDidMount() {
-    this.stopRendering = autorun(() => this.renderScene())
-  }
-
-  public componentWillUnmount() {
-    this.stopRendering()
-    this.props.network.destroy()
-  }
+  // public componentDidMount() {
+  //   this.stopRendering = autorun(() => this.renderScene())
+  // }
+  //
+  // public componentWillUnmount() {
+  //   this.stopRendering()
+  //   this.props.network.destroy()
+  // }
 
   public render() {
     const { model, Menu } = this.props
@@ -47,44 +47,55 @@ export class VisionView extends Component<Props> {
       <div className={styles.vision}>
         <Menu/>
         <div>
-          {viewModel.robots.map(robot => (
-            <div className={styles.robot} key={robot.name}>
-              <div className={styles.canvases}>
-                {robot.layers.map((layer, index) => (
-                  <canvas className={styles.canvas} key={index} width={1280} height={1024}
-                          ref={this.onRef(robot, index)}></canvas>
-                ))}
-              </div>
-              <div>{robot.name}</div>
-            </div>
-          ))}
+          {viewModel.robots.map(robot => <RobotVisionView key={robot.id} viewModel={robot}/>)}
         </div>
       </div>
     )
   }
 
-  private onRef = (robot: RobotViewModel, index: number) => action((canvas: HTMLCanvasElement) => {
-    this.canvases.set(this.hash(robot, index), canvas)
-  })
+  // private renderScene() {
+  //   const viewModel = VisionViewModel.of(this.props.model)
+  //   viewModel.robots.forEach(viewModel => {
+  //     viewModel.layers.forEach((layer, layerIndex) => {
+  //       const canvas = this.canvases.get(this.hash(viewModel, layerIndex))
+  //       if (canvas) {
+  //         if (layer.type === 'canvas2d') {
+  //           layer.renderer(canvas).render(layer.scene, layer.camera)
+  //         } else if (layer.type === 'webgl') {
+  //           layer.renderer(canvas).render(layer.scene, layer.camera)
+  //         }
+  //       }
+  //     })
+  //   })
+  // }
+}
 
-  private renderScene() {
-    const viewModel = VisionViewModel.of(this.props.model)
-    viewModel.robots.forEach(robot => {
-      robot.layers.forEach((layer, layerIndex) => {
-        const canvas = this.canvases.get(this.hash(robot, layerIndex))
-        if (canvas) {
-          if (layer.type === 'canvas2d') {
-            layer.renderer(canvas).render(layer.scene, layer.camera)
-          } else if (layer.type === 'webgl') {
-            layer.renderer(canvas).render(layer.scene, layer.camera)
-          }
-        }
-      })
-    })
+@observer
+export class RobotVisionView extends Component<{ viewModel: RobotViewModel }> {
+  private canvas: HTMLCanvasElement | null
+  private destroy: () => void
+
+  public componentDidMount() {
+    this.destroy = autorun(() => this.renderScene())
   }
 
-  // TODO: Find an alternative approach for mapping a unique identifier for each canvas.
-  private hash(robot: RobotViewModel, index: number) {
-    return `${robot.name}:${index}}`
+  public componentWillUnmount() {
+    this.destroy()
+  }
+
+  render() {
+    return (
+      <canvas className={styles.canvas} width={1280} height={1024} ref={this.onRef}/>
+    )
+  }
+
+  private onRef = (canvas: HTMLCanvasElement | null) => {
+    this.canvas = canvas
+  }
+
+  private renderScene() {
+    const { viewModel } = this.props
+    const { cameraViewModel } = viewModel
+    cameraViewModel.renderer(this.canvas!).render(cameraViewModel.scene, cameraViewModel.camera)
   }
 }

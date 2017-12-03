@@ -59,6 +59,11 @@ export class VisionRobotModel {
   })
 
   @computed
+  public get id() {
+    return this.robotModel.id
+  }
+
+  @computed
   public get name() {
     return this.robotModel.name
   }

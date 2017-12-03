@@ -27,9 +27,9 @@ export class VisionNetwork {
 
   // @action
   // private onGoals = (robotModel: RobotModel, goals: NUsightGoals) => {
-  //   const robot = VisionRobotModel.of(robotModel)
+  //   const viewModel = VisionRobotModel.of(robotModel)
   //   // TODO
-  //   robot.goals = goals.goals.map(goal => ({
+  //   viewModel.goals = goals.goals.map(goal => ({
   //     tl: Vector2.from(goal.quad!.tl!),
   //     tr: Vector2.from(goal.quad!.tr!),
   //     bl: Vector2.from(goal.quad!.bl!),
@@ -39,9 +39,9 @@ export class VisionNetwork {
 
   // @action
   // private onBalls = (robotModel: RobotModel, balls: NUsightBalls) => {
-  //   const robot = VisionRobotModel.of(robotModel)
+  //   const viewModel = VisionRobotModel.of(robotModel)
   //   // TODO
-  //   robot.balls = balls.balls.map(ball => ({
+  //   viewModel.balls = balls.balls.map(ball => ({
   //     radius: ball.circle!.radius!,
   //     centre: Vector2.from(ball.circle!.centre!),
   //   }))

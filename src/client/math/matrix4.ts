@@ -16,14 +16,19 @@ export class Matrix4 {
   }
 
   public static of() {
-    return new Matrix4(new Vector4(1, 0, 0, 0), new Vector4(0, 1, 0, 0), new Vector4(0, 0, 1, 0), new Vector4(0, 0, 0, 1))
+    return new Matrix4(
+      new Vector4(1, 0, 0, 0),
+      new Vector4(0, 1, 0, 0),
+      new Vector4(0, 0, 1, 0),
+      new Vector4(0, 0, 0, 1),
+    )
   }
 
   public static from(mat?: {
-    x?: { x?: number, y?: number, z? :number, t? :number },
-    y?: { x?: number, y?: number, z? :number, t? :number },
-    z?: { x?: number, y?: number, z? :number, t? :number },
-    t?: { x?: number, y?: number, z? :number, t? :number }
+    x?: { x?: number, y?: number, z?: number, t?: number },
+    y?: { x?: number, y?: number, z?: number, t?: number },
+    z?: { x?: number, y?: number, z?: number, t?: number },
+    t?: { x?: number, y?: number, z?: number, t?: number }
   } | null): Matrix4 {
     if (!mat) {
       return Matrix4.of()
@@ -31,7 +36,8 @@ export class Matrix4 {
     return new Matrix4(Vector4.from(mat.x), Vector4.from(mat.y), Vector4.from(mat.z), Vector4.from(mat.t))
   }
 
-  @computed get trace(): number {
+  @computed
+  get trace(): number {
     return this.x.x + this.y.y + this.z.z + this.t.t
   }
 

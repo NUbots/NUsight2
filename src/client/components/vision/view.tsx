@@ -14,6 +14,10 @@ export class VisionView extends Component<{
   network: VisionNetwork
   Menu: ComponentType
 }> {
+  public componentWillUnmount() {
+    this.props.network.destroy()
+  }
+
   public render() {
     const { viewModel, Menu } = this.props
     // TODO: Some kind of intelligent layout resizing to make it look good.

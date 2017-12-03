@@ -5,6 +5,7 @@ import { IReactionDisposer } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
+import { ComponentType } from 'react'
 import { VisionModel } from './model'
 import { VisionNetwork } from './network'
 import * as styles from './styles.css'
@@ -14,6 +15,7 @@ import { RobotViewModel } from './view_model'
 type Props = {
   model: VisionModel
   network: VisionNetwork
+  menu: ComponentType
 }
 
 @observer
@@ -38,17 +40,19 @@ export class VisionView extends Component<Props> {
 
   public render() {
     const viewModel = VisionViewModel.of(this.props.model)
+    const Menu = this.props.menu
 
     // TODO: Some kind of intelligent layout resizing to make it look good.
     return (
-      <div>
-        <h1>Vision</h1>
+      <div className={styles.vision}>
+        <Menu/>
         <div>
           {viewModel.robots.map(robot => (
             <div className={styles.robot} key={robot.name}>
               <div className={styles.canvases}>
                 {robot.layers.map((layer, index) => (
-                  <canvas className={styles.canvas} key={index} width={1280} height={1024} ref={this.onRef(robot, index)}></canvas>
+                  <canvas className={styles.canvas} key={index} width={1280} height={1024}
+                          ref={this.onRef(robot, index)}></canvas>
                 ))}
               </div>
               <div>{robot.name}</div>

@@ -1,5 +1,10 @@
 /* TODO: Style this nicely :) */
 
+.vision {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
 .robot {
   margin: 6px;
   border: 1px solid red;

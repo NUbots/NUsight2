@@ -7,6 +7,7 @@ import { VisionModel } from './model'
 import { VisionNetwork } from './network'
 import { VisionView } from './view'
 import { ComponentType } from 'react'
+import { VisionViewModel } from './view_model'
 
 export function installVision({ nav, appModel, nusightNetwork, Menu }: {
   nav: NavigationConfiguration,
@@ -20,8 +21,9 @@ export function installVision({ nav, appModel, nusightNetwork, Menu }: {
     Icon,
     label: 'Vision',
     Content: () => {
+      const viewModel = VisionViewModel.of(model)
       const network = VisionNetwork.of(nusightNetwork)
-      return <VisionView model={model} network={network} Menu={Menu}/>
+      return <VisionView viewModel={viewModel} network={network} Menu={Menu}/>
     },
   })
 }

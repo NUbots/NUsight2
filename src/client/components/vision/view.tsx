@@ -3,14 +3,13 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
-import { VisionModel } from './model'
 import { VisionNetwork } from './network'
 import * as styles from './styles.css'
 import { VisionViewModel } from './view_model'
 import { RobotViewModel } from './view_model'
 
 type Props = {
-  model: VisionModel
+  viewModel: VisionViewModel
   network: VisionNetwork
   Menu: ComponentType
 }
@@ -18,9 +17,7 @@ type Props = {
 @observer
 export class VisionView extends Component<Props> {
   public render() {
-    const { model, Menu } = this.props
-    const viewModel = VisionViewModel.of(model)
-
+    const { viewModel, Menu } = this.props
     // TODO: Some kind of intelligent layout resizing to make it look good.
     return (
       <div className={styles.vision}>

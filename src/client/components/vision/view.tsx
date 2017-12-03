@@ -1,7 +1,4 @@
-import { action } from 'mobx'
 import { autorun } from 'mobx'
-import { observable } from 'mobx'
-import { IReactionDisposer } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
@@ -20,24 +17,6 @@ type Props = {
 
 @observer
 export class VisionView extends Component<Props> {
-  // @observable private canvases: Map<string, HTMLCanvasElement>
-  // private stopRendering: IReactionDisposer
-
-  // public constructor(props: Props) {
-  //   super(props)
-  //
-  //   // this.canvases = new Map()
-  // }
-
-  // public componentDidMount() {
-  //   this.stopRendering = autorun(() => this.renderScene())
-  // }
-  //
-  // public componentWillUnmount() {
-  //   this.stopRendering()
-  //   this.props.network.destroy()
-  // }
-
   public render() {
     const { model, Menu } = this.props
     const viewModel = VisionViewModel.of(model)
@@ -52,22 +31,6 @@ export class VisionView extends Component<Props> {
       </div>
     )
   }
-
-  // private renderScene() {
-  //   const viewModel = VisionViewModel.of(this.props.model)
-  //   viewModel.robots.forEach(viewModel => {
-  //     viewModel.layers.forEach((layer, layerIndex) => {
-  //       const canvas = this.canvases.get(this.hash(viewModel, layerIndex))
-  //       if (canvas) {
-  //         if (layer.type === 'canvas2d') {
-  //           layer.renderer(canvas).render(layer.scene, layer.camera)
-  //         } else if (layer.type === 'webgl') {
-  //           layer.renderer(canvas).render(layer.scene, layer.camera)
-  //         }
-  //       }
-  //     })
-  //   })
-  // }
 }
 
 @observer

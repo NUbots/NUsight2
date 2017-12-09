@@ -1,16 +1,25 @@
+import { observable } from 'mobx'
+import { observer } from 'mobx-react'
 import { ComponentType } from 'react'
 import * as React from 'react'
 import { NavigationConfiguration } from '../../navigation'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { AppModel } from '../app/model'
-import { ColorSpaceVisualzerModel } from './color_space_visualizer/model'
-import { ColorSpaceVisualizer } from './color_space_visualizer/view'
+import { installColorSpaceVisualizer } from './color_space_visualizer/install'
 import { ClassifierController } from './controller'
 import Icon from './icon.svg'
+import { ClassifierRobotModel } from './model'
 import { ClassifierModel } from './model'
 import { ClassifierNetwork } from './network'
+import { ClassifierRobotViewProps } from './view'
+import { ClassifierRobotView } from './view'
 import { ClassifierView } from './view'
 import { ClassifierViewModel } from './view_model'
+
+export class ClassifierConfiguration {
+  @observable.ref public ColorSpaceVisualizer?: ComponentType<{ classifierRobotModel: ClassifierRobotModel }>
+  @observable.ref public ClassifierRobotView?: ComponentType<ClassifierRobotViewProps>
+}
 
 export function installClassifier({ nav, appModel, nusightNetwork, Menu }: {
   appModel: AppModel,
@@ -18,13 +27,12 @@ export function installClassifier({ nav, appModel, nusightNetwork, Menu }: {
   nav: NavigationConfiguration,
   Menu: ComponentType
 }) {
+  const config = new ClassifierConfiguration()
   const model = ClassifierModel.of(appModel)
-  const views = {
-    ColorSpaceVisualizer() {
-      const model = ColorSpaceVisualzerModel.of()
-      return <ColorSpaceVisualizer model={model}/>
-    },
-  }
+
+  installColorSpaceVisualizer({ config })
+  installClassifierRobotView({ config })
+
   nav.addRoute({
     path: '/classifier',
     Icon,
@@ -38,9 +46,15 @@ export function installClassifier({ nav, appModel, nusightNetwork, Menu }: {
           componentWillUnmount={controller.destroy}
           viewModel={viewModel}
           Menu={Menu}
-          ColorSpaceVisualizer={views.ColorSpaceVisualizer}
+          ClassifierRobotView={config.ClassifierRobotView}
         />
       )
     },
   })
+}
+
+const installClassifierRobotView = ({ config }: { config: ClassifierConfiguration }) => {
+  config.ClassifierRobotView = observer((props: ClassifierRobotViewProps) => (
+    <ClassifierRobotView {...props} ColorSpaceVisualizer={config.ColorSpaceVisualizer}/>
+  ))
 }

@@ -1,66 +1,50 @@
-import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
-import { WebGLRenderer } from 'three'
-import { Camera } from 'three'
+import { observable } from 'mobx'
 import { Scene } from 'three'
-import { Mesh } from 'three'
-import { Material } from 'three'
-import { Geometry } from 'three'
-import { ShaderMaterial } from 'three'
-import { Texture } from 'three'
-import { DataTexture } from 'three'
-import { LuminanceFormat } from 'three'
-import { UnsignedByteType } from 'three'
-import { ClampToEdgeWrapping } from 'three'
+import { WebGLRenderer } from 'three'
 import { LinearFilter } from 'three'
-import { Renderer } from 'three'
+import { ClampToEdgeWrapping } from 'three'
+import { UnsignedByteType } from 'three'
+import { LuminanceFormat } from 'three'
+import { DataTexture } from 'three'
+import { Texture } from 'three'
+import { ShaderMaterial } from 'three'
+import { Material } from 'three'
 import { PlaneGeometry } from 'three'
+import { Geometry } from 'three'
+import { Mesh } from 'three'
 import { OrthographicCamera } from 'three'
-import { ClassifierModel } from './model'
-import { ClassifierRobotModel } from './model'
-// import * as fragmentShader from './shaders/visual_lut.frag'
-// import * as vertexShader from './shaders/visual_lut.vert'
-import * as fragmentShader from './color_space_visualizer/shaders/simple.frag'
-import * as vertexShader from './color_space_visualizer/shaders/simple.vert'
+import { Camera } from 'three'
+import { memoize } from '../../../base/memoize'
+import { ColorSpaceVisualzerModel } from './model'
+import * as fragmentShader from './shaders/simple.frag'
+import * as vertexShader from './shaders/simple.vert'
 
-export class ClassifierViewModel {
-  public static of = createTransformer((model: ClassifierModel) => {
-    return new ClassifierViewModel(model)
+export class ColorSpaceVisualizerViewModel {
+  @observable.ref canvas: HTMLCanvasElement | null
+
+  constructor(private model: ColorSpaceVisualzerModel) {
+  }
+
+  public static of = memoize((model: ColorSpaceVisualzerModel) => {
+    return new ColorSpaceVisualizerViewModel(model)
   })
 
-  constructor(private model: ClassifierModel) {
+  @computed
+  get width() {
+    return this.model.width
   }
 
   @computed
-  get robots(): ClassifierRobotViewModel[] {
-    return this.model.robots
-      .filter(robot => robot.visible)
-      .map(robot => ClassifierRobotViewModel.of(robot))
+  get height() {
+    return this.model.height
   }
-}
 
-export class ClassifierRobotViewModel {
-  public renderer = createTransformer((canvas: HTMLCanvasElement): Renderer => {
-    const renderer = new WebGLRenderer({
-      canvas,
-      antialias: true,
+  @computed
+  get renderer(): WebGLRenderer {
+    return new WebGLRenderer({
+      canvas: this.canvas!,
     })
-    renderer.setClearColor('#ffffff')
-    // renderer.setViewport(1, 1)
-    return renderer
-  })
-
-  constructor(public model: ClassifierRobotModel) {
-
-  }
-
-  public static of = createTransformer((model: ClassifierRobotModel) => {
-    return new ClassifierRobotViewModel(model)
-  })
-
-  @computed
-  get id(): string {
-    return this.model.id
   }
 
   @computed

@@ -1,36 +1,30 @@
-import { autorun } from 'mobx'
 import { Component } from 'react'
 import * as React from 'react'
-import { ColorSpaceVisualzerModel } from './model'
+import { ColorSpaceVisualizerViewModel } from './view_model'
 
-export class ColorSpaceVisualizer extends Component<{
-  model: ColorSpaceVisualzerModel
-}> {
-  private canvas: HTMLCanvasElement
-  private destroy: () => void
+export type ColorSpaceVisualizerProps = {
+  viewModel: ColorSpaceVisualizerViewModel,
+  componentDidMount?(): void,
+  componentWillUnmount?(): void,
+}
 
+export class ColorSpaceVisualizer extends Component<ColorSpaceVisualizerProps> {
   public render() {
-    const { width, height } = this.props.model
+    const { width, height } = this.props.viewModel
     return (
       <canvas ref={this.onCanvasRef} width={width} height={height}/>
     )
   }
 
-  public componentDidMount() {
-    this.destroy = autorun(() => this.renderScene())
-  }
-
-  public componentWillUnmount() {
-    this.destroy()
-  }
-
-  private renderScene() {
-
-  }
-
   private onCanvasRef = (canvas: HTMLCanvasElement | null) => {
-    if (canvas) {
-      this.canvas = canvas
-    }
+    this.props.viewModel.canvas = canvas
+  }
+
+  componentDidMount() {
+    this.props.componentDidMount && this.props.componentDidMount()
+  }
+
+  componentWillUnmount() {
+    this.props.componentWillUnmount && this.props.componentWillUnmount()
   }
 }

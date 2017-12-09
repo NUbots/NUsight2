@@ -28,9 +28,7 @@ export class ClassifierNetwork {
     const { diff } = lookUpTableDiff
     diff.forEach(d => {
       const { lutIndex, classification } = d
-      const lut = robot.lut.get().data
-      lut[lutIndex!] = classification!
-      robot.lut.set({ data: lut })
+      robot.lut.set(lutIndex!, classification!)
     })
   }
 }

@@ -62,7 +62,7 @@ function init() {
       simulators: [
         // { frequency: 1, simulator: OverviewSimulator.of() },
         // { frequency: 60, simulator: SensorDataSimulator.of() },
-        { frequency: 1, simulator: ClassifierSimulator.of() },
+        { frequency: 10, simulator: ClassifierSimulator.of() },
       ],
     })
     virtualRobots.startSimulators()

@@ -36,12 +36,7 @@ class ClassifierRobotView extends Component<{ viewModel: ClassifierRobotViewMode
   public render() {
     return (
       <div className={styles.lutDisplay}>
-        <canvas
-          ref={this.onCanvasRef}
-          style={{ display: 'block' }}
-          width={512}
-          height={512}
-        />
+        <canvas className={styles.lutCanvas} ref={this.onCanvasRef} width={512} height={512}/>
       </div>
     )
   }

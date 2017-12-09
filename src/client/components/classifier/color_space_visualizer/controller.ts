@@ -3,6 +3,7 @@ import { ColorSpaceVisualizerModel } from './model'
 import { ColorSpaceVisualizerViewModel } from './view_model'
 
 export class ColorSpaceVisualizerController {
+  private viewModel = ColorSpaceVisualizerViewModel.of(this.model)
   private destroy?: () => void
 
   constructor(private model: ColorSpaceVisualizerModel) {
@@ -21,7 +22,6 @@ export class ColorSpaceVisualizerController {
   }
 
   private renderScene() {
-    const viewModel = ColorSpaceVisualizerViewModel.of(this.model)
-    viewModel.renderer.render(viewModel.scene, viewModel.camera)
+    this.viewModel.renderer.render(this.viewModel.scene, this.viewModel.camera)
   }
 }

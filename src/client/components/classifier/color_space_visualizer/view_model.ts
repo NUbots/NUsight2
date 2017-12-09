@@ -62,7 +62,7 @@ export class ColorSpaceVisualizerViewModel {
     camera.up.set(0, 0, 1)
     const r = 3
     const now = mobxUtils.now('frame')
-    const t = now * 1e-3
+    const t = now * 5e-4
     const azimuth = t
     const elevation = Math.cos(t) / 4
     const x = r * Math.sin(Math.PI / 2 + elevation) * Math.cos(azimuth)
@@ -105,7 +105,7 @@ export class ColorSpaceVisualizerViewModel {
 
   @computed
   get planeMaterial(): Material {
-    const material = new ShaderMaterial({
+    return new ShaderMaterial({
       vertexShader: String(vertexShader),
       fragmentShader: String(fragmentShader),
       uniforms: {
@@ -115,14 +115,12 @@ export class ColorSpaceVisualizerViewModel {
         bitsG: { value: this.model.lut.size.y },
         bitsB: { value: this.model.lut.size.z },
         scale: { value: 1 },
-        size: { value: 20 },
+        size: { value: 10 },
         renderRaw: { value: false },
         renderCube: { value: false },
         outputColourSpace: { value: 1 },
       },
     })
-    material.depthTest = false
-    return material
   }
 
   @computed

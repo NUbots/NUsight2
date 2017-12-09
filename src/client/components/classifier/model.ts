@@ -67,7 +67,7 @@ export class Lut {
   public static of() {
     return new Lut({
       atom: new Atom('Lut'),
-      data: new Uint8Array(2 ** (6 + 6 + 6)),
+      data: new Uint8Array(2 ** (6 + 6 + 6)).fill(117),
       size: { x: 6, y: 6, z: 6 },
     })
   }

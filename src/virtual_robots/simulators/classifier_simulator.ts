@@ -28,7 +28,7 @@ export class ClassifierSimulator implements Simulator {
         { lutIndex: Math.floor(Math.random() * (2 ** 18)), classification: T_ORANGE },
         { lutIndex: Math.floor(Math.random() * (2 ** 18)), classification: T_CYAN },
         { lutIndex: Math.floor(Math.random() * (2 ** 18)), classification: T_MAGENTA },
-      ]), Array(100).fill(0)),
+      ]), Array(10).fill(0)),
     }).finish()
     const message = { messageType, buffer }
     return [message]

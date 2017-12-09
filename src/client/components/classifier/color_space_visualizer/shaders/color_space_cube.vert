@@ -287,7 +287,7 @@ void main() {
 		// Transform to eye-space
 		vec4 mvPosition = modelViewMatrix * vec4(positionScaled, 1.0);
 		// Scale the point size based on distance from the camera (aka. size attenuation)
-//		gl_PointSize = size * (scale / length(mvPosition.xyz));
+		gl_PointSize = size * (scale / length(mvPosition.xyz));
 		// Transform to clip space and set as position
 		gl_Position = projectionMatrix * mvPosition;
 	}

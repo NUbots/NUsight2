@@ -4,17 +4,16 @@ import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
 import { ColorSpaceVisualizer } from './color_space_visualizer/view'
-import { ClassifierController } from './controller'
 import * as styles from './styles.css'
 import { ClassifierViewModel } from './view_model'
 import { ClassifierRobotViewModel } from './view_model'
 
 @observer
 export class ClassifierView extends Component<{
-  controller: ClassifierController,
   viewModel: ClassifierViewModel
   Menu: ComponentType,
   ColorSpaceVisualizer: ComponentType
+  componentWillUnmount(): void,
 }> {
   public render() {
     const { viewModel, Menu, ColorSpaceVisualizer } = this.props
@@ -33,7 +32,7 @@ export class ClassifierView extends Component<{
   }
 
   public componentWillUnmount() {
-    this.props.controller.destroy()
+    this.props.componentWillUnmount()
   }
 }
 

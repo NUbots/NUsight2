@@ -1,3 +1,4 @@
+import { ClassifierModel } from './model'
 import { ClassifierNetwork } from './network'
 
 export class ClassifierController {

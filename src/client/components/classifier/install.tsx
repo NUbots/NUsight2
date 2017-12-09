@@ -35,7 +35,7 @@ export function installClassifier({ nav, appModel, nusightNetwork, Menu }: {
       const viewModel = ClassifierViewModel.of(model)
       return (
         <ClassifierView
-          controller={controller}
+          componentWillUnmount={controller.destroy}
           viewModel={viewModel}
           Menu={Menu}
           ColorSpaceVisualizer={views.ColorSpaceVisualizer}

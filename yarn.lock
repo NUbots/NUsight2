@@ -4619,6 +4619,10 @@ mobx-react@^4.3.3:
   dependencies:
     hoist-non-react-statics "^2.3.1"
 
+mobx-utils@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/mobx-utils/-/mobx-utils-3.2.2.tgz#1979fe85a27df496d4f17af288813ac4fd356fd5"
+
 mobx@^3.3.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-3.4.1.tgz#37abe5ee882d401828d9f26c6c1a2f47614bbbef"

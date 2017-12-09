@@ -1,5 +1,7 @@
 import { computed } from 'mobx'
+import * as mobxUtils from 'mobx-utils'
 import { observable } from 'mobx'
+import { Vector3 } from 'three'
 import { Points } from 'three'
 import { BufferAttribute } from 'three'
 import { BufferGeometry } from 'three'
@@ -57,9 +59,17 @@ export class ColorSpaceVisualizerViewModel {
   @computed
   get camera(): Camera {
     const camera = new PerspectiveCamera(75, 1, 0.1, 1000)
-    // const camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 100)
     camera.up.set(0, 0, 1)
-    camera.position.set(0, 0, 3)
+    const r = 3
+    const now = mobxUtils.now('frame')
+    const t = now * 1e-3
+    const azimuth = t
+    const elevation = Math.cos(t) / 4
+    const x = r * Math.sin(Math.PI / 2 + elevation) * Math.cos(azimuth)
+    const y = r * Math.sin(Math.PI / 2 + elevation) * Math.sin(azimuth)
+    const z = r * Math.cos(Math.PI / 2 + elevation)
+    camera.position.set(x, y, z)
+    camera.lookAt(new Vector3(0, 0, 0))
     return camera
   }
 

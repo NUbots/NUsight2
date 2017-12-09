@@ -1,0 +1,103 @@
+.select {
+  display: flex;
+  align-items: center;
+  user-select: none;
+  cursor: default;
+}
+
+.selectDisabled {
+  opacity: 0.75;
+}
+
+.selectLabel {
+  padding-left: 4px;
+  margin-right: 8px;
+}
+
+.selectContainer {
+  position: relative;
+}
+
+.selectInput {
+  display: flex;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #DDD;
+  padding: 3px 3px 3px 6px;
+  align-items: center;
+  border-radius: 2px;
+  font-size: 13px;
+  transition: border-color 0.2s;
+  min-width: 80px;
+}
+
+.select:not(.selectDisabled) .selectInput:hover {
+  border-color: #BBB;
+  cursor: pointer;
+}
+
+.selectFocused .selectInput {
+  border-color: #57A3F3!important; /* Override specificity of :not() + :hover selectors above */
+  box-shadow: 0 0 0 2px rgba(45, 140, 240, 0.2);
+}
+
+.selectPlaceholder {
+  color: rgba(0, 0, 0, 0.5);
+  flex-grow: 1;
+}
+
+.selectValue {
+  flex-grow: 1;
+}
+
+.selectDropdownIcon {
+  width: 18px;
+  height: 18px;
+  margin-left: 4px;
+  fill: #999;
+}
+
+.selectOpen .selectDropdownIcon {
+  transform: rotate(180deg);
+}
+
+.selectDropdown {
+  display: none;
+  position: absolute;
+  max-height: 200px;
+  overflow: auto;
+  margin-top: 4px;
+  padding: 4px 0;
+  background-color: #FFF;
+  border-radius: 2px;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.35);
+  width: 100%;
+  min-width: 100px;
+  z-index: 1;
+}
+
+.selectOpen .selectDropdown {
+  display: block;
+}
+
+.selectDropdownList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  width: 100%;
+}
+
+.selectDropdownItem {
+  padding: 4px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.selectDropdownItem:hover {
+  background-color: #EEE;
+}
+
+.selectDropdownItemSelected {
+  background: rgba(45, 140, 240, 0.9)!important; /* Override specificity of :hover selector above */
+  color: #FFF;
+}

@@ -3,40 +3,54 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
-import { ClassifierModel } from './model'
-import { ClassifierNetwork } from './network'
+import { ColorSpaceVisualizer } from './color_space_visualizer/view'
+import { ClassifierController } from './controller'
 import * as styles from './styles.css'
-import { ClassifierRobotViewModel } from './view_model'
 import { ClassifierViewModel } from './view_model'
+import { ClassifierRobotViewModel } from './view_model'
 
 @observer
 export class ClassifierView extends Component<{
-  model: ClassifierModel
-  network: ClassifierNetwork
+  controller: ClassifierController,
+  viewModel: ClassifierViewModel
   Menu: ComponentType,
   ColorSpaceVisualizer: ComponentType
 }> {
   public render() {
-    const { model, Menu } = this.props
-    const viewModel = ClassifierViewModel.of(model)
+    const { viewModel, Menu, ColorSpaceVisualizer } = this.props
     return (
       <div className={styles.classifier}>
         <Menu/>
-        {viewModel.robots.map(robot => <ClassifierRobotView key={robot.id} viewModel={robot}/>)}
+        {viewModel.robots.map(robot => (
+          <ClassifierRobotView
+            key={robot.id}
+            viewModel={robot}
+            ColorSpaceVisualizer={ColorSpaceVisualizer}
+          />
+        ))}
       </div>
     )
+  }
+
+  public componentWillUnmount() {
+    this.props.controller.destroy()
   }
 }
 
 @observer
-class ClassifierRobotView extends Component<{ viewModel: ClassifierRobotViewModel }> {
+class ClassifierRobotView extends Component<{
+  viewModel: ClassifierRobotViewModel,
+  ColorSpaceVisualizer: ComponentType,
+}> {
   private canvas: HTMLCanvasElement | null
   private stopRendering: () => void
 
   public render() {
+    const { ColorSpaceVisualizer } = this.props
     return (
       <div className={styles.lutDisplay}>
         <canvas className={styles.lutCanvas} ref={this.onCanvasRef} width={512} height={512}/>
+        <ColorSpaceVisualizer/>
       </div>
     )
   }

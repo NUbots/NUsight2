@@ -1,3 +1,4 @@
+import { ComponentType } from 'react'
 import * as React from 'react'
 import { NavigationConfiguration } from '../../navigation'
 import { NUsightNetwork } from '../../network/nusight_network'
@@ -9,10 +10,11 @@ import { ClassifierModel } from './model'
 import { ClassifierNetwork } from './network'
 import { ClassifierView } from './view'
 
-export function installClassifier({ nav, appModel, nusightNetwork }: {
+export function installClassifier({ nav, appModel, nusightNetwork, Menu }: {
   appModel: AppModel,
   nusightNetwork: NUsightNetwork,
-  nav: NavigationConfiguration
+  nav: NavigationConfiguration,
+  Menu: ComponentType
 }) {
   const model = ClassifierModel.of(appModel)
   const views = {
@@ -27,7 +29,14 @@ export function installClassifier({ nav, appModel, nusightNetwork }: {
     label: 'Classifier',
     Content: () => {
       const network = ClassifierNetwork.of(nusightNetwork, model)
-      return <ClassifierView model={model} network={network} ColorSpaceVisualizer={views.ColorSpaceVisualizer}/>
+      return (
+        <ClassifierView
+          model={model}
+          network={network}
+          Menu={Menu}
+          ColorSpaceVisualizer={views.ColorSpaceVisualizer}
+        />
+      )
     },
   })
 }

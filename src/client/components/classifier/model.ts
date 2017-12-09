@@ -60,4 +60,9 @@ export class ClassifierRobotModel {
   get id(): string {
     return this.model.id
   }
+
+  @computed
+  get visible(): boolean {
+    return this.model.enabled
+  }
 }

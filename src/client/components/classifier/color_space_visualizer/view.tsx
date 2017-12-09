@@ -9,18 +9,18 @@ export class ColorSpaceVisualizer extends Component<{
   private canvas: HTMLCanvasElement
   private destroy: () => void
 
-  render() {
+  public render() {
     const { width, height } = this.props.model
     return (
       <canvas ref={this.onCanvasRef} width={width} height={height}/>
     )
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     this.destroy = autorun(() => this.renderScene())
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     this.destroy()
   }
 

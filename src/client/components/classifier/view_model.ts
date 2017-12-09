@@ -33,7 +33,9 @@ export class ClassifierViewModel {
 
   @computed
   get robots(): ClassifierRobotViewModel[] {
-    return this.model.robots.map(robot => ClassifierRobotViewModel.of(robot))
+    return this.model.robots
+      .filter(robot => robot.visible)
+      .map(robot => ClassifierRobotViewModel.of(robot))
   }
 }
 

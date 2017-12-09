@@ -16,17 +16,17 @@ import { Mesh } from 'three'
 import { OrthographicCamera } from 'three'
 import { Camera } from 'three'
 import { memoize } from '../../../base/memoize'
-import { ColorSpaceVisualzerModel } from './model'
+import { ColorSpaceVisualizerModel } from './model'
 import * as fragmentShader from './shaders/simple.frag'
 import * as vertexShader from './shaders/simple.vert'
 
 export class ColorSpaceVisualizerViewModel {
-  @observable.ref canvas: HTMLCanvasElement | null
+  @observable.ref public canvas: HTMLCanvasElement | null
 
-  constructor(private model: ColorSpaceVisualzerModel) {
+  constructor(private model: ColorSpaceVisualizerModel) {
   }
 
-  public static of = memoize((model: ColorSpaceVisualzerModel) => {
+  public static of = memoize((model: ColorSpaceVisualizerModel) => {
     return new ColorSpaceVisualizerViewModel(model)
   })
 
@@ -56,7 +56,6 @@ export class ColorSpaceVisualizerViewModel {
 
   @computed
   get camera(): Camera {
-    // const camera = new PerspectiveCamera(75, this.model.aspect, 0.01, 100)
     const camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 100)
     camera.up.set(0, 0, 1)
     camera.position.set(0, 0, 1)

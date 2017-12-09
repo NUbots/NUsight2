@@ -14,10 +14,9 @@ import { ClassifierNetwork } from './network'
 import { ClassifierRobotViewProps } from './view'
 import { ClassifierRobotView } from './view'
 import { ClassifierView } from './view'
-import { ClassifierViewModel } from './view_model'
 
 export class ClassifierConfiguration {
-  @observable.ref public ColorSpaceVisualizer?: ComponentType<{ classifierRobotModel: ClassifierRobotModel }>
+  @observable.ref public ColorSpaceVisualizer?: ComponentType<{ model: ClassifierRobotModel }>
   @observable.ref public ClassifierRobotView?: ComponentType<ClassifierRobotViewProps>
 }
 
@@ -38,13 +37,12 @@ export function installClassifier({ nav, appModel, nusightNetwork, Menu }: {
     Icon,
     label: 'Classifier',
     Content: () => {
-      const network = ClassifierNetwork.of(nusightNetwork, model)
+      const network = ClassifierNetwork.of(nusightNetwork)
       const controller = ClassifierController.of(network)
-      const viewModel = ClassifierViewModel.of(model)
       return (
         <ClassifierView
           componentWillUnmount={controller.destroy}
-          viewModel={viewModel}
+          model={model}
           Menu={Menu}
           ClassifierRobotView={config.ClassifierRobotView}
         />

@@ -3,19 +3,17 @@ import { message } from '../../../shared/proto/messages'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
-import { ClassifierModel } from './model'
 import { ClassifierRobotModel } from './model'
 import LookUpTableDiff = message.vision.LookUpTableDiff
 
 export class ClassifierNetwork {
-  public constructor(private network: Network,
-                     private model: ClassifierModel) {
+  public constructor(private network: Network) {
     this.network.on(LookUpTableDiff, this.onLookUpTableDiff)
   }
 
-  public static of(nusightNetwork: NUsightNetwork, model: ClassifierModel): ClassifierNetwork {
+  public static of(nusightNetwork: NUsightNetwork): ClassifierNetwork {
     const network = Network.of(nusightNetwork)
-    return new ClassifierNetwork(network, model)
+    return new ClassifierNetwork(network)
   }
 
   public destroy() {

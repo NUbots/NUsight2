@@ -6,7 +6,7 @@ import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
 
 export class ClassifierModel {
-  @observable public appModel: AppModel
+  @observable private appModel: AppModel
 
   constructor(appModel: AppModel) {
     this.appModel = appModel

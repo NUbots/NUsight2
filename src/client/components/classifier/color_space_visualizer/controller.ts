@@ -1,14 +1,14 @@
 import { autorun } from 'mobx'
-import { ColorSpaceVisualzerModel } from './model'
+import { ColorSpaceVisualizerModel } from './model'
 import { ColorSpaceVisualizerViewModel } from './view_model'
 
 export class ColorSpaceVisualizerController {
   private destroy?: () => void
 
-  constructor(private model: ColorSpaceVisualzerModel) {
+  constructor(private model: ColorSpaceVisualizerModel) {
   }
 
-  public static of(model: ColorSpaceVisualzerModel) {
+  public static of(model: ColorSpaceVisualizerModel) {
     return new ColorSpaceVisualizerController(model)
   }
 

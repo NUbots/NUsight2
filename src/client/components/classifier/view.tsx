@@ -3,24 +3,24 @@ import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
 import { ColorSpaceVisualizer } from './color_space_visualizer/view'
+import { ClassifierModel } from './model'
 import { ClassifierRobotModel } from './model'
 import * as styles from './styles.css'
-import { ClassifierViewModel } from './view_model'
-import { ClassifierRobotViewModel } from './view_model'
 
 @observer
 export class ClassifierView extends Component<{
-  viewModel: ClassifierViewModel
+  model: ClassifierModel,
   Menu: ComponentType,
   ClassifierRobotView?: ComponentType<ClassifierRobotViewProps>,
-  componentWillUnmount(): void,
+  componentWillUnmount(): void
 }> {
+
   public render() {
-    const { viewModel, Menu, ClassifierRobotView } = this.props
+    const { model, Menu, ClassifierRobotView } = this.props
     return (
       <div className={styles.classifier}>
         <Menu/>
-        {ClassifierRobotView && viewModel.robots.map(robot => <ClassifierRobotView key={robot.id} viewModel={robot}/>)}
+        {ClassifierRobotView && model.robots.map(robot => <ClassifierRobotView key={robot.id} model={robot}/>)}
       </div>
     )
   }
@@ -31,18 +31,18 @@ export class ClassifierView extends Component<{
 }
 
 export type ClassifierRobotViewProps = {
-  viewModel: ClassifierRobotViewModel,
+  model: ClassifierRobotModel
 }
 
 @observer
 export class ClassifierRobotView extends Component<ClassifierRobotViewProps & {
-  ColorSpaceVisualizer?: ComponentType<{ classifierRobotModel: ClassifierRobotModel }>,
+  ColorSpaceVisualizer?: ComponentType<{ model: ClassifierRobotModel }>
 }> {
   public render() {
-    const { viewModel, ColorSpaceVisualizer } = this.props
+    const { model, ColorSpaceVisualizer } = this.props
     return (
       <div className={styles.lutDisplay}>
-        {ColorSpaceVisualizer && <ColorSpaceVisualizer classifierRobotModel={viewModel.model}/>}
+        {ColorSpaceVisualizer && <ColorSpaceVisualizer model={model}/>}
       </div>
     )
   }

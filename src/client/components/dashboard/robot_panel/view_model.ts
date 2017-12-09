@@ -1,14 +1,20 @@
 import { computed } from 'mobx'
 import { createTransformer } from 'mobx'
 import { message } from '../../../../shared/proto/messages'
+import { Vector3 } from '../../../math/vector3'
 import { DashboardRobotModel } from '../dashboard_robot/model'
-import { LastStatus } from './view'
+import { LastStatus as Status } from './view'
 import State = message.behaviour.Behaviour.State
 
 import Mode = message.input.GameState.Data.Mode
 import PenaltyReason = message.input.GameState.Data.PenaltyReason
 import Phase = message.input.GameState.Data.Phase
-import { Vector3 } from '../../../math/vector3'
+
+// Alias hack to suppress build warnings.
+// Refer to:
+// https://github.com/angular/angular-cli/issues/2034#issuecomment-302666897
+// https://github.com/angular/angular-cli/issues/2034#issuecomment-317270354
+type LastStatus = Status
 
 export class RobotPanelViewModel {
   public constructor(private model: DashboardRobotModel) {

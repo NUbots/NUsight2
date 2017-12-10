@@ -54,22 +54,18 @@ export class NbsFrameChunker extends stream.Transform {
   private getNextFrame(buffer: Buffers): { index: number, buffer: Buffer } | undefined {
     // Search for the nbs header byte sequence.
     const headerIndex = buffer.indexOf(NBS_HEADER)
-    if (headerIndex >= 0) {
-      // Header found, slice from that index to make the following calculations easier.
-      const frame = buffer.slice(headerIndex)
-      const headerSize = NBS_HEADER.byteLength
-      const headerAndPacketLengthSize = headerSize + PACKET_SIZE_SIZE
-      // Check that we have received enough data to read the size of the frame.
-      if (frame.length >= headerAndPacketLengthSize) {
-        // Read the size of the frame which exists right after the header.
-        const packetSize = frame.slice(headerSize, headerSize + headerAndPacketLengthSize).readUInt32LE(0)
-        // Check again that we have received enough data to the read the rest of the frame.
-        if (frame.length >= headerAndPacketLengthSize + packetSize) {
-          // Slice and return the entire frame, along with where we found it.
-          return {
-            index: headerIndex,
-            buffer: frame.slice(0, headerAndPacketLengthSize + packetSize),
-          }
+    if (headerIndex >= 0 && buffer.length > headerIndex + PACKET_SIZE_SIZE) {
+
+      // Read the size of the next packet
+      const sizeStart = headerIndex + NBS_HEADER.byteLength
+      const sizeEnd = sizeStart + PACKET_SIZE_SIZE
+      const packetSize = buffer.slice(sizeStart, sizeEnd).readUInt32LE(0)
+
+      // We have enough data
+      if (sizeEnd + packetSize <= buffer.length) {
+        return {
+          index: headerIndex,
+          buffer: buffer.slice(headerIndex, sizeEnd + packetSize),
         }
       }
     }

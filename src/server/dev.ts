@@ -79,7 +79,7 @@ function init() {
     const nuclearnetClient = withVirtualRobots ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     nuclearnetClient.connect({ name: 'Fake Stream' })
     while (true) {
-      const out = NbsNUClearPlayback.fromFile('/Users/brendan/Lab/NUsight2/recordings/20171113T13_19_36.nbs', nuclearnetClient)
+      const out = NbsNUClearPlayback.fromFile('recordings/20171113T13_19_36.nbs', nuclearnetClient)
 
       // const filename = '/Users/brendan/Lab/NUsight2/recordings/20171113T13_19_36.nbs'
       // let rawStream = fs.createReadStream(filename, { highWaterMark: 1024 * 1024 * 32})

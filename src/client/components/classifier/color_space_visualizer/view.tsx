@@ -1,3 +1,4 @@
+import { WheelEvent } from 'react'
 import { MouseEvent } from 'react'
 import { Component } from 'react'
 import * as React from 'react'
@@ -11,6 +12,7 @@ export type ColorSpaceVisualizerProps = {
   onMouseDown?(x: number, y: number): void
   onMouseMove?(x: number, y: number): void
   onMouseUp?(x: number, y: number): void
+  onWheel(deltaY: number, preventDefault: () => void): void
 }
 
 export class ColorSpaceVisualizer extends Component<ColorSpaceVisualizerProps> {
@@ -26,6 +28,7 @@ export class ColorSpaceVisualizer extends Component<ColorSpaceVisualizerProps> {
         onMouseDown={this.onMouseDown}
         onMouseMove={this.onMouseMove}
         onMouseUp={this.onMouseUp}
+        onWheel={this.onWheel}
       />
     )
   }
@@ -52,5 +55,9 @@ export class ColorSpaceVisualizer extends Component<ColorSpaceVisualizerProps> {
 
   private onMouseUp = (e: MouseEvent<HTMLCanvasElement>) => {
     this.props.onMouseUp && this.props.onMouseUp(e.nativeEvent.layerX, e.nativeEvent.layerY)
+  }
+
+  private onWheel = (e: WheelEvent<HTMLCanvasElement>) => {
+    this.props.onWheel && this.props.onWheel(e.deltaY, () => e.preventDefault())
   }
 }

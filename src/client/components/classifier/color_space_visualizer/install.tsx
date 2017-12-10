@@ -19,6 +19,7 @@ export const installColorSpaceVisualizer = ({ config }: {
         onMouseDown={controller.onMouseDown}
         onMouseMove={controller.onMouseMove}
         onMouseUp={controller.onMouseUp}
+        onWheel={controller.onWheel}
       />
     )
   }

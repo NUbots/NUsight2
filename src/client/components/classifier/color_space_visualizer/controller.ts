@@ -49,11 +49,17 @@ export class ColorSpaceVisualizerController {
     this.viewModel.mouseDown = false
   }
 
+  @action
+  public onWheel = (deltaY: number, preventDefault: () => void) => {
+    this.model.camera.distance = clamp(this.model.camera.distance + deltaY / 100, 0.01)
+    preventDefault()
+  }
+
   private renderScene() {
     this.viewModel.renderer.render(this.viewModel.scene, this.viewModel.camera)
   }
 }
 
-function clamp(x: number, min: number, max: number) {
+function clamp(x: number, min: number = -Infinity, max: number = Infinity) {
   return Math.min(max, Math.max(min, x))
 }

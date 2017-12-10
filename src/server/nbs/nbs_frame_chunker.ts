@@ -1,4 +1,3 @@
-import * as Buffers from 'buffers'
 import * as stream from 'stream'
 import { NBS_HEADER } from './nbs_frame_codecs'
 import { PACKET_SIZE_SIZE } from './nbs_frame_codecs'
@@ -9,7 +8,7 @@ import { PACKET_SIZE_SIZE } from './nbs_frame_codecs'
  * other words it decodes the nbs framing protocol and emits those frames in the form of processable chunks.
  */
 export class NbsFrameChunker extends stream.Transform {
-  private buffers: Buffers
+  private buffer: Buffer
   private foundHeader: boolean
   private foundPacketSize: boolean
 
@@ -18,9 +17,9 @@ export class NbsFrameChunker extends stream.Transform {
       objectMode: true,
     })
 
-    this.buffers = new Buffers()
     this.foundHeader = false
     this.foundPacketSize = false
+    this.buffer = new Buffer(0)
   }
 
   public static of(): NbsFrameChunker {
@@ -29,18 +28,18 @@ export class NbsFrameChunker extends stream.Transform {
 
   public _transform(chunk: any, encoding: string, done: (err?: any, data?: any) => void) {
     // Buffer any received data so that we can find nbs packets within it.
-    this.buffers.push(chunk)
+    this.buffer = Buffer.concat([this.buffer, chunk])
 
     let frame
-    while ((frame = this.getNextFrame(this.buffers)) !== undefined) {
+    while ((frame = this.getNextFrame(this.buffer)) !== undefined) {
       this.push(frame.buffer)
-      this.buffers.splice(0, frame.index + frame.buffer.byteLength)
+      this.buffer = this.buffer.slice(frame.index + frame.buffer.byteLength)
     }
 
     // If there are no headers within the data, just empty the buffer.
     // Prevents this being an unbounded buffer continually accumulating when no nbs packets are to be found.
-    if (this.buffers.indexOf(NBS_HEADER) === -1) {
-      this.buffers = new Buffers()
+    if (this.buffer.indexOf(NBS_HEADER) === -1) {
+      this.buffer = new Buffer(0)
     }
 
     done()
@@ -51,7 +50,7 @@ export class NbsFrameChunker extends stream.Transform {
    * nbs header byte sequence, and then processes just enough to know the size of the frame and it will return that
    * slice, along with the starting index it was found at.
    */
-  private getNextFrame(buffer: Buffers): { index: number, buffer: Buffer } | undefined {
+  private getNextFrame(buffer: Buffer): { index: number, buffer: Buffer } | undefined {
     // Search for the nbs header byte sequence.
     const headerIndex = buffer.indexOf(NBS_HEADER)
     if (headerIndex >= 0 && buffer.length > headerIndex + PACKET_SIZE_SIZE) {

@@ -109,8 +109,9 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "serve-favicon": "^2.4.3",
-    "socket.io": "^1.7.3",
-    "socket.io-client": "^1.7.3",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4",
+    "socket.io-msgpack-parser": "^2.2.0",
     "three": "^0.84.0",
     "xxhashjs": "^0.2.1"
   }

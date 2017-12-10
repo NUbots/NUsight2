@@ -11,6 +11,9 @@ import * as webpackDevMiddleware from 'webpack-dev-middleware'
 import * as webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackConfig from '../../webpack.config'
 import { VisionSimulator } from '../simulators/vision_simulator'
+import { NbsFrameChunker } from './nbs/nbs_frame_chunker'
+import { NbsFrame } from './nbs/nbs_frame_codecs'
+import { NbsFrameDecoder } from './nbs/nbs_frame_streams'
 import { NbsNUClearPlayback } from './nbs/nbs_nuclear_playback'
 import { DirectNUClearNetClient } from './nuclearnet/direct_nuclearnet_client'
 import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
@@ -27,7 +30,7 @@ const withVirtualRobots = args['virtual-robots'] || false
 
 const app = express()
 const server = http.createServer(app)
-const sioNetwork = sio(server)
+const sioNetwork = sio(server as any, { parser: require('socket.io-msgpack-parser')} as any)
 
 // Initialize socket.io namespace immediately to catch reconnections.
 WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
@@ -76,9 +79,18 @@ function init() {
     const nuclearnetClient = withVirtualRobots ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     nuclearnetClient.connect({ name: 'Fake Stream' })
     while (true) {
-      const out = NbsNUClearPlayback.fromFile('/Users/brendan/Lab/NUsight2/recordings/igus.nbs', nuclearnetClient)
+      const out = NbsNUClearPlayback.fromFile('/Users/brendan/Lab/NUsight2/recordings/20171113T13_19_36.nbs', nuclearnetClient)
+
+      // const filename = '/Users/brendan/Lab/NUsight2/recordings/20171113T13_19_36.nbs'
+      // let rawStream = fs.createReadStream(filename, { highWaterMark: 1024 * 1024 * 32})
+      // // let rawStream = fs.createReadStream(filename)
+      // const out = rawStream.pipe(new NbsFrameChunker()).pipe(new NbsFrameDecoder())
+      // out.on('data', (data: NbsFrame) => {
+      //   console.log('data', data.hash, data.payload.byteLength)
+      // })
+
       await new Promise(res => out.on('finish', res))
-      // console.log('end')
+      console.log('end')
     }
   }
 

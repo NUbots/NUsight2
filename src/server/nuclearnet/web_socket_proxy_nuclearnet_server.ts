@@ -139,10 +139,11 @@ class PacketProcessor {
   }
 
   public static of(socket: WebSocket) {
-    return new PacketProcessor(socket, NodeSystemClock, { limit: 1, timeout: 5 })
+    return new PacketProcessor(socket, NodeSystemClock, { limit: 20, timeout: 0 })
   }
 
   public onPacket(event: string, packet: NUClearNetPacket) {
+    console.log('event queue', event, this.eventQueueSize.get(event))
     if (packet.reliable) {
       this.sendReliablePacket(event, packet)
     } else if (this.isEventBelowLimit(event)) {

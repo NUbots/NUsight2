@@ -3,6 +3,7 @@ import { MouseEvent } from 'react'
 import { Component } from 'react'
 import * as React from 'react'
 import { ColorSpaceVisualizerModel } from './model'
+import * as styles from './styles.css'
 import { ColorSpaceVisualizerViewModel } from './view_model'
 
 export type ColorSpaceVisualizerProps = {
@@ -22,6 +23,7 @@ export class ColorSpaceVisualizer extends Component<ColorSpaceVisualizerProps> {
     const { width, height } = this.viewModel
     return (
       <canvas
+        className={styles.canvas}
         ref={this.onCanvasRef}
         width={width}
         height={height}

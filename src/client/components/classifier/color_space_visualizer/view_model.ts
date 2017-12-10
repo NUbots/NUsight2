@@ -63,7 +63,7 @@ export class ColorSpaceVisualizerViewModel {
 
   @computed
   get camera(): Camera {
-    const camera = new PerspectiveCamera(75, 1, 0.1, 1000)
+    const camera = new PerspectiveCamera(75, 1, 0.01, 15)
     camera.up.set(0, 0, 1)
     const r = this.model.camera.distance
     const azimuth = this.model.camera.azimuth

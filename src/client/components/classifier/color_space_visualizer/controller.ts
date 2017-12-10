@@ -51,7 +51,7 @@ export class ColorSpaceVisualizerController {
 
   @action
   public onWheel = (deltaY: number, preventDefault: () => void) => {
-    this.model.camera.distance = clamp(this.model.camera.distance + deltaY / 100, 0.01)
+    this.model.camera.distance = clamp(this.model.camera.distance + deltaY / 100, 0.01, 10)
     preventDefault()
   }
 

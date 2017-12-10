@@ -14,13 +14,14 @@ export class ClassifierView extends Component<{
   ClassifierRobotView?: ComponentType<ClassifierRobotViewProps>,
   componentWillUnmount(): void
 }> {
-
   public render() {
     const { model, Menu, ClassifierRobotView } = this.props
     return (
       <div className={styles.classifier}>
         <Menu/>
-        {ClassifierRobotView && model.robots.map(robot => <ClassifierRobotView key={robot.id} model={robot}/>)}
+        {ClassifierRobotView && model.robots
+          .filter(robot => robot.visible)
+          .map(robot => robot.visible && <ClassifierRobotView key={robot.id} model={robot}/>)}
       </div>
     )
   }

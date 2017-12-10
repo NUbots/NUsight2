@@ -111,14 +111,11 @@ export class ColorSpaceVisualizerViewModel {
       uniforms: {
         lut: { value: this.lutTexture },
         lutSize: { value: 512 },
-        bitsR: { value: this.model.lut.size.x },
-        bitsG: { value: this.model.lut.size.y },
-        bitsB: { value: this.model.lut.size.z },
+        bitsX: { value: this.model.lut.size.x },
+        bitsY: { value: this.model.lut.size.y },
+        bitsZ: { value: this.model.lut.size.z },
         scale: { value: 1 },
         size: { value: 10 },
-        renderRaw: { value: false },
-        renderCube: { value: false },
-        outputColourSpace: { value: 1 },
       },
     })
   }

@@ -38,7 +38,7 @@ export class ColorSpaceVisualizerController {
       return
     }
     const newDrag = Vector2.of(x, y)
-    const diff = newDrag.subtract(this.viewModel.startDrag).multiplyScalar(DegToRad)
+    const diff = newDrag.subtract(this.viewModel.startDrag).multiplyScalar(0.5 * DegToRad)
     this.model.camera.azimuth -= diff.x
     this.model.camera.elevation = clamp(this.model.camera.elevation - diff.y, -PI2 + 0.01, PI2 - 0.01)
     this.viewModel.startDrag = Vector2.of(x, y)

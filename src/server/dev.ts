@@ -30,7 +30,7 @@ const withVirtualRobots = args['virtual-robots'] || false
 
 const app = express()
 const server = http.createServer(app)
-const sioNetwork = sio(server as any, { parser: require('socket.io-msgpack-parser')} as any)
+const sioNetwork = sio(server as any, { parser: require('socket.io-msgpack-parser') } as any)
 
 // Initialize socket.io namespace immediately to catch reconnections.
 WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {

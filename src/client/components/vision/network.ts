@@ -30,7 +30,7 @@ export class VisionNetwork {
     robot.Hcw = Matrix4.from(image.Hcw)
     if (image.cameraId !== 0) {
       // TODO
-      return;
+      return
     }
 
     if (image.format === BGGR) {

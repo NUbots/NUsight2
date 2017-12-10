@@ -16,6 +16,9 @@ export const installColorSpaceVisualizer = ({ config }: {
         model={model}
         componentDidMount={controller.componentDidMount}
         componentWillUnmount={controller.componentWillUnmount}
+        onMouseDown={controller.onMouseDown}
+        onMouseMove={controller.onMouseMove}
+        onMouseUp={controller.onMouseUp}
       />
     )
   }

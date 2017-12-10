@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react'
 import { Component } from 'react'
 import * as React from 'react'
 import { ColorSpaceVisualizerModel } from './model'
@@ -7,6 +8,9 @@ export type ColorSpaceVisualizerProps = {
   model: ColorSpaceVisualizerModel,
   componentDidMount?(): void,
   componentWillUnmount?(): void
+  onMouseDown?(x: number, y: number): void
+  onMouseMove?(x: number, y: number): void
+  onMouseUp?(x: number, y: number): void
 }
 
 export class ColorSpaceVisualizer extends Component<ColorSpaceVisualizerProps> {
@@ -15,7 +19,14 @@ export class ColorSpaceVisualizer extends Component<ColorSpaceVisualizerProps> {
   public render() {
     const { width, height } = this.viewModel
     return (
-      <canvas ref={this.onCanvasRef} width={width} height={height}/>
+      <canvas
+        ref={this.onCanvasRef}
+        width={width}
+        height={height}
+        onMouseDown={this.onMouseDown}
+        onMouseMove={this.onMouseMove}
+        onMouseUp={this.onMouseUp}
+      />
     )
   }
 
@@ -29,5 +40,17 @@ export class ColorSpaceVisualizer extends Component<ColorSpaceVisualizerProps> {
 
   private onCanvasRef = (canvas: HTMLCanvasElement | null) => {
     this.viewModel.canvas = canvas
+  }
+
+  private onMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
+    this.props.onMouseDown && this.props.onMouseDown(e.nativeEvent.layerX, e.nativeEvent.layerY)
+  }
+
+  private onMouseMove = (e: MouseEvent<HTMLCanvasElement>) => {
+    this.props.onMouseMove && this.props.onMouseMove(e.nativeEvent.layerX, e.nativeEvent.layerY)
+  }
+
+  private onMouseUp = (e: MouseEvent<HTMLCanvasElement>) => {
+    this.props.onMouseUp && this.props.onMouseUp(e.nativeEvent.layerX, e.nativeEvent.layerY)
   }
 }

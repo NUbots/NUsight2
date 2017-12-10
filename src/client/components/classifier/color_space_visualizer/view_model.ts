@@ -18,12 +18,15 @@ import { ShaderMaterial } from 'three'
 import { Material } from 'three'
 import { Camera } from 'three'
 import { memoize } from '../../../base/memoize'
+import { Vector2 } from '../../../math/vector2'
 import { ColorSpaceVisualizerModel } from './model'
 import * as fragmentShader from './shaders/color_space_cube.frag'
 import * as vertexShader from './shaders/color_space_cube.vert'
 
 export class ColorSpaceVisualizerViewModel {
   @observable.ref public canvas: HTMLCanvasElement | null
+  @observable.ref public mouseDown: boolean = false
+  @observable.ref public startDrag: Vector2
 
   constructor(private model: ColorSpaceVisualizerModel) {
   }
@@ -44,9 +47,11 @@ export class ColorSpaceVisualizerViewModel {
 
   @computed
   get renderer(): WebGLRenderer {
-    return new WebGLRenderer({
+    const renderer = new WebGLRenderer({
       canvas: this.canvas!,
     })
+    renderer.setClearColor('#fff')
+    return renderer
   }
 
   @computed
@@ -60,11 +65,9 @@ export class ColorSpaceVisualizerViewModel {
   get camera(): Camera {
     const camera = new PerspectiveCamera(75, 1, 0.1, 1000)
     camera.up.set(0, 0, 1)
-    const r = 3
-    const now = mobxUtils.now('frame')
-    const t = now * 5e-4
-    const azimuth = t
-    const elevation = Math.cos(t) / 4
+    const r = this.model.camera.distance
+    const azimuth = this.model.camera.azimuth
+    const elevation = this.model.camera.elevation
     const x = r * Math.sin(Math.PI / 2 + elevation) * Math.cos(azimuth)
     const y = r * Math.sin(Math.PI / 2 + elevation) * Math.sin(azimuth)
     const z = r * Math.cos(Math.PI / 2 + elevation)

@@ -28,6 +28,11 @@ export class VisionNetwork {
     const robot = VisionRobotModel.of(robotModel)
     const BGGR = 0x52474742 // TODO
     robot.Hcw = Matrix4.from(image.Hcw)
+    if (image.cameraId !== 0) {
+      // TODO
+      return;
+    }
+
     if (image.format === BGGR) {
       robot.image.set(image.data)
     } else {

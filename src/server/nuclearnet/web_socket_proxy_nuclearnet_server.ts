@@ -165,7 +165,7 @@ class PacketProcessor {
   private sendUnreliablePacket(event: string, packet: NUClearNetPacket) {
     // Throttle unreliable packets so that we do not overwhelm the client with traffic.
     const done = this.enqueue(event)
-    this.socket.send(event, packet, done)
+    this.socket.volatileSend(event, packet, done)
     this.clock.setTimeout(done, this.timeout)
   }
 

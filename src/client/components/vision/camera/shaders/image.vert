@@ -1,6 +1,13 @@
+precision highp float;
+
 // Source: Efficient, High-Quality Bayer Demosaic Filtering on GPUs
 // Morgan McGuire, Williams College
 // Uses the Malvar-He-Cutler technique
+attribute vec3 position;
+attribute vec2 uv;
+
+uniform mat4 projectionMatrix;
+uniform mat4 modelViewMatrix;
 
 uniform vec4 sourceSize;
 uniform vec2 firstRed;

@@ -40,7 +40,7 @@ type VisionImage = {
   format: number,
   width: number,
   height: number,
-  data: Uint8Array,
+  data: Uint8Array
 }
 
 export class VisionRobotModel {

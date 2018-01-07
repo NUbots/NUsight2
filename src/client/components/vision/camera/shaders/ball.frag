@@ -1,8 +1,11 @@
+precision highp float;
+
 uniform vec3 axis;
 uniform float gradient;
 uniform vec2 imageSize;
 
-vec2 imageToScreen(vec2 point, vec2 imageSize);
+varying vec2 vUv;
+
 vec3 unprojectEquidistant(vec2 point, float focalLength);
 vec2 projectEquidistant(vec3 ray, float focalLength);
 vec3 rotateByAxisAngle(vec3 v, vec3 e, float theta);
@@ -11,7 +14,7 @@ float focusLength = 1.0 / 0.0026997136600899543;
 float lineWidth = 4.0;
 
 void main() {
-  vec2 screenPoint = imageToScreen(gl_FragCoord.xy, imageSize);
+  vec2 screenPoint = vec2(0.5 - vUv.x, vUv.y - 0.5) * imageSize;
   vec3 cam = unprojectEquidistant(screenPoint, focusLength);
   vec3 p = rotateByAxisAngle(axis, normalize(cross(axis, cam)), acos(gradient));
   vec2 nearestPixel = projectEquidistant(p, focusLength);
@@ -22,13 +25,6 @@ void main() {
 
 vec3 rotateByAxisAngle(vec3 v, vec3 e, float theta) {
   return cos(theta) * v + sin(theta) * cross(e, v) + (1.0 - cos(theta)) * (dot(e, v)) * e;
-}
-
-vec2 imageToScreen(vec2 point, vec2 imageSize) {
-  return vec2(
-    (imageSize.x - point.x) - imageSize.x * 0.5,
-    point.y - imageSize.y * 0.5
-  );
 }
 
 vec3 unprojectEquidistant(vec2 point, float focalLength) {

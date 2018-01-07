@@ -1,6 +1,9 @@
 import { observable } from 'mobx'
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { BufferGeometry } from 'three'
+import { PlaneBufferGeometry } from 'three'
+import { RawShaderMaterial } from 'three'
 import { MeshBasicMaterial } from 'three'
 import { WebGLRenderTarget } from 'three'
 import { Scene } from 'three'
@@ -8,7 +11,6 @@ import { Mesh } from 'three'
 import { WebGLRenderer } from 'three'
 import { Camera } from 'three'
 import { OrthographicCamera } from 'three'
-import { ShaderMaterial } from 'three'
 import { Geometry } from 'three'
 import { Material } from 'three'
 import { DataTexture } from 'three'
@@ -76,13 +78,13 @@ export class CameraViewModel {
   }
 
   @computed
-  private get quadGeometry(): Geometry {
-    return new PlaneGeometry(2, 2)
+  private get quadGeometry(): BufferGeometry {
+    return new PlaneBufferGeometry(2, 2)
   }
 
   @computed
   private get horizonMaterial(): Material {
-    return new ShaderMaterial({
+    return new RawShaderMaterial({
       vertexShader: String(simpleVertexShader),
       fragmentShader: String(horizonFragmentShader),
       uniforms: {
@@ -138,7 +140,7 @@ export class CameraViewModel {
     renderTarget.depthBuffer = false
     renderTarget.stencilBuffer = false
     const scene = new Scene()
-    const material = new ShaderMaterial({
+    const material = new RawShaderMaterial({
       vertexShader: String(imageVertexShader),
       fragmentShader: String(imageFragmentShader),
       uniforms: {
@@ -197,7 +199,7 @@ class BallViewModel {
     )
     const Rcw = new Matrix4().extractRotation(Hcw)
     const axis = new Vector3(this.model.axis.x, this.model.axis.y, this.model.axis.z).applyMatrix4(Rcw)
-    return new ShaderMaterial({
+    return new RawShaderMaterial({
       vertexShader: String(simpleVertexShader),
       fragmentShader: String(ballFragmentShader),
       uniforms: {

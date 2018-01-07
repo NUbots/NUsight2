@@ -1,3 +1,4 @@
+import { observable } from 'mobx'
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 import { Scene } from 'three'
@@ -28,16 +29,21 @@ import * as imageVertexShader from './shaders/image.vert'
 import * as simpleVertexShader from './shaders/simple.vert'
 
 export class CameraViewModel {
-  public renderer = memoize((canvas: HTMLCanvasElement) => {
-    return new WebGLRenderer({ canvas })
-  })
+  @observable.ref public canvas: HTMLCanvasElement | null = null
 
   public constructor(private robotModel: VisionRobotModel) {
   }
 
-  public static of = createTransformer((robotModel: VisionRobotModel) => {
+  public static of = memoize((robotModel: VisionRobotModel) => {
     return new CameraViewModel(robotModel)
   })
+
+  @computed
+  public get renderer(): WebGLRenderer | undefined {
+    if (this.canvas) {
+      return new WebGLRenderer({ canvas: this.canvas })
+    }
+  }
 
   @computed
   public get camera(): Camera {

@@ -34,7 +34,6 @@ export class VisionView extends Component<{
 
 @observer
 export class RobotVisionView extends Component<{ viewModel: RobotViewModel }> {
-  private canvas: HTMLCanvasElement | null
   private destroy: () => void
 
   public componentDidMount() {
@@ -47,18 +46,20 @@ export class RobotVisionView extends Component<{ viewModel: RobotViewModel }> {
 
   public render() {
     return (
+      // TODO: width/height
       <canvas className={styles.canvas} width={1280} height={1024} ref={this.onRef}/>
     )
   }
 
   private onRef = (canvas: HTMLCanvasElement | null) => {
-    this.canvas = canvas
+    this.props.viewModel.cameraViewModel.canvas = canvas
   }
 
   private renderScene() {
     const { viewModel } = this.props
-    const { cameraViewModel } = viewModel
-    const renderer = cameraViewModel.renderer(this.canvas!)
-    renderer.render(cameraViewModel.scene, cameraViewModel.camera)
+    const { cameraViewModel: { renderer, scene, camera } } = viewModel
+    if (renderer) {
+      renderer.render(scene, camera)
+    }
   }
 }

@@ -1,6 +1,8 @@
 import { observable } from 'mobx'
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { MeshBasicMaterial } from 'three'
+import { WebGLRenderTarget } from 'three'
 import { Scene } from 'three'
 import { Mesh } from 'three'
 import { WebGLRenderer } from 'three'
@@ -102,21 +104,15 @@ export class CameraViewModel {
 
   @computed
   private get imageMaterial(): Material {
-    return new ShaderMaterial({
-      vertexShader: String(imageVertexShader),
-      fragmentShader: String(imageFragmentShader),
-      uniforms: {
-        sourceSize: { value: [1280, 1024, 1 / 1280, 1 / 1024] },
-        firstRed: { value: [1, 0] },
-        image: { value: this.imageTexture, type: 't' },
-      },
+    return new MeshBasicMaterial({
+      map: this.imageTexture,
       depthTest: false,
       depthWrite: false,
     })
   }
 
   @computed
-  private get imageTexture(): Texture {
+  private get imageTexture2(): Texture {
     const texture = new DataTexture(
       this.robotModel.image.get(),
       1280,
@@ -132,6 +128,35 @@ export class CameraViewModel {
     texture.flipY = true
     texture.needsUpdate = true
     return texture
+  }
+
+  @computed
+  private get imageTexture(): Texture {
+    // TODO: width/height
+    const renderTarget = new WebGLRenderTarget(1280, 1024)
+    renderTarget.depthBuffer = false
+    renderTarget.stencilBuffer = false
+    const scene = new Scene()
+    const material = new ShaderMaterial({
+      vertexShader: String(imageVertexShader),
+      fragmentShader: String(imageFragmentShader),
+      uniforms: {
+        // TODO: width/height
+        sourceSize: { value: [1280, 1024, 1 / 1280, 1 / 1024] },
+        firstRed: { value: [1, 0] },
+        image: { value: this.imageTexture2, type: 't' },
+      },
+      depthTest: false,
+      depthWrite: false,
+    })
+    const mesh = new Mesh(this.quadGeometry, material)
+    mesh.frustumCulled = false
+    scene.add(mesh)
+    const camera = new OrthographicCamera(-1, 1, 1, -1, 1, 3)
+    camera.position.z = 2
+    console.log('rendering', this.renderer)
+    this.renderer!.render(scene, camera, renderTarget)
+    return renderTarget.texture
   }
 
   @computed

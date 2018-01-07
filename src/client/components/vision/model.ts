@@ -4,9 +4,9 @@ import { IObservableValue } from 'mobx'
 import { memoize } from '../../base/memoize'
 import { Matrix4 } from '../../math/matrix4'
 import { Vector2 } from '../../math/vector2'
+import { Vector3 } from '../../math/vector3'
 import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
-import { Vector3 } from '../../math/vector3'
 
 export class VisionModel {
   public constructor(private appModel: AppModel) {
@@ -25,7 +25,7 @@ export class VisionModel {
 type VisionRobotModelOpts = {
   balls: VisionBallModel[]
   goals: VisionGoal[]
-  image: IObservableValue<Uint8Array>
+  image?: VisionImage
   Hcw: Matrix4
 }
 
@@ -36,10 +36,17 @@ type VisionGoal = {
   br: Vector2
 }
 
+type VisionImage = {
+  format: number,
+  width: number,
+  height: number,
+  data: Uint8Array,
+}
+
 export class VisionRobotModel {
   @observable public balls: VisionBallModel[]
   @observable public goals: VisionGoal[]
-  @observable.ref public image: IObservableValue<Uint8Array>
+  @observable.shallow public image?: VisionImage
   @observable public Hcw: Matrix4
 
   constructor(private robotModel: RobotModel, opts: VisionRobotModelOpts) {
@@ -53,7 +60,6 @@ export class VisionRobotModel {
     return new VisionRobotModel(robotModel, {
       balls: [],
       goals: [],
-      image: observable.box(),
       Hcw: Matrix4.of(),
     })
   })
@@ -73,11 +79,12 @@ export class VisionRobotModel {
     return this.robotModel.enabled
   }
 }
+
 export class VisionBallModel {
   @observable public gradient: number
   @observable public axis: Vector3
 
-  constructor(private model: VisionRobotModel, { gradient, axis }: { gradient: number, axis: Vector3}) {
+  constructor(private model: VisionRobotModel, { gradient, axis }: { gradient: number, axis: Vector3 }) {
     this.gradient = gradient
     this.axis = axis
   }

@@ -33,10 +33,15 @@ export class VisionNetwork {
       return
     }
 
-    if (image.format === BGGR) {
-      robot.image.set(image.data)
-    } else {
+    if (image.format !== BGGR) {
       throw new Error(`Unsupported image format: ${image.format}`)
+    }
+
+    robot.image = {
+      format: image.format,
+      width: image.dimensions!.x!,
+      height: image.dimensions!.y!,
+      data: image.data,
     }
 
     robot.balls = [

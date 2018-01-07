@@ -57,7 +57,7 @@ export class CameraViewModel {
   @computed
   public get scene(): Scene {
     const scene = new Scene()
-    if (this.robotModel.image.get()) {
+    if (this.robotModel.image) {
       scene.add(this.plane)
       scene.add(this.horizon)
       scene.add(this.balls)
@@ -114,9 +114,9 @@ export class CameraViewModel {
   @computed
   private get imageTexture2(): Texture {
     const texture = new DataTexture(
-      this.robotModel.image.get(),
-      1280,
-      1024,
+      this.robotModel.image!.data,
+      this.robotModel.image!.width,
+      this.robotModel.image!.height,
       LuminanceFormat,
       UnsignedByteType,
       Texture.DEFAULT_MAPPING,
@@ -133,7 +133,8 @@ export class CameraViewModel {
   @computed
   private get imageTexture(): Texture {
     // TODO: width/height
-    const renderTarget = new WebGLRenderTarget(1280, 1024)
+    const { width, height } = this.robotModel.image!
+    const renderTarget = new WebGLRenderTarget(width, height)
     renderTarget.depthBuffer = false
     renderTarget.stencilBuffer = false
     const scene = new Scene()
@@ -142,7 +143,7 @@ export class CameraViewModel {
       fragmentShader: String(imageFragmentShader),
       uniforms: {
         // TODO: width/height
-        sourceSize: { value: [1280, 1024, 1 / 1280, 1 / 1024] },
+        sourceSize: { value: [width, height, 1 / width, 1 / height] },
         firstRed: { value: [1, 0] },
         image: { value: this.imageTexture2, type: 't' },
       },
@@ -202,6 +203,7 @@ class BallViewModel {
       uniforms: {
         axis: { value: axis },
         gradient: { value: this.model.gradient },
+        // TODO: width/height
         imageSize: { value: [1280, 1024] },
       },
       depthTest: false,

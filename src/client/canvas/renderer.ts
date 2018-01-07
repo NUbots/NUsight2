@@ -13,14 +13,15 @@ import { Object2d } from './object/object2d'
 import { Group } from './object/group'
 import { Shape } from './object/shape'
 import { ArcGeometry } from './geometry/arc_geometry'
+import { createTransformer } from 'mobx'
 
 export class CanvasRenderer {
   constructor(private context: CanvasRenderingContext2D) {
   }
 
-  public static of(context: CanvasRenderingContext2D): CanvasRenderer {
+  public static of = createTransformer((context: CanvasRenderingContext2D): CanvasRenderer => {
     return new CanvasRenderer(context)
-  }
+  })
 
   public render(scene: Group, camera: Transform = Transform.of()): void {
     const canvas = this.context.canvas

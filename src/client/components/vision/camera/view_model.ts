@@ -154,7 +154,6 @@ export class CameraViewModel {
     scene.add(mesh)
     const camera = new OrthographicCamera(-1, 1, 1, -1, 1, 3)
     camera.position.z = 2
-    console.log('rendering', this.renderer)
     this.renderer!.render(scene, camera, renderTarget)
     return renderTarget.texture
   }

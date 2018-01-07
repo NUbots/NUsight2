@@ -15,11 +15,8 @@
   position: relative;
 }
 
-/*
- * The :not(:last-child) selector ensures at least 1 canvas element takes up DOM space. This might not be needed when
- * auto-sizing is added.
- */
-.canvas:not(:last-child) {
-  /* Float canvas layer on top. */
-  /*position: absolute;*/
+.container, .canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }

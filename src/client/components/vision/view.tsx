@@ -3,6 +3,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
+import ReactResizeDetector from 'react-resize-detector'
 import { VisionNetwork } from './network'
 import * as styles from './styles.css'
 import { VisionViewModel } from './view_model'
@@ -47,8 +48,15 @@ export class RobotVisionView extends Component<{ viewModel: RobotViewModel }> {
   public render() {
     return (
       // TODO: width/height
-      <canvas className={styles.canvas} width={1280} height={1024} ref={this.onRef}/>
+      <div className={styles.container}>
+        <ReactResizeDetector handleWidth handleHeight onResize={this.onResize}/>
+        <canvas className={styles.canvas} width={1280} height={1024} ref={this.onRef}/>
+      </div>
     )
+  }
+
+  private onResize = () => {
+    console.log('resize')
   }
 
   private onRef = (canvas: HTMLCanvasElement | null) => {

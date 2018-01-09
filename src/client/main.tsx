@@ -9,6 +9,7 @@ import { AppModel } from './components/app/model'
 import { AppNetwork } from './components/app/network'
 import { AppView } from './components/app/view'
 import { installDashboard } from './components/dashboard/install'
+import { installChart } from './components/chart/install'
 import { installLocalisation } from './components/localisation/install'
 import { withRobotSelectorMenuBar } from './components/menu_bar/view'
 import { NavigationConfiguration } from './navigation'
@@ -27,6 +28,7 @@ const menu = withRobotSelectorMenuBar(appModel.robots, appController.toggleRobot
 
 const nav = NavigationConfiguration.of()
 installDashboard({ nav, appModel, nusightNetwork, menu })
+installChart({ nav, appModel, nusightNetwork, menu })
 installLocalisation({ nav, appModel, nusightNetwork, menu })
 
 ReactDOM.render(

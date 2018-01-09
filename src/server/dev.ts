@@ -9,9 +9,9 @@ import * as webpack from 'webpack'
 import * as webpackDevMiddleware from 'webpack-dev-middleware'
 import * as webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackConfig from '../../webpack.config'
-import { OverviewSimulator } from '../simulators/overview_simulator'
-import { SensorDataSimulator } from '../simulators/sensor_data_simulator'
-import { VirtualRobots } from '../simulators/virtual_robots'
+import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
+import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
+import { VirtualRobots } from '../virtual_robots/virtual_robots'
 import { ChartSimulator } from '../simulators/chart_simulator'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
@@ -19,7 +19,7 @@ import { WebSocketServer } from './nuclearnet/web_socket_server'
 const compiler = webpack(webpackConfig)
 
 const args = minimist(process.argv.slice(2))
-const withSimulators = args['with-simulators'] || false
+const withVirtualRobots = args['virtual-robots'] || false
 
 const app = express()
 const server = http.createServer(app)
@@ -27,7 +27,7 @@ const sioNetwork = sio(server)
 
 // Initialize socket.io namespace immediately to catch reconnections.
 WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
-  fakeNetworking: withSimulators,
+  fakeNetworking: withVirtualRobots,
 })
 
 const devMiddleware = webpackDevMiddleware(compiler, {
@@ -55,17 +55,17 @@ server.listen(port, () => {
 })
 
 function init() {
-  if (withSimulators) {
+  if (withVirtualRobots) {
     const virtualRobots = VirtualRobots.of({
       fakeNetworking: true,
       numRobots: 3,
       simulators: [
         ChartSimulator.of(),
-        OverviewSimulator.of(),
-        SensorDataSimulator.of(),
+        { frequency: 1, simulator: OverviewSimulator.of() },
+        { frequency: 60, simulator: SensorDataSimulator.of() },
       ],
     })
-    virtualRobots.simulateWithFrequency(60)
+    virtualRobots.startSimulators()
   }
 }
 

@@ -49,7 +49,6 @@ export class Shape implements Object2d {
     })
   }
 
-  @action
   public add(obj: Object2d): void {
     this.group.add(obj)
   }

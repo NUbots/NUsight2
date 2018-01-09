@@ -12,7 +12,7 @@ import { DashboardController } from './controller'
 export type DashboardProps = {
   controller: DashboardController
   Field: ComponentType<{}>
-  Menu: ComponentType<{}>
+  menu: ComponentType<{}>
   model: DashboardModel
   network: DashboardNetwork
 }
@@ -24,8 +24,9 @@ export class Dashboard extends Component<DashboardProps> {
   }
 
   public render() {
-    const { Field, Menu, model } = this.props
+    const { menu: Menu, model } = this.props
     const showPanels = model.robots.some(robot => robot.enabled)
+    const Field = this.props.Field
     return (
       <div className={style.page}>
         <Menu>

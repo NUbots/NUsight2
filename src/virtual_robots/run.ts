@@ -1,5 +1,5 @@
 import * as minimist from 'minimist'
-import { ChartSimulator } from './chart_simulator'
+import { ChartSimulator } from './simulators/chart_simulator'
 import { OverviewSimulator } from './simulators/overview_simulator'
 import { SensorDataSimulator } from './simulators/sensor_data_simulator'
 import { SimulatorOpts } from './virtual_robot'
@@ -20,7 +20,7 @@ function main() {
 function getSimulators(args: minimist.ParsedArgs): SimulatorOpts[] {
   const simulators = []
   if (args.chart || args.all) {
-    simulators.push(ChartSimulator.of())
+    simulators.push({ frequency: 60, simulator: ChartSimulator.of() })
   }
   if (args.overview || args.all) {
     simulators.push({ frequency: 1, simulator: OverviewSimulator.of() })

@@ -12,7 +12,7 @@ import webpackConfig from '../../webpack.config'
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
 import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
-import { ChartSimulator } from '../simulators/chart_simulator'
+import { ChartSimulator } from '../virtual_robots/simulators/chart_simulator'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
 
@@ -60,7 +60,7 @@ function init() {
       fakeNetworking: true,
       numRobots: 3,
       simulators: [
-        ChartSimulator.of(),
+        { frequency: 60, simulator: ChartSimulator.of() },
         { frequency: 1, simulator: OverviewSimulator.of() },
         { frequency: 60, simulator: SensorDataSimulator.of() },
       ],

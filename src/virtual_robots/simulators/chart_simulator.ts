@@ -1,6 +1,6 @@
-import { message } from '../../src/shared/proto/messages'
-import { Message } from './simulator'
-import { Simulator } from './simulator'
+import { message } from '../../shared/proto/messages'
+import { Message } from '../simulator'
+import { Simulator } from '../simulator'
 
 import DataPoint = message.support.nubugger.DataPoint
 import Type = DataPoint.Type

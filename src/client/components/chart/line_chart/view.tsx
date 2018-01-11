@@ -11,6 +11,8 @@ import * as style from './style.css'
 import { LineChartViewModel } from './view_model'
 import ReactResizeDetector from 'react-resize-detector'
 
+import { ExampleCheckboxTree } from '../checkbox_tree/example'
+
 export type LineChartProps = {
   controller: LineChartController
   model: LineChartModel
@@ -40,13 +42,18 @@ export class LineChart extends Component<LineChartProps> {
   public render() {
     return (
       <div className={style.lineChart}>
-        <ReactResizeDetector handleWidth handleHeight onResize={this.onChartResize} />
-        <canvas
-          className={style.lineChart__canvas}
-          ref={this.onRef}
-          width={this.props.model.width}
-          height={this.props.model.height}
-        />
+        <div className={style.lineChart__canvasWrapper}>
+          <ReactResizeDetector handleWidth handleHeight onResize={this.onChartResize} />
+          <canvas
+            className={style.lineChart__canvas}
+            ref={this.onRef}
+            width={this.props.model.width}
+            height={this.props.model.height}
+          />
+        </div>
+        <div className={style.lineChart__sidebar}>
+          <ExampleCheckboxTree></ExampleCheckboxTree>
+        </div>
       </div>
     )
   }

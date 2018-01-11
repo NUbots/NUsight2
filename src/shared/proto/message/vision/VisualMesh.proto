@@ -14,19 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with the NUbots Codebase.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2017 NUbots <nubots@nubots.net>
+ * Copyright 2013 NUbots <nubots@nubots.net>
  */
+
 syntax = "proto3";
 
-package message.localisation;
+package message.vision;
 
 import "Vector.proto";
-import "Matrix.proto";
 
-message Field {
-    // Measures the position of the field centre in world space position[0,1] = (rFWw)
-    // and measures the orientation of the field from the world position[2] = (thetafw)
-    vec3 position = 1;
-    // Covariance of the measurement
-    mat3 covariance = 2;
+message VisualMesh {
+
+    message Row {
+        float phi      = 1;
+        int32 segments = 2;
+    }
+
+    message Classification {
+        int32          dimensions = 1;
+        repeated float values     = 2;
+    }
+
+    uint32   camera_id                      = 1;
+    repeated Row mesh                       = 2;
+    repeated int32 indices                  = 3;
+    repeated ivec6 neighbourhood            = 4;
+    repeated ivec2 coordinates              = 5;
+    repeated Classification classifications = 6;
 }

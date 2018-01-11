@@ -26,6 +26,8 @@
     "clean": "yarn clean:build && yarn clean:coverage",
     "clean:build": "rimraf build",
     "clean:coverage": "rimraf coverage",
+    "message:js": "$(npm bin)/pbjs -t static-module -w commonjs -o src/shared/proto/messages.js -p src/shared/proto $(find src/shared/proto -name \"*.proto\")",
+    "message:ts": "$(npm bin)/pbts src/shared/proto/messages.js -o src/shared/proto/messages.d.ts -n",
     "heroku-postbuild": "yarn build",
     "prepush": "yarn tslint"
   },

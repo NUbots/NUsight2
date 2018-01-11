@@ -2,9 +2,9 @@ import * as React from 'react'
 import { NavigationConfiguration } from '../../navigation'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { AppModel } from '../app/model'
-import { VisionRadarView } from './view'
-import { VisionRadarModel } from './model'
 import Icon from './icon.svg'
+import { VisionRadarModel } from './model'
+import { VisionRadarView } from './view'
 
 export function installVisionRadar({ nav, appModel, nusightNetwork }: {
   nav: NavigationConfiguration,

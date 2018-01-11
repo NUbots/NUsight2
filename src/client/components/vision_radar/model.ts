@@ -4,8 +4,6 @@ import { createTransformer } from 'mobx'
 import { memoize } from '../../base/memoize'
 import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
-import { fakeSegments } from './fakes'
-import { fakeColors } from './fakes'
 
 export class VisionRadarModel {
 
@@ -23,12 +21,12 @@ export class VisionRadarModel {
 }
 
 export class VisionRadarRobotModel {
-  @observable public ringSegments: number[]
-  @observable public colors: { [x: string]: [number, number, number] }
+  @observable.ref public ringSegments: number[]
+  @observable.ref public colors: [number, [number, number, number]][]
 
   constructor(private model: RobotModel, { ringSegments, colors }: {
     ringSegments: number[]
-    colors: { [x: string]: [number, number, number] }
+    colors: [number, [number, number, number]][]
   }) {
     this.ringSegments = ringSegments
     this.colors = colors
@@ -36,8 +34,8 @@ export class VisionRadarRobotModel {
 
   public static of = createTransformer((model: RobotModel): VisionRadarRobotModel => {
     return new VisionRadarRobotModel(model, {
-      ringSegments: fakeSegments,
-      colors: fakeColors,
+      ringSegments: [],
+      colors: [],
     })
   })
 

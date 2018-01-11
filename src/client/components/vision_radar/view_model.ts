@@ -44,6 +44,11 @@ export class VisionRadarRobotViewModel {
   })
 
   @computed
+  get id() {
+    return this.model.id
+  }
+
+  @computed
   get scene(): Scene {
     const scene = new Scene()
     scene.add(this.radar)
@@ -120,11 +125,11 @@ export class VisionRadarRobotViewModel {
     // Expand colours to match vertices
     colours.length = (vertices.length / 2) * 3
     colours.fill(0)
-    for (const key of Object.keys(this.model.colors)) {
-      colours[parseInt(key) * 3 + 0] = this.model.colors[key][0]
-      colours[parseInt(key) * 3 + 1] = this.model.colors[key][1]
-      colours[parseInt(key) * 3 + 2] = this.model.colors[key][2]
-    }
+    this.model.colors.forEach(v => {
+      colours[v[0] * 3 + 0] = v[1][0]
+      colours[v[0] * 3 + 1] = v[1][1]
+      colours[v[0] * 3 + 2] = v[1][2]
+    })
 
     const geometry = new BufferGeometry()
     geometry.setIndex(indices)

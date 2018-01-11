@@ -41,7 +41,12 @@ export class LineChart extends Component<LineChartProps> {
     return (
       <div className={style.lineChart}>
         <ReactResizeDetector handleWidth handleHeight onResize={this.onChartResize} />
-        <canvas className={style.lineChart__canvas} ref={this.onRef} width={this.props.model.width} height={this.props.model.height} />
+        <canvas
+          className={style.lineChart__canvas}
+          ref={this.onRef}
+          width={this.props.model.width}
+          height={this.props.model.height}
+        />
       </div>
     )
   }

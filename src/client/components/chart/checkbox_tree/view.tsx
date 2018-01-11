@@ -17,8 +17,8 @@ export const CheckboxTree: StatelessComponent<CheckboxTreeProps> = (props: Check
   return (
     <div>
       { props.model.nodes.map((node, i) => {
-          return <TreeNode node={node} level={0} key={i} onCheck={props.onCheck} onExpand={props.onExpand}></TreeNode>
-        })
+        return <TreeNode node={node} level={0} key={i} onCheck={props.onCheck} onExpand={props.onExpand}></TreeNode>
+      })
       }
     </div>
   )

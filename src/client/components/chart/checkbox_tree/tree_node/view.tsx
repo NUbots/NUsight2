@@ -46,7 +46,7 @@ export class TreeNode extends Component<TreeNodeProps> {
     // Using inline paddingLeft to indent so that the hover and selected background indicators
     // are full width. Padding is the default left padding of 8px plus each level's indent of 22px.
     const headerInlineStyle = {
-      paddingLeft: 8 + (level * 22) + 'px'
+      paddingLeft: 8 + (level * 22) + 'px',
     }
 
     return (
@@ -63,7 +63,7 @@ export class TreeNode extends Component<TreeNodeProps> {
 
             <div className={style.treenode__checkbox}>
               <input
-                type="checkbox"
+                type='checkbox'
                 ref={this.onRef}
                 onClick={this.onCheckboxClick}
                 onChange={this.onCheckboxChange}
@@ -81,7 +81,7 @@ export class TreeNode extends Component<TreeNodeProps> {
                 level={level + 1}
                 onCheck={this.props.onCheck}
                 onExpand={this.props.onExpand}
-              />
+              />,
             )
           }
         </li>

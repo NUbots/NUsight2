@@ -3,9 +3,9 @@ import { observable } from 'mobx'
 import { memoize } from '../../../base/memoize'
 
 export enum CheckedState {
-  Checked = "checked",
-  Unchecked = "unchecked",
-  Indeterminate = "indeterminate"
+  Checked = 'checked',
+  Unchecked = 'unchecked',
+  Indeterminate = 'indeterminate',
 }
 
 export type TreeNodeModelOpts = {
@@ -17,11 +17,35 @@ export type TreeNodeModelOpts = {
 }
 
 export class TreeNodeModel {
-  @observable children: TreeNodeModel[]
-  @observable checkedState: CheckedState
-  @observable label: string
-  @observable expanded: boolean
-  @observable path?: string
+  @observable public children: TreeNodeModel[]
+  @observable public checkedState: CheckedState
+  @observable public label: string
+  @observable public expanded: boolean
+  @observable public path?: string
+
+  constructor(opts: TreeNodeModelOpts) {
+    this.children = opts.children
+    this.checkedState = opts.checkedState
+    this.label = opts.label
+    this.expanded = opts.expanded
+    this.path = opts.path
+  }
+
+  public static of({
+    children = [],
+    checkedState = CheckedState.Unchecked,
+    label,
+    expanded = false,
+    path,
+  }: Partial<TreeNodeModel> = {}): TreeNodeModel {
+    return new TreeNodeModel({
+      children,
+      checkedState,
+      label,
+      expanded,
+      path,
+    })
+  }
 
   @computed
   public get leaf(): boolean {
@@ -44,30 +68,6 @@ export class TreeNodeModel {
 
     return CheckedState.Indeterminate
   }
-
-  constructor(opts: TreeNodeModelOpts) {
-    this.children = opts.children
-    this.checkedState = opts.checkedState
-    this.label = opts.label
-    this.expanded = opts.expanded
-    this.path = opts.path
-  }
-
-  public static of({
-    children = [],
-    checkedState = CheckedState.Unchecked,
-    label,
-    expanded = false,
-    path
-  }: Partial<TreeNodeModel> = {}): TreeNodeModel {
-    return new TreeNodeModel({
-      children,
-      checkedState,
-      label,
-      expanded,
-      path
-    })
-  }
 }
 
 export type TreeModelOpts = {
@@ -76,8 +76,8 @@ export type TreeModelOpts = {
 }
 
 export class TreeModel {
-  @observable nodes: TreeNodeModel[]
-  @observable usePessimisticToggle: boolean
+  @observable public nodes: TreeNodeModel[]
+  @observable public usePessimisticToggle: boolean
 
   public constructor(opts: TreeModelOpts) {
     this.nodes = opts.nodes
@@ -90,7 +90,7 @@ export class TreeModel {
   }: Partial<TreeModelOpts> = {}): TreeModel => {
     return new TreeModel({
       nodes,
-      usePessimisticToggle
+      usePessimisticToggle,
     })
   })
 }
@@ -111,9 +111,9 @@ export function createNode(label: string, data: any, parentPath: string = ''): T
   const node : TreeNodeModel = new TreeNodeModel({
     children: [],
     checkedState: CheckedState.Checked,
-    label: label,
     expanded: false,
-    path
+    label,
+    path,
   })
 
   if (data !== null && typeof data === 'object' && !Array.isArray(data)) {

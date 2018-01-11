@@ -134,7 +134,7 @@ export class VisionRadarRobotViewModel {
     const geometry = new BufferGeometry()
     geometry.setIndex(indices)
     geometry.addAttribute('position', new Float32BufferAttribute(vertices, 2))
-    geometry.addAttribute('colour', new Uint8BufferAttribute(colours, 3))
+    geometry.addAttribute('colour', new Float32BufferAttribute(colours, 3))
 
     return geometry
   }

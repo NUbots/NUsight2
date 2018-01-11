@@ -3,10 +3,10 @@ import { observer } from 'mobx-react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
 import * as React from 'react'
-import { VisionRadarViewModel } from './view_model'
-import { VisionRadarRobotViewModel } from './view_model'
 import { VisionRadarNetwork } from './network'
 import * as style from './style.css'
+import { VisionRadarViewModel } from './view_model'
+import { VisionRadarRobotViewModel } from './view_model'
 
 @observer
 export class VisionRadarView extends Component<{

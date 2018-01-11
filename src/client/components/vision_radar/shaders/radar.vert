@@ -10,7 +10,7 @@ attribute vec3 colour;
 varying vec3 fragColour;
 
 void main() {
-  fragColour = colour/255.0;
+  fragColour = colour;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 0.0, 1.0);
 }
 

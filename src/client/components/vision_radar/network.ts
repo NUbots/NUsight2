@@ -31,10 +31,10 @@ export class VisionRadarNetwork {
       const v = mesh.classifications[0].values!
 
       robot.colors = mesh.indices!.map((idx, i) => [idx, [
-        Math.max(Math.min(Math.floor(v[i * d + 0] * 255), 255), 0),
-        Math.max(Math.min(Math.floor(v[i * d + 1] * 255), 255), 0),
-        Math.floor(v[i * d + 2] * 255)]
-      ] as [number, [number, number, number]])
+        v[i * d + 0],
+        v[i * d + 1],
+        v[i * d + 2],
+      ]] as [number, [number, number, number]])
     }
   }
 }

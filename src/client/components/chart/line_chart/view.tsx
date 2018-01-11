@@ -9,6 +9,7 @@ import { LineChartController } from './controller'
 import { LineChartModel } from './model'
 import * as style from './style.css'
 import { LineChartViewModel } from './view_model'
+import ReactResizeDetector from 'react-resize-detector'
 
 export type LineChartProps = {
   controller: LineChartController
@@ -37,16 +38,16 @@ export class LineChart extends Component<LineChartProps> {
   }
 
   public render() {
-    return <canvas className={style.lineChart} ref={this.onRef}/>
+    return (
+      <div className={style.lineChart}>
+        <ReactResizeDetector handleWidth handleHeight onResize={this.onChartResize} />
+        <canvas className={style.lineChart__canvas} ref={this.onRef} width={this.props.model.width} height={this.props.model.height} />
+      </div>
+    )
   }
 
   private onRequestAnimationFrame = (timestamp: number) => {
     this.rafId = requestAnimationFrame(this.onRequestAnimationFrame)
-    const width = this.chart.clientWidth
-    const height = this.chart.clientHeight
-    if (width !== this.chart.width || height !== this.chart.height) {
-      this.onChartResize(width, height)
-    }
     this.props.controller.onRequestAnimationFrame(this.props.model, timestamp)
   }
 
@@ -61,9 +62,8 @@ export class LineChart extends Component<LineChartProps> {
   }
 
   @action
-  private onChartResize(width: number, height: number) {
-    this.chart.width = width
-    this.chart.height = height
-    this.props.controller.onChartResize(this.props.model, width, height)
+  private onChartResize = (width: number, height: number)  => {
+    const dpi = window.devicePixelRatio
+    this.props.controller.onChartResize(this.props.model, width * dpi, height * dpi)
   }
 }

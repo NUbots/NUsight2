@@ -63,6 +63,7 @@ export class FieldViewModel {
     const goalAreaLength = this.model.dimensions.goalAreaLength
     const goalDepth = this.model.dimensions.goalDepth
     const goalWidth = this.model.dimensions.goalWidth
+    const penaltyMarkDistance = this.model.dimensions.penaltyMarkDistance
 
     const halfLength = fieldLength * 0.5
     const halfWidth = fieldWidth * 0.5
@@ -77,6 +78,7 @@ export class FieldViewModel {
       goalAreaWidth,
       lineWidth)
     const blueHalfGoal = this.buildRectangle(-halfLength, -halfGoalWidth, -goalDepth, goalWidth, lineWidth)
+    const blueHalfPenaltyMark = this.buildRectangle(-halfLength + penaltyMarkDistance, 0, 0, 0, lineWidth)
 
     const yellowHalf = this.buildRectangle(0, -halfWidth, halfLength, fieldWidth, lineWidth)
     const yellowHalfGoalArea = this.buildRectangle(
@@ -86,15 +88,18 @@ export class FieldViewModel {
       goalAreaWidth,
       lineWidth)
     const yellowHalfGoal = this.buildRectangle(halfLength, -halfGoalWidth, goalDepth, goalWidth, lineWidth)
+    const yellowHalfPenaltyMark = this.buildRectangle(halfLength - penaltyMarkDistance, 0, 0, 0, lineWidth)
 
     const identity = new Matrix4()
     geometry.merge(centerCircle, identity)
     geometry.merge(blueHalf, identity)
     geometry.merge(blueHalfGoalArea, identity)
     geometry.merge(blueHalfGoal, identity)
+    geometry.merge(blueHalfPenaltyMark, identity)
     geometry.merge(yellowHalf, identity)
     geometry.merge(yellowHalfGoalArea, identity)
     geometry.merge(yellowHalfGoal, identity)
+    geometry.merge(yellowHalfPenaltyMark, identity)
 
     return geometry
   }

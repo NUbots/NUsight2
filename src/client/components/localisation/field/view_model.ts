@@ -77,14 +77,14 @@ export class FieldViewModel {
       goalAreaLength,
       goalAreaWidth,
       lineWidth)
-    const blueHalfGoal = this.buildRectangle(-halfLength, -halfGoalWidth, -goalDepth, goalWidth, lineWidth)
+    const blueHalfGoal = this.buildRectangle(-halfLength - goalDepth, -halfGoalWidth, goalDepth, goalWidth, lineWidth)
     const blueHalfPenaltyMark = this.buildRectangle(-halfLength + penaltyMarkDistance, 0, 0, 0, lineWidth)
 
     const yellowHalf = this.buildRectangle(0, -halfWidth, halfLength, fieldWidth, lineWidth)
     const yellowHalfGoalArea = this.buildRectangle(
-      halfLength,
+      halfLength - goalAreaLength,
       -halfGoalAreaWidth,
-      -goalAreaLength,
+      goalAreaLength,
       goalAreaWidth,
       lineWidth)
     const yellowHalfGoal = this.buildRectangle(halfLength, -halfGoalWidth, goalDepth, goalWidth, lineWidth)
@@ -121,12 +121,6 @@ export class FieldViewModel {
   private buildRectangle(x: number, y: number, w: number, h: number, lw: number) {
     let x1 = x - lw * 0.5
     let x2 = x + w + lw * 0.5
-
-    if (x1 > x2) {
-      const temp = x1
-      x1 = x2
-      x2 = temp
-    }
 
     const topLine = this.buildHorizontalLine(x1, x2, y, lw)
     const bottomLine = this.buildHorizontalLine(x1, x2, y + h, lw)

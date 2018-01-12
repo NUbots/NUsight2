@@ -43,6 +43,7 @@
       }
     ],
     "new-parens": true,
+    "no-bitwise": false,
     "no-consecutive-blank-lines": [true, 2],
     "no-console": true,
     "no-debugger": true,

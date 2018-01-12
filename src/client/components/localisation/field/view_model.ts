@@ -31,12 +31,13 @@ export class FieldViewModel {
   }
 
   @computed
-  private get groundGeometry() {
-    const geometry = new PlaneGeometry(
-      this.model.dimensions.fieldLength + this.model.dimensions.borderStripMinWidth * 2,
-      this.model.dimensions.fieldWidth + this.model.dimensions.borderStripMinWidth * 2,
+  private get groundGeometry(): Geometry {
+    const dimensions = this.model.dimensions
+    const { fieldLength, fieldWidth, borderStripMinWidth, goalDepth } = dimensions
+    return new PlaneGeometry(
+      fieldLength + goalDepth * 2 + borderStripMinWidth * 2,
+      fieldWidth + borderStripMinWidth * 2,
     )
-    return geometry
   }
 
   @computed
@@ -119,8 +120,8 @@ export class FieldViewModel {
   }
 
   private buildRectangle(x: number, y: number, w: number, h: number, lw: number) {
-    let x1 = x - lw * 0.5
-    let x2 = x + w + lw * 0.5
+    const x1 = x - lw * 0.5
+    const x2 = x + w + lw * 0.5
 
     const topLine = this.buildHorizontalLine(x1, x2, y, lw)
     const bottomLine = this.buildHorizontalLine(x1, x2, y + h, lw)

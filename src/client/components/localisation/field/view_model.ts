@@ -59,17 +59,42 @@ export class FieldViewModel {
     const fieldWidth = this.model.dimensions.fieldWidth
     const fieldLength = this.model.dimensions.fieldLength
     const lineWidth = this.model.dimensions.lineWidth
+    const goalAreaWidth = this.model.dimensions.goalAreaWidth
+    const goalAreaLength = this.model.dimensions.goalAreaLength
+    const goalDepth = this.model.dimensions.goalDepth
+    const goalWidth = this.model.dimensions.goalWidth
 
     const halfLength = fieldLength * 0.5
     const halfWidth = fieldWidth * 0.5
+    const halfGoalAreaWidth = goalAreaWidth * 0.5
+    const halfGoalWidth = goalWidth * 0.5
 
     const blueHalf = this.buildRectangle(-halfLength, -halfWidth, halfLength, fieldWidth, lineWidth)
+    const blueHalfGoalArea = this.buildRectangle(
+      -halfLength,
+      -halfGoalAreaWidth,
+      goalAreaLength,
+      goalAreaWidth,
+      lineWidth)
+    const blueHalfGoal = this.buildRectangle(-halfLength, -halfGoalWidth, -goalDepth, goalWidth, lineWidth)
+
     const yellowHalf = this.buildRectangle(0, -halfWidth, halfLength, fieldWidth, lineWidth)
+    const yellowHalfGoalArea = this.buildRectangle(
+      halfLength,
+      -halfGoalAreaWidth,
+      -goalAreaLength,
+      goalAreaWidth,
+      lineWidth)
+    const yellowHalfGoal = this.buildRectangle(halfLength, -halfGoalWidth, goalDepth, goalWidth, lineWidth)
 
     const identity = new Matrix4()
     geometry.merge(centerCircle, identity)
     geometry.merge(blueHalf, identity)
+    geometry.merge(blueHalfGoalArea, identity)
+    geometry.merge(blueHalfGoal, identity)
     geometry.merge(yellowHalf, identity)
+    geometry.merge(yellowHalfGoalArea, identity)
+    geometry.merge(yellowHalfGoal, identity)
 
     return geometry
   }
@@ -89,8 +114,15 @@ export class FieldViewModel {
   }
 
   private buildRectangle(x: number, y: number, w: number, h: number, lw: number) {
-    const x1 = x - lw * 0.5
-    const x2 = x + w + lw * 0.5
+    let x1 = x - lw * 0.5
+    let x2 = x + w + lw * 0.5
+
+    if (x1 > x2) {
+      const temp = x1
+      x1 = x2
+      x2 = temp
+    }
+
     const topLine = this.buildHorizontalLine(x1, x2, y, lw)
     const bottomLine = this.buildHorizontalLine(x1, x2, y + h, lw)
 

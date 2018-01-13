@@ -11,6 +11,7 @@
     ],
     "arrow-parens": false,
     "arrow-return-shorthand": true,
+    "ban-types": false,
     "block-spacing": [
       true,
       "never"
@@ -19,13 +20,13 @@
     "comment-format": [true, "check-space"],
     "completed-docs": false,  // One day...
     "curly": true,
-    "deprecation": true,
     "encoding": true,
     "eofline": true,
     "interface-name": [
       true,
       "never-prefix"
     ],
+    "interface-over-type-literal": false,
     "linebreak-style": "LF",
     "max-classes-per-file": false,
     "member-access": true,
@@ -44,6 +45,7 @@
     ],
     "new-parens": true,
     "no-bitwise": false,
+    "no-conditional-assignment": true,
     "no-consecutive-blank-lines": [true, 2],
     "no-console": true,
     "no-debugger": true,
@@ -51,29 +53,29 @@
     "no-duplicate-super": true,
     "no-duplicate-switch-case": true,
     "no-duplicate-variable": true,
-    "no-empty": true,
+    "no-empty": false,
     "no-eval": true,
     "no-empty-interface": false,
     "no-implicit-dependencies": [true, "dev"],
-    "no-inferred-empty-object-type": true,
     "no-invalid-template-strings": true,
-    "no-invalid-this": true,
+    "no-invalid-this": false,
     "no-irregular-whitespace": true,
     "no-redundant-jsdoc": true,
     "no-reference-import": true,
     "no-require-imports": true,
+    "no-shadowed-variable": false,
     "no-string-literal": true,
     "no-string-throw": true,
     "no-trailing-whitespace": true,
     "no-unsafe-finally": true,
     "no-unused-expression": [true, "allow-fast-null-checks"],
     "no-var-keyword": true,
-    "number-literal-format": true,
+    "number-literal-format": false,  // Maybe change to true when they have a fixer
     "object-curly-spacing": true,
     "object-literal-key-quotes": [true, "consistent-as-needed"],
     "object-literal-shorthand": true,
     "object-literal-sort-keys": false,
-    "one-variable-per-declaration": true,
+    "one-variable-per-declaration": false,
     "ordered-imports": [
       true,
       {
@@ -83,17 +85,17 @@
         "named-import-order": "case-insensitive"
       }
     ],
+    "prefer-conditional-expression": false,
     "prefer-const": true,
     "prefer-method-signature": true,
-    "prefer-switch": true,
-    "prefer-template": true,
+    "prefer-switch": false,
+    "prefer-template": false,
     "quotemark": {
       "options": [
         "avoid-escape",
         "single"
       ]
     },
-    "return-undefined": true,
     "semicolon": {
       "options": [
         "never"
@@ -137,7 +139,7 @@
         "singleline": "never"
       }
     ],
-    "triple-equals": true,
+    "triple-equals": [true, "allow-null-check"],
     "use-isnan": true,
     "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"]
   },

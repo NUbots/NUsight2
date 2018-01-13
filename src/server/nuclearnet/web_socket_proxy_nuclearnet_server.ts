@@ -181,7 +181,7 @@ class PacketProcessor {
         const latency = this.clock.performanceNow() - start
 
         // Update our performance tracking information
-        const tracking = this.eventTracking.get(event) || { active: 0, latency: 1.0, processing: 0.5 }
+        const tracking = this.eventTracking.get(event)!
         tracking.active -= 1
         tracking.latency = (tracking.latency * 10 + latency) / 11
         tracking.processing = (tracking.processing * 10 + processing) / 11

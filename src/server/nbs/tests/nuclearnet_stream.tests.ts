@@ -4,6 +4,8 @@ import { PassThrough } from 'stream'
 import { range } from '../../../shared/base/range'
 import { FakeNUClearNetClient } from '../../nuclearnet/fake_nuclearnet_client'
 import { FakeNUClearNetServer } from '../../nuclearnet/fake_nuclearnet_server'
+import { StreamDisconnectEvent } from '../nuclearnet_stream'
+import { StreamConnectEvent } from '../nuclearnet_stream'
 import { StreamPacket } from '../nuclearnet_stream'
 import { PeerFilter } from '../nuclearnet_stream'
 import { NUClearNetStream } from '../nuclearnet_stream'
@@ -120,6 +122,31 @@ describe('NUClearNetStream', () => {
       await flush()
 
       stream.end()
+    })
+
+    it('forwards connect messages from stream', () => {
+      jest.spyOn(nuclearnetClient, 'connect')
+      const event: StreamConnectEvent = {
+        type: 'nuclear_connect',
+        options: {
+          name: 'bob'
+        }
+      }
+      stream.write(event);
+      expect(nuclearnetClient.connect).toHaveBeenCalled()
+    })
+
+    it('forwards disconnect messages from stream', async () => {
+      const disconnect = jest.fn()
+      jest.spyOn(nuclearnetClient, 'connect').mockImplementation(() => disconnect)
+      const connectEvent: StreamConnectEvent = {
+        type: 'nuclear_connect',
+        options: { name: 'bob' }
+      }
+      stream.write(connectEvent);
+      const disconnectEvent: StreamDisconnectEvent = { type: 'nuclear_disconnect' }
+      stream.write(disconnectEvent);
+      expect(disconnect).toHaveBeenCalled()
     })
   })
 })

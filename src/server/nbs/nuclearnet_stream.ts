@@ -1,16 +1,20 @@
+import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetPacket } from 'nuclearnet.js'
 import * as stream from 'stream'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 
-export type StreamEvent = StreamPacket | StreamJoinEvent | StreamLeaveEvent
+export type StreamEvent = StreamPacket | StreamJoinEvent | StreamLeaveEvent | StreamConnectEvent | StreamDisconnectEvent
 export type StreamPacket = { type: 'packet', packet: NUClearNetPacket }
 export type StreamJoinEvent = { type: 'nuclear_join', peer: NUClearNetPeer }
 export type StreamLeaveEvent = { type: 'nuclear_leave', peer: NUClearNetPeer }
+export type StreamConnectEvent = { type: 'nuclear_connect', options: NUClearNetOptions }
+export type StreamDisconnectEvent = { type: 'nuclear_disconnect' }
 
-export class NUClearNetStream extends stream.Readable {
+export class NUClearNetStream extends stream.Duplex {
   private buffer: StreamPacket[] = []
   private buffering = false
+  private disconnect?: () => void
 
   constructor(private nuclearnetClient: NUClearNetClient, private highWaterMark: number = 16) {
     super({
@@ -28,6 +32,10 @@ export class NUClearNetStream extends stream.Readable {
 
   public push(event: StreamEvent | null): boolean {
     return super.push(event)
+  }
+
+  public write(event: StreamEvent | null): boolean {
+    return super.write(event)
   }
 
   private bufferEvent(event: StreamPacket) {
@@ -68,6 +76,15 @@ export class NUClearNetStream extends stream.Readable {
     if (this.buffering) {
       this.onDrain()
     }
+  }
+
+  public _write(event: StreamEvent, encoding: string, done: Function) {
+    if (event.type === 'nuclear_connect') {
+      this.disconnect = this.nuclearnetClient.connect(event.options);
+    } else if (event.type === 'nuclear_disconnect') {
+      this.disconnect && this.disconnect()
+    }
+    done()
   }
 
   // TODO (Annable): Automatically end when client disconnects?

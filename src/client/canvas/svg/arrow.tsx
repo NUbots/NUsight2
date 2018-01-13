@@ -5,6 +5,8 @@ import { Component } from 'react'
 import { ArrowGeometry } from '../geometry/arrow_geometry'
 import { Shape } from '../object/shape'
 
+import { appearance } from './svg'
+
 @observer
 export class Arrow extends Component<{model: Shape<ArrowGeometry>}> {
   // TODO draw arrows using lines

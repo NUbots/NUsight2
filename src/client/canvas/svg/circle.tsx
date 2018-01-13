@@ -5,11 +5,14 @@ import { Component } from 'react'
 import { CircleGeometry } from '../geometry/circle_geometry'
 import { Shape } from '../object/shape'
 
+import { appearance } from './svg'
+
 @observer
 export class Circle extends Component<{model: Shape<CircleGeometry>}> {
 
   public render() {
-    const g = this.props.model.geometry
-    return <circle cx={g.x} cy={g.y} radius={g.radius} />
+    const m = this.props.model
+    const g = m.geometry
+    return <circle cx={g.x} cy={g.y} radius={g.radius} {...appearance(m.appearance)} />
   }
 }

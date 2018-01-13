@@ -2,6 +2,9 @@ import { Component } from 'react'
 import * as React from 'react'
 
 import { Transform } from '../../math/transform'
+import { Appearance } from '../appearance/appearance'
+import { BasicAppearance } from '../appearance/basic_appearance'
+import { LineAppearance } from '../appearance/line_appearance'
 import { ArcGeometry } from '../geometry/arc_geometry'
 import { ArrowGeometry } from '../geometry/arrow_geometry'
 import { CircleGeometry } from '../geometry/circle_geometry'
@@ -11,8 +14,8 @@ import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Group as GroupGeometry } from '../object/group'
 import { Object2d } from '../object/object2d'
-import { Shape } from '../object/shape'
 import { Geometry } from '../object/shape'
+import { Shape } from '../object/shape'
 
 import { Arc } from './arc'
 import { Arrow } from './arrow'
@@ -22,6 +25,18 @@ import { Line } from './line'
 import { Marker } from './marker'
 import { Polygon } from './polygon'
 import { Text } from './text'
+
+export function appearance(appearance: Appearance): {} {
+  if (appearance instanceof BasicAppearance) {
+    return {
+    }
+  } else if (appearance instanceof LineAppearance) {
+    return {
+    }
+  } else {
+    throw new Error(`Unsupported appearance type ${appearance}`)
+  }
+}
 
 export function transform(transform: Transform): string {
   const s = transform.scale

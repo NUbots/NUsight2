@@ -5,7 +5,7 @@ import { Component } from 'react'
 import { Group as GroupGeometry } from '../object/group'
 import { Shape } from '../object/shape'
 
-import { transform, viewForGeometry  } from './svg'
+import { transform, viewForGeometry } from './svg'
 
 @observer
 export class Group extends Component<{model: GroupGeometry}> {

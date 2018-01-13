@@ -5,7 +5,8 @@ import { Component } from 'react'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Shape } from '../object/shape'
 
-import { transform } from './svg'
+import { appearance, transform } from './svg'
+
 @observer
 export class Text extends Component<{model: Shape<TextGeometry>}> {
 
@@ -23,7 +24,8 @@ export class Text extends Component<{model: Shape<TextGeometry>}> {
       x={g.x}
       y={g.y}
       fontFamily={g.fontFamily}
-      transform={transform(m.transform)}>
+      transform={transform(m.transform)}
+      {...appearance(m.appearance)}>
       {g.text}
     </text>
   }

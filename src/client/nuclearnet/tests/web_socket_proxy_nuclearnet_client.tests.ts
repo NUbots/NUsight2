@@ -1,8 +1,8 @@
 import { createMockInstance } from '../../../shared/base/testing/create_mock_instance'
-import { WebSocketClient } from '../web_socket_client'
-import { WebSocketProxyNUClearNetClient } from '../web_socket_proxy_nuclearnet_client'
 import Mocked = jest.Mocked
 import { FakeClock } from '../../../shared/time/fake_clock'
+import { WebSocketClient } from '../web_socket_client'
+import { WebSocketProxyNUClearNetClient } from '../web_socket_proxy_nuclearnet_client'
 
 describe('WebSocketProxyNUClearNetClient', () => {
   let mockWebSocket: Mocked<WebSocketClient>

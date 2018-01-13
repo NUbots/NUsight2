@@ -1,6 +1,7 @@
 import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetPacket } from 'nuclearnet.js'
+import * as stream from 'stream'
 
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { Clock } from '../../shared/time/clock'
@@ -40,7 +41,7 @@ class WebSocketServerClient {
   private offJoin: () => void
   private offLeave: () => void
   private offListenMap: Map<string, () => void>
-  private processors: Map<NUClearNetPeer, PacketProcessor>
+  private processors: Map<NUClearNetPeer, PacketStream>
 
   public constructor(private nuclearnetClient: NUClearNetClient, private socket: WebSocket) {
     this.connected = false
@@ -61,7 +62,8 @@ class WebSocketServerClient {
 
   private onJoin = (peer: NUClearNetPeer) => {
     this.socket.send('nuclear_join', peer)
-    this.processors.set(peer, PacketProcessor.of(this.socket))
+    // this.processors.set(peer, PacketProcessor.of(this.socket))
+    this.processors.set(peer, PacketStream.of(this.socket))
   }
 
   private onLeave = (peer: NUClearNetPeer) => {
@@ -108,7 +110,8 @@ class WebSocketServerClient {
     if (peerKey) {
       const processor = this.processors.get(peerKey)
       if (processor) {
-        processor.onPacket(event, packet)
+        const streamPacket: StreamPacket = { event, packet }
+        processor.write(streamPacket)
       }
     }
   }
@@ -120,6 +123,32 @@ class WebSocketServerClient {
     return Array.from(peers).find(otherPeer => {
       return otherPeer.name === peer.name && otherPeer.address === peer.address && otherPeer.port === peer.port
     })
+  }
+}
+
+type StreamPacket = {
+  event: string,
+  packet: NUClearNetPacket
+}
+
+class PacketStream extends stream.Writable {
+  public constructor(private socket: WebSocket) {
+    super({
+      objectMode: true,
+    })
+  }
+
+  public static of(socket: WebSocket) {
+    return new PacketStream(socket)
+  }
+
+  public _write(streamPacket: StreamPacket) {
+    const { event, packet } = streamPacket
+    if (packet.reliable) {
+      this.socket.send(event, packet)
+    } else {
+      this.socket.sendVolatile(event, packet)
+    }
   }
 }
 
@@ -149,9 +178,10 @@ class PacketProcessor {
       this.sendReliablePacket(event, packet)
     } else if (this.isEventBelowLimit(event)) {
       this.sendUnreliablePacket(event, packet)
-    }/* else {
-      // This event is unreliable and already at the limit, simply drop the packet.
-    }*/
+    }
+    /* else {
+          // This event is unreliable and already at the limit, simply drop the packet.
+        }*/
   }
 
   private isEventBelowLimit(event: string) {

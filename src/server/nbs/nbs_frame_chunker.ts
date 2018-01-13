@@ -33,9 +33,8 @@ export class NbsFrameChunker extends stream.Transform {
     this.buffers.push(chunk)
 
     let frame
-    /* tslint:disable no-conditional-assignment */
+    // tslint:disable-next-line no-conditional-assignment
     while ((frame = this.getNextFrame(this.buffers)) !== undefined) {
-    /* tslint:enable no-conditional-assignment */
       this.push(frame.buffer)
       this.buffers.splice(0, frame.index + frame.buffer.byteLength)
     }

@@ -51,7 +51,7 @@ app.use(favicon(`${__dirname}/../assets/favicon.ico`))
 
 const port = process.env.PORT || 3000
 server.listen(port, () => {
-  /* tslint:disable no-console */
+  // tslint:disable-next-line no-console
   console.log(`NUsight server started at http://localhost:${port}`)
 })
 

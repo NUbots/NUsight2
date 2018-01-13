@@ -24,24 +24,24 @@ export type Geometry =
   | PolygonGeometry
   | TextGeometry
 
-export type ShapeOpts = {
+export type ShapeOpts<T extends Geometry> = {
   appearance: Appearance
-  geometry: Geometry
+  geometry: T
 } & GroupOpts
 
-export class Shape implements Object2d {
+export class Shape<T extends Geometry> implements Object2d {
   @observable public appearance: Appearance
-  @observable public geometry: Geometry
+  @observable public geometry: T
   @observable private group: Group
 
-  constructor(opts: ShapeOpts) {
+  constructor(opts: ShapeOpts<T>) {
     this.appearance = opts.appearance
     this.geometry = opts.geometry
     this.group = Group.of(opts)
   }
 
   public static of(geometry: Geometry, appearance: Appearance = BasicAppearance.of()) {
-    return new Shape({
+    return new Shape<Geometry>({
       appearance,
       children: [],
       geometry,

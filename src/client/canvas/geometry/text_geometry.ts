@@ -2,9 +2,7 @@ import { observable } from 'mobx'
 
 import { Transform } from '../../math/transform'
 
-import { Geometry } from './geometry'
-
-export class TextGeometry implements Geometry {
+export class TextGeometry {
   @observable public alignToView: boolean
   @observable public fontFamily: string
   @observable public maxWidth: number

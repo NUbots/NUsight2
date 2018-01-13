@@ -13,6 +13,43 @@ describe('NUClearNetStream', () => {
     stream = NUClearNetStream.of(nuclearnetClient)
   })
 
+  it('forwards join events into the stream', done => {
+    const spy = jest.fn()
+    stream.on('data', spy).on('end', () => {
+      expect(spy).toHaveBeenCalledWith({
+        type: 'nuclear_join', peer: expect.objectContaining({
+          name: 'alice',
+        }),
+      })
+      done()
+    })
+    nuclearnetClient.connect({ name: 'bob' })
+
+    const aliceClient = new FakeNUClearNetClient(nuclearnetServer)
+    aliceClient.connect({ name: 'alice' })
+
+    stream.end()
+  })
+
+  it('forwards leave events into the stream', done => {
+    const spy = jest.fn()
+    stream.on('data', spy).on('end', () => {
+      expect(spy).toHaveBeenCalledWith({
+        type: 'nuclear_leave', peer: expect.objectContaining({
+          name: 'alice',
+        }),
+      })
+      done()
+    })
+    nuclearnetClient.connect({ name: 'bob' })
+
+    const aliceClient = new FakeNUClearNetClient(nuclearnetServer)
+    const disconnect = aliceClient.connect({ name: 'alice' })
+    disconnect()
+
+    stream.end()
+  })
+
   it('forwards packets into the stream', done => {
     const spy = jest.fn()
     const packet = {
@@ -22,7 +59,7 @@ describe('NUClearNetStream', () => {
       reliable: true,
     }
     stream.on('data', spy).on('end', () => {
-      expect(spy).toHaveBeenCalledWith({ event: 'packet', packet })
+      expect(spy).toHaveBeenCalledWith({ type: 'packet', packet })
       done()
     })
     nuclearnetClient.connect({ name: 'bob' })

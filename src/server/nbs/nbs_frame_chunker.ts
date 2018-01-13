@@ -1,5 +1,6 @@
 import * as Buffers from 'buffers'
 import * as stream from 'stream'
+
 import { NBS_HEADER } from './nbs_frame_codecs'
 import { PACKET_SIZE_SIZE } from './nbs_frame_codecs'
 
@@ -32,7 +33,9 @@ export class NbsFrameChunker extends stream.Transform {
     this.buffers.push(chunk)
 
     let frame
+    /* tslint:disable no-conditional-assignment */
     while ((frame = this.getNextFrame(this.buffers)) !== undefined) {
+    /* tslint:enable no-conditional-assignment */
       this.push(frame.buffer)
       this.buffers.splice(0, frame.index + frame.buffer.byteLength)
     }

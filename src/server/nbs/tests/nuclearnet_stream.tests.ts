@@ -1,5 +1,8 @@
+import { NUClearNetPeer } from 'nuclearnet.js'
 import { FakeNUClearNetClient } from '../../nuclearnet/fake_nuclearnet_client'
 import { FakeNUClearNetServer } from '../../nuclearnet/fake_nuclearnet_server'
+import { StreamPacket } from '../nuclearnet_stream'
+import { PeerFilter } from '../nuclearnet_stream'
 import { NUClearNetStream } from '../nuclearnet_stream'
 
 describe('NUClearNetStream', () => {
@@ -65,5 +68,53 @@ describe('NUClearNetStream', () => {
     nuclearnetClient.connect({ name: 'bob' })
     nuclearnetClient.fakePacket('hash', packet)
     stream.end()
+  })
+})
+
+describe('PeerFilter', () => {
+  let peer: NUClearNetPeer
+  let filter: PeerFilter
+
+  beforeEach(() => {
+    peer = { name: 'bob', address: 'fake_address', port: -1 }
+    filter = PeerFilter.of(peer)
+  })
+
+  it('should forward through packets of given peer', done => {
+    const spy = jest.fn()
+    filter.on('data', spy).on('finish', () => {
+      expect(spy).toHaveBeenCalled()
+      done()
+    })
+    const event: StreamPacket = {
+      type: 'packet',
+      packet: {
+        peer: { name: 'bob', address: 'fake_address', port: -1 },
+        hash: new Buffer(8),
+        payload: new Buffer(8),
+        reliable: true,
+      },
+    }
+    filter.write(event)
+    filter.end()
+  })
+
+  it('should not forward through packets of other peers', done => {
+    const spy = jest.fn()
+    filter.on('data', spy).on('finish', () => {
+      expect(spy).not.toHaveBeenCalled()
+      done()
+    })
+    const event: StreamPacket = {
+      type: 'packet',
+      packet: {
+        peer: { name: 'alice', address: 'fake_address', port: -1 },
+        hash: new Buffer(8),
+        payload: new Buffer(8),
+        reliable: true,
+      },
+    }
+    filter.write(event)
+    filter.end()
   })
 })

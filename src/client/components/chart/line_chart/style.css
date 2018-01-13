@@ -1,0 +1,23 @@
+.lineChart {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.lineChart__canvasWrapper {
+  position: relative;
+  flex-grow: 1;
+}
+
+.lineChart__canvas {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.lineChart__sidebar {
+  width: 300px;
+  border-left: 1px solid #DDD;
+}

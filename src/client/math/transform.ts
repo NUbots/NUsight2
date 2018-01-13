@@ -25,11 +25,11 @@ export class Transform {
   }
 
   public static of({
-                     anticlockwise = true,
-                     rotate = 0,
-                     scale = { x: 1, y: 1 },
-                     translate = { x: 0, y: 0 },
-                   }: Partial<Transform> = {}): Transform {
+    anticlockwise = true,
+    rotate = 0,
+    scale = { x: 1, y: 1 },
+    translate = { x: 0, y: 0 },
+  }: Partial<TransformOpts> = {}): Transform {
     return new Transform({
       anticlockwise,
       rotate,

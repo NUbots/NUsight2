@@ -8,6 +8,7 @@ import { ArrowGeometry } from './geometry/arrow_geometry'
 import { CircleGeometry } from './geometry/circle_geometry'
 import { LineGeometry } from './geometry/line_geometry'
 import { MarkerGeometry } from './geometry/marker_geometry'
+import { PathGeometry } from './geometry/path_geometry'
 import { PolygonGeometry } from './geometry/polygon_geometry'
 import { TextGeometry } from './geometry/text_geometry'
 import { Group } from './object/group'
@@ -64,6 +65,8 @@ export class CanvasRenderer {
       this.renderLine({ appearance, geometry })
     } else if (geometry instanceof MarkerGeometry) {
       this.renderMarker({ appearance, geometry })
+    } else if (geometry instanceof PathGeometry) {
+      this.renderPath({ appearance, geometry })
     } else if (geometry instanceof PolygonGeometry) {
       this.renderPolygon({ appearance, geometry })
     } else if (geometry instanceof TextGeometry) {
@@ -195,6 +198,19 @@ export class CanvasRenderer {
 
     this.applyAppearance(appearance)
     this.context.fill()
+    this.context.stroke()
+  }
+
+  private renderPath(opts: { appearance: Appearance, geometry: PathGeometry }): void {
+    const { appearance, geometry } = opts
+
+    this.context.beginPath()
+    this.context.moveTo(geometry.path[0].x, geometry.path[0].y)
+    for (const point of geometry.path.slice(0)) {
+      this.context.lineTo(point.x, point.y)
+    }
+
+    this.applyAppearance(appearance)
     this.context.stroke()
   }
 

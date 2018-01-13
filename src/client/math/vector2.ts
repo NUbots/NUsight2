@@ -108,4 +108,8 @@ export class Vector2 {
     this.y -= v.y
     return this
   }
+
+  public dot(v: Vector2): number {
+    return this.x * v.x + this.y * v.y
+  }
 }

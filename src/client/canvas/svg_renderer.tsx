@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
-import { Component } from 'react'
 
 import { Transform } from '../math/transform'
 

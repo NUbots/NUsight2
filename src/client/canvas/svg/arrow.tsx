@@ -5,14 +5,16 @@ import { Transform } from '../../math/transform'
 import { ArrowGeometry } from '../geometry/arrow_geometry'
 import { Shape } from '../object/shape'
 
-import { svgAppearanceAttributes } from './svg'
+import { toSvgProps } from './svg'
 
 
 type Props = { model: Shape<ArrowGeometry>, world: Transform }
-export const Arrow = observer(({ model: {
-  geometry: { origin, direction, width, length, headWidth, headLength },
-  appearance,
-},                               world }: Props) => {
+export const Arrow = observer(({
+                                 model: {
+                                   geometry: { origin, direction, width, length, headWidth, headLength },
+                                   appearance,
+                                 }, world,
+                               }: Props) => {
   const w = width * 0.5
   const hl = headLength * 0.5
   const hw = headWidth * 0.5
@@ -29,6 +31,6 @@ export const Arrow = observer(({ model: {
   return <path
     d={path}
     transform={`translate(${origin.x},${origin.y}) rotate(${r})`}
-    {...svgAppearanceAttributes(appearance)}
+    {...toSvgProps(appearance)}
   />
 })

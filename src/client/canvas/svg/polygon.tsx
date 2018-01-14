@@ -5,11 +5,12 @@ import { Transform } from '../../math/transform'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { Shape } from '../object/shape'
 
-import { svgAppearanceAttributes } from './svg'
+import { toSvgProps } from './svg'
 
 type Props = { model: Shape<PolygonGeometry>, world: Transform }
 export const Polygon = observer(({ model: { geometry: { points }, appearance }, world }: Props) => (
-  <polygon points={points.map(p => `${p.x},${p.y}`).join(' ')}
-           {...svgAppearanceAttributes(appearance)}
+  <polygon
+    points={points.map(p => `${p.x},${p.y}`).join(' ')}
+    {...toSvgProps(appearance)}
   />
 ))

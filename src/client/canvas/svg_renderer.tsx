@@ -14,14 +14,10 @@ export type SVGRendererProps = {
   camera: Transform
 }
 
-@observer
-export class SVGRenderer extends Component<SVGRendererProps> {
-
-  public render() {
-    return <svg className={this.props.className}>
-      <g transform={toSvgTransform(this.props.camera.inverse())}>
-        <Group model={this.props.scene} world={this.props.camera.inverse()}/>
-      </g>
-    </svg>
-  }
-}
+export const SVGRenderer = observer(({ className, scene, camera }: SVGRendererProps) => (
+  <svg className={className}>
+    <g transform={toSvgTransform(camera.inverse())}>
+      <Group model={scene} world={camera.inverse()}/>
+    </g>
+  </svg>
+))

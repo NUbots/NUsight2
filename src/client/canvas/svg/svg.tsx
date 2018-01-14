@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import * as React from 'react'
 
 import { Transform } from '../../math/transform'
@@ -14,7 +13,6 @@ import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Group as GroupGeometry } from '../object/group'
 import { Object2d } from '../object/object2d'
-import { Geometry } from '../object/shape'
 import { Shape } from '../object/shape'
 
 import { Arc } from './arc'
@@ -26,7 +24,7 @@ import { Marker } from './marker'
 import { Polygon } from './polygon'
 import { Text } from './text'
 
-export function svgAppearanceAttributes(appearance: Appearance): {} {
+export function toSvgProps(appearance: Appearance) {
   if (appearance instanceof BasicAppearance) {
     return {
       fill: appearance.fillStyle,
@@ -54,26 +52,26 @@ export function toSvgTransform(transform: Transform): string {
 }
 
 type Props = { obj: Object2d, world: Transform }
+
 export function GeometryView({ obj, world }: Props): JSX.Element {
 
-  // TODO wrap things in appearance tags
   if (obj instanceof GroupGeometry) {
-    return <Group model={obj} world={world} />
+    return <Group model={obj} world={world}/>
   } else if (obj instanceof Shape) {
     if (obj.geometry instanceof ArcGeometry) {
-      return <Arc model={obj} world={world} />
+      return <Arc model={obj} world={world}/>
     } else if (obj.geometry instanceof ArrowGeometry) {
-      return <Arrow model={obj} world={world} />
+      return <Arrow model={obj} world={world}/>
     } else if (obj.geometry instanceof CircleGeometry) {
-      return <Circle model={obj} world={world} />
+      return <Circle model={obj} world={world}/>
     } else if (obj.geometry instanceof LineGeometry) {
-      return <Line model={obj} world={world} />
+      return <Line model={obj} world={world}/>
     } else if (obj.geometry instanceof MarkerGeometry) {
-      return <Marker model={obj} world={world} />
+      return <Marker model={obj} world={world}/>
     } else if (obj.geometry instanceof PolygonGeometry) {
-      return <Polygon model={obj} world={world} />
+      return <Polygon model={obj} world={world}/>
     } else if (obj.geometry instanceof TextGeometry) {
-      return <Text model={obj} world={world} />
+      return <Text model={obj} world={world}/>
     } else {
       throw new Error(`Unsupported geometry type: ${obj}`)
     }

@@ -5,14 +5,16 @@ import { Transform } from '../../math/transform'
 import { ArcGeometry } from '../geometry/arc_geometry'
 import { Shape } from '../object/shape'
 
-import { svgAppearanceAttributes } from './svg'
+import { toSvgProps } from './svg'
 
 
 type Props = { model: Shape<ArcGeometry>, world: Transform }
-export const Arc = observer(({ model: {
-  geometry: { origin, radius, startAngle, endAngle, anticlockwise },
-  appearance,
-},                             world }: Props) => {
+export const Arc = observer(({
+                               model: {
+                                 geometry: { origin, radius, startAngle, endAngle, anticlockwise },
+                                 appearance,
+                               }, world,
+                             }: Props) => {
 
   // Is this arc empty?
   if (radius < 0) {
@@ -41,7 +43,7 @@ export const Arc = observer(({ model: {
   path += `A${radius} ${radius} 0 ${+(da >= Math.PI)} ${cw} ${p1.x} ${p1.y}`
 
 
-  return <path d={path}
-               {...svgAppearanceAttributes(appearance)}
-  />
+  return (<path d={path}
+                {...toSvgProps(appearance)}
+  />)
 })

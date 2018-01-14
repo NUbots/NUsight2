@@ -30,10 +30,8 @@ export class Field extends Component<FieldProps> {
   @action
   private onResize = (width: number, height: number) => {
 
-    const m = this.props.model
+    const { model: { camera, fieldWidth, fieldLength } } = this.props;
 
-    const fieldWidth = m.fieldWidth
-    const fieldLength = m.fieldLength
     const scaleX = fieldLength / width
     const scaleY = fieldWidth / height
 
@@ -42,11 +40,11 @@ export class Field extends Component<FieldProps> {
     // Ensures the canvas is scaled such that the entire field is always visible, regardless of aspect ratio.
     const scale = canvasAspect > fieldAspect ? scaleY : scaleX
 
-    m.camera.scale.x = scale
-    m.camera.scale.y = -scale
+    camera.scale.x = scale
+    camera.scale.y = -scale
 
     // Translate by half of the canvas width and height so that the field appears in the center.
-    m.camera.translate.x = -width * 0.5
-    m.camera.translate.y = -height * 0.5
+    camera.translate.x = -width * 0.5
+    camera.translate.y = -height * 0.5
   }
 }

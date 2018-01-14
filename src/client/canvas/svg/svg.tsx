@@ -50,7 +50,7 @@ export function transform(transform: Transform): string {
   const s = transform.scale
   const r = (180.0 / Math.PI) * transform.rotate // SVG rotations are in degrees
   const t = transform.translate
-  return `scale(${s.x}, ${s.y}) rotate(${r}) translate(${t.x}, ${t.y})`
+  return `translate(${-t.x}, ${-t.y}) rotate(${r}) scale(${1.0 / s.x}, ${1.0 / s.y})`
 }
 
 export function viewForGeometry(obj: Object2d, index: number): JSX.Element {

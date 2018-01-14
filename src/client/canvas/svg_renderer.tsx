@@ -18,16 +18,8 @@ export type SVGRendererProps = {
 export class SVGRenderer extends Component<SVGRendererProps> {
 
   public render() {
-
-    const c = this.props.camera.clone()
-
-    c.scale.x = 1 / c.scale.x
-    c.scale.y = 1 / c.scale.y
-    c.translate.x = -c.translate.x / c.scale.x
-    c.translate.y = -c.translate.y / c.scale.y
-
     return <svg className={this.props.className}>
-      <g transform={transform(c)}>
+      <g transform={transform(this.props.camera)}>
         <Group model={this.props.scene}/>
       </g>
     </svg>

@@ -3,14 +3,14 @@ import { observable } from 'mobx'
 import { Transform } from '../../math/transform'
 
 export class TextGeometry {
-  @observable public alignToView: boolean
-  @observable public fontFamily: string
-  @observable public maxWidth: number
-  @observable public text: string
-  @observable public textAlign: 'start' | 'middle' | 'end' | 'left' | 'right' | 'center'
-  @observable public textBaseline: 'top' | 'hanging' | 'middle' | 'alphabetic' | 'ideographic' | 'bottom'
-  @observable public x: number
-  @observable public y: number
+  @observable alignToView: boolean
+  @observable fontFamily: string
+  @observable maxWidth: number
+  @observable text: string
+  @observable textAlign: 'start' | 'middle' | 'end' | 'left' | 'right' | 'center'
+  @observable textBaseline: 'top' | 'hanging' | 'middle' | 'alphabetic' | 'ideographic' | 'bottom'
+  @observable x: number
+  @observable y: number
 
   constructor(opts: TextGeometry) {
     this.alignToView = opts.alignToView
@@ -23,7 +23,7 @@ export class TextGeometry {
     this.y = opts.y
   }
 
-  public static of({
+  static of({
     alignToView = true,
     fontFamily = 'sans-serif',
     maxWidth = 0.5,

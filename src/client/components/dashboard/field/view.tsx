@@ -18,7 +18,7 @@ export type FieldProps = {
 @observer
 export class Field extends Component<FieldProps> {
 
-  public render() {
+  render() {
     const model = this.props.model
     const viewModel = FieldViewModel.of(model)
     return <div className={style.container}>

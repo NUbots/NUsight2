@@ -30,8 +30,8 @@ export type ShapeOpts<T extends Geometry> = {
 } & GroupOpts
 
 export class Shape<T extends Geometry> implements Object2d {
-  @observable public appearance: Appearance
-  @observable public geometry: T
+  @observable appearance: Appearance
+  @observable geometry: T
   @observable private group: Group
 
   constructor(opts: ShapeOpts<T>) {
@@ -40,7 +40,7 @@ export class Shape<T extends Geometry> implements Object2d {
     this.group = Group.of(opts)
   }
 
-  public static of<T extends Geometry>(geometry: T, appearance: Appearance = BasicAppearance.of()) {
+  static of<T extends Geometry>(geometry: T, appearance: Appearance = BasicAppearance.of()) {
     return new Shape<T>({
       appearance,
       children: [],
@@ -49,17 +49,17 @@ export class Shape<T extends Geometry> implements Object2d {
     })
   }
 
-  public add(obj: Object2d): void {
+  add(obj: Object2d): void {
     this.group.add(obj)
   }
 
   @computed
-  public get children(): Object2d[] {
+  get children(): Object2d[] {
     return this.group.children
   }
 
   @computed
-  public get transform(): Transform {
+  get transform(): Transform {
     return this.group.transform
   }
 }

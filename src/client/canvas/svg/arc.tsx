@@ -2,6 +2,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 
 import { Transform } from '../../math/transform'
+import { Vector2 } from '../../math/vector2'
 import { ArcGeometry } from '../geometry/arc_geometry'
 import { Shape } from '../object/shape'
 
@@ -17,16 +18,9 @@ export const Arc = observer(({ model: { geometry, appearance } }: Props) => {
     throw new Error(`Negative radius: ${radius}`)
   }
 
-  // Work out our start and end points on the circle
-  const p0 = {
-    x: origin.x + radius * Math.cos(startAngle),
-    y: origin.y + radius * Math.sin(startAngle),
-  }
-
-  const p1 = {
-    x: origin.x + radius * Math.cos(endAngle),
-    y: origin.y + radius * Math.sin(endAngle),
-  }
+  // Calculate out our start and end points on the circle
+  const p0 = Vector2.fromPolar(radius, startAngle).add(origin)
+  const p1 = Vector2.fromPolar(radius, endAngle).add(origin)
 
   // Our cw value must be a 0/1 not true/false
   const cw = +!anticlockwise

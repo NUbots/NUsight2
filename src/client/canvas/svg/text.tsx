@@ -24,6 +24,7 @@ export class Text extends Component<{model: Shape<TextGeometry>}> {
       x={g.x}
       y={g.y}
       fontFamily={g.fontFamily}
+      fontSize={'0.02rem'}
       transform={transform(m.transform)}
       {...appearance(m.appearance)}>
       {g.text}

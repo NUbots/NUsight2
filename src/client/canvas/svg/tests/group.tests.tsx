@@ -1,9 +1,10 @@
 import * as React from 'react'
+
+import { Transform } from '../../../math/transform'
 import { BasicAppearance } from '../../appearance/basic_appearance'
 import { LineGeometry } from '../../geometry/line_geometry'
 import { Shape } from '../../object/shape'
 import { Line } from '../line'
-import { Transform } from '../../../math/transform'
 
 describe('LineSVGRenderer', () => {
   it('renders', () => {

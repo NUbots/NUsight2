@@ -13,7 +13,8 @@ type Props = { model: Shape<TextGeometry>, world: Transform }
 export const Text = observer(({ model: {
   geometry: {
     x, y, fontFamily, text, maxWidth, textAlign, textBaseline, alignToView,
-  }, appearance,
+  },
+  appearance,
 },                              world }: Props) => {
 
   // TODO handle font size and max width properly

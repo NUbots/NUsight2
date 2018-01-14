@@ -12,12 +12,7 @@ import { appearance, transform } from './svg'
 export class Text extends Component<{model: Shape<TextGeometry>, world: Transform}> {
 
   public render() {
-
-    // TODO handle these properties
-    // @observable public alignToView: boolean
-    // @observable public maxWidth: number
-    // @observable public textAlign: 'start' | 'end' | 'left' | 'right' | 'center'
-    // @observable public textBaseline: 'top' | 'hanging' | 'middle' | 'alphabetic' | 'ideographic' | 'bottom'
+    // TODO handle font size and max width properly
 
     const m = this.props.model
     const g = m.geometry
@@ -31,7 +26,7 @@ export class Text extends Component<{model: Shape<TextGeometry>, world: Transfor
       x={g.x}
       y={g.y}
       fontFamily={g.fontFamily}
-      fontSize={'0.02rem'}
+      fontSize={'0.015rem'}
       textAnchor={g.textAlign}
       dominantBaseline={g.textBaseline}
       transform={transform(t)}

@@ -13,9 +13,8 @@ export class Group extends Component<{model: GroupGeometry, world: Transform}> {
 
   public render() {
     return <g transform={transform(this.props.model.transform)}>
-      {this.props.model.children.map((obj, i) => {
-        viewForGeometry(obj, i, this.props.world.clone().then(this.props.model.transform.inverse()))
-      })}
+      {this.props.model.children.map((obj, i) =>
+        viewForGeometry(obj, i, this.props.world.clone().then(this.props.model.transform.inverse())))}
     </g>
   }
 }

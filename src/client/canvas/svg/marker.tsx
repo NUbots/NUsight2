@@ -8,12 +8,7 @@ import { Shape } from '../object/shape'
 import { toSvgProps } from './svg'
 
 type Props = { model: Shape<MarkerGeometry>, world: Transform }
-export const Marker = observer(({
-                                  model: {
-                                    geometry: { x, y, radius, heading },
-                                    appearance,
-                                  }, world,
-                                }: Props) => {
+export const Marker = observer(({ model: { geometry: { x, y, radius, heading }, appearance }, world }: Props) => {
   const rotation = 135.0 + (180.0 / Math.PI) * Math.atan2(heading.y, heading.x)
   return (
     <path

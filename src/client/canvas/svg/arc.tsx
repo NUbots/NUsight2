@@ -9,12 +9,7 @@ import { toSvgProps } from './svg'
 
 
 type Props = { model: Shape<ArcGeometry>, world: Transform }
-export const Arc = observer(({
-                               model: {
-                                 geometry: { origin, radius, startAngle, endAngle, anticlockwise },
-                                 appearance,
-                               }, world,
-                             }: Props) => {
+export const Arc = observer(({ model: { geometry: { origin, radius, startAngle, endAngle, anticlockwise }, appearance }, world }: Props) => {
 
   // Is this arc empty?
   if (radius < 0) {

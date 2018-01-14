@@ -30,7 +30,7 @@ export class Field extends Component<FieldProps> {
   @action
   private onResize = (width: number, height: number) => {
 
-    const { model: { camera, fieldWidth, fieldLength } } = this.props;
+    const { model: { camera, fieldWidth, fieldLength } } = this.props
 
     const scaleX = fieldLength / width
     const scaleY = fieldWidth / height

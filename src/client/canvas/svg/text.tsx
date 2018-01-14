@@ -8,14 +8,7 @@ import { Shape } from '../object/shape'
 import { toSvgProps, toSvgTransform } from './svg'
 
 type Props = { model: Shape<TextGeometry>, world: Transform }
-export const Text = observer(({
-                                model: {
-                                  geometry: {
-                                    x, y, fontFamily, text, maxWidth, textAlign, textBaseline, alignToView,
-                                  },
-                                  appearance,
-                                }, world,
-                              }: Props) => {
+export const Text = observer(({ model: { geometry: { x, y, fontFamily, text, maxWidth, textAlign, textBaseline, alignToView }, appearance }, world }: Props) => {
 
   // TODO handle font size and max width properly
   const t = alignToView ? Transform.of({
@@ -38,4 +31,3 @@ export const Text = observer(({
     </text>
   )
 })
-

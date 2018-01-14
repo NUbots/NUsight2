@@ -9,12 +9,7 @@ import { toSvgProps } from './svg'
 
 
 type Props = { model: Shape<ArrowGeometry>, world: Transform }
-export const Arrow = observer(({
-                                 model: {
-                                   geometry: { origin, direction, width, length, headWidth, headLength },
-                                   appearance,
-                                 }, world,
-                               }: Props) => {
+export const Arrow = observer(({ model: { geometry: { origin, direction, width, length, headWidth, headLength }, appearance }, world }: Props) => {
   const w = width * 0.5
   const hl = headLength * 0.5
   const hw = headWidth * 0.5

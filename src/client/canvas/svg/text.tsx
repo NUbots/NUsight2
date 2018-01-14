@@ -2,8 +2,8 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 
-import { TextGeometry } from '../geometry/text_geometry'
 import { Transform } from '../../math/transform'
+import { TextGeometry } from '../geometry/text_geometry'
 import { Shape } from '../object/shape'
 
 import { appearance, transform } from './svg'

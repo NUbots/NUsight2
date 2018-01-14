@@ -26,6 +26,7 @@ export class Text extends Component<{model: Shape<TextGeometry>}> {
       fontFamily={g.fontFamily}
       fontSize={'0.02rem'}
       transform={transform(m.transform)}
+      textAnchor={g.textBaseline}
       {...appearance(m.appearance)}>
       {g.text}
     </text>

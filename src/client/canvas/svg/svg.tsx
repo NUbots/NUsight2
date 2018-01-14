@@ -53,26 +53,26 @@ export function transform(transform: Transform): string {
   return `translate(${t.x}, ${t.y}) rotate(${r}) scale(${s.x}, ${s.y})`
 }
 
-export function viewForGeometry(obj: Object2d, index: number): JSX.Element {
+export function viewForGeometry(obj: Object2d, index: number, world: Transform): JSX.Element {
 
   // TODO wrap things in appearance tags
   if (obj instanceof GroupGeometry) {
-    return <Group key={index} model={obj}/>
+    return <Group key={index} model={obj} world={world} />
   } else if (obj instanceof Shape) {
     if (obj.geometry instanceof ArcGeometry) {
-      return <Arc key={index} model={obj}/>
+      return <Arc key={index} model={obj} />
     } else if (obj.geometry instanceof ArrowGeometry) {
-      return <Arrow key={index} model={obj}/>
+      return <Arrow key={index} model={obj} />
     } else if (obj.geometry instanceof CircleGeometry) {
-      return <Circle key={index} model={obj}/>
+      return <Circle key={index} model={obj} />
     } else if (obj.geometry instanceof LineGeometry) {
-      return <Line key={index} model={obj}/>
+      return <Line key={index} model={obj} />
     } else if (obj.geometry instanceof MarkerGeometry) {
-      return <Marker key={index} model={obj}/>
+      return <Marker key={index} model={obj} />
     } else if (obj.geometry instanceof PolygonGeometry) {
-      return <Polygon key={index} model={obj}/>
+      return <Polygon key={index} model={obj} />
     } else if (obj.geometry instanceof TextGeometry) {
-      return <Text key={index} model={obj}/>
+      return <Text key={index} model={obj} world={world} />
     } else {
       throw new Error(`Unsupported geometry type: ${obj}`)
     }

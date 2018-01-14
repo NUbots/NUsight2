@@ -8,7 +8,7 @@ import { Shape } from '../object/shape'
 import { toSvgProps } from './svg'
 
 type Props = { model: Shape<LineGeometry>, world: Transform }
-export const Line = observer(({ model: { geometry, appearance }, world }: Props) => (
+export const Line = observer(({ model: { geometry, appearance } }: Props) => (
   <line
     x1={geometry.origin.x}
     y1={geometry.origin.y}

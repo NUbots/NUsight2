@@ -9,7 +9,8 @@ import { toSvgProps } from './svg'
 
 
 type Props = { model: Shape<ArcGeometry>, world: Transform }
-export const Arc = observer(({ model: { geometry: { origin, radius, startAngle, endAngle, anticlockwise }, appearance }, world }: Props) => {
+export const Arc = observer(({ model: { geometry, appearance } }: Props) => {
+  const { origin, radius, startAngle, endAngle, anticlockwise } = geometry
 
   // Is this arc empty?
   if (radius < 0) {
@@ -37,8 +38,5 @@ export const Arc = observer(({ model: { geometry: { origin, radius, startAngle, 
   // Draw the arc
   path += `A${radius} ${radius} 0 ${+(da >= Math.PI)} ${cw} ${p1.x} ${p1.y}`
 
-
-  return (<path d={path}
-                {...toSvgProps(appearance)}
-  />)
+  return <path d={path} {...toSvgProps(appearance)}/>
 })

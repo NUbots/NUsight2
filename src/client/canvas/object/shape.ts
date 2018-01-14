@@ -40,8 +40,8 @@ export class Shape<T extends Geometry> implements Object2d {
     this.group = Group.of(opts)
   }
 
-  public static of(geometry: Geometry, appearance: Appearance = BasicAppearance.of()) {
-    return new Shape<Geometry>({
+  public static of<T extends Geometry>(geometry: T, appearance: Appearance = BasicAppearance.of()) {
+    return new Shape<T>({
       appearance,
       children: [],
       geometry,

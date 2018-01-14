@@ -39,10 +39,10 @@ exports[`TextSVGRenderer renders 1`] = `
   world={
     Transform {
       "anticlockwise": true,
-      "rotate": 0,
+      "rotate": 0.7853981633974483,
       "scale": Object {
-        "x": 1,
-        "y": 1,
+        "x": -1,
+        "y": -1,
       },
       "translate": Object {
         "x": 0,

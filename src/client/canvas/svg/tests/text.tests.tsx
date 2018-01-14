@@ -9,7 +9,10 @@ import { Text } from '../text'
 describe('TextSVGRenderer', () => {
   it('renders', () => {
     const model = Shape.of(TextGeometry.of(), BasicAppearance.of())
-    const world = Transform.of()
+    const world = Transform.of({
+      scale: { x: -1, y: -1 },
+      rotate: Math.PI / 4.0,
+    })
     expect(<Text model={model} world={world}/>).toMatchSnapshot()
   })
 })

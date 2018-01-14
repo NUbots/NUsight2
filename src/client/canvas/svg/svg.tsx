@@ -26,7 +26,7 @@ import { Marker } from './marker'
 import { Polygon } from './polygon'
 import { Text } from './text'
 
-export function appearance(appearance: Appearance): {} {
+export function svgAppearanceAttributes(appearance: Appearance): {} {
   if (appearance instanceof BasicAppearance) {
     return {
       fill: appearance.fillStyle,
@@ -46,33 +46,34 @@ export function appearance(appearance: Appearance): {} {
   }
 }
 
-export function transform(transform: Transform): string {
+export function toSvgTransform(transform: Transform): string {
   const s = transform.scale
   const r = (180.0 / Math.PI) * transform.rotate // SVG rotations are in degrees
   const t = transform.translate
   return `translate(${t.x}, ${t.y}) rotate(${r}) scale(${s.x}, ${s.y})`
 }
 
-export function viewForGeometry(obj: Object2d, index: number, world: Transform): JSX.Element {
+type Props = { obj: Object2d, world: Transform }
+export function GeometryView({ obj, world }: Props): JSX.Element {
 
   // TODO wrap things in appearance tags
   if (obj instanceof GroupGeometry) {
-    return <Group key={index} model={obj} world={world} />
+    return <Group model={obj} world={world} />
   } else if (obj instanceof Shape) {
     if (obj.geometry instanceof ArcGeometry) {
-      return <Arc key={index} model={obj} />
+      return <Arc model={obj} world={world} />
     } else if (obj.geometry instanceof ArrowGeometry) {
-      return <Arrow key={index} model={obj} />
+      return <Arrow model={obj} world={world} />
     } else if (obj.geometry instanceof CircleGeometry) {
-      return <Circle key={index} model={obj} />
+      return <Circle model={obj} world={world} />
     } else if (obj.geometry instanceof LineGeometry) {
-      return <Line key={index} model={obj} />
+      return <Line model={obj} world={world} />
     } else if (obj.geometry instanceof MarkerGeometry) {
-      return <Marker key={index} model={obj} />
+      return <Marker model={obj} world={world} />
     } else if (obj.geometry instanceof PolygonGeometry) {
-      return <Polygon key={index} model={obj} />
+      return <Polygon model={obj} world={world} />
     } else if (obj.geometry instanceof TextGeometry) {
-      return <Text key={index} model={obj} world={world} />
+      return <Text model={obj} world={world} />
     } else {
       throw new Error(`Unsupported geometry type: ${obj}`)
     }

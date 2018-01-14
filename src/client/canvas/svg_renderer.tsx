@@ -6,7 +6,7 @@ import { Transform } from '../math/transform'
 
 import { Group as GroupGeometry } from './object/group'
 import { Group } from './svg/group'
-import { transform } from './svg/svg'
+import { toSvgTransform } from './svg/svg'
 
 export type SVGRendererProps = {
   className: string
@@ -19,7 +19,7 @@ export class SVGRenderer extends Component<SVGRendererProps> {
 
   public render() {
     return <svg className={this.props.className}>
-      <g transform={transform(this.props.camera.inverse())}>
+      <g transform={toSvgTransform(this.props.camera.inverse())}>
         <Group model={this.props.scene} world={this.props.camera.inverse()}/>
       </g>
     </svg>

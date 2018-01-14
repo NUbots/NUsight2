@@ -1,18 +1,20 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
-import { Component } from 'react'
 
+import { Transform } from '../../math/transform'
 import { CircleGeometry } from '../geometry/circle_geometry'
 import { Shape } from '../object/shape'
 
-import { appearance } from './svg'
+import { svgAppearanceAttributes } from './svg'
 
-@observer
-export class Circle extends Component<{model: Shape<CircleGeometry>}> {
-
-  public render() {
-    const m = this.props.model
-    const g = m.geometry
-    return <circle cx={g.x} cy={g.y} r={g.radius} {...appearance(m.appearance)} />
-  }
-}
+type Props = { model: Shape<CircleGeometry>, world: Transform }
+export const Circle = observer(({ model: {
+  geometry: { x, y, radius },
+  appearance,
+},                                world }: Props) => (
+  <circle cx={x}
+          cy={y}
+          r={radius}
+          {...svgAppearanceAttributes(appearance)}
+  />
+))

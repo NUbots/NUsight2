@@ -3,13 +3,14 @@ import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetPacket } from 'nuclearnet.js'
 import * as stream from 'stream'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
+import { WebSocket } from '../nuclearnet/web_socket_server'
 
 export type StreamEvent = StreamPacket | StreamJoinEvent | StreamLeaveEvent | StreamConnectEvent | StreamDisconnectEvent
-export type StreamPacket = { type: 'packet', packet: NUClearNetPacket }
-export type StreamJoinEvent = { type: 'nuclear_join', peer: NUClearNetPeer }
-export type StreamLeaveEvent = { type: 'nuclear_leave', peer: NUClearNetPeer }
-export type StreamConnectEvent = { type: 'nuclear_connect', options: NUClearNetOptions }
-export type StreamDisconnectEvent = { type: 'nuclear_disconnect' }
+export type StreamPacket = { type: 'packet', data: NUClearNetPacket }
+export type StreamJoinEvent = { type: 'nuclear_join', data: NUClearNetPeer }
+export type StreamLeaveEvent = { type: 'nuclear_leave', data: NUClearNetPeer }
+export type StreamConnectEvent = { type: 'nuclear_connect', data: NUClearNetOptions }
+export type StreamDisconnectEvent = { type: 'nuclear_disconnect', data: undefined }
 
 export class NUClearNetStream extends stream.Duplex {
   private buffer: StreamPacket[] = []
@@ -26,17 +27,17 @@ export class NUClearNetStream extends stream.Duplex {
     nuclearnetClient.onLeave(this.onLeave)
   }
 
-  public static of(nuclearnetClient: NUClearNetClient, highWaterMark: number) {
+  public static of(nuclearnetClient: NUClearNetClient, highWaterMark: number = 16) {
     return new NUClearNetStream(nuclearnetClient, highWaterMark)
   }
 
-  public push(event: StreamEvent | null): boolean {
-    return super.push(event)
-  }
-
-  public write(event: StreamEvent | null): boolean {
-    return super.write(event)
-  }
+  // public push(event: StreamEvent | null): boolean {
+  //   return super.push(event)
+  // }
+  //
+  // public write(event: StreamEvent | null): boolean {
+  //   return super.write(event)
+  // }
 
   private bufferEvent(event: StreamPacket) {
     this.buffer.push(event)
@@ -46,14 +47,14 @@ export class NUClearNetStream extends stream.Duplex {
     this.buffering = false
     while (this.buffer.length > 0) {
       const event = this.buffer.shift()!
-      if (!this.onPacket(event.packet)) {
+      if (!this.onPacket(event.data)) {
         break
       }
     }
   }
 
   private onPacket = (packet: NUClearNetPacket): boolean => {
-    const event: StreamPacket = { type: 'packet', packet }
+    const event: StreamPacket = { type: 'packet', data: packet }
     if (this.buffering) {
       this.bufferEvent(event)
       return false
@@ -65,11 +66,11 @@ export class NUClearNetStream extends stream.Duplex {
   }
 
   private onJoin = (peer: NUClearNetPeer) => {
-    this.push({ type: 'nuclear_join', peer })
+    this.push({ type: 'nuclear_join', data: peer })
   }
 
   private onLeave = (peer: NUClearNetPeer) => {
-    this.push({ type: 'nuclear_leave', peer })
+    this.push({ type: 'nuclear_leave', data: peer })
   }
 
   public _read(size: number) {
@@ -80,7 +81,7 @@ export class NUClearNetStream extends stream.Duplex {
 
   public _write(event: StreamEvent, encoding: string, done: Function) {
     if (event.type === 'nuclear_connect') {
-      this.disconnect = this.nuclearnetClient.connect(event.options);
+      this.disconnect = this.nuclearnetClient.connect(event.data)
     } else if (event.type === 'nuclear_disconnect') {
       this.disconnect && this.disconnect()
     }
@@ -113,7 +114,7 @@ export class PeerFilter extends stream.Transform {
   }
 
   _transform(event: StreamEvent, encoding: string, done: (err?: any, data?: any) => void) {
-    if (event.type !== 'packet' || this.isPeer(event.packet.peer)) {
+    if (event.type !== 'packet' || this.isPeer(event.data.peer)) {
       this.push(event)
     }
     done()
@@ -125,5 +126,56 @@ export class PeerFilter extends stream.Transform {
       && otherPeer.address === this.peer.address
       && otherPeer.port === this.peer.port
     )
+  }
+}
+
+export class WebSocketStream extends stream.Duplex {
+  public constructor(private socket: WebSocket) {
+    super({
+      objectMode: true,
+    })
+
+    socket.on('listen', this.onListen)
+    socket.on('unlisten', this.onUnlisten)
+    socket.on('nuclear_connect', this.onConnect)
+    socket.on('disconnect', this.onDisconnect)
+  }
+
+  static of(socket: WebSocket) {
+    return new WebSocketStream(socket)
+  }
+
+  _read() {
+
+  }
+
+  _write(event: StreamEvent, encoding: string, done: Function) {
+    if (event.type === 'packet') {
+      const packet = event.data;
+      if (packet.reliable) {
+        this.socket.send(event.type, packet)
+      } else {
+        this.socket.sendVolatile(event.type, packet)
+      }
+    } else {
+      this.socket.send(event.type, event.data)
+    }
+    done()
+  }
+
+  onListen = () => {
+
+  }
+
+  onUnlisten = () => {
+
+  }
+
+  onConnect = () => {
+
+  }
+
+  onDisconnect = () => {
+
   }
 }

@@ -26,7 +26,8 @@ describe('NUClearNetStream', () => {
     const spy = jest.fn()
     stream.on('data', spy).on('end', () => {
       expect(spy).toHaveBeenCalledWith({
-        type: 'nuclear_join', peer: expect.objectContaining({
+        type: 'nuclear_join',
+        data: expect.objectContaining({
           name: 'alice',
         }),
       })
@@ -44,7 +45,8 @@ describe('NUClearNetStream', () => {
     const spy = jest.fn()
     stream.on('data', spy).on('end', () => {
       expect(spy).toHaveBeenCalledWith({
-        type: 'nuclear_leave', peer: expect.objectContaining({
+        type: 'nuclear_leave',
+        data: expect.objectContaining({
           name: 'alice',
         }),
       })
@@ -68,7 +70,7 @@ describe('NUClearNetStream', () => {
       reliable: true,
     }
     stream.on('data', spy).on('end', () => {
-      expect(spy).toHaveBeenCalledWith({ type: 'packet', packet })
+      expect(spy).toHaveBeenCalledWith({ type: 'packet', data: packet })
       done()
     })
     nuclearnetClient.connect({ name: 'bob' })
@@ -109,7 +111,7 @@ describe('NUClearNetStream', () => {
         const packetEventCalls = spy.mock.calls.filter(call => call[0].type === 'packet')
         expect(packetEventCalls.length).toBe(100)
         packetEventCalls.forEach(call => {
-          expect(call[0]).toMatchObject({ type: 'packet', packet })
+          expect(call[0]).toMatchObject({ type: 'packet', data: packet })
         })
         done()
       })
@@ -128,11 +130,11 @@ describe('NUClearNetStream', () => {
       jest.spyOn(nuclearnetClient, 'connect')
       const event: StreamConnectEvent = {
         type: 'nuclear_connect',
-        options: {
-          name: 'bob'
-        }
+        data: {
+          name: 'bob',
+        },
       }
-      stream.write(event);
+      stream.write(event)
       expect(nuclearnetClient.connect).toHaveBeenCalled()
     })
 
@@ -141,11 +143,11 @@ describe('NUClearNetStream', () => {
       jest.spyOn(nuclearnetClient, 'connect').mockImplementation(() => disconnect)
       const connectEvent: StreamConnectEvent = {
         type: 'nuclear_connect',
-        options: { name: 'bob' }
+        data: { name: 'bob' },
       }
-      stream.write(connectEvent);
-      const disconnectEvent: StreamDisconnectEvent = { type: 'nuclear_disconnect' }
-      stream.write(disconnectEvent);
+      stream.write(connectEvent)
+      const disconnectEvent: StreamDisconnectEvent = { type: 'nuclear_disconnect', data: undefined }
+      stream.write(disconnectEvent)
       expect(disconnect).toHaveBeenCalled()
     })
   })
@@ -170,7 +172,7 @@ describe('PeerFilter', () => {
     })
     const event: StreamPacket = {
       type: 'packet',
-      packet: {
+      data: {
         peer: { name: 'bob', address: 'fake_address', port: -1 },
         hash: new Buffer(8),
         payload: new Buffer(8),
@@ -189,7 +191,7 @@ describe('PeerFilter', () => {
     })
     const event: StreamPacket = {
       type: 'packet',
-      packet: {
+      data: {
         peer: { name: 'alice', address: 'fake_address', port: -1 },
         hash: new Buffer(8),
         payload: new Buffer(8),

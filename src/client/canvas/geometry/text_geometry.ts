@@ -9,7 +9,6 @@ export class TextGeometry {
   @observable public text: string
   @observable public textAlign: 'start' | 'end' | 'left' | 'right' | 'center'
   @observable public textBaseline: 'top' | 'hanging' | 'middle' | 'alphabetic' | 'ideographic' | 'bottom'
-  @observable public transform: Transform
   @observable public x: number
   @observable public y: number
 
@@ -20,7 +19,6 @@ export class TextGeometry {
     this.text = opts.text
     this.textAlign = opts.textAlign
     this.textBaseline = opts.textBaseline
-    this.transform = opts.transform
     this.x = opts.x
     this.y = opts.y
   }
@@ -32,7 +30,6 @@ export class TextGeometry {
     text = '',
     textAlign = 'start',
     textBaseline = 'alphabetic',
-    transform = Transform.of(),
     x = 0,
     y = 0,
   }: Partial<TextGeometry> = {}): TextGeometry {
@@ -43,7 +40,6 @@ export class TextGeometry {
       text,
       textAlign,
       textBaseline,
-      transform,
       x,
       y,
     })

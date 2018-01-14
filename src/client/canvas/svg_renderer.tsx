@@ -9,6 +9,7 @@ import { Group } from './svg/group'
 import { transform } from './svg/svg'
 
 export type SVGRendererProps = {
+  className: string
   scene: GroupGeometry
   camera: Transform
 }
@@ -17,23 +18,18 @@ export type SVGRendererProps = {
 export class SVGRenderer extends Component<SVGRendererProps> {
 
   public render() {
-    return <svg>
-      <g transform={transform(this.props.camera)}>
+
+    const c = this.props.camera.clone()
+
+    c.scale.x = 1 / c.scale.x
+    c.scale.y = 1 / c.scale.y
+    c.translate.x = -c.translate.x / c.scale.x
+    c.translate.y = -c.translate.y / c.scale.y
+
+    return <svg className={this.props.className}>
+      <g transform={transform(c)}>
         <Group model={this.props.scene}/>
       </g>
     </svg>
   }
 }
-
-/*
-
-  arc_geometry
-  arrow_geometry
-  circle_geometry
-  geometry
-  line_geometry
-  marker_geometry
-  polygon_geometry
-  text_geometry
-
-*/

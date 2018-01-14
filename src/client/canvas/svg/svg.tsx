@@ -29,9 +29,17 @@ import { Text } from './text'
 export function appearance(appearance: Appearance): {} {
   if (appearance instanceof BasicAppearance) {
     return {
+      fill: appearance.fillStyle,
+      strokeWidth: appearance.lineWidth,
+      stroke: appearance.strokeStyle,
     }
   } else if (appearance instanceof LineAppearance) {
     return {
+      strokeLinecap: appearance.lineCap,
+      strokeLinejoin: appearance.lineJoin,
+      strokeDashoffset: appearance.lineDashOffset,
+      strokeWidth: appearance.lineWidth,
+      stroke: appearance.strokeStyle,
     }
   } else {
     throw new Error(`Unsupported appearance type ${appearance}`)

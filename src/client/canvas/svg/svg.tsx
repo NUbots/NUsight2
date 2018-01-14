@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react'
 import * as React from 'react'
 
 import { Transform } from '../../math/transform'
@@ -53,8 +54,7 @@ export function toSvgTransform(transform: Transform): string {
 
 type Props = { obj: Object2d, world: Transform }
 
-export function GeometryView({ obj, world }: Props): JSX.Element {
-
+export const GeometryView = observer(({ obj, world }: Props): JSX.Element => {
   if (obj instanceof GroupGeometry) {
     return <Group model={obj} world={world}/>
   } else if (obj instanceof Shape) {
@@ -78,4 +78,4 @@ export function GeometryView({ obj, world }: Props): JSX.Element {
   } else {
     throw new Error(`Unsupported geometry type: ${obj}`)
   }
-}
+})

@@ -38,7 +38,7 @@ export class WebSocket {
     this.sioSocket.emit(event, ...args)
   }
 
-  public sendVolatile(event: string, ...args: any[]) {
+  sendVolatile(event: string, ...args: any[]) {
     this.sioSocket.volatile.emit(event, ...args)
   }
 }

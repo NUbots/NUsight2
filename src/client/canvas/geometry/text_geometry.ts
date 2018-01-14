@@ -7,7 +7,7 @@ export class TextGeometry {
   @observable public fontFamily: string
   @observable public maxWidth: number
   @observable public text: string
-  @observable public textAlign: 'start' | 'end' | 'left' | 'right' | 'center'
+  @observable public textAlign: 'start' | 'middle' | 'end' | 'left' | 'right' | 'center'
   @observable public textBaseline: 'top' | 'hanging' | 'middle' | 'alphabetic' | 'ideographic' | 'bottom'
   @observable public x: number
   @observable public y: number

@@ -19,7 +19,7 @@ export class SVGRenderer extends Component<SVGRendererProps> {
 
   public render() {
     return <svg className={this.props.className}>
-      <g transform={transform(this.props.camera)}>
+      <g transform={transform(this.props.camera.inverse())}>
         <Group model={this.props.scene}/>
       </g>
     </svg>

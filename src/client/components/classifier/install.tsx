@@ -2,9 +2,11 @@ import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { ComponentType } from 'react'
 import * as React from 'react'
+
 import { NavigationConfiguration } from '../../navigation'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { AppModel } from '../app/model'
+
 import { installColorSpaceVisualizer } from './color_space_visualizer/install'
 import { ClassifierController } from './controller'
 import Icon from './icon.svg'
@@ -16,8 +18,8 @@ import { ClassifierRobotView } from './view'
 import { ClassifierView } from './view'
 
 export class ClassifierConfiguration {
-  @observable.ref public ColorSpaceVisualizer?: ComponentType<{ model: ClassifierRobotModel }>
-  @observable.ref public ClassifierRobotView?: ComponentType<ClassifierRobotViewProps>
+  @observable.ref ColorSpaceVisualizer?: ComponentType<{ model: ClassifierRobotModel }>
+  @observable.ref ClassifierRobotView?: ComponentType<ClassifierRobotViewProps>
 }
 
 export function installClassifier({ nav, appModel, nusightNetwork, Menu }: {

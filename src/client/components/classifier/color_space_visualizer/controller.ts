@@ -1,6 +1,8 @@
 import { action } from 'mobx'
 import { autorun } from 'mobx'
+
 import { Vector2 } from '../../../math/vector2'
+
 import { ColorSpaceVisualizerModel } from './model'
 import { ColorSpaceVisualizerViewModel } from './view_model'
 
@@ -14,26 +16,26 @@ export class ColorSpaceVisualizerController {
   constructor(private model: ColorSpaceVisualizerModel) {
   }
 
-  public static of(model: ColorSpaceVisualizerModel) {
+  static of(model: ColorSpaceVisualizerModel) {
     return new ColorSpaceVisualizerController(model)
   }
 
-  public componentDidMount = () => {
+  componentDidMount = () => {
     this.destroy = autorun(() => this.renderScene())
   }
 
-  public componentWillUnmount = () => {
+  componentWillUnmount = () => {
     this.destroy && this.destroy()
   }
 
   @action
-  public onMouseDown = (x: number, y: number) => {
+  onMouseDown = (x: number, y: number) => {
     this.viewModel.mouseDown = true
     this.viewModel.startDrag = Vector2.of(x, y)
   }
 
   @action
-  public onMouseMove = (x: number, y: number) => {
+  onMouseMove = (x: number, y: number) => {
     if (!this.viewModel.mouseDown) {
       return
     }
@@ -45,12 +47,12 @@ export class ColorSpaceVisualizerController {
   }
 
   @action
-  public onMouseUp = () => {
+  onMouseUp = () => {
     this.viewModel.mouseDown = false
   }
 
   @action
-  public onWheel = (deltaY: number, preventDefault: () => void) => {
+  onWheel = (deltaY: number, preventDefault: () => void) => {
     this.model.camera.distance = clamp(this.model.camera.distance + deltaY / 500, 0.01, 10)
     preventDefault()
   }

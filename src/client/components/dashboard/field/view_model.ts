@@ -1,21 +1,23 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+
 import { Group } from '../../../canvas/object/group'
 import { Transform } from '../../../math/transform'
 import { DashboardRobotViewModel } from '../dashboard_robot/view_model'
 import { GroundViewModel } from '../ground/view_model'
+
 import { FieldModel } from './model'
 
 export class FieldViewModel {
-  public constructor(private model: FieldModel) {
+  constructor(private model: FieldModel) {
   }
 
-  public static of = createTransformer((model: FieldModel): FieldViewModel => {
+  static of = createTransformer((model: FieldModel): FieldViewModel => {
     return new FieldViewModel(model)
   })
 
   @computed
-  public get scene(): Group {
+  get scene(): Group {
     return Group.of({
       transform: Transform.of({
         // TODO (Annable): move camera to the view model and put this transform there.

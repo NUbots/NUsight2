@@ -5,11 +5,11 @@ export class ClassifierController {
   constructor(private network: ClassifierNetwork) {
   }
 
-  public static of(network: ClassifierNetwork) {
+  static of(network: ClassifierNetwork) {
     return new ClassifierController(network)
   }
 
-  public destroy = () => {
+  destroy = () => {
     this.network.destroy()
   }
 }

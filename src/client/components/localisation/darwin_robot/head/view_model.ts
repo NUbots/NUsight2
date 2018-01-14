@@ -3,8 +3,10 @@ import { createTransformer } from 'mobx'
 import { Mesh } from 'three'
 import { MultiMaterial } from 'three'
 import { Object3D } from 'three'
+
 import { geometryAndMaterial } from '../../utils'
 import { LocalisationRobotModel } from '../model'
+
 import * as CameraConfig from './config/camera.json'
 import * as EyeLEDConfig from './config/eye_led.json'
 import * as HeadConfig from './config/head.json'
@@ -15,12 +17,12 @@ export class HeadViewModel {
   constructor(private model: LocalisationRobotModel) {
   }
 
-  public static of = createTransformer((model: LocalisationRobotModel): HeadViewModel => {
+  static of = createTransformer((model: LocalisationRobotModel): HeadViewModel => {
     return new HeadViewModel(model)
   })
 
   @computed
-  public get head() {
+  get head() {
     const head = new Object3D()
     head.add(this.neck)
     return head

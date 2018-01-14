@@ -1,28 +1,29 @@
 import { Transform } from '../math/transform'
 import { Vector2 } from '../math/vector2'
+
 import { Appearance } from './appearance/appearance'
 import { BasicAppearance } from './appearance/basic_appearance'
 import { LineAppearance } from './appearance/line_appearance'
+import { ArcGeometry } from './geometry/arc_geometry'
 import { ArrowGeometry } from './geometry/arrow_geometry'
 import { CircleGeometry } from './geometry/circle_geometry'
 import { LineGeometry } from './geometry/line_geometry'
 import { MarkerGeometry } from './geometry/marker_geometry'
 import { PolygonGeometry } from './geometry/polygon_geometry'
 import { TextGeometry } from './geometry/text_geometry'
-import { Object2d } from './object/object2d'
 import { Group } from './object/group'
+import { Object2d } from './object/object2d'
 import { Shape } from './object/shape'
-import { ArcGeometry } from './geometry/arc_geometry'
 
 export class CanvasRenderer {
   constructor(private context: CanvasRenderingContext2D) {
   }
 
-  public static of(context: CanvasRenderingContext2D): CanvasRenderer {
+  static of(context: CanvasRenderingContext2D): CanvasRenderer {
     return new CanvasRenderer(context)
   }
 
-  public render(scene: Group, camera: Transform = Transform.of()): void {
+  render(scene: Group, camera: Transform = Transform.of()): void {
     const canvas = this.context.canvas
     this.context.clearRect(0, 0, canvas.width, canvas.height)
     this.renderObjects(scene.children, camera.inverse().then(scene.transform))

@@ -1,22 +1,24 @@
 import { action } from 'mobx'
+
 import { message } from '../../../shared/proto/messages'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
+
 import { ClassifierRobotModel } from './model'
 import LookUpTableDiff = message.vision.LookUpTableDiff
 
 export class ClassifierNetwork {
-  public constructor(private network: Network) {
+  constructor(private network: Network) {
     this.network.on(LookUpTableDiff, this.onLookUpTableDiff)
   }
 
-  public static of(nusightNetwork: NUsightNetwork): ClassifierNetwork {
+  static of(nusightNetwork: NUsightNetwork): ClassifierNetwork {
     const network = Network.of(nusightNetwork)
     return new ClassifierNetwork(network)
   }
 
-  public destroy() {
+  destroy() {
     this.network.off()
   }
 

@@ -2,6 +2,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
+
 import { ColorSpaceVisualizer } from './color_space_visualizer/view'
 import { ClassifierModel } from './model'
 import { ClassifierRobotModel } from './model'
@@ -14,7 +15,7 @@ export class ClassifierView extends Component<{
   ClassifierRobotView?: ComponentType<ClassifierRobotViewProps>,
   componentWillUnmount(): void
 }> {
-  public render() {
+  render() {
     const { model, Menu, ClassifierRobotView } = this.props
     return (
       <div className={styles.classifier}>
@@ -26,7 +27,7 @@ export class ClassifierView extends Component<{
     )
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     this.props.componentWillUnmount()
   }
 }
@@ -39,7 +40,7 @@ export type ClassifierRobotViewProps = {
 export class ClassifierRobotView extends Component<ClassifierRobotViewProps & {
   ColorSpaceVisualizer?: ComponentType<{ model: ClassifierRobotModel }>
 }> {
-  public render() {
+  render() {
     const { model, ColorSpaceVisualizer } = this.props
     return (
       <div className={styles.lutDisplay}>

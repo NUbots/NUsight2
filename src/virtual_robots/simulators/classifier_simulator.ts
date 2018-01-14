@@ -1,8 +1,8 @@
 import { message } from '../../shared/proto/messages'
-import { Simulator } from '../simulator'
-import { Message } from '../simulator'
 import LookUpTableDiff = message.vision.LookUpTableDiff
 import { flatMap } from '../flat_map'
+import { Simulator } from '../simulator'
+import { Message } from '../simulator'
 
 const T_UNCLASSIFIED = 117.0
 const T_WHITE = 119.0 // line
@@ -13,11 +13,11 @@ const T_CYAN = 99.0
 const T_MAGENTA = 109.0
 
 export class ClassifierSimulator implements Simulator {
-  public static of(): ClassifierSimulator {
+  static of(): ClassifierSimulator {
     return new ClassifierSimulator()
   }
 
-  public simulate(time: number, index: number, numRobots: number): Message[] {
+  simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.vision.LookUpTableDiff'
     const buffer = LookUpTableDiff.encode({
       diff: flatMap(() => ([

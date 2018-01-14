@@ -1,6 +1,7 @@
 import { action } from 'mobx'
 import { computed } from 'mobx'
 import { observable } from 'mobx'
+
 import { Transform } from '../../math/transform'
 import { Appearance } from '../appearance/appearance'
 import { BasicAppearance } from '../appearance/basic_appearance'
@@ -10,6 +11,7 @@ import { CircleGeometry } from '../geometry/circle_geometry'
 import { LineGeometry } from '../geometry/line_geometry'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
+
 import { Group } from './group'
 import { GroupOpts } from './group'
 import { Object2d } from './object2d'
@@ -28,8 +30,8 @@ export type ShapeOpts = {
 } & GroupOpts
 
 export class Shape implements Object2d {
-  @observable public appearance: Appearance
-  @observable public geometry: Geometry
+  @observable appearance: Appearance
+  @observable geometry: Geometry
   @observable private group: Group
 
   constructor(opts: ShapeOpts) {
@@ -38,7 +40,7 @@ export class Shape implements Object2d {
     this.group = Group.of(opts)
   }
 
-  public static of(geometry: Geometry, appearance: Appearance = BasicAppearance.of()) {
+  static of(geometry: Geometry, appearance: Appearance = BasicAppearance.of()) {
     return new Shape({
       appearance,
       children: [],
@@ -47,17 +49,17 @@ export class Shape implements Object2d {
     })
   }
 
-  public add(obj: Object2d): void {
+  add(obj: Object2d): void {
     this.group.add(obj)
   }
 
   @computed
-  public get children(): Object2d[] {
+  get children(): Object2d[] {
     return this.group.children
   }
 
   @computed
-  public get transform(): Transform {
+  get transform(): Transform {
     return this.group.transform
   }
 }

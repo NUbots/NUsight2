@@ -2,6 +2,7 @@ import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 import { Mesh } from 'three'
 import { MultiMaterial } from 'three'
+
 import { geometryAndMaterial } from '../../utils'
 import { HeadViewModel } from '../head/view_model'
 import { LeftArmViewModel } from '../left_arm/view_model'
@@ -9,18 +10,19 @@ import { LeftLegViewModel } from '../left_leg/view_model'
 import { LocalisationRobotModel } from '../model'
 import { RightArmViewModel } from '../right_arm/view_model'
 import { RightLegViewModel } from '../right_leg/view_model'
+
 import * as BodyConfig from './config/body.json'
 
 export class BodyViewModel {
-  public constructor(private model: LocalisationRobotModel) {
+  constructor(private model: LocalisationRobotModel) {
   }
 
-  public static of = createTransformer((model: LocalisationRobotModel): BodyViewModel => {
+  static of = createTransformer((model: LocalisationRobotModel): BodyViewModel => {
     return new BodyViewModel(model)
   })
 
   @computed
-  public get body(): Mesh {
+  get body(): Mesh {
     const { geometry, materials } = this.bodyGeometryAndMaterial
     const mesh = new Mesh(geometry, new MultiMaterial(materials))
     mesh.position.set(0, 0, 0.096)

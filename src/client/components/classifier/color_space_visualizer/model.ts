@@ -1,13 +1,14 @@
 import { computed } from 'mobx'
 import { observable } from 'mobx'
+
 import { memoize } from '../../../base/memoize'
 import { Lut } from '../model'
 import { ClassifierRobotModel } from '../model'
 
 export class ColorSpaceVisualizerModel {
-  @observable.ref public width: number
-  @observable.ref public height: number
-  @observable.shallow public camera: { distance: number, elevation: number, azimuth: number }
+  @observable.ref width: number
+  @observable.ref height: number
+  @observable.shallow camera: { distance: number, elevation: number, azimuth: number }
 
   constructor(private model: ClassifierRobotModel, { width, height, camera }: {
     width: number,
@@ -19,7 +20,7 @@ export class ColorSpaceVisualizerModel {
     this.camera = camera
   }
 
-  public static of = memoize((model: ClassifierRobotModel): ColorSpaceVisualizerModel => {
+  static of = memoize((model: ClassifierRobotModel): ColorSpaceVisualizerModel => {
     return new ColorSpaceVisualizerModel(model, {
       width: 512,
       height: 512,

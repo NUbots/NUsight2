@@ -1,6 +1,7 @@
 import { Atom } from 'mobx'
 import { observable } from 'mobx'
 import { computed } from 'mobx'
+
 import { memoize } from '../../base/memoize'
 import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
@@ -12,7 +13,7 @@ export class ClassifierModel {
     this.appModel = appModel
   }
 
-  public static of = memoize((appModel: AppModel): ClassifierModel => {
+  static of = memoize((appModel: AppModel): ClassifierModel => {
     return new ClassifierModel(appModel)
   })
 
@@ -23,15 +24,15 @@ export class ClassifierModel {
 }
 
 export class ClassifierRobotModel {
-  @observable.ref public aspect: number
-  @observable.ref public lut: Lut
+  @observable.ref aspect: number
+  @observable.ref lut: Lut
 
   constructor(private model: RobotModel, { aspect, lut }: { aspect: number, lut: Lut }) {
     this.aspect = aspect
     this.lut = lut
   }
 
-  public static of = memoize((model: RobotModel): ClassifierRobotModel => {
+  static of = memoize((model: RobotModel): ClassifierRobotModel => {
     return new ClassifierRobotModel(model, {
       aspect: 1,
       lut: Lut.of(),
@@ -51,20 +52,20 @@ export class ClassifierRobotModel {
 
 export class Lut {
   private atom: Atom
-  private data_: Uint8Array
-  @observable.shallow public size: { x: number, y: number, z: number }
+  private rawData: Uint8Array
+  @observable.shallow size: { x: number, y: number, z: number }
 
-  public constructor({ atom, data, size }: {
+  constructor({ atom, data, size }: {
     atom: Atom,
     data: Uint8Array,
     size: { x: number, y: number, z: number }
   }) {
     this.atom = atom
-    this.data_ = data
+    this.rawData = data
     this.size = size
   }
 
-  public static of() {
+  static of() {
     return new Lut({
       atom: new Atom('Lut'),
       data: new Uint8Array(2 ** (6 + 6 + 6)).fill(117),
@@ -72,13 +73,13 @@ export class Lut {
     })
   }
 
-  public get data(): Uint8Array {
+  get data(): Uint8Array {
     this.atom.reportObserved()
-    return this.data_
+    return this.rawData
   }
 
-  public set(index: number, value: number) {
-    this.data_[index] = value
+  set(index: number, value: number) {
+    this.rawData[index] = value
     this.atom.reportChanged()
   }
 }

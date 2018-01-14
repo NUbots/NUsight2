@@ -2,6 +2,7 @@ import { WheelEvent } from 'react'
 import { MouseEvent } from 'react'
 import { Component } from 'react'
 import * as React from 'react'
+
 import { ColorSpaceVisualizerModel } from './model'
 import * as styles from './styles.css'
 import { ColorSpaceVisualizerViewModel } from './view_model'
@@ -19,7 +20,7 @@ export type ColorSpaceVisualizerProps = {
 export class ColorSpaceVisualizer extends Component<ColorSpaceVisualizerProps> {
   private viewModel = ColorSpaceVisualizerViewModel.of(this.props.model)
 
-  public render() {
+  render() {
     const { width, height } = this.viewModel
     return (
       <canvas
@@ -35,11 +36,11 @@ export class ColorSpaceVisualizer extends Component<ColorSpaceVisualizerProps> {
     )
   }
 
-  public componentDidMount() {
+  componentDidMount() {
     this.props.componentDidMount && this.props.componentDidMount()
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     this.props.componentWillUnmount && this.props.componentWillUnmount()
   }
 

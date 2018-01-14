@@ -1,13 +1,13 @@
 import { computed } from 'mobx'
-import * as mobxUtils from 'mobx-utils'
 import { observable } from 'mobx'
+import * as mobxUtils from 'mobx-utils'
 import { Vector3 } from 'three'
 import { Points } from 'three'
 import { BufferAttribute } from 'three'
 import { BufferGeometry } from 'three'
 import { PerspectiveCamera } from 'three'
 import { Scene } from 'three'
-import { WebGLRenderer } from 'three'
+import { Camera } from 'three'
 import { LinearFilter } from 'three'
 import { ClampToEdgeWrapping } from 'three'
 import { UnsignedByteType } from 'three'
@@ -16,22 +16,24 @@ import { DataTexture } from 'three'
 import { Texture } from 'three'
 import { ShaderMaterial } from 'three'
 import { Material } from 'three'
-import { Camera } from 'three'
+import { WebGLRenderer } from 'three'
+
 import { memoize } from '../../../base/memoize'
 import { Vector2 } from '../../../math/vector2'
+
 import { ColorSpaceVisualizerModel } from './model'
 import * as fragmentShader from './shaders/color_space_cube.frag'
 import * as vertexShader from './shaders/color_space_cube.vert'
 
 export class ColorSpaceVisualizerViewModel {
-  @observable.ref public canvas: HTMLCanvasElement | null
-  @observable.ref public mouseDown: boolean = false
-  @observable.ref public startDrag: Vector2
+  @observable.ref canvas: HTMLCanvasElement | null
+  @observable.ref mouseDown: boolean = false
+  @observable.ref startDrag: Vector2
 
   constructor(private model: ColorSpaceVisualizerModel) {
   }
 
-  public static of = memoize((model: ColorSpaceVisualizerModel) => {
+  static of = memoize((model: ColorSpaceVisualizerModel) => {
     return new ColorSpaceVisualizerViewModel(model)
   })
 
@@ -86,15 +88,15 @@ export class ColorSpaceVisualizerViewModel {
   @computed
   get pointsGeometry(): BufferGeometry {
     const lutSize = this.model.lut.data.length
-    var geometry = new BufferGeometry()
-    var vertices = new Float32Array(lutSize * 3)
-    var index = 0
-    var maxX = 2 ** this.model.lut.size.x
-    var maxY = 2 ** this.model.lut.size.y
-    var maxZ = 2 ** this.model.lut.size.z
-    for (var r = 0; r < maxX; r++) {
-      for (var g = 0; g < maxY; g++) {
-        for (var b = 0; b < maxZ; b++) {
+    const geometry = new BufferGeometry()
+    const vertices = new Float32Array(lutSize * 3)
+    let index = 0
+    const maxX = 2 ** this.model.lut.size.x
+    const maxY = 2 ** this.model.lut.size.y
+    const maxZ = 2 ** this.model.lut.size.z
+    for (let r = 0; r < maxX; r++) {
+      for (let g = 0; g < maxY; g++) {
+        for (let b = 0; b < maxZ; b++) {
           vertices[index] = r
           vertices[index + 1] = g
           vertices[index + 2] = b

@@ -1,6 +1,8 @@
 import * as React from 'react'
+
 import { ClassifierConfiguration } from '../install'
 import { ClassifierRobotModel } from '../model'
+
 import { ColorSpaceVisualizerController } from './controller'
 import { ColorSpaceVisualizerModel } from './model'
 import { ColorSpaceVisualizer } from './view'

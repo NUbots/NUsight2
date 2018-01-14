@@ -3,6 +3,7 @@ import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetPacket } from 'nuclearnet.js'
 import * as stream from 'stream'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
+import { hashType } from '../nuclearnet/fake_nuclearnet_server'
 import { WebSocket } from '../nuclearnet/web_socket_server'
 
 export type StreamEvent = StreamPacket | StreamJoinEvent | StreamLeaveEvent | StreamConnectEvent | StreamDisconnectEvent
@@ -17,7 +18,7 @@ export class NUClearNetStream extends stream.Duplex {
   private buffering = false
   private disconnect?: () => void
 
-  constructor(private nuclearnetClient: NUClearNetClient, private highWaterMark: number = 16) {
+  constructor(private nuclearnetClient: NUClearNetClient, private highWaterMark: number = 512) {
     super({
       objectMode: true,
       highWaterMark,
@@ -27,7 +28,7 @@ export class NUClearNetStream extends stream.Duplex {
     nuclearnetClient.onLeave(this.onLeave)
   }
 
-  public static of(nuclearnetClient: NUClearNetClient, highWaterMark: number = 16) {
+  public static of(nuclearnetClient: NUClearNetClient, highWaterMark: number = 512) {
     return new NUClearNetStream(nuclearnetClient, highWaterMark)
   }
 
@@ -40,7 +41,9 @@ export class NUClearNetStream extends stream.Duplex {
   // }
 
   private bufferEvent(event: StreamPacket) {
-    this.buffer.push(event)
+    if (this.buffer.length < this.highWaterMark) {
+      this.buffer.push(event)
+    }
   }
 
   private onDrain = () => {
@@ -130,9 +133,12 @@ export class PeerFilter extends stream.Transform {
 }
 
 export class WebSocketStream extends stream.Duplex {
+  private hashes: Map<string, string> = new Map()
+
   public constructor(private socket: WebSocket) {
     super({
       objectMode: true,
+      highWaterMark: 512,
     })
 
     socket.on('listen', this.onListen)
@@ -152,30 +158,37 @@ export class WebSocketStream extends stream.Duplex {
   _write(event: StreamEvent, encoding: string, done: Function) {
     if (event.type === 'packet') {
       const packet = event.data;
-      if (packet.reliable) {
-        this.socket.send(event.type, packet)
-      } else {
-        this.socket.sendVolatile(event.type, packet)
+      const hexHash = packet.hash.toString('hex')
+      if (this.hashes.has(hexHash)) {
+        const eventName = this.hashes.get(hexHash)!;
+        if (packet.reliable) {
+          this.socket.send(eventName, packet)
+          done()
+        } else {
+          this.socket.sendVolatile(eventName, packet, done)
+        }
       }
     } else {
       this.socket.send(event.type, event.data)
+      done()
     }
-    done()
   }
 
-  onListen = () => {
-
+  onListen = (event: string, requestToken: string) => {
+    this.hashes.set(hashType(event).toString('hex'), event)
   }
 
   onUnlisten = () => {
 
   }
 
-  onConnect = () => {
-
+  onConnect = (options: NUClearNetOptions) => {
+    const event: StreamConnectEvent = { type: 'nuclear_connect', data: options }
+    this.push(event)
   }
 
   onDisconnect = () => {
-
+    const event: StreamDisconnectEvent = { type: 'nuclear_disconnect', data: undefined }
+    this.push(event)
   }
 }

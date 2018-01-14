@@ -88,7 +88,9 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
     const listener = (packet: NUClearNetPacket, ack?: () => void) => {
       cb(packet)
       if (ack) {
-        ack()
+        setTimeout(() => {
+          ack()
+        }, 500)
       }
     }
     this.socket.on(event, listener)

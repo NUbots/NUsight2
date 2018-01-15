@@ -5,33 +5,33 @@ import { Shape } from '../object/shape'
 
 import { applyAppearance } from './canvas'
 
-export function renderText(context: CanvasRenderingContext2D, shape: Shape<TextGeometry>, world: Transform): void {
+export function renderText(ctx: CanvasRenderingContext2D, shape: Shape<TextGeometry>, world: Transform): void {
 
   const { x, y, text, maxWidth, fontFamily, textAlign, textBaseline, alignToView } = shape.geometry
 
-  context.font = `1em ${fontFamily}`
-  context.textAlign = textAlign
-  context.textBaseline = textBaseline
+  ctx.font = `1em ${fontFamily}`
+  ctx.textAlign = textAlign
+  ctx.textBaseline = textBaseline
 
   const position = Vector2.of(x, y)
 
-  const textWidth = context.measureText(text).width
+  const textWidth = ctx.measureText(text).width
   const scale = maxWidth / textWidth
 
   if (alignToView) {
     // Ensure the text is always rendered without rotation such that it is aligned with the screen.
-    context.scale(Math.sign(world.scale.x), Math.sign(world.scale.y))
-    context.rotate(-world.rotate)
+    ctx.scale(Math.sign(world.scale.x), Math.sign(world.scale.y))
+    ctx.rotate(-world.rotate)
     position.transform(Transform.of({
       rotate: -world.rotate,
       scale: { x: Math.sign(world.scale.x), y: Math.sign(world.scale.y) },
     }))
   }
 
-  context.scale(scale, scale)
-  context.translate(position.x / scale, position.y / scale)
+  ctx.scale(scale, scale)
+  ctx.translate(position.x / scale, position.y / scale)
 
-  applyAppearance(context, shape.appearance)
+  applyAppearance(ctx, shape.appearance)
 
-  context.fillText(text, 0, 0)
+  ctx.fillText(text, 0, 0)
 }

@@ -3,7 +3,7 @@ import { Shape } from '../object/shape'
 
 import { applyAppearance } from './canvas'
 
-export function renderMarker(context: CanvasRenderingContext2D, shape: Shape<MarkerGeometry>): void {
+export function renderMarker(ctx: CanvasRenderingContext2D, shape: Shape<MarkerGeometry>): void {
 
   const { x, y, radius, heading } = shape.geometry
 
@@ -16,8 +16,8 @@ export function renderMarker(context: CanvasRenderingContext2D, shape: Shape<Mar
   const startAngle = headingAngle + startAngleOffset
   const endAngle = headingAngle + arcDistance + startAngleOffset
 
-  context.beginPath()
-  context.arc(
+  ctx.beginPath()
+  ctx.arc(
     x,
     y,
     radius,
@@ -29,14 +29,14 @@ export function renderMarker(context: CanvasRenderingContext2D, shape: Shape<Mar
   const sqrt2 = Math.sqrt(2)
 
   // Convert the heading to absolute canvas coordinates.
-  context.lineTo(
+  ctx.lineTo(
     x + sqrt2 * radius * heading.x,
     y + sqrt2 * radius * heading.y,
   )
-  context.closePath()
+  ctx.closePath()
 
-  applyAppearance(context, shape.appearance)
+  applyAppearance(ctx, shape.appearance)
 
-  context.fill()
-  context.stroke()
+  ctx.fill()
+  ctx.stroke()
 }

@@ -3,15 +3,15 @@ import { Shape } from '../object/shape'
 
 import { applyAppearance } from './canvas'
 
-export function renderLine(context: CanvasRenderingContext2D, shape: Shape<LineGeometry>): void {
+export function renderLine(ctx: CanvasRenderingContext2D, shape: Shape<LineGeometry>): void {
 
   const { origin, target } = shape.geometry
 
-  context.beginPath()
-  context.moveTo(origin.x, origin.y)
-  context.lineTo(target.x, target.y)
+  ctx.beginPath()
+  ctx.moveTo(origin.x, origin.y)
+  ctx.lineTo(target.x, target.y)
 
-  applyAppearance(context, shape.appearance)
+  applyAppearance(ctx, shape.appearance)
 
-  context.stroke()
+  ctx.stroke()
 }

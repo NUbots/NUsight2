@@ -3,12 +3,12 @@ import { Shape } from '../object/shape'
 
 import { applyAppearance } from './canvas'
 
-export function renderCircle(context: CanvasRenderingContext2D, shape: Shape<CircleGeometry>): void {
+export function renderCircle(ctx: CanvasRenderingContext2D, shape: Shape<CircleGeometry>): void {
 
   const { x, y, radius } = shape.geometry
 
-  context.beginPath()
-  context.arc(
+  ctx.beginPath()
+  ctx.arc(
     x,
     y,
     radius,
@@ -16,8 +16,8 @@ export function renderCircle(context: CanvasRenderingContext2D, shape: Shape<Cir
     2 * Math.PI,
   )
 
-  applyAppearance(context, shape.appearance)
+  applyAppearance(ctx, shape.appearance)
 
-  context.fill()
-  context.stroke()
+  ctx.fill()
+  ctx.stroke()
 }

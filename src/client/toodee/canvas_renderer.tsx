@@ -11,7 +11,7 @@ import { Transform } from '../math/transform'
 import { renderObject2d } from './canvas/canvas'
 import { RendererProps } from './renderer_props'
 import * as style from './style.css'
-import { autorunAsync } from 'mobx'
+import { autorun } from 'mobx'
 
 @observer
 export class CanvasRenderer extends Component<RendererProps> {
@@ -25,7 +25,7 @@ export class CanvasRenderer extends Component<RendererProps> {
     }
 
     // Render when changes happen
-    this.stopAutorun = autorunAsync(() => this.renderCanvas())
+    this.stopAutorun = autorun(() => this.renderCanvas())
   }
 
   componentWillUnmount() {
@@ -52,16 +52,11 @@ export class CanvasRenderer extends Component<RendererProps> {
     this.canvas = canvas
   }
 
-  @action
   renderCanvas = () => {
-
-    console.log('Rendering')
-
     // Render our scene
     const { scene, camera } = this.props
 
-    const cam = this.resolution.clone().then(camera)
-    console.log(cam)
+    const cam = this.resolution.inverse().then(camera)
 
     renderObject2d(this.canvas.getContext('2d')!, scene, cam)
   }

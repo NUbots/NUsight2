@@ -3,15 +3,15 @@ import { Shape } from '../object/shape'
 
 import { applyAppearance } from './canvas'
 
-export function renderArc(context: CanvasRenderingContext2D, shape: Shape<ArcGeometry>): void {
+export function renderArc(ctx: CanvasRenderingContext2D, shape: Shape<ArcGeometry>): void {
 
   const { origin, radius, startAngle, endAngle, anticlockwise } = shape.geometry
 
-  context.beginPath()
-  context.arc(origin.x, origin.y, radius, startAngle, endAngle, anticlockwise)
+  ctx.beginPath()
+  ctx.arc(origin.x, origin.y, radius, startAngle, endAngle, anticlockwise)
 
-  applyAppearance(context, shape.appearance)
+  applyAppearance(ctx, shape.appearance)
 
-  context.stroke()
-  context.fill()
+  ctx.stroke()
+  ctx.fill()
 }

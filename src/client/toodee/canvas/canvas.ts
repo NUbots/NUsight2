@@ -22,32 +22,32 @@ import { renderMarker } from './marker'
 import { renderPolygon } from './polygon'
 import { renderText } from './text'
 
-export function renderObject2d(context: CanvasRenderingContext2D, obj: Object2d, world: Transform) {
+export function renderObject2d(ctx: CanvasRenderingContext2D, obj: Object2d, world: Transform) {
 
   if (obj instanceof Group) {
     const newWorld = world.clone().then(obj.transform)
 
     for (const o of obj.children) {
-      context.save()
-      applyTransform(context, obj.transform)
-      renderObject2d(context, o, newWorld)
-      context.restore()
+      ctx.save()
+      applyTransform(ctx, obj.transform)
+      renderObject2d(ctx, o, newWorld)
+      ctx.restore()
     }
   } else if (obj instanceof Shape) {
     if (obj.geometry instanceof ArcGeometry) {
-      renderArc(context, obj)
+      renderArc(ctx, obj)
     } else if (obj.geometry instanceof ArrowGeometry) {
-      renderArrow(context, obj)
+      renderArrow(ctx, obj)
     } else if (obj.geometry instanceof CircleGeometry) {
-      renderCircle(context, obj)
+      renderCircle(ctx, obj)
     } else if (obj.geometry instanceof LineGeometry) {
-      renderLine(context, obj)
+      renderLine(ctx, obj)
     } else if (obj.geometry instanceof MarkerGeometry) {
-      renderMarker(context, obj)
+      renderMarker(ctx, obj)
     } else if (obj.geometry instanceof PolygonGeometry) {
-      renderPolygon(context, obj)
+      renderPolygon(ctx, obj)
     } else if (obj.geometry instanceof TextGeometry) {
-      renderText(context, obj, world)
+      renderText(ctx, obj, world)
     } else {
       throw new Error(`Unsupported geometry type: ${obj.geometry}`)
     }
@@ -56,30 +56,24 @@ export function renderObject2d(context: CanvasRenderingContext2D, obj: Object2d,
   }
 }
 
-export function applyTransform(context: CanvasRenderingContext2D, transform: Transform): void {
-
-  const translationDash = Vector2.from(transform.translate).transform(Transform.of({
-    rotate: transform.rotate * (transform.anticlockwise ? 1 : -1),
-    scale: { x: 1 / transform.scale.x, y: 1 / transform.scale.y },
-  }))
-
-  context.scale(transform.scale.x, transform.scale.y)
-  context.rotate(transform.rotate * (transform.anticlockwise ? 1 : -1))
-  context.translate(translationDash.x, translationDash.y)
+export function applyTransform(ctx: CanvasRenderingContext2D, transform: Transform): void {
+  ctx.translate(transform.translate.x, transform.translate.y)
+  ctx.scale(transform.scale.x, transform.scale.y)
+  ctx.rotate(transform.rotate * (transform.anticlockwise ? 1 : -1))
 }
 
-export function applyAppearance(context: CanvasRenderingContext2D, appearance: Appearance): void {
+export function applyAppearance(ctx: CanvasRenderingContext2D, appearance: Appearance): void {
 
   if (appearance instanceof BasicAppearance) {
-    context.fillStyle = appearance.fillStyle
-    context.lineWidth = appearance.lineWidth
-    context.strokeStyle = appearance.strokeStyle
+    ctx.fillStyle = appearance.fillStyle
+    ctx.lineWidth = appearance.lineWidth
+    ctx.strokeStyle = appearance.strokeStyle
   } else if (appearance instanceof LineAppearance) {
-    context.lineCap = appearance.lineCap
-    context.lineDashOffset = appearance.lineDashOffset
-    context.lineJoin = appearance.lineJoin
-    context.lineWidth = appearance.lineWidth
-    context.strokeStyle = appearance.strokeStyle
+    ctx.lineCap = appearance.lineCap
+    ctx.lineDashOffset = appearance.lineDashOffset
+    ctx.lineJoin = appearance.lineJoin
+    ctx.lineWidth = appearance.lineWidth
+    ctx.strokeStyle = appearance.strokeStyle
   } else {
     throw new Error(`Unsupported appearance type: ${appearance}`)
   }

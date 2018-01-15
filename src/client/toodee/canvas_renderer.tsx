@@ -1,6 +1,7 @@
 import { IReactionDisposer } from 'mobx'
 import { observable } from 'mobx'
 import { action } from 'mobx'
+import { autorun } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
@@ -11,7 +12,6 @@ import { Transform } from '../math/transform'
 import { renderObject2d } from './canvas/canvas'
 import { RendererProps } from './renderer_props'
 import * as style from './style.css'
-import { autorun } from 'mobx'
 
 @observer
 export class CanvasRenderer extends Component<RendererProps> {

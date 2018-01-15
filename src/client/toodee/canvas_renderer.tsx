@@ -64,36 +64,26 @@ export class CanvasRenderer extends Component<RendererProps> {
   @action
   private onResize = (width: number, height: number) => {
 
-    const dpi = devicePixelRatio
-
-    // Apply our canvas size + dpi settings
-    const pxWidth = width * dpi
-    const pxHeight = height * dpi
+    // Multiply all our widths by dpi
+    width *= devicePixelRatio
+    height *= devicePixelRatio
 
     // Translate to the center
-    this.resolution.translate.x = pxWidth * 0.5
-    this.resolution.translate.y = pxHeight * 0.5
+    this.resolution.translate.x = -width * 0.5
+    this.resolution.translate.y = -height * 0.5
 
     // If we have an aspect ratio, use it to scale the canvas to unit size
-    const { aspectRatio } = this.props
-    if (aspectRatio !== undefined) {
+    if (this.props.aspectRatio !== undefined) {
 
-      // Given our aspect ratio work out the scale to ensure it remains on screen
       const canvasAspect = width / height
-
-      // Get a width and height to make the image unit height
-      const unitWidth = aspectRatio
-      const unitHeight = 1
-
-      // Work out which scale we should use
-      const scale = canvasAspect > aspectRatio ? unitWidth / (width * dpi) : unitHeight / (height * dpi)
+      const scale = canvasAspect < this.props.aspectRatio ? 1 / width : 1 / (height * this.props.aspectRatio)
 
       // Scale to fit
       this.resolution.scale.x = scale
-      this.resolution.scale.y = -scale // Flip the y scale to make y up like opengl coordinates
+      this.resolution.scale.y = scale
     } else {
-      this.resolution.scale.x = 1 / dpi
-      this.resolution.scale.y = -1 / dpi
+      this.resolution.scale.x = 1
+      this.resolution.scale.y = 1
     }
   }
 }

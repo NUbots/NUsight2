@@ -1,7 +1,7 @@
 import { ArcGeometry } from '../geometry/arc_geometry'
 import { Shape } from '../object/shape'
 
-import { applyAppearance } from './canvas'
+import { applyAppearance } from './util'
 
 export function renderArc(ctx: CanvasRenderingContext2D, shape: Shape<ArcGeometry>): void {
 

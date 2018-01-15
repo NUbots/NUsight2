@@ -10,7 +10,7 @@ import { Transform } from '../math/transform'
 import { RendererProps } from './renderer_props'
 import * as style from './style.css'
 import { Group } from './svg/group'
-import { toSvgTransform } from './svg/svg'
+import { toSvgTransform } from './svg/util'
 
 @observer
 export class SVGRenderer extends Component<RendererProps> {

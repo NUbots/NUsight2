@@ -9,8 +9,8 @@ import ReactResizeDetector from 'react-resize-detector'
 
 import { Transform } from '../math/transform'
 
-import { renderObject2d } from './canvas/canvas'
-import { applyTransform } from './canvas/canvas'
+import { renderObject2d } from './canvas/util'
+import { applyTransform } from './canvas/util'
 import { RendererProps } from './renderer_props'
 import * as style from './style.css'
 

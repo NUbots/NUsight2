@@ -3,7 +3,7 @@ import { Vector2 } from '../../math/vector2'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Shape } from '../object/shape'
 
-import { applyAppearance } from './canvas'
+import { applyAppearance } from './util'
 
 export function renderText(ctx: CanvasRenderingContext2D, shape: Shape<TextGeometry>, world: Transform): void {
 

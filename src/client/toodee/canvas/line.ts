@@ -1,7 +1,7 @@
 import { LineGeometry } from '../geometry/line_geometry'
 import { Shape } from '../object/shape'
 
-import { applyAppearance } from './canvas'
+import { applyAppearance } from './util'
 
 export function renderLine(ctx: CanvasRenderingContext2D, shape: Shape<LineGeometry>): void {
 

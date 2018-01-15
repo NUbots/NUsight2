@@ -1,7 +1,7 @@
 import { ArrowGeometry } from '../geometry/arrow_geometry'
 import { Shape } from '../object/shape'
 
-import { applyAppearance } from './canvas'
+import { applyAppearance } from './util'
 
 export function renderArrow(ctx: CanvasRenderingContext2D, shape: Shape<ArrowGeometry>): void {
 

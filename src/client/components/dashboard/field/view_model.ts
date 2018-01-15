@@ -1,8 +1,8 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 
-import { Group } from '../../../canvas/object/group'
 import { Transform } from '../../../math/transform'
+import { Group } from '../../../toodee/object/group'
 import { DashboardRobotViewModel } from '../dashboard_robot/view_model'
 import { GroundViewModel } from '../ground/view_model'
 
@@ -28,6 +28,19 @@ export class FieldViewModel {
         this.robots,
       ],
     })
+  }
+
+  @computed
+  get camera(): Transform {
+    return Transform.of({
+      scale: { x: 1.0 / this.model.fieldLength, y: 1.0 / this.model.fieldLength },
+      translate: { x: -this.model.fieldLength * 0.5, y: -this.model.fieldWidth * 0.5 },
+    })
+  }
+
+  @computed
+  get aspectRatio(): number {
+    return this.model.fieldLength / this.model.fieldWidth
   }
 
   @computed

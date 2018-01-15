@@ -1,14 +1,14 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 
-import { BasicAppearance } from '../../../canvas/appearance/basic_appearance'
-import { LineAppearance } from '../../../canvas/appearance/line_appearance'
-import { CircleGeometry } from '../../../canvas/geometry/circle_geometry'
-import { LineGeometry } from '../../../canvas/geometry/line_geometry'
-import { PolygonGeometry } from '../../../canvas/geometry/polygon_geometry'
-import { Group } from '../../../canvas/object/group'
-import { Shape } from '../../../canvas/object/shape'
 import { Vector2 } from '../../../math/vector2'
+import { BasicAppearance } from '../../../toodee/appearance/basic_appearance'
+import { LineAppearance } from '../../../toodee/appearance/line_appearance'
+import { CircleGeometry } from '../../../toodee/geometry/circle_geometry'
+import { LineGeometry } from '../../../toodee/geometry/line_geometry'
+import { PolygonGeometry } from '../../../toodee/geometry/polygon_geometry'
+import { Group } from '../../../toodee/object/group'
+import { Shape } from '../../../toodee/object/shape'
 
 import { GroundModel } from './model'
 

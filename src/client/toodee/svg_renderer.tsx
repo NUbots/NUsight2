@@ -14,46 +14,58 @@ import { toSvgTransform } from './svg/svg'
 
 @observer
 export class SVGRenderer extends Component<RendererProps> {
-  @observable private resolution: Transform
+  @observable private resolution: Transform = Transform.of()
 
   render() {
     const { className, scene, camera } = this.props
 
+    const cam = this.resolution.clone().then(camera)
+
     return (
-      <div className={`${this.props.className} ${style.container}`}>
+      <div className={`${className} ${style.container}`}>
         <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
         <svg className={style.container}>
-          <g transform={toSvgTransform(camera.inverse())}>
-            <Group model={scene} world={camera.inverse()}/>
+          <g transform={toSvgTransform(cam)}>
+            <Group model={scene} world={cam}/>
           </g>
         </svg>
       </div>
     )
   }
 
+
   @action
-  private onResize(width: number, height: number) {
+  private onResize = (width: number, height: number) => {
 
-    // We have an aspect ratio to preserve
-    if (this.props.aspectRatio !== undefined) {
-
-    } else {
-      this.resolution.scale.x = 1
-      this.resolution.scale.y = 1
-      this.resolution.translate.x = width * 0.5
-      this.resolution.translate.y = height * 0.5
-    }
     // Apply our canvas size + dpi settings
     const pxWidth = width
     const pxHeight = height
 
-    // Work out our aspect ratio and scale by it
     // Translate to the center
-    const scale = Math.min(width / height, height / width)
-    this.resolution.scale.x = scale
-    this.resolution.scale.y = scale
     this.resolution.translate.x = pxWidth * 0.5
     this.resolution.translate.y = pxHeight * 0.5
+
+    // If we have an aspect ratio, use it to scale the canvas to unit size
+    const { aspectRatio } = this.props
+    if (aspectRatio !== undefined) {
+
+      // Given our aspect ratio work out the scale to ensure it remains on screen
+      const canvasAspect = width / height
+
+      // Get a width and height to make the image unit height
+      const unitWidth = aspectRatio
+      const unitHeight = 1
+
+      // Work out which scale we should use
+      const scale = canvasAspect < aspectRatio ? unitWidth / width: unitHeight / height
+
+      // Scale to fit
+      this.resolution.scale.x = 1.0 / scale
+      this.resolution.scale.y = -1.0 / scale // Flip the y scale to make y up like opengl coordinates
+    } else {
+      this.resolution.scale.x = 1 / devicePixelRatio
+      this.resolution.scale.y = -1 / devicePixelRatio
+    }
   }
 
 }

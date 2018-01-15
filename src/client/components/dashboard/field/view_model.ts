@@ -34,7 +34,6 @@ export class FieldViewModel {
   get camera(): Transform {
     return Transform.of({
       scale: { x: 1.0 / this.model.fieldLength, y: 1.0 / this.model.fieldLength },
-      translate: { x: -this.model.fieldLength * 0.5, y: -this.model.fieldWidth * 0.5 },
     })
   }
 

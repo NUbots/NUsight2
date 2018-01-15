@@ -34,19 +34,19 @@ export function renderObject2d(context: CanvasRenderingContext2D, obj: Object2d,
       context.restore()
     }
   } else if (obj instanceof Shape) {
-    if (obj instanceof ArcGeometry) {
+    if (obj.geometry instanceof ArcGeometry) {
       renderArc(context, obj)
-    } else if (obj instanceof ArrowGeometry) {
+    } else if (obj.geometry instanceof ArrowGeometry) {
       renderArrow(context, obj)
-    } else if (obj instanceof CircleGeometry) {
+    } else if (obj.geometry instanceof CircleGeometry) {
       renderCircle(context, obj)
-    } else if (obj instanceof LineGeometry) {
+    } else if (obj.geometry instanceof LineGeometry) {
       renderLine(context, obj)
-    } else if (obj instanceof MarkerGeometry) {
+    } else if (obj.geometry instanceof MarkerGeometry) {
       renderMarker(context, obj)
-    } else if (obj instanceof PolygonGeometry) {
+    } else if (obj.geometry instanceof PolygonGeometry) {
       renderPolygon(context, obj)
-    } else if (obj instanceof TextGeometry) {
+    } else if (obj.geometry instanceof TextGeometry) {
       renderText(context, obj, world)
     } else {
       throw new Error(`Unsupported geometry type: ${obj.geometry}`)

@@ -10,6 +10,7 @@ import ReactResizeDetector from 'react-resize-detector'
 import { Transform } from '../math/transform'
 
 import { renderObject2d } from './canvas/canvas'
+import { applyTransform } from './canvas/canvas'
 import { RendererProps } from './renderer_props'
 import * as style from './style.css'
 
@@ -40,8 +41,8 @@ export class CanvasRenderer extends Component<RendererProps> {
         <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
         <canvas
           className={style.container}
-          width={this.resolution.translate.x * 2}
-          height={this.resolution.translate.y * 2}
+          width={-this.resolution.translate.x * 2}
+          height={-this.resolution.translate.y * 2}
           ref={this.onRef}
         />
       </div>
@@ -57,8 +58,13 @@ export class CanvasRenderer extends Component<RendererProps> {
     const { scene, camera } = this.props
 
     const cam = this.resolution.inverse().then(camera)
+    const ctx = this.canvas.getContext('2d')!
 
-    renderObject2d(this.canvas.getContext('2d')!, scene, cam)
+    ctx.save()
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    applyTransform(ctx, cam)
+    renderObject2d(ctx, scene, cam)
+    ctx.restore()
   }
 
   @action

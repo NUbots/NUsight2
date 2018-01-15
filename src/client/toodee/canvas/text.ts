@@ -10,7 +10,7 @@ export function renderText(ctx: CanvasRenderingContext2D, shape: Shape<TextGeome
   const { x, y, text, maxWidth, fontFamily, textAlign, textBaseline, alignToView } = shape.geometry
 
   ctx.font = `1em ${fontFamily}`
-  ctx.textAlign = textAlign
+  ctx.textAlign = textAlign === 'middle' ? 'center' : textAlign
   ctx.textBaseline = textBaseline
 
   const position = Vector2.of(x, y)

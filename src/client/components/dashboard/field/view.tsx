@@ -20,7 +20,7 @@ export class Field extends Component<FieldProps> {
     const model = this.props.model
     const viewModel = FieldViewModel.of(model)
     return <div className={style.container}>
-      <SVGRenderer
+      <CanvasRenderer
         className={style.field}
         scene={viewModel.scene}
         camera={viewModel.camera}

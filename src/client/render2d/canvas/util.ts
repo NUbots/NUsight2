@@ -10,6 +10,7 @@ import { MarkerGeometry } from '../geometry/marker_geometry'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Group } from '../object/group'
+import { Object2d } from '../object/object2d'
 import { Shape } from '../object/shape'
 
 import { renderArc } from './arc'
@@ -19,7 +20,6 @@ import { renderLine } from './line'
 import { renderMarker } from './marker'
 import { renderPolygon } from './polygon'
 import { renderText } from './text'
-import { Object2d } from '../object/object2d'
 
 export function renderObject2d(ctx: CanvasRenderingContext2D, obj: Object2d, world: Transform) {
 

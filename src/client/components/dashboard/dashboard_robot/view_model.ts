@@ -1,6 +1,8 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 
+import { Transform } from '../../../math/transform'
+import { Vector2 } from '../../../math/vector2'
 import { BasicAppearance } from '../../../render2d/appearance/basic_appearance'
 import { LineAppearance } from '../../../render2d/appearance/line_appearance'
 import { ArcGeometry } from '../../../render2d/geometry/arc_geometry'
@@ -11,8 +13,6 @@ import { MarkerGeometry } from '../../../render2d/geometry/marker_geometry'
 import { TextGeometry } from '../../../render2d/geometry/text_geometry'
 import { Group } from '../../../render2d/object/group'
 import { Shape } from '../../../render2d/object/shape'
-import { Transform } from '../../../math/transform'
-import { Vector2 } from '../../../math/vector2'
 
 import { DashboardRobotModel } from './model'
 

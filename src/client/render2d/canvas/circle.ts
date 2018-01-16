@@ -1,7 +1,7 @@
 import { CircleGeometry } from '../geometry/circle_geometry'
 import { Shape } from '../object/shape'
 
-import { applyAppearance } from './util'
+import { applyAppearance } from './rendering'
 
 export function renderCircle(ctx: CanvasRenderingContext2D, shape: Shape<CircleGeometry>): void {
 

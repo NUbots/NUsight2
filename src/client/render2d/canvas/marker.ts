@@ -1,7 +1,7 @@
 import { MarkerGeometry } from '../geometry/marker_geometry'
 import { Shape } from '../object/shape'
 
-import { applyAppearance } from './util'
+import { applyAppearance } from './rendering'
 
 export function renderMarker(ctx: CanvasRenderingContext2D, shape: Shape<MarkerGeometry>): void {
 

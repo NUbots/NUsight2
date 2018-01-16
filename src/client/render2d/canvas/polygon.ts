@@ -1,7 +1,7 @@
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { Shape } from '../object/shape'
 
-import { applyAppearance } from './util'
+import { applyAppearance } from './rendering'
 
 export function renderPolygon(ctx: CanvasRenderingContext2D, shape: Shape<PolygonGeometry>): void {
   const { points } = shape.geometry

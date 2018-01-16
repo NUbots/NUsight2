@@ -24,12 +24,12 @@ import { renderText } from './text'
 export function renderObject2d(ctx: CanvasRenderingContext2D, obj: Object2d, world: Transform) {
 
   if (obj instanceof Group) {
-    const newWorld = world.clone().then(obj.transform)
+    const objWorld = world.clone().then(obj.transform)
 
     for (const o of obj.children) {
       ctx.save()
       applyTransform(ctx, obj.transform)
-      renderObject2d(ctx, o, newWorld)
+      renderObject2d(ctx, o, objWorld)
       ctx.restore()
     }
   } else if (obj instanceof Shape) {
@@ -55,7 +55,7 @@ export function renderObject2d(ctx: CanvasRenderingContext2D, obj: Object2d, wor
   }
 }
 
-export function applyTransform(ctx: CanvasRenderingContext2D, transform: Transform): void {
+function applyTransform(ctx: CanvasRenderingContext2D, transform: Transform): void {
   ctx.translate(transform.translate.x, transform.translate.y)
   ctx.scale(transform.scale.x, transform.scale.y)
   ctx.rotate(transform.rotate * (transform.anticlockwise ? 1 : -1))

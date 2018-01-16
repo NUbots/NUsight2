@@ -7,8 +7,22 @@ import { Group as GroupGeometry } from '../object/group'
 import { GeometryView, toSvgTransform } from './util'
 
 type Props = { model: GroupGeometry, world: Transform }
-export const Group = observer(({ model: { children, transform }, world }: Props) => (
-  <g transform={toSvgTransform(transform)}>
-    {children.map((obj, i) => (<GeometryView key={i} obj={obj} world={transform.clone().then(world)}/>))}
-  </g>
-))
+export const Group = observer(({ model: { children, transform }, world }: Props) => {
+
+  // If we have the identity transform forgo the group to save on dom elements
+  const elems = children.map((obj, i) => (<GeometryView key={i} obj={obj} world={transform.clone().then(world)}/>))
+
+  if (transform.isIdentity()) {
+    return (
+      <>
+        {elems}
+      </>
+    )
+  } else {
+    return (
+      <g transform={toSvgTransform(transform)}>
+        {elems}
+      </g>
+    )
+  }
+})

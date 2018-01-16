@@ -1,7 +1,7 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 
-import { Group } from '../../../canvas/object/group'
+import { Group } from '../../../render2d/object/group'
 import { Transform } from '../../../math/transform'
 import { DashboardRobotViewModel } from '../dashboard_robot/view_model'
 import { GroundViewModel } from '../ground/view_model'

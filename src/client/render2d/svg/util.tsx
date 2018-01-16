@@ -13,7 +13,6 @@ import { MarkerGeometry } from '../geometry/marker_geometry'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Group as GroupGeometry } from '../object/group'
-import { Object2d } from '../object/object2d'
 import { Shape } from '../object/shape'
 
 import { Arc } from './arc'
@@ -52,7 +51,7 @@ export function toSvgTransform(transform: Transform): string {
   return `translate(${t.x}, ${t.y}) rotate(${r}) scale(${s.x}, ${s.y})`
 }
 
-type Props = { obj: Object2d, world: Transform }
+type Props = { obj: any, world: Transform }
 
 export const GeometryView = observer(({ obj, world }: Props): JSX.Element => {
   if (obj instanceof GroupGeometry) {

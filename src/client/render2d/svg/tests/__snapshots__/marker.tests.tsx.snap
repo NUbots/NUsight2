@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CircleSVGRenderer renders 1`] = `
+exports[`MarkerSVGRenderer renders 1`] = `
 <_class
   model={
     Shape {
@@ -9,25 +9,14 @@ exports[`CircleSVGRenderer renders 1`] = `
         "lineWidth": 1,
         "strokeStyle": "#000",
       },
-      "geometry": CircleGeometry {
+      "geometry": MarkerGeometry {
+        "heading": Vector2 {
+          "x": 1,
+          "y": 0,
+        },
         "radius": 1,
         "x": 0,
         "y": 0,
-      },
-      "group": Group {
-        "children": Array [],
-        "transform": Transform {
-          "anticlockwise": true,
-          "rotate": 0,
-          "scale": Object {
-            "x": 1,
-            "y": 1,
-          },
-          "translate": Object {
-            "x": 0,
-            "y": 0,
-          },
-        },
       },
     }
   }

@@ -5,7 +5,7 @@ import { Transform } from '../../math/transform'
 import { ArrowGeometry } from '../geometry/arrow_geometry'
 import { Shape } from '../object/shape'
 
-import { toSvgProps } from './svg'
+import { toSvgProps } from './util'
 
 
 type Props = { model: Shape<ArrowGeometry>, world: Transform }

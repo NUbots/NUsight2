@@ -2,15 +2,13 @@ import { observable } from 'mobx'
 
 import { Transform } from '../../math/transform'
 
-import { Object2d } from './object2d'
-
 export type GroupOpts = {
-  children: Object2d[]
+  children: any[]
   transform: Transform
 }
 
-export class Group implements Object2d {
-  @observable children: Object2d[]
+export class Group {
+  @observable children: any[]
   @observable transform: Transform
 
   constructor(opts: GroupOpts) {
@@ -28,7 +26,7 @@ export class Group implements Object2d {
     })
   }
 
-  add(obj: Object2d): void {
+  add(obj: any): void {
     this.children.push(obj)
   }
 }

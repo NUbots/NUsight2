@@ -1,6 +1,7 @@
 import { action } from 'mobx'
 import { computed } from 'mobx'
 import { observable } from 'mobx'
+
 import { Transform } from '../../math/transform'
 import { Appearance } from '../appearance/appearance'
 import { BasicAppearance } from '../appearance/basic_appearance'
@@ -11,6 +12,7 @@ import { LineGeometry } from '../geometry/line_geometry'
 import { PathGeometry } from '../geometry/path_geometry'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
+
 import { Group } from './group'
 import { GroupOpts } from './group'
 import { Object2d } from './object2d'
@@ -24,24 +26,24 @@ export type Geometry =
   | PolygonGeometry
   | TextGeometry
 
-export type ShapeOpts = {
+export type ShapeOpts<T extends Geometry> = {
   appearance: Appearance
-  geometry: Geometry
+  geometry: T
 } & GroupOpts
 
-export class Shape implements Object2d {
-  @observable public appearance: Appearance
-  @observable public geometry: Geometry
+export class Shape<T extends Geometry> implements Object2d {
+  @observable appearance: Appearance
+  @observable geometry: T
   @observable private group: Group
 
-  constructor(opts: ShapeOpts) {
+  constructor(opts: ShapeOpts<T>) {
     this.appearance = opts.appearance
     this.geometry = opts.geometry
     this.group = Group.of(opts)
   }
 
-  public static of(geometry: Geometry, appearance: Appearance = BasicAppearance.of()) {
-    return new Shape({
+  static of<T extends Geometry>(geometry: T, appearance: Appearance = BasicAppearance.of()) {
+    return new Shape<T>({
       appearance,
       children: [],
       geometry,
@@ -49,18 +51,17 @@ export class Shape implements Object2d {
     })
   }
 
-  @action
-  public add(obj: Object2d): void {
+  add(obj: Object2d): void {
     this.group.add(obj)
   }
 
   @computed
-  public get children(): Object2d[] {
+  get children(): Object2d[] {
     return this.group.children
   }
 
   @computed
-  public get transform(): Transform {
+  get transform(): Transform {
     return this.group.transform
   }
 }

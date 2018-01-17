@@ -1,6 +1,7 @@
 import { Matrix4 } from 'three'
 import { Vector3 } from 'three'
 import { Quaternion } from 'three'
+
 import { message } from '../../shared/proto/messages'
 import { mat44$Properties } from '../../shared/proto/messages'
 import { Simulator } from '../simulator'
@@ -10,11 +11,11 @@ import Sensors = message.input.Sensors
 export const HIP_TO_FOOT = 0.2465
 
 export class SensorDataSimulator implements Simulator {
-  public static of() {
+  static of() {
     return new SensorDataSimulator()
   }
 
-  public simulate(time: number, index: number, numRobots: number): Message[] {
+  simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.input.Sensors'
 
     // Simulate a walk

@@ -2,12 +2,13 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
+
+import { DashboardController } from './controller'
 import { DashboardModel } from './model'
 import { DashboardNetwork } from './network'
 import { RobotPanel } from './robot_panel/view'
 import { RobotPanelViewModel } from './robot_panel/view_model'
 import * as style from './style.css'
-import { DashboardController } from './controller'
 
 export type DashboardProps = {
   controller: DashboardController
@@ -19,11 +20,11 @@ export type DashboardProps = {
 
 @observer
 export class Dashboard extends Component<DashboardProps> {
-  public componentWillUnmount(): void {
+  componentWillUnmount(): void {
     this.props.network.destroy()
   }
 
-  public render() {
+  render() {
     const { menu: Menu, model } = this.props
     const showPanels = model.robots.some(robot => robot.enabled)
     const Field = this.props.Field

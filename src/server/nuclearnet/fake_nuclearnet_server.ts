@@ -1,7 +1,9 @@
 import * as EventEmitter from 'events'
 import { NUClearNetSend } from 'nuclearnet.js'
 import * as XXH from 'xxhashjs'
+
 import { createSingletonFactory } from '../../shared/base/create_singleton_factory'
+
 import { FakeNUClearNetClient } from './fake_nuclearnet_client'
 
 /**
@@ -14,7 +16,7 @@ export class FakeNUClearNetServer {
   private events: EventEmitter
   private clients: FakeNUClearNetClient[]
 
-  public constructor() {
+  constructor() {
     this.events = new EventEmitter()
     this.clients = []
   }
@@ -27,11 +29,11 @@ export class FakeNUClearNetServer {
    * Avoid using this singleton factory in tests though, as you'll introduce cross-contamination between tests.
    * Simply use the constructor of both FakeNUClearNetServer and FakeNUClearNetClient instead.
    */
-  public static of = createSingletonFactory(() => {
+  static of = createSingletonFactory(() => {
     return new FakeNUClearNetServer()
   })
 
-  public connect(client: FakeNUClearNetClient): () => void {
+  connect(client: FakeNUClearNetClient): () => void {
     this.events.emit('nuclear_join', client.peer)
     this.clients.push(client)
 
@@ -56,7 +58,7 @@ export class FakeNUClearNetServer {
     }
   }
 
-  public send(client: FakeNUClearNetClient, opts: NUClearNetSend) {
+  send(client: FakeNUClearNetClient, opts: NUClearNetSend) {
     const hash: Buffer = typeof opts.type === 'string' ? hashType(opts.type) : opts.type
     const packet = {
       peer: client.peer,
@@ -84,6 +86,9 @@ export class FakeNUClearNetServer {
 export function hashType(type: string): Buffer {
   // Matches hashing implementation from NUClearNet
   // See https://goo.gl/6NDPo2
-  const hashString: string = XXH.h64(type, 0x4e55436c).toString(16)
+  let hashString: string = XXH.h64(type, 0x4e55436c).toString(16)
+  // The hash string may truncate if it's smaller than 16 characters so we pad it with 0s
+  hashString = ('0'.repeat(16) + hashString).slice(-16)
+
   return Buffer.from((hashString.match(/../g) as string[]).reverse().join(''), 'hex')
 }

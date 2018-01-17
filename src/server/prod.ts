@@ -9,6 +9,7 @@ import { ChartSimulator } from '../virtual_robots/simulators/chart_simulator'
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
 import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
+
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
 
@@ -27,7 +28,7 @@ app.use(favicon(`${__dirname}/../assets/favicon.ico`))
 
 const port = process.env.PORT || 9090
 server.listen(port, () => {
-  /* tslint:disable no-console */
+  // tslint:disable-next-line no-console
   console.log(`NUsight server started at http://localhost:${port}`)
 })
 

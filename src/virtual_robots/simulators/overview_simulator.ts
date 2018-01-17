@@ -1,8 +1,8 @@
-import { message } from '../../shared/proto/messages'
 import { Vector2 } from '../../client/math/vector2'
 import { Vector3 } from '../../client/math/vector3'
 import { SeededRandom } from '../../shared/base/random/seeded_random'
 import { FieldDimensions } from '../../shared/field/dimensions'
+import { message } from '../../shared/proto/messages'
 import { vec2$Properties } from '../../shared/proto/messages'
 import { Simulator } from '../simulator'
 import { Message } from '../simulator'
@@ -17,14 +17,14 @@ export class OverviewSimulator implements Simulator {
               private random: SeededRandom) {
   }
 
-  public static of() {
+  static of() {
     return new OverviewSimulator(
       FieldDimensions.postYear2017(),
       SeededRandom.of('overview_simulator'),
     )
   }
 
-  public simulate(time: number, index: number, numRobots: number): Message[] {
+  simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.support.nubugger.Overview'
 
     const t = time / 10 - index

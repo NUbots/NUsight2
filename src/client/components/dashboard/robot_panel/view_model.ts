@@ -1,20 +1,22 @@
 import { computed } from 'mobx'
 import { createTransformer } from 'mobx'
-import { message } from '../../../../shared/proto/messages'
-import { DashboardRobotModel } from '../dashboard_robot/model'
-import { LastStatus } from './view'
-import State = message.behaviour.Behaviour.State
 
-import Mode = message.input.GameState.Data.Mode
-import PenaltyReason = message.input.GameState.Data.PenaltyReason
-import Phase = message.input.GameState.Data.Phase
+import { message } from '../../../../shared/proto/messages'
 import { Vector3 } from '../../../math/vector3'
+import { DashboardRobotModel } from '../dashboard_robot/model'
+
+const State = message.behaviour.Behaviour.State
+const Mode = message.input.GameState.Data.Mode
+const PenaltyReason = message.input.GameState.Data.PenaltyReason
+const Phase = message.input.GameState.Data.Phase
+
+import { LastStatus } from './view'
 
 export class RobotPanelViewModel {
-  public constructor(private model: DashboardRobotModel) {
+  constructor(private model: DashboardRobotModel) {
   }
 
-  public static of = createTransformer((model: DashboardRobotModel): RobotPanelViewModel => {
+  static of = createTransformer((model: DashboardRobotModel): RobotPanelViewModel => {
     return new RobotPanelViewModel(model)
   })
 
@@ -23,57 +25,57 @@ export class RobotPanelViewModel {
   }
 
   @computed
-  public get batteryValue(): string {
+  get batteryValue(): string {
     const battery = this.model.battery
     return battery === -1 ? '' : `${Math.round(battery * 100)}%`
   }
 
   @computed
-  public get behaviour(): string {
+  get behaviour(): string {
     return State[this.model.behaviourState] || State[State.UNKNOWN]
   }
 
   @computed
-  public get lastCameraImage(): LastStatus {
+  get lastCameraImage(): LastStatus {
     return this.getLastStatus(this.model.lastCameraImage, 5)
   }
 
   @computed
-  public get lastSeenBall(): LastStatus {
+  get lastSeenBall(): LastStatus {
     return this.getLastStatus(this.model.lastSeenBall, 30)
   }
 
   @computed
-  public get lastSeenGoal(): LastStatus {
+  get lastSeenGoal(): LastStatus {
     return this.getLastStatus(this.model.lastSeenGoal, 30)
   }
 
   @computed
-  public get mode(): string {
+  get mode(): string {
     return Mode[this.model.gameMode] || Mode[Mode.UNKNOWN_MODE]
   }
 
   @computed
-  public get penalised(): boolean {
+  get penalised(): boolean {
     return this.model.penaltyReason !== PenaltyReason.UNPENALISED
   }
 
   @computed
-  public get penalty(): string {
+  get penalty(): string {
     return PenaltyReason[this.model.penaltyReason] || PenaltyReason[PenaltyReason.UNKNOWN_PENALTY_REASON]
   }
 
   @computed
-  public get phase(): string {
+  get phase(): string {
     return Phase[this.model.gamePhase] || Phase[Phase.UNKNOWN_PHASE]
   }
 
   @computed
-  public get title(): string {
+  get title(): string {
     return this.model.name
   }
 
-  public get walkCommand(): Vector3 {
+  get walkCommand(): Vector3 {
     return this.model.walkCommand
   }
 

@@ -3,8 +3,10 @@ import { computed } from 'mobx'
 import { Mesh } from 'three'
 import { MultiMaterial } from 'three'
 import { Object3D } from 'three'
+
 import { geometryAndMaterial } from '../../utils'
 import { LocalisationRobotModel } from '../model'
+
 import * as LeftAnkleConfig from './config/left_ankle.json'
 import * as LeftFootConfig from './config/left_foot.json'
 import * as LeftLowerLegConfig from './config/left_lower_leg.json'
@@ -16,12 +18,12 @@ export class LeftLegViewModel {
   constructor(private model: LocalisationRobotModel) {
   }
 
-  public static of = createTransformer((model: LocalisationRobotModel): LeftLegViewModel => {
+  static of = createTransformer((model: LocalisationRobotModel): LeftLegViewModel => {
     return new LeftLegViewModel(model)
   })
 
   @computed
-  public get leftLeg() {
+  get leftLeg() {
     const leftLeg = new Object3D()
     leftLeg.add(this.leftPelvisY)
     return leftLeg

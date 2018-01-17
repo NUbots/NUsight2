@@ -3,9 +3,9 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { StatelessComponent } from 'react'
 
-import { TreeNode } from './tree_node/view'
 import { TreeModel } from './model'
 import { TreeNodeModel } from './model'
+import { TreeNode } from './tree_node/view'
 
 export interface CheckboxTreeProps {
   model: TreeModel

@@ -1,5 +1,6 @@
 import { computed } from 'mobx'
 import { observable } from 'mobx'
+
 import { memoize } from '../../../base/memoize'
 
 export enum CheckedState {
@@ -17,11 +18,11 @@ export type TreeNodeModelOpts = {
 }
 
 export class TreeNodeModel {
-  @observable public children: TreeNodeModel[]
-  @observable public checkedState: CheckedState
-  @observable public label: string
-  @observable public expanded: boolean
-  @observable public path?: string
+  @observable children: TreeNodeModel[]
+  @observable checkedState: CheckedState
+  @observable label: string
+  @observable expanded: boolean
+  @observable path?: string
 
   constructor(opts: TreeNodeModelOpts) {
     this.children = opts.children
@@ -31,7 +32,7 @@ export class TreeNodeModel {
     this.path = opts.path
   }
 
-  public static of({
+  static of({
     children = [],
     checkedState = CheckedState.Unchecked,
     label,
@@ -48,12 +49,12 @@ export class TreeNodeModel {
   }
 
   @computed
-  public get leaf(): boolean {
+  get leaf(): boolean {
     return this.children.length === 0
   }
 
   @computed
-  public get checked(): CheckedState {
+  get checked(): CheckedState {
     if (this.leaf) {
       return this.checkedState
     }
@@ -76,15 +77,15 @@ export type TreeModelOpts = {
 }
 
 export class TreeModel {
-  @observable public nodes: TreeNodeModel[]
-  @observable public usePessimisticToggle: boolean
+  @observable nodes: TreeNodeModel[]
+  @observable usePessimisticToggle: boolean
 
-  public constructor(opts: TreeModelOpts) {
+  constructor(opts: TreeModelOpts) {
     this.nodes = opts.nodes
     this.usePessimisticToggle = opts.usePessimisticToggle
   }
 
-  public static of = memoize(({
+  static of = memoize(({
     nodes = [],
     usePessimisticToggle = true,
   }: Partial<TreeModelOpts> = {}): TreeModel => {
@@ -96,7 +97,7 @@ export class TreeModel {
 }
 
 export function createNodesFromData(data: any): TreeNodeModel[] {
-  const nodes : TreeNodeModel[] = []
+  const nodes: TreeNodeModel[] = []
 
   Object.keys(data).forEach(key => {
     nodes.push(createNode(key, data[key]))
@@ -108,7 +109,7 @@ export function createNodesFromData(data: any): TreeNodeModel[] {
 export function createNode(label: string, data: any, parentPath: string = ''): TreeNodeModel {
   const path = parentPath.length > 0 ? `${parentPath}.${label}` : label
 
-  const node : TreeNodeModel = new TreeNodeModel({
+  const node: TreeNodeModel = new TreeNodeModel({
     children: [],
     checkedState: CheckedState.Checked,
     expanded: false,

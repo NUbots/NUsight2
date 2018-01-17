@@ -4,14 +4,15 @@ import { IReactionDisposer } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
-import { CanvasRenderer } from '../../../canvas/renderer'
+import ReactResizeDetector from 'react-resize-detector'
+
+import { SVGRenderer } from '../../../render2d/svg_renderer'
+import { ExampleCheckboxTree } from '../checkbox_tree/example'
+
 import { LineChartController } from './controller'
 import { LineChartModel } from './model'
 import * as style from './style.css'
 import { LineChartViewModel } from './view_model'
-import ReactResizeDetector from 'react-resize-detector'
-
-import { ExampleCheckboxTree } from '../checkbox_tree/example'
 
 export type LineChartProps = {
   controller: LineChartController
@@ -25,7 +26,7 @@ export class LineChart extends Component<LineChartProps> {
   private renderer: CanvasRenderer
   private stopAutorun: IReactionDisposer
 
-  public componentDidMount() {
+  componentDidMount() {
     if (!this.chart) {
       return
     }
@@ -35,11 +36,11 @@ export class LineChart extends Component<LineChartProps> {
     this.rafId = requestAnimationFrame(this.onRequestAnimationFrame)
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     cancelAnimationFrame(this.rafId)
   }
 
-  public render() {
+  render() {
     return (
       <div className={style.lineChart}>
         <div className={style.lineChart__canvasWrapper}>

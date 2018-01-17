@@ -16,17 +16,17 @@ export class ExampleController {
     Object.assign(this, opts)
   }
 
-  public static of(opts: { model: TreeModel }) {
+  static of(opts: { model: TreeModel }) {
     return new ExampleController(opts)
   }
 
   @action
-  public onNodeExpand = (node: TreeNodeModel): void => {
+  onNodeExpand = (node: TreeNodeModel): void => {
     node.expanded = !node.expanded
   }
 
   @action
-  public onNodeCheck = (node: TreeNodeModel) => {
+  onNodeCheck = (node: TreeNodeModel) => {
     if (node.leaf) {
       if (node.checkedState === CheckedState.Checked) {
         this.uncheckNode(node)
@@ -47,13 +47,13 @@ export class ExampleController {
   }
 
   @action
-  public checkNode = (node: TreeNodeModel) => {
+  checkNode = (node: TreeNodeModel) => {
     node.checkedState = CheckedState.Checked
     node.children.forEach(this.checkNode)
   }
 
   @action
-  public uncheckNode = (node: TreeNodeModel) => {
+  uncheckNode = (node: TreeNodeModel) => {
     node.checkedState = CheckedState.Unchecked
     node.children.forEach(this.uncheckNode)
   }
@@ -90,7 +90,7 @@ export const ExampleCheckboxTree: StatelessComponent = () => {
     },
   }
 
-  const nodes : TreeNodeModel[] = createNodesFromData(data)
+  const nodes: TreeNodeModel[] = createNodesFromData(data)
 
   const model = TreeModel.of({ nodes })
   const controller = ExampleController.of({ model })

@@ -6,11 +6,11 @@ import DataPoint = message.support.nubugger.DataPoint
 import Type = DataPoint.Type
 
 export class ChartSimulator implements Simulator {
-  public static of(): ChartSimulator {
+  static of(): ChartSimulator {
     return new ChartSimulator()
   }
 
-  public simulate(time: number, index: number, numRobots: number): Message[] {
+  simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.support.nubugger.DataPoint'
     const period = 10
     const theta = (2 * Math.PI * (time - index)) / period

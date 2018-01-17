@@ -7,10 +7,11 @@ import { Component } from 'react'
 import { MouseEvent } from 'react'
 import * as React from 'react'
 
-import IconChevronDown from './chevron_down.svg'
-import IconChevronRight from './chevron_right.svg'
 import { CheckedState } from '../model'
 import { TreeNodeModel } from '../model'
+
+import IconChevronDown from './chevron_down.svg'
+import IconChevronRight from './chevron_right.svg'
 import * as style from './style.css'
 
 export interface TreeNodeProps {
@@ -25,7 +26,7 @@ export class TreeNode extends Component<TreeNodeProps> {
   private checkbox: HTMLInputElement
   private stopAutorun: IReactionDisposer
 
-  public componentDidMount() {
+  componentDidMount() {
     if (!this.checkbox) {
       return
     }
@@ -33,11 +34,11 @@ export class TreeNode extends Component<TreeNodeProps> {
     this.stopAutorun = autorun(() => this.updateCheckbox())
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     this.stopAutorun()
   }
 
-  public render(): JSX.Element {
+  render(): JSX.Element {
     const children = this.props.node.children
     const hasChildren = children.length > 0
     const level = this.props.level || 0

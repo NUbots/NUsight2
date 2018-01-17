@@ -8,7 +8,7 @@ import { Group } from './svg/group'
 import { toSvgTransform } from './svg/svg'
 
 export type SVGRendererProps = {
-  className: string
+  className?: string
   scene: GroupGeometry
   camera: Transform
 }

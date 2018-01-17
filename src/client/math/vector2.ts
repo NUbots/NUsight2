@@ -114,7 +114,7 @@ export class Vector2 {
     return this
   }
 
-  public dot(v: Vector2): number {
+  dot(v: Vector2): number {
     return this.x * v.x + this.y * v.y
   }
 }

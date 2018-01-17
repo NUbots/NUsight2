@@ -1,0 +1,11 @@
+.example {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

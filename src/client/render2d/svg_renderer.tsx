@@ -1,3 +1,4 @@
+import * as classNames from 'classnames'
 import { observable } from 'mobx'
 import { action } from 'mobx'
 import { observer } from 'mobx-react'
@@ -20,9 +21,8 @@ export class SVGRenderer extends Component<RendererProps> {
     const { className, scene, camera } = this.props
 
     const cam = this.resolution.inverse().then(camera)
-
     return (
-      <div className={`${className} ${style.container}`}>
+      <div className={classNames(className, style.container)}>
         <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
         <svg className={style.container}>
           <g transform={toSvgTransform(cam)}>

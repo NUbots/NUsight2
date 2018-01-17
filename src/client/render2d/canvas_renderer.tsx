@@ -1,3 +1,4 @@
+import * as classNames from 'classnames'
 import { IReactionDisposer } from 'mobx'
 import { observable } from 'mobx'
 import { action } from 'mobx'
@@ -37,7 +38,7 @@ export class CanvasRenderer extends Component<RendererProps> {
 
   render() {
     return (
-      <div className={`${this.props.className} ${style.container}`}>
+      <div className={classNames(className, style.container)}>
         <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
         <canvas
           className={style.container}

@@ -90,7 +90,7 @@ export class SeriesModel {
   }
 
   @computed
-  get data(): ReadonlyArray<Vector2> {
+  get data(): Vector2[] {
     return this.points
   }
 

@@ -1,11 +1,7 @@
-import { action } from 'mobx'
-import { autorun } from 'mobx'
-import { IReactionDisposer } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 import ReactResizeDetector from 'react-resize-detector'
-
 import { SVGRenderer } from '../../../render2d/svg_renderer'
 import { ExampleCheckboxTree } from '../checkbox_tree/example'
 
@@ -21,18 +17,9 @@ export type LineChartProps = {
 
 @observer
 export class LineChart extends Component<LineChartProps> {
-  private chart: HTMLCanvasElement
   private rafId: number
-  private renderer: CanvasRenderer
-  private stopAutorun: IReactionDisposer
 
   componentDidMount() {
-    if (!this.chart) {
-      return
-    }
-    const context: CanvasRenderingContext2D = this.chart.getContext('2d')!
-    this.renderer = CanvasRenderer.of(context)
-    this.stopAutorun = autorun(() => this.renderChart())
     this.rafId = requestAnimationFrame(this.onRequestAnimationFrame)
   }
 
@@ -41,15 +28,15 @@ export class LineChart extends Component<LineChartProps> {
   }
 
   render() {
+    const model = this.props.model
+    const viewModel = LineChartViewModel.of(model)
     return (
       <div className={style.lineChart}>
         <div className={style.lineChart__canvasWrapper}>
-          <ReactResizeDetector handleWidth handleHeight onResize={this.onChartResize} />
-          <canvas
-            className={style.lineChart__canvas}
-            ref={this.onRef}
-            width={this.props.model.width}
-            height={this.props.model.height}
+          <SVGRenderer
+            className={style.field}
+            scene={viewModel.chart}
+            camera={viewModel.camera}
           />
         </div>
         <div className={style.lineChart__sidebar}>
@@ -61,22 +48,6 @@ export class LineChart extends Component<LineChartProps> {
 
   private onRequestAnimationFrame = (timestamp: number) => {
     this.rafId = requestAnimationFrame(this.onRequestAnimationFrame)
-    this.props.controller.onRequestAnimationFrame(this.props.model, timestamp)
-  }
-
-  private onRef = (chart: HTMLCanvasElement) => {
-    this.chart = chart
-  }
-
-  private renderChart() {
-    const viewModel = LineChartViewModel.of(this.props.model)
-    this.renderer.render(viewModel.chart, viewModel.camera)
-    this.props.controller.onRenderChart(this.props.model)
-  }
-
-  @action
-  private onChartResize = (width: number, height: number)  => {
-    const dpi = window.devicePixelRatio
-    this.props.controller.onChartResize(this.props.model, width * dpi, height * dpi)
+    this.props.controller.removeOutOfBoundsData(this.props.model)
   }
 }

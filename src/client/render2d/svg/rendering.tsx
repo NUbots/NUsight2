@@ -10,6 +10,7 @@ import { ArrowGeometry } from '../geometry/arrow_geometry'
 import { CircleGeometry } from '../geometry/circle_geometry'
 import { LineGeometry } from '../geometry/line_geometry'
 import { MarkerGeometry } from '../geometry/marker_geometry'
+import { PathGeometry } from '../geometry/path_geometry'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Group as GroupGeometry } from '../object/group'
@@ -22,6 +23,7 @@ import { Circle } from './circle'
 import { Group } from './group'
 import { Line } from './line'
 import { Marker } from './marker'
+import { Path } from './path'
 import { Polygon } from './polygon'
 import { Text } from './text'
 
@@ -72,6 +74,8 @@ export const GeometryView = observer(({ obj, world }: Props): JSX.Element => {
       return <Polygon model={obj} world={world}/>
     } else if (obj.geometry instanceof TextGeometry) {
       return <Text model={obj} world={world}/>
+    } else if (obj.geometry instanceof PathGeometry) {
+      return <Path model={obj} world={world} />
     } else {
       throw new Error(`Unsupported geometry type: ${obj}`)
     }

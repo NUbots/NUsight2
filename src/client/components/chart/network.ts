@@ -39,10 +39,7 @@ export class ChartNetwork {
     data.value.forEach((value, index) => {
       const point = Vector2.of(timestamp, value)
       const series = seriesList[index]
-      if (!series) {
-        throw new Error('Series should exist.')
-      }
-      series.append(point)
+      series!.append(point)
     })
   }
 }

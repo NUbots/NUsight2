@@ -22,17 +22,13 @@ export class LineChartViewModel {
   get camera(): Transform {
     const maxValue = this.maxValue
     const minValue = this.minValue
-    const scaleX = this.model.timeWindow / this.model.width
-    const scaleY = (maxValue - minValue) / this.model.height
+    const scaleX = this.model.timeWindow
+    const scaleY = (maxValue - minValue)
 
     return Transform.of({
       scale: {
         x: scaleX,
         y: -scaleY,
-      },
-      translate: {
-        x: -this.model.width,
-        y: -maxValue / scaleY,
       },
     })
   }
@@ -73,7 +69,7 @@ export class LineChartViewModel {
   }
 
   private seriesList(series: Map<string, SeriesModel[]>): Group {
-    const paths: Shape[] = []
+    const paths: Array<Shape<PathGeometry>> = []
     for (const seriesList of series.values()) {
       const shapes = seriesList.map(series => {
         return Shape.of(

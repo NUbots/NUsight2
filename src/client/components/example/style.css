@@ -1,11 +1,19 @@
-.example {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-}
-
 .page {
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+.example {
+  display: flex;
+  flex: 1;
+}
+
+.main {
+  flex-grow: 1;
+}
+
+.sidebar {
+  width: 400px;
+  border-left: 1px solid #DDD;
 }

@@ -22,12 +22,15 @@ export class Example extends Component<ExampleProps> {
     return (
       <div className={style.page}>
         <Menu></Menu>
-        <div className={style.dashboard}>
-          <CheckboxTree
-            model={model.treeModel}
-            onCheck={controller.onNodeCheck}
-            onExpand={controller.onNodeExpand}
-          ></CheckboxTree>
+        <div className={style.example}>
+          <div className={style.main}></div>
+          <div className={style.sidebar}>
+            <CheckboxTree
+              model={model.treeModel}
+              onCheck={controller.onNodeCheck}
+              onExpand={controller.onNodeExpand}
+            ></CheckboxTree>
+          </div>
         </div>
       </div>
     )

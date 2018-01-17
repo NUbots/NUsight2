@@ -1,14 +1,16 @@
 import * as React from 'react'
 import { ComponentType } from 'react'
+
 import { NavigationConfiguration } from '../../navigation'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { AppModel } from '../app/model'
+
+import Icon from './icon.svg'
 import { LineChartController } from './line_chart/controller'
 import { LineChart } from './line_chart/view'
 import { ChartModel } from './model'
 import { ChartNetwork } from './network'
 import { ChartView } from './view'
-import Icon from './icon.svg'
 
 export function installChart({ nav, appModel, nusightNetwork, menu }: {
   nav: NavigationConfiguration,

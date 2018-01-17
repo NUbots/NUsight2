@@ -4,6 +4,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { ComponentType } from 'react'
 import { ReactNode } from 'react'
+
 import { DropdownProps } from '../dropdown/view'
 import { Dropdown } from '../dropdown/view'
 
@@ -24,7 +25,7 @@ export const dropdownContainer = (WrappedComponent: ComponentType<DropdownProps>
     @observable private isOpen: boolean = false
     private removeListeners: () => void
 
-    public componentDidMount() {
+    componentDidMount() {
       const onClick = (event: MouseEvent) => this.onDocumentClick(event)
       document.addEventListener('click', onClick)
 
@@ -37,13 +38,13 @@ export const dropdownContainer = (WrappedComponent: ComponentType<DropdownProps>
       }
     }
 
-    public componentWillUnmount() {
+    componentWillUnmount() {
       if (this.removeListeners) {
         this.removeListeners()
       }
     }
 
-    public render(): JSX.Element {
+    render(): JSX.Element {
       return (
         <WrappedComponent {...this.props}
           isOpen={this.isOpen}

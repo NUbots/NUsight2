@@ -1,5 +1,6 @@
 import * as Buffers from 'buffers'
 import * as stream from 'stream'
+
 import { NBS_HEADER } from './nbs_frame_codecs'
 import { PACKET_SIZE_SIZE } from './nbs_frame_codecs'
 
@@ -23,15 +24,16 @@ export class NbsFrameChunker extends stream.Transform {
     this.foundPacketSize = false
   }
 
-  public static of(): NbsFrameChunker {
+  static of(): NbsFrameChunker {
     return new NbsFrameChunker()
   }
 
-  public _transform(chunk: any, encoding: string, done: (err?: any, data?: any) => void) {
+  _transform(chunk: any, encoding: string, done: (err?: any, data?: any) => void) {
     // Buffer any received data so that we can find nbs packets within it.
     this.buffers.push(chunk)
 
     let frame
+    // tslint:disable-next-line no-conditional-assignment
     while ((frame = this.getNextFrame(this.buffers)) !== undefined) {
       this.push(frame.buffer)
       this.buffers.splice(0, frame.index + frame.buffer.byteLength)

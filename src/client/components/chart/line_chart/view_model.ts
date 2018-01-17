@@ -1,42 +1,40 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
-import { LineAppearance } from '../../../canvas/appearance/line_appearance'
-import { PathGeometry } from '../../../canvas/geometry/path_geometry'
-import { Group } from '../../../canvas/object/group'
-import { Shape } from '../../../canvas/object/shape'
+
 import { Transform } from '../../../math/transform'
+import { LineAppearance } from '../../../render2d/appearance/line_appearance'
+import { PathGeometry } from '../../../render2d/geometry/path_geometry'
+import { Group } from '../../../render2d/object/group'
+import { Shape } from '../../../render2d/object/shape'
 import { ChartRobotModel, SeriesModel } from '../model'
+
 import { LineChartModel } from './model'
 
 export class LineChartViewModel {
-  public constructor(private model: LineChartModel) {
+  constructor(private model: LineChartModel) {
   }
 
-  public static of = createTransformer((model: LineChartModel): LineChartViewModel => {
+  static of = createTransformer((model: LineChartModel): LineChartViewModel => {
     return new LineChartViewModel(model)
   })
 
   @computed
-  public get camera(): Transform {
+  get camera(): Transform {
     const maxValue = this.maxValue
     const minValue = this.minValue
-    const scaleX = this.model.timeWindow / this.model.width
-    const scaleY = (maxValue - minValue) / this.model.height
+    const scaleX = this.model.timeWindow
+    const scaleY = (maxValue - minValue)
 
     return Transform.of({
       scale: {
         x: scaleX,
         y: -scaleY,
       },
-      translate: {
-        x: -this.model.width,
-        y: -maxValue / scaleY,
-      },
     })
   }
 
   @computed
-  public get chart(): Group {
+  get chart(): Group {
     return Group.of({
       children: this.robots.map(robot => this.seriesList(robot.series)),
     })
@@ -71,7 +69,7 @@ export class LineChartViewModel {
   }
 
   private seriesList(series: Map<string, SeriesModel[]>): Group {
-    let paths: Shape[] = []
+    const paths: Array<Shape<PathGeometry>> = []
     for (const seriesList of series.values()) {
       const shapes = seriesList.map(series => {
         return Shape.of(

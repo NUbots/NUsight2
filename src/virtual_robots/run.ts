@@ -1,4 +1,5 @@
 import * as minimist from 'minimist'
+
 import { ChartSimulator } from './simulators/chart_simulator'
 import { OverviewSimulator } from './simulators/overview_simulator'
 import { SensorDataSimulator } from './simulators/sensor_data_simulator'

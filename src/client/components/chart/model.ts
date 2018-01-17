@@ -1,9 +1,11 @@
 import { action } from 'mobx'
 import { observable } from 'mobx'
 import { computed } from 'mobx'
+
 import { memoize } from '../../base/memoize'
 import { Vector2 } from '../../math/vector2'
 import { RobotModel } from '../robot/model'
+
 import { LineChartModel } from './line_chart/model'
 
 export class ChartModel {
@@ -13,36 +15,36 @@ export class ChartModel {
     this.robotModels = robotModels
   }
 
-  public static of = memoize((robots: RobotModel[]): ChartModel => {
+  static of = memoize((robots: RobotModel[]): ChartModel => {
     return new ChartModel(robots)
   })
 
   @computed
-  public get robots(): ChartRobotModel[] {
+  get robots(): ChartRobotModel[] {
     return this.robotModels.map(robot => ChartRobotModel.of(robot))
   }
 
   @computed
-  public get lineChart(): LineChartModel {
+  get lineChart(): LineChartModel {
     return LineChartModel.of(this)
   }
 }
 
 export class ChartRobotModel {
   @observable private robot: RobotModel
-  @observable public series: Map<string, SeriesModel[]>
+  @observable series: Map<string, SeriesModel[]>
 
   constructor(robot: RobotModel, series: Map<string, SeriesModel[]>) {
     this.robot = robot
     this.series = series
   }
 
-  public static of = memoize((robot: RobotModel): ChartRobotModel => {
+  static of = memoize((robot: RobotModel): ChartRobotModel => {
     return new ChartRobotModel(robot, new Map())
   })
 
   @computed
-  public get visible(): boolean {
+  get visible(): boolean {
     return this.robot.enabled && this.robot.connected
   }
 }
@@ -57,7 +59,7 @@ type Stacks = {
 }
 
 export class SeriesModel {
-  @observable public enabled: boolean
+  @observable enabled: boolean
   @observable private points: Vector2[]
   // TODO Olejniczak use heap like structure instead of stacks
   @observable private stacks: Stacks
@@ -73,27 +75,27 @@ export class SeriesModel {
     this.enabled = enabled
   }
 
-  public static of(): SeriesModel {
+  static of(): SeriesModel {
     return new SeriesModel(true)
   }
 
   @computed
-  public get maxValue(): number {
+  get maxValue(): number {
     return this.stacks.value.max.length === 0 ? -Number.MAX_VALUE : this.stacks.value.max[0]
   }
 
   @computed
-  public get minValue(): number {
+  get minValue(): number {
     return this.stacks.value.min.length === 0 ? Number.MAX_VALUE : this.stacks.value.min[0]
   }
 
   @computed
-  public get data(): ReadonlyArray<Vector2> {
+  get data(): Vector2[] {
     return this.points
   }
 
   @action
-  public append(point: Vector2): void {
+  append(point: Vector2): void {
     // TODO Olejniczak Ensure data points are inserted in correct order of timestamp
     if (this.points.length >= 3) {
       // TODO (Annable): find a real home for this, clean it up and comment it.
@@ -122,7 +124,7 @@ export class SeriesModel {
   }
 
   @action
-  public removeOlderThan(timestamp: number): void {
+  removeOlderThan(timestamp: number): void {
     for (const [index, point] of this.points.entries()) {
       if (point.x < timestamp) {
         this.points.splice(index, this.points.length - index)

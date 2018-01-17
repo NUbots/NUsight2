@@ -2,6 +2,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
+
 // import { FieldSelector } from './field_selector/view'
 import { ChartModel } from './model'
 import { ChartNetwork } from './network'
@@ -16,11 +17,11 @@ export type ChartViewProps = {
 
 @observer
 export class ChartView extends Component<ChartViewProps> {
-  public componentWillUnmount(): void {
+  componentWillUnmount(): void {
     this.props.network.destroy()
   }
 
-  public render() {
+  render() {
     const { LineChart, Menu } = this.props
     // <FieldSelector />
     return (

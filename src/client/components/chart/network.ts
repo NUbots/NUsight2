@@ -1,26 +1,28 @@
 import { action } from 'mobx'
+
+import { BrowserSystemClock } from '../../../client/time/browser_clock'
 import { message } from '../../../shared/proto/messages'
+import { Clock } from '../../../shared/time/clock'
 import { Vector2 } from '../../math/vector2'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
-import { BrowserSystemClock } from '../../../client/time/browser_clock'
-import { Clock } from '../../../shared/time/clock'
 import { RobotModel } from '../robot/model'
+
 import { ChartRobotModel, SeriesModel } from './model'
 import DataPoint = message.support.nubugger.DataPoint
 
 export class ChartNetwork {
-  public constructor(private clock: Clock,
-                     private network: Network) {
+  constructor(private clock: Clock,
+              private network: Network) {
     this.network.on(DataPoint, this.onDataPoint)
   }
 
-  public static of(nusightNetwork: NUsightNetwork): ChartNetwork {
+  static of(nusightNetwork: NUsightNetwork): ChartNetwork {
     const network = Network.of(nusightNetwork)
     return new ChartNetwork(BrowserSystemClock, network)
   }
 
-  public destroy() {
+  destroy() {
     this.network.off()
   }
 
@@ -37,10 +39,7 @@ export class ChartNetwork {
     data.value.forEach((value, index) => {
       const point = Vector2.of(timestamp, value)
       const series = seriesList[index]
-      if (!series) {
-        throw new Error('Series should exist.')
-      }
-      series.append(point)
+      series!.append(point)
     })
   }
 }

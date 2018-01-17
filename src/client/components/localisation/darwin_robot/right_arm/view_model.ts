@@ -3,8 +3,10 @@ import { computed } from 'mobx'
 import { Mesh } from 'three'
 import { MultiMaterial } from 'three'
 import { Object3D } from 'three'
+
 import { geometryAndMaterial } from '../../utils'
 import { LocalisationRobotModel } from '../model'
+
 import * as RightLowerArmConfig from './config/right_lower_arm.json'
 import * as RightShoulderConfig from './config/right_shoulder.json'
 import * as RightUpperArmConfig from './config/right_upper_arm.json'
@@ -13,12 +15,12 @@ export class RightArmViewModel {
   constructor(private model: LocalisationRobotModel) {
   }
 
-  public static of = createTransformer((model: LocalisationRobotModel): RightArmViewModel => {
+  static of = createTransformer((model: LocalisationRobotModel): RightArmViewModel => {
     return new RightArmViewModel(model)
   })
 
   @computed
-  public get rightArm() {
+  get rightArm() {
     const rightArm = new Object3D()
     rightArm.add(this.rightShoulder)
     return rightArm

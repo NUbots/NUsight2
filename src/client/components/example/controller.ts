@@ -1,7 +1,6 @@
 import { action } from 'mobx'
 
 import { CheckedState } from '../checkbox_tree/model'
-import { createNodesFromData } from '../checkbox_tree/model'
 import { TreeNodeModel } from '../checkbox_tree/model'
 
 import { ExampleModel } from './model'
@@ -24,34 +23,16 @@ export class ExampleController {
 
   @action
   onNodeCheck = (node: TreeNodeModel) => {
-    if (node.leaf) {
-      if (node.checkedState === CheckedState.Checked) {
-        this.uncheckNode(node)
-      } else {
-        this.checkNode(node)
-      }
-    } else if (node.children.every(node => node.checkedState === CheckedState.Checked)) {
-      this.uncheckNode(node)
-    } else if (node.children.every(node => node.checkedState === CheckedState.Unchecked)) {
-      this.checkNode(node)
+    if (node.checked === CheckedState.Checked) {
+      node.checked = CheckedState.Unchecked
+    } else if (node.checked === CheckedState.Unchecked) {
+      node.checked = CheckedState.Checked
     } else {
-      if (this.model.treeModel.usePessimisticToggle) {
-        this.uncheckNode(node)
+      if (this.model.tree.usePessimisticToggle) {
+        node.checked = CheckedState.Unchecked
       } else {
-        this.checkNode(node)
+        node.checked = CheckedState.Checked
       }
     }
-  }
-
-  @action
-  checkNode = (node: TreeNodeModel) => {
-    node.checkedState = CheckedState.Checked
-    node.children.forEach(this.checkNode)
-  }
-
-  @action
-  uncheckNode = (node: TreeNodeModel) => {
-    node.checkedState = CheckedState.Unchecked
-    node.children.forEach(this.uncheckNode)
   }
 }

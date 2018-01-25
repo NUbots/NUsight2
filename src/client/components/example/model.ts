@@ -1,54 +1,46 @@
+import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
 import { observable } from 'mobx'
 
 import { CheckedState } from '../checkbox_tree/model'
-import { createNodesFromData } from '../checkbox_tree/model'
 import { TreeModel } from '../checkbox_tree/model'
 import { TreeNodeModel } from '../checkbox_tree/model'
 
-export class ExampleModel {
-  @observable treeModel: TreeModel
+import { ExampleTreeViewModel } from './view_model'
 
-  constructor() {
-    const nodes = getSampleData()
-    this.treeModel = TreeModel.of({ nodes })
-  }
+export interface TreeData {
+  [key: string]: TreeData | TreeDataPoint
+}
 
-  static of(): ExampleModel {
-    return new ExampleModel()
+export class TreeDataPoint {
+  @observable color: string
+  @observable checked: CheckedState
+
+  constructor({ color = '#ff0000', checked = CheckedState.Unchecked }: Partial<TreeDataPoint> = {}) {
+    this.color = color
+    this.checked = checked
   }
 }
 
-function getSampleData(): TreeNodeModel[] {
-  const x = 0
-  const y = 0
-  const z = 0
-  const temperature = 0
+export class ExampleModel {
+  @observable treeData: TreeData
 
-  const data = {
-    igus1: {
-      sensors: {
-        leftFootPosition: {
-          x, y, z,
-        },
-        rightFootPosition: {
-          x, y, z,
-        },
-        temperature,
-      },
-    },
-    igus2: {
-      sensors: {
-        leftFootPosition: {
-          x, y, z,
-        },
-        rightFootPosition: {
-          x, y, z,
-        },
-        temperature,
-      },
-    },
+  constructor(data: TreeData) {
+    this.treeData = data
   }
 
-  return createNodesFromData(data)
+  static of(data: TreeData): ExampleModel {
+    return new ExampleModel(data)
+  }
+
+  @computed
+  get tree() {
+    return {
+      nodes: Object.keys(this.treeData).map(key => ExampleTreeViewModel.of({
+        label: key,
+        model: this.treeData[key],
+      })),
+      usePessimisticToggle: true,
+    }
+  }
 }

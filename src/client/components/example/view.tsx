@@ -26,7 +26,7 @@ export class Example extends Component<ExampleProps> {
           <div className={style.main}></div>
           <div className={style.sidebar}>
             <CheckboxTree
-              model={model.treeModel}
+              model={model.tree}
               onCheck={controller.onNodeCheck}
               onExpand={controller.onNodeExpand}
             ></CheckboxTree>

@@ -71,4 +71,21 @@ export class ExampleTreeViewModel implements TreeNodeModel {
       model: (this.model as TreeData)[key],
     }))
   }
+
+  @computed
+  get color() {
+    if (this.model instanceof TreeDataPoint) {
+      return this.model.color
+    } else {
+      throw new Error(`Non-leaf node does not have property .color`)
+    }
+  }
+
+  set color(color: string) {
+    if (this.model instanceof TreeDataPoint) {
+      this.model.color = color
+    } else {
+      throw new Error(`Non-leaf node does not have property .color`)
+    }
+  }
 }

@@ -17,6 +17,7 @@ import * as style from './style.css'
 export interface TreeNodeProps {
   node: TreeNodeModel
   level?: number
+  renderLabel?(node: TreeNodeModel): JSX.Element
   onCheck?(node: TreeNodeModel): void
   onExpand?(node: TreeNodeModel): void
 }
@@ -43,6 +44,7 @@ export class TreeNode extends Component<TreeNodeProps> {
     const hasChildren = children.length > 0
     const level = this.props.level || 0
     const classes = classnames(style.treenode)
+    const renderLabel = this.props.renderLabel
 
     // Using inline paddingLeft to indent so that the hover and selected background indicators
     // are full width. Padding is the default left padding of 8px plus each level's indent of 22px.
@@ -71,7 +73,9 @@ export class TreeNode extends Component<TreeNodeProps> {
               />
             </div>
 
-            <div className={style.treenode__label}>{ this.props.node.label }</div>
+            <div className={style.treenode__label}>
+              { renderLabel ? renderLabel(this.props.node) : this.props.node.label }
+            </div>
           </div>
 
           {this.props.node.expanded &&
@@ -80,6 +84,7 @@ export class TreeNode extends Component<TreeNodeProps> {
                 key={i}
                 node={node}
                 level={level + 1}
+                renderLabel={this.props.renderLabel}
                 onCheck={this.props.onCheck}
                 onExpand={this.props.onExpand}
               />,

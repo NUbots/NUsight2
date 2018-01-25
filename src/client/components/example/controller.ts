@@ -4,6 +4,7 @@ import { CheckedState } from '../checkbox_tree/model'
 import { TreeNodeModel } from '../checkbox_tree/model'
 
 import { ExampleModel } from './model'
+import { ExampleTreeViewModel } from './view_model'
 
 export class ExampleController {
   private model: ExampleModel
@@ -14,6 +15,15 @@ export class ExampleController {
 
   static of(opts: { model: ExampleModel }) {
     return new ExampleController(opts)
+  }
+
+  @action
+  onColorChange = (color: string, node: TreeNodeModel): void => {
+    if (node instanceof ExampleTreeViewModel) {
+      node.color = color
+    } else {
+      throw new Error(`Unsupported node: ${node}`)
+    }
   }
 
   @action

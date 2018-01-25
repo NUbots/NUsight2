@@ -39,6 +39,7 @@
 
 .treenode__label {
   flex-grow: 1;
+  line-height: 1;
 }
 
 .treenode__header:hover {

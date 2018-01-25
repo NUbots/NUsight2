@@ -7,8 +7,9 @@ import { TreeModel } from './model'
 import { TreeNodeModel } from './model'
 import { TreeNode } from './tree_node/view'
 
-export interface CheckboxTreeProps {
+export type CheckboxTreeProps = {
   model: TreeModel
+  renderLabel?(node: TreeNodeModel): JSX.Element
   onCheck?(node: TreeNodeModel): void
   onExpand?(node: TreeNodeModel): void
 }
@@ -17,7 +18,14 @@ export const CheckboxTree: StatelessComponent<CheckboxTreeProps> = (props: Check
   return (
     <div>
       { props.model.nodes.map((node, i) => {
-        return <TreeNode node={node} level={0} key={i} onCheck={props.onCheck} onExpand={props.onExpand}></TreeNode>
+        return <TreeNode
+          node={node}
+          level={0}
+          key={i}
+          renderLabel={props.renderLabel}
+          onCheck={props.onCheck}
+          onExpand={props.onExpand}
+        ></TreeNode>
       })
       }
     </div>

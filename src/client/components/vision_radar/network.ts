@@ -1,22 +1,24 @@
 import { action } from 'mobx'
+
 import { message } from '../../../shared/proto/messages'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
+
 import { VisionRadarRobotModel } from './model'
 import VisualMesh = message.vision.VisualMesh
 
 export class VisionRadarNetwork {
-  public constructor(private network: Network) {
+  constructor(private network: Network) {
     this.network.on(VisualMesh, this.onVisualMesh)
   }
 
-  public static of(nusightNetwork: NUsightNetwork): VisionRadarNetwork {
+  static of(nusightNetwork: NUsightNetwork): VisionRadarNetwork {
     const network = Network.of(nusightNetwork)
     return new VisionRadarNetwork(network)
   }
 
-  public destroy() {
+  destroy() {
     this.network.off()
   }
 
@@ -24,7 +26,7 @@ export class VisionRadarNetwork {
   private onVisualMesh = (robotModel: RobotModel, mesh: VisualMesh) => {
     const robot = VisionRadarRobotModel.of(robotModel)
 
-    if(mesh.cameraId === 0) {
+    if (mesh.cameraId === 0) {
       robot.ringSegments = mesh.mesh!.map(v => v.segments!)
 
       const d = mesh.classifications[0].dimensions!

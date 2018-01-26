@@ -3,6 +3,7 @@ import { observer } from 'mobx-react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
 import * as React from 'react'
+
 import { VisionRadarNetwork } from './network'
 import * as style from './style.css'
 import { VisionRadarViewModel } from './view_model'
@@ -14,11 +15,11 @@ export class VisionRadarView extends Component<{
   network: VisionRadarNetwork
   Menu: ComponentType
 }> {
-  public componentWillUnmount() {
+  componentWillUnmount() {
     this.props.network.destroy()
   }
 
-  public render() {
+  render() {
     const { viewModel, Menu } = this.props
     return (
       <div>
@@ -34,15 +35,15 @@ export class VisionRadarRobotView extends Component<{ viewModel: VisionRadarRobo
   private canvas: HTMLCanvasElement | null
   private destroy: () => void
 
-  public componentDidMount() {
+  componentDidMount() {
     this.destroy = autorun(() => this.renderScene())
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     this.destroy()
   }
 
-  public render() {
+  render() {
     return (
       <div>
         <canvas width={1000} height={1000} ref={this.onRef} className={style.canvas}/>
@@ -55,9 +56,8 @@ export class VisionRadarRobotView extends Component<{ viewModel: VisionRadarRobo
   }
 
   private renderScene() {
-    const { props, canvas } = this
-    const { viewModel } = props
-    const renderer = viewModel.renderer(canvas!)
+    const { viewModel } = this.props
+    const renderer = viewModel.renderer(this.canvas!)
     renderer.render(viewModel.scene, viewModel.camera)
   }
 }

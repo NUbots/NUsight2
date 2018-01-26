@@ -1,10 +1,11 @@
 import * as React from 'react'
 import { ComponentType } from 'react'
+
 import { NavigationConfiguration } from '../../navigation'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { AppModel } from '../app/model'
+
 import { DashboardController } from './controller'
-import { FieldController } from './field/controller'
 import { Field } from './field/view'
 import Icon from './icon.svg'
 import { DashboardModel } from './model'
@@ -19,7 +20,7 @@ export function installDashboard({ nav, appModel, nusightNetwork, menu }: {
 }) {
   const model = DashboardModel.of(appModel.robots)
   const views = {
-    Field: () => <Field controller={FieldController.of()} model={model.field}/>,
+    Field: () => <Field model={model.field}/>,
   }
   nav.addRoute({
     path: '/',

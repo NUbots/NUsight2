@@ -3,6 +3,7 @@ import { FakeNUClearNetClient } from '../server/nuclearnet/fake_nuclearnet_clien
 import { NodeSystemClock } from '../server/time/node_clock'
 import { NUClearNetClient } from '../shared/nuclearnet/nuclearnet_client'
 import { Clock } from '../shared/time/clock'
+
 import { flatMap } from './flat_map'
 import { Simulator } from './simulator'
 
@@ -28,13 +29,13 @@ export class VirtualRobot {
     this.simulators = opts.simulators
   }
 
-  public static of(opts: Opts): VirtualRobot {
+  static of(opts: Opts): VirtualRobot {
     const network = opts.fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     const clock = NodeSystemClock
     return new VirtualRobot(network, clock, opts)
   }
 
-  public startSimulators(index: number, numRobots: number) {
+  startSimulators(index: number, numRobots: number) {
     const disconnect = this.connect()
 
     const stops = this.simulators.map(opts => {
@@ -48,7 +49,7 @@ export class VirtualRobot {
     }
   }
 
-  public send(messageType: string, buffer: Uint8Array, reliable?: boolean) {
+  send(messageType: string, buffer: Uint8Array, reliable?: boolean) {
     this.network.send({
       type: messageType,
       payload: new Buffer(buffer),
@@ -57,13 +58,13 @@ export class VirtualRobot {
     })
   }
 
-  public simulateAll(index: number, numRobots: number) {
+  simulateAll(index: number, numRobots: number) {
     const messages = flatMap(opts => opts.simulator.simulate(this.clock.now(), index, numRobots), this.simulators)
     messages.forEach(message => this.send(message.messageType, message.buffer))
     return messages
   }
 
-  public connect(): () => void {
+  connect(): () => void {
     return this.network.connect({ name: this.name })
   }
 

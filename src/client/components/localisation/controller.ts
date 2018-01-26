@@ -3,7 +3,9 @@ import * as THREE from 'three'
 import { Euler } from 'three'
 import { Quaternion } from 'three'
 import { Matrix4 } from 'three'
+
 import { Vector3 } from '../../math/vector3'
+
 import { HIP_TO_FOOT } from './darwin_robot/view_model'
 import { KeyCode } from './keycodes'
 import { LocalisationModel } from './model'
@@ -15,18 +17,18 @@ interface KeyModifiers {
 }
 
 export class LocalisationController {
-  public static of(): LocalisationController {
+  static of(): LocalisationController {
     return new LocalisationController()
   }
 
   @action
-  public onAnimationFrame(model: LocalisationModel, time: number) {
+  onAnimationFrame(model: LocalisationModel, time: number) {
     model.time.time = time / 1000
     this.updatePosition(model)
   }
 
   @action
-  public onLeftClick(model: LocalisationModel, requestPointerLock: () => void) {
+  onLeftClick(model: LocalisationModel, requestPointerLock: () => void) {
     if (!model.locked) {
       requestPointerLock()
     } else {
@@ -35,14 +37,14 @@ export class LocalisationController {
   }
 
   @action
-  public onRightClick(model: LocalisationModel) {
+  onRightClick(model: LocalisationModel) {
     if (model.locked) {
       model.target = this.getPreviousTarget(model)
     }
   }
 
   @action
-  public onHawkEyeClick(model: LocalisationModel) {
+  onHawkEyeClick(model: LocalisationModel) {
     model.controls.pitch = -Math.PI / 2
     model.controls.yaw = Math.PI / 2
     model.camera.position.set(0, 0, 5)
@@ -51,12 +53,12 @@ export class LocalisationController {
   }
 
   @action
-  public onPointerLockChange(model: LocalisationModel, locked: boolean): void {
+  onPointerLockChange(model: LocalisationModel, locked: boolean): void {
     model.locked = locked
   }
 
   @action
-  public onMouseMove(model: LocalisationModel, movementX: number, movementY: number): void {
+  onMouseMove(model: LocalisationModel, movementX: number, movementY: number): void {
     if (!model.locked || model.viewMode === ViewMode.FirstPerson) {
       return
     }
@@ -67,13 +69,13 @@ export class LocalisationController {
   }
 
   @action
-  public onWheel(model: LocalisationModel, deltaY: number): void {
+  onWheel(model: LocalisationModel, deltaY: number): void {
     const newDistance = model.camera.distance + deltaY / 1000
     model.camera.distance = Math.min(10, Math.max(0.1, newDistance))
   }
 
   @action
-  public onKeyDown(model: LocalisationModel, key: KeyCode, modifiers: KeyModifiers): void {
+  onKeyDown(model: LocalisationModel, key: KeyCode, modifiers: KeyModifiers): void {
     if (model.locked) {
       switch (key) {
         case KeyCode.W:
@@ -120,7 +122,7 @@ export class LocalisationController {
   }
 
   @action
-  public onKeyUp(model: LocalisationModel, key: KeyCode): void {
+  onKeyUp(model: LocalisationModel, key: KeyCode): void {
     if (model.locked) {
       switch (key) {
         case KeyCode.W:

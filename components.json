@@ -1,0 +1,12 @@
+{
+  "modules" : [
+      {
+        "name": "dashboard",
+        "enable": true
+      },
+      {
+        "name": "localisation",
+        "enable": true
+      }
+  ]
+}

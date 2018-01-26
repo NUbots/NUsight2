@@ -12,7 +12,7 @@ import { DashboardModel } from './model'
 import { DashboardNetwork } from './network'
 import { Dashboard } from './view'
 
-export function installDashboard({ nav, appModel, nusightNetwork, menu }: {
+export function install({ nav, appModel, nusightNetwork, menu }: {
   nav: NavigationConfiguration,
   appModel: AppModel,
   nusightNetwork: NUsightNetwork,

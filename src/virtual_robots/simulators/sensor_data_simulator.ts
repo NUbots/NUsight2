@@ -3,7 +3,7 @@ import { Vector3 } from 'three'
 import { Quaternion } from 'three'
 
 import { message } from '../../shared/proto/messages'
-import { mat44$Properties } from '../../shared/proto/messages'
+import { mat4$Properties } from '../../shared/proto/messages'
 import { Simulator } from '../simulator'
 import { Message } from '../simulator'
 import Sensors = message.input.Sensors
@@ -29,7 +29,7 @@ export class SensorDataSimulator implements Simulator {
     const Htw = toHtw(x, y, HIP_TO_FOOT, heading)
 
     const buffer = Sensors.encode({
-      world: toProtoMat44(Htw),
+      world: toProtoMat4(Htw),
       servo: [
         { presentPosition: 3 * Math.PI / 4 + 0.5 * Math.cos(t - Math.PI) },
         { presentPosition: 3 * Math.PI / 4 + 0.5 * Math.cos(t) },
@@ -67,7 +67,7 @@ function toHtw(x: number, y: number, z: number, heading: number): Matrix4 {
   return new Matrix4().getInverse(new Matrix4().compose(translation, rotation, scale))
 }
 
-function toProtoMat44(m: Matrix4): mat44$Properties {
+function toProtoMat4(m: Matrix4): mat4$Properties {
   return {
     x: { x: m.elements[0], y: m.elements[1], z: m.elements[2], t: m.elements[3] },
     y: { x: m.elements[4], y: m.elements[5], z: m.elements[6], t: m.elements[7] },

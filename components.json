@@ -1,12 +1,15 @@
 {
+  "default" : ["nav", "appModel", "nusightNetwork", "menu"],
   "modules" : [
     {
       "name": "dashboard",
-      "enable": true
+      "enable": true,
+      "dependencies": []
     },
     {
       "name": "localisation",
-      "enable": true
+      "enable": true,
+      "dependencies": []
     }
   ]
 }

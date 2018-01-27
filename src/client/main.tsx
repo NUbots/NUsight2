@@ -30,11 +30,23 @@ const nav = NavigationConfiguration.of()
 
 async function installComponents(components: any) {
 
+  const defaultDependencies = { nav, appModel, nusightNetwork, menu }
+  const extraDependencies: any = {}
+
   // dynamically load our components based on the components.json file
   for (const component of components.modules) {
     if (component.enable) {
       const module = await import('./components/' + component.name + '/install')
-      module.install({ nav, appModel, nusightNetwork, menu })
+
+      let custom: any = {}
+
+      if( component.dependencies != null || component.dependencies.length > 0) {
+        for (const dependency of component.dependencies) {
+          custom[dependency] = extraDependencies[dependency]
+        }
+      }
+
+      module.install({...defaultDependencies, ...custom})
     }
   }
 

@@ -10,10 +10,13 @@ import * as webpackDevMiddleware from 'webpack-dev-middleware'
 import * as webpackHotMiddleware from 'webpack-hot-middleware'
 
 import webpackConfig from '../../webpack.config'
+import { VisionSimulator } from '../simulators/vision_simulator'
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
 import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
-
+import { NbsNUClearPlayback } from './nbs/nbs_nuclear_playback'
+import { DirectNUClearNetClient } from './nuclearnet/direct_nuclearnet_client'
+import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
 
@@ -24,7 +27,7 @@ const withVirtualRobots = args['virtual-robots'] || false
 
 const app = express()
 const server = http.createServer(app)
-const sioNetwork = sio(server)
+const sioNetwork = sio(server as any, { parser: require('socket.io-msgpack-parser') } as any)
 
 // Initialize socket.io namespace immediately to catch reconnections.
 WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
@@ -63,10 +66,32 @@ function init() {
       simulators: [
         { frequency: 1, simulator: OverviewSimulator.of() },
         { frequency: 60, simulator: SensorDataSimulator.of() },
+        { frequency: 5, simulator: VisionSimulator.of() },
       ],
     })
-    virtualRobots.startSimulators()
+    // virtualRobots.startSimulators()
   }
+
+  async function playback() {
+    const nuclearnetClient = withVirtualRobots ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+    nuclearnetClient.connect({ name: 'Fake Stream' })
+    while (true) {
+      const out = NbsNUClearPlayback.fromFile('recordings/20171113T13_19_36.nbs', nuclearnetClient)
+
+      // const filename = '/Users/brendan/Lab/NUsight2/recordings/20171113T13_19_36.nbs'
+      // let rawStream = fs.createReadStream(filename, { highWaterMark: 1024 * 1024 * 32})
+      // // let rawStream = fs.createReadStream(filename)
+      // const out = rawStream.pipe(new NbsFrameChunker()).pipe(new NbsFrameDecoder())
+      // out.on('data', (data: NbsFrame) => {
+      //   console.log('data', data.hash, data.payload.byteLength)
+      // })
+
+      await new Promise(res => out.on('finish', res))
+      console.log('end')
+    }
+  }
+
+  playback()
 }
 
 devMiddleware.waitUntilValid(init)

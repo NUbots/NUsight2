@@ -13,12 +13,12 @@ export class SeededRandom {
     return new SeededRandom(seedrandom(seed))
   }
 
-  float(): number {
-    return this.prng()
+  public float(min: number = 0, max: number = min + 1): number {
+    return this.prng() * (max - min) + min
   }
 
-  integer(min: number, max: number): number {
-    return Math.floor(this.prng() * (max - min) + min)
+  public integer(min: number, max: number): number {
+    return Math.floor(this.float(min, max))
   }
 
   choice<T>(arr: T[]): T {

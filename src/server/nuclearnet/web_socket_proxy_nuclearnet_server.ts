@@ -140,11 +140,11 @@ class PacketProcessor {
     this.eventQueueSize = new Map()
   }
 
-  static of(socket: WebSocket) {
-    return new PacketProcessor(socket, NodeSystemClock, { limit: 1, timeout: 5 })
+  public static of(socket: WebSocket) {
+    return new PacketProcessor(socket, NodeSystemClock, { limit: 20, timeout: 0 })
   }
 
-  onPacket(event: string, packet: NUClearNetPacket) {
+  public onPacket(event: string, packet: NUClearNetPacket) {
     if (packet.reliable) {
       this.sendReliablePacket(event, packet)
     } else if (this.isEventBelowLimit(event)) {
@@ -166,7 +166,7 @@ class PacketProcessor {
   private sendUnreliablePacket(event: string, packet: NUClearNetPacket) {
     // Throttle unreliable packets so that we do not overwhelm the client with traffic.
     const done = this.enqueue(event)
-    this.socket.send(event, packet, done)
+    this.socket.volatileSend(event, packet, done)
     this.clock.setTimeout(done, this.timeout)
   }
 

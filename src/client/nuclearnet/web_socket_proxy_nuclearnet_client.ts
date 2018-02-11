@@ -35,7 +35,8 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
     return new WebSocketProxyNUClearNetClient(WebSocketClient.of(uri, {
       upgrade: false,
       transports: ['websocket'],
-    }))
+      parser: require('socket.io-msgpack-parser'),
+    } as any))
   }
 
   connect(options: NUClearNetOptions): () => void {

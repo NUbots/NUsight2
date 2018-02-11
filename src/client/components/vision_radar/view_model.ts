@@ -1,6 +1,14 @@
+///<reference path="../../../../node_modules/@types/three/three-core.d.ts"/>
 import { observable } from 'mobx'
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { PlaneBufferGeometry } from 'three'
+import { WebGLRenderTarget } from 'three'
+import { LinearFilter } from 'three'
+import { ClampToEdgeWrapping } from 'three'
+import { UnsignedByteType } from 'three'
+import { LuminanceFormat } from 'three'
+import { DataTexture } from 'three'
 import { Texture } from 'three'
 import { WebGLRenderer } from 'three'
 import { Scene } from 'three'
@@ -15,6 +23,8 @@ import { VisionRadarModel } from './model'
 import { VisionRadarRobotModel } from './model'
 import * as fragmentShader from './shaders/radar.frag'
 import * as vertexShader from './shaders/radar.vert'
+import * as imageFragmentShader from '../vision/camera/shaders/image.frag'
+import * as imageVertexShader from '../vision/camera/shaders/image.vert'
 
 export class VisionRadarViewModel {
   constructor(private model: VisionRadarModel) {
@@ -142,8 +152,8 @@ export class VisionRadarRobotViewModel {
     uvs.length = (vertices.length / 2) * 2
     uvs.fill(0)
     this.model.coordinates.forEach(v => {
-      uvs[v[0] * 2 + 0] = v[1][0] / 1280
-      uvs[v[0] * 2 + 1] = v[1][1] / 1024
+      uvs[v[0] * 2 + 0] = v[1][0] / this.model.image!.width
+      uvs[v[0] * 2 + 1] = 1 - (v[1][1] / this.model.image!.height) // flip y
     })
 
     const geometry = new BufferGeometry()
@@ -160,14 +170,62 @@ export class VisionRadarRobotViewModel {
     return new RawShaderMaterial({
       vertexShader: String(vertexShader),
       fragmentShader: String(fragmentShader),
-      // uniforms: {
-      //   image: this.imageTexture,
-      // },
+      uniforms: {
+        image: { value: this.imageTexture },
+      },
     })
   }
 
-  // @computed
-  // get imageTexture(): Texture {
-  //
-  // }
+  @computed
+  private get imageTexture2(): Texture {
+    const texture = new DataTexture(
+      this.model.image!.data,
+      this.model.image!.width,
+      this.model.image!.height,
+      LuminanceFormat,
+      UnsignedByteType,
+      Texture.DEFAULT_MAPPING,
+      ClampToEdgeWrapping,
+      ClampToEdgeWrapping,
+      LinearFilter,
+      LinearFilter,
+    )
+    texture.flipY = true
+    texture.needsUpdate = true
+    return texture
+  }
+
+  @computed
+  private get imageTexture(): Texture {
+    // TODO: width/height
+    const { width, height } = this.model.image!
+    const renderTarget = new WebGLRenderTarget(width, height)
+    renderTarget.depthBuffer = false
+    renderTarget.stencilBuffer = false
+    const scene = new Scene()
+    const material = new RawShaderMaterial({
+      vertexShader: String(imageVertexShader),
+      fragmentShader: String(imageFragmentShader),
+      uniforms: {
+        // TODO: width/height
+        sourceSize: { value: [width, height, 1 / width, 1 / height] },
+        firstRed: { value: [1, 0] },
+        image: { value: this.imageTexture2, type: 't' },
+      },
+      depthTest: false,
+      depthWrite: false,
+    })
+    const mesh = new Mesh(this.quadGeometry, material)
+    mesh.frustumCulled = false
+    scene.add(mesh)
+    const camera = new OrthographicCamera(-1, 1, 1, -1, 1, 3)
+    camera.position.z = 2
+    this.renderer!.render(scene, camera, renderTarget)
+    return renderTarget.texture
+  }
+
+  @computed
+  private get quadGeometry(): BufferGeometry {
+    return new PlaneBufferGeometry(2, 2)
+  }
 }

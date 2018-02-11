@@ -21,22 +21,34 @@ export class VisionRadarModel {
   }
 }
 
+type VisionRadarImage = {
+  format: number,
+  width: number,
+  height: number,
+  data: Uint8Array
+}
+
 export class VisionRadarRobotModel {
   @observable.ref ringSegments: number[]
   @observable.ref colors: Array<[number, [number, number, number]]>
+  @observable.ref coordinates: Array<[number, [number, number]]>
+  @observable.shallow public image?: VisionRadarImage
 
-  constructor(private model: RobotModel, { ringSegments, colors }: {
+  constructor(private model: RobotModel, { ringSegments, colors, coordinates }: {
     ringSegments: number[]
     colors: Array<[number, [number, number, number]]>
+    coordinates: Array<[number, [number, number, number]]>
   }) {
     this.ringSegments = ringSegments
     this.colors = colors
+    this.coordinates = coordinates
   }
 
   static of = createTransformer((model: RobotModel): VisionRadarRobotModel => {
     return new VisionRadarRobotModel(model, {
       ringSegments: [],
       colors: [],
+      coordinates: [],
     })
   })
 

@@ -1,7 +1,8 @@
+import { observable } from 'mobx'
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { Texture } from 'three'
 import { WebGLRenderer } from 'three'
-import { Renderer } from 'three'
 import { Scene } from 'three'
 import { OrthographicCamera } from 'three'
 import { Camera } from 'three'
@@ -9,9 +10,7 @@ import { Mesh } from 'three'
 import { Material } from 'three'
 import { BufferGeometry } from 'three'
 import { Float32BufferAttribute } from 'three'
-import { Uint8BufferAttribute } from 'three'
 import { RawShaderMaterial } from 'three'
-import { Vector2 } from 'three'
 import { VisionRadarModel } from './model'
 import { VisionRadarRobotModel } from './model'
 import * as fragmentShader from './shaders/radar.frag'
@@ -32,9 +31,7 @@ export class VisionRadarViewModel {
 }
 
 export class VisionRadarRobotViewModel {
-  public renderer = createTransformer((canvas: HTMLCanvasElement): Renderer => {
-    return new WebGLRenderer({ canvas })
-  })
+  @observable.ref public canvas: HTMLCanvasElement | null = null
 
   constructor(private model: VisionRadarRobotModel) {
   }
@@ -44,6 +41,13 @@ export class VisionRadarRobotViewModel {
   })
 
   @computed
+  get renderer(): WebGLRenderer | undefined {
+    if (this.canvas) {
+      return new WebGLRenderer({ canvas: this.canvas })
+    }
+  }
+
+  @computed
   get id() {
     return this.model.id
   }
@@ -51,7 +55,9 @@ export class VisionRadarRobotViewModel {
   @computed
   get scene(): Scene {
     const scene = new Scene()
-    scene.add(this.radar)
+    if (this.model.image) {
+      scene.add(this.radar)
+    }
     return scene
   }
 
@@ -75,12 +81,13 @@ export class VisionRadarRobotViewModel {
     const vertices: number[] = []
     const indices: number[] = []
     const colours: number[] = []
+    const uvs: number[] = []
 
     // Create the vertices from the segments
     this.model.ringSegments.forEach((segments, i) => {
       const r = i / this.model.ringSegments.length
 
-      for(let s = 0; s < segments; ++s) {
+      for (let s = 0; s < segments; ++s) {
         const theta = s * (2 * Math.PI / segments)
         vertices.push(Math.cos(theta) * r, Math.sin(theta) * r)
       }
@@ -107,7 +114,7 @@ export class VisionRadarRobotViewModel {
       //  the previous one below us
       for (let r = 0; r < outer; ++r) {
         // Work out the index of the point on the previous ring
-        let innerPoint =  inner * (r / outer)
+        let innerPoint = inner * (r / outer)
         let inner1 = Math.floor(innerPoint)
 
         // Make the two triangles clockwise
@@ -131,10 +138,19 @@ export class VisionRadarRobotViewModel {
       colours[v[0] * 3 + 2] = v[1][2]
     })
 
+    // Expand uvs to match vertices
+    uvs.length = (vertices.length / 2) * 2
+    uvs.fill(0)
+    this.model.coordinates.forEach(v => {
+      uvs[v[0] * 2 + 0] = v[1][0] / 1280
+      uvs[v[0] * 2 + 1] = v[1][1] / 1024
+    })
+
     const geometry = new BufferGeometry()
     geometry.setIndex(indices)
     geometry.addAttribute('position', new Float32BufferAttribute(vertices, 2))
     geometry.addAttribute('colour', new Float32BufferAttribute(colours, 3))
+    geometry.addAttribute('uv', new Float32BufferAttribute(uvs, 2))
 
     return geometry
   }
@@ -144,6 +160,14 @@ export class VisionRadarRobotViewModel {
     return new RawShaderMaterial({
       vertexShader: String(vertexShader),
       fragmentShader: String(fragmentShader),
+      // uniforms: {
+      //   image: this.imageTexture,
+      // },
     })
   }
+
+  // @computed
+  // get imageTexture(): Texture {
+  //
+  // }
 }

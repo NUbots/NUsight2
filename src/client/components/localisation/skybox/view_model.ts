@@ -1,4 +1,4 @@
-import { createTransformer } from 'mobx'
+import { createTransformer } from 'mobx-utils'
 import { computed } from 'mobx'
 import { BackSide } from 'three'
 import { Mesh } from 'three'

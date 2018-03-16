@@ -1,4 +1,4 @@
-import { createTransformer } from 'mobx'
+import { createTransformer } from 'mobx-utils'
 import { computed } from 'mobx'
 import { PlaneGeometry } from 'three'
 import { Matrix4 } from 'three'

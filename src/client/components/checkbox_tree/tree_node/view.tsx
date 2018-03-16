@@ -32,6 +32,8 @@ export class TreeNode extends Component<TreeNodeProps> {
       return
     }
 
+    // autorun is needed to update the indeterminate property of the checkbox, since the
+    // HTML input element doesn't have an indeterminate attribute we can set in JSX.
     this.stopAutorun = autorun(() => this.updateCheckbox())
   }
 

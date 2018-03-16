@@ -25,7 +25,7 @@ export const CheckboxTree: StatelessComponent<CheckboxTreeProps> = (props: Check
           renderLabel={props.renderLabel}
           onCheck={props.onCheck}
           onExpand={props.onExpand}
-        ></TreeNode>
+        />
       })
       }
     </div>

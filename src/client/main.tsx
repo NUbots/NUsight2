@@ -17,7 +17,7 @@ import { NUsightNetwork } from './network/nusight_network'
 
 // enable MobX strict mode
 configure({
-  enforceActions: true
+  enforceActions: true,
 })
 
 const appModel = AppModel.of()

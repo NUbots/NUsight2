@@ -54,6 +54,7 @@ export class Label extends Component<LabelProps> {
   onColorChange = (color: ColorResult) => {
     if (this.props.onColorChange) {
       this.props.onColorChange(color.hex, this.props.node)
+      this.closePicker()
     }
   }
 

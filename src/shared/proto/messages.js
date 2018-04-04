@@ -47800,7 +47800,7 @@ $root.message = (function() {
                  * @type {Object}
                  * @property {string} [label] DataPoint label.
                  * @property {Array.<number>} [value] DataPoint value.
-                 * @property {message.support.nubugger.DataPoint.Type} [type] DataPoint type.
+                 * @property {google.protobuf.Timestamp$Properties} [timestamp] DataPoint timestamp.
                  */
 
                 /**
@@ -47830,10 +47830,10 @@ $root.message = (function() {
                 DataPoint.prototype.value = $util.emptyArray;
 
                 /**
-                 * DataPoint type.
-                 * @type {message.support.nubugger.DataPoint.Type}
+                 * DataPoint timestamp.
+                 * @type {(google.protobuf.Timestamp$Properties|null)}
                  */
-                DataPoint.prototype.type = 0;
+                DataPoint.prototype.timestamp = null;
 
                 /**
                  * Creates a new DataPoint instance using the specified properties.
@@ -47861,8 +47861,8 @@ $root.message = (function() {
                             writer.float(message.value[i]);
                         writer.ldelim();
                     }
-                    if (message.type != null && message.hasOwnProperty("type"))
-                        writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.type);
+                    if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+                        $root.google.protobuf.Timestamp.encode(message.timestamp, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
                     return writer;
                 };
 
@@ -47904,8 +47904,8 @@ $root.message = (function() {
                             } else
                                 message.value.push(reader.float());
                             break;
-                        case 3:
-                            message.type = reader.uint32();
+                        case 4:
+                            message.timestamp = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -47946,14 +47946,11 @@ $root.message = (function() {
                             if (typeof message.value[i] !== "number")
                                 return "value: number[] expected";
                     }
-                    if (message.type != null && message.hasOwnProperty("type"))
-                        switch (message.type) {
-                        default:
-                            return "type: enum value expected";
-                        case 0:
-                        case 2:
-                            break;
-                        }
+                    if (message.timestamp != null && message.hasOwnProperty("timestamp")) {
+                        var error = $root.google.protobuf.Timestamp.verify(message.timestamp);
+                        if (error)
+                            return "timestamp." + error;
+                    }
                     return null;
                 };
 
@@ -47975,15 +47972,10 @@ $root.message = (function() {
                         for (var i = 0; i < object.value.length; ++i)
                             message.value[i] = Number(object.value[i]);
                     }
-                    switch (object.type) {
-                    case "FLOAT_LIST":
-                    case 0:
-                        message.type = 0;
-                        break;
-                    case "ROTATION_3D":
-                    case 2:
-                        message.type = 2;
-                        break;
+                    if (object.timestamp != null) {
+                        if (typeof object.timestamp !== "object")
+                            throw TypeError(".message.support.nubugger.DataPoint.timestamp: object expected");
+                        message.timestamp = $root.google.protobuf.Timestamp.fromObject(object.timestamp);
                     }
                     return message;
                 };
@@ -48011,7 +48003,7 @@ $root.message = (function() {
                         object.value = [];
                     if (options.defaults) {
                         object.label = "";
-                        object.type = options.enums === String ? "FLOAT_LIST" : 0;
+                        object.timestamp = null;
                     }
                     if (message.label != null && message.hasOwnProperty("label"))
                         object.label = message.label;
@@ -48020,8 +48012,8 @@ $root.message = (function() {
                         for (var j = 0; j < message.value.length; ++j)
                             object.value[j] = message.value[j];
                     }
-                    if (message.type != null && message.hasOwnProperty("type"))
-                        object.type = options.enums === String ? $root.message.support.nubugger.DataPoint.Type[message.type] : message.type;
+                    if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+                        object.timestamp = $root.google.protobuf.Timestamp.toObject(message.timestamp, options);
                     return object;
                 };
 
@@ -48041,22 +48033,6 @@ $root.message = (function() {
                 DataPoint.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
-
-                /**
-                 * The represents the type of data
-                 * NOTE: This should not describe how to display the data, as that should be done client-side.
-                 * @name Type
-                 * @memberof message.support.nubugger.DataPoint
-                 * @enum {number}
-                 * @property {number} FLOAT_LIST=0 FLOAT_LIST value
-                 * @property {number} ROTATION_3D=2 ROTATION_3D value
-                 */
-                DataPoint.Type = (function() {
-                    var valuesById = {}, values = Object.create(valuesById);
-                    values[valuesById[0] = "FLOAT_LIST"] = 0;
-                    values[valuesById[2] = "ROTATION_3D"] = 2;
-                    return values;
-                })();
 
                 return DataPoint;
             })();

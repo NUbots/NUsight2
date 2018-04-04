@@ -26346,7 +26346,7 @@ export namespace message {
             type DataPoint$Properties = {
                 label?: string;
                 value?: number[];
-                type?: message.support.nubugger.DataPoint.Type;
+                timestamp?: google.protobuf.Timestamp$Properties;
             };
 
             /**
@@ -26378,10 +26378,10 @@ export namespace message {
                 public value: number[];
 
                 /**
-                 * DataPoint type.
-                 * @type {message.support.nubugger.DataPoint.Type}
+                 * DataPoint timestamp.
+                 * @type {(google.protobuf.Timestamp$Properties|null)}
                  */
-                public type: message.support.nubugger.DataPoint.Type;
+                public timestamp: (google.protobuf.Timestamp$Properties|null);
 
                 /**
                  * Creates a new DataPoint instance using the specified properties.
@@ -26468,23 +26468,6 @@ export namespace message {
                  * @returns {Object.<string,*>} JSON object
                  */
                 public toJSON(): { [k: string]: any };
-            }
-
-            namespace DataPoint {
-
-                /**
-                 * The represents the type of data
-                 * NOTE: This should not describe how to display the data, as that should be done client-side.
-                 * @name Type
-                 * @memberof message.support.nubugger.DataPoint
-                 * @enum {number}
-                 * @property {number} FLOAT_LIST=0 FLOAT_LIST value
-                 * @property {number} ROTATION_3D=2 ROTATION_3D value
-                 */
-                enum Type {
-                    FLOAT_LIST = 0,
-                    ROTATION_3D = 2
-                }
             }
 
             type DrawObject$Properties = {

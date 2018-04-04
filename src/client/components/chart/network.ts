@@ -2,16 +2,16 @@ import { action } from 'mobx'
 
 import { BrowserSystemClock } from '../../../client/time/browser_clock'
 import { message } from '../../../shared/proto/messages'
+import { google } from '../../../shared/proto/messages'
 import { Clock } from '../../../shared/time/clock'
 import { Vector2 } from '../../math/vector2'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
+
 import { ChartModel } from './model'
 import { TreeDataSeries } from './model'
 import { TreeData } from './model'
-
-import { google } from '../../../shared/proto/messages'
 import Timestamp = google.protobuf.Timestamp$Properties
 import DataPoint = message.support.nubugger.DataPoint
 import DataPoint$Properties = message.support.nubugger.DataPoint$Properties
@@ -86,7 +86,7 @@ export class ChartNetwork {
 
       leaf.series.push({
         timestamp: toSeconds(data.timestamp),
-        value: v
+        value: v,
       })
     })
   }

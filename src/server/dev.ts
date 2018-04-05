@@ -10,9 +10,9 @@ import * as webpackDevMiddleware from 'webpack-dev-middleware'
 import * as webpackHotMiddleware from 'webpack-hot-middleware'
 
 import webpackConfig from '../../webpack.config'
+import { ChartSimulator } from '../virtual_robots/simulators/chart_data_simulator'
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
 import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
-import { ChartSimulator } from '../virtual_robots/simulators/chart_data_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
 
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'

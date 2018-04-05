@@ -4,9 +4,9 @@ import { Component } from 'react'
 import { ComponentType } from 'react'
 
 import { CheckboxTree } from '../checkbox_tree/view'
-import { LineChart } from './line_chart/view'
 
 import { ChartController } from './controller'
+import { LineChart } from './line_chart/view'
 import { ChartModel } from './model'
 import { ChartNetwork } from './network'
 import * as style from './style.css'

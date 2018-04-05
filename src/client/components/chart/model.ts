@@ -9,19 +9,14 @@ import { RobotModel } from '../robot/model'
 
 import { TreeViewModel } from './view_model'
 
-export interface TreeData extends Map<string, TreeData | TreeDataSeries> {}
+export interface TreeData extends Map<string, TreeData | DataSeries> {}
 
-export type TreeDataPoint = {
-  timestamp: number
-  value: number
-}
-
-export class TreeDataSeries {
+export class DataSeries {
   @observable color: string
   @observable checked: CheckedState
-  @observable series: TreeDataPoint[]
+  @observable series: Vector2[]
 
-  constructor({ color = '#ff0000', checked = CheckedState.Unchecked }: Partial<TreeDataSeries> = {}) {
+  constructor({ color = '#ff0000', checked = CheckedState.Unchecked }: Partial<DataSeries> = {}) {
     this.color = color
     this.checked = checked
     this.series = []
@@ -30,7 +25,7 @@ export class TreeDataSeries {
 
 export class ChartModel {
   @observable private robotModels: RobotModel[]
-  @observable treeData: TreeData = new Map<string, TreeData | TreeDataSeries>()
+  @observable treeData: TreeData = new Map<string, TreeData | DataSeries>()
 
   constructor(robotModels: RobotModel[]) {
     this.robotModels = robotModels
@@ -39,7 +34,7 @@ export class ChartModel {
   @computed
   get tree() {
     return {
-      nodes: Array.from(this.treeData.entries()).map((entry: [string, TreeData | TreeDataSeries]) => TreeViewModel.of({
+      nodes: Array.from(this.treeData.entries()).map((entry: [string, TreeData | DataSeries]) => TreeViewModel.of({
         label: entry[0],
         model: entry[1],
       })),

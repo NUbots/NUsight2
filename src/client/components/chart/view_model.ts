@@ -6,15 +6,15 @@ import { CheckedState } from '../checkbox_tree/model'
 import { TreeNodeModel } from '../checkbox_tree/model'
 
 import { TreeData } from './model'
-import { TreeDataSeries } from './model'
+import { DataSeries } from './model'
 
 interface TreeViewModelOpts {
-  model: TreeData | TreeDataSeries
+  model: TreeData | DataSeries
   label: string
 }
 
 export class TreeViewModel implements TreeNodeModel {
-  private model: TreeData | TreeDataSeries
+  private model: TreeData | DataSeries
   @observable label: string
   @observable expanded: boolean
 
@@ -30,13 +30,13 @@ export class TreeViewModel implements TreeNodeModel {
 
   @computed
   get leaf(): boolean {
-    return this.model instanceof TreeDataSeries
+    return this.model instanceof DataSeries
   }
 
   @computed
   get checked(): CheckedState {
     if (this.leaf) {
-      return (this.model as TreeDataSeries).checked
+      return (this.model as DataSeries).checked
     }
 
     if (this.children.every(node => node.checked === CheckedState.Checked)) {
@@ -52,7 +52,7 @@ export class TreeViewModel implements TreeNodeModel {
 
   set checked(checked: CheckedState) {
     if (this.leaf) {
-      (this.model as TreeDataSeries).checked = checked
+      (this.model as DataSeries).checked = checked
     } else {
       this.children.forEach(child => {
         child.checked = checked
@@ -62,11 +62,11 @@ export class TreeViewModel implements TreeNodeModel {
 
   @computed
   get children(): TreeNodeModel[] {
-    if (this.model instanceof TreeDataSeries) {
+    if (this.model instanceof DataSeries) {
       return []
     }
 
-    return Array.from(this.model.entries()).map((entry: [string, TreeData | TreeDataSeries]) => TreeViewModel.of({
+    return Array.from(this.model.entries()).map((entry: [string, TreeData | DataSeries]) => TreeViewModel.of({
       label: entry[0],
       model: entry[1],
     }))

@@ -10,7 +10,7 @@ import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
 
 import { ChartModel } from './model'
-import { TreeDataSeries } from './model'
+import { DataSeries } from './model'
 import { TreeData } from './model'
 import Timestamp = google.protobuf.Timestamp$Properties
 import DataPoint = message.support.nubugger.DataPoint
@@ -70,7 +70,7 @@ export class ChartNetwork {
 
     const node = basePath.reduce((accumulator: TreeData, p: string, index: number) => {
       if (!accumulator.has(p)) {
-        accumulator.set(p, new Map<string, TreeData | TreeDataSeries>())
+        accumulator.set(p, new Map<string, TreeData | DataSeries>())
       }
       return accumulator.get(p)! as TreeData
     }, this.model.treeData)
@@ -79,15 +79,12 @@ export class ChartNetwork {
       const key = keys[i]!
 
       if (!node.has(key)) {
-        node.set(key, new TreeDataSeries())
+        node.set(key, new DataSeries())
       }
 
-      const leaf = node.get(key) as TreeDataSeries
+      const leaf = node.get(key) as DataSeries
 
-      leaf.series.push({
-        timestamp: toSeconds(data.timestamp),
-        value: v,
-      })
+      leaf.series.push(Vector2.of(toSeconds(data.timestamp), v))
     })
   }
 

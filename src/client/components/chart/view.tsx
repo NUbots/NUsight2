@@ -4,6 +4,7 @@ import { Component } from 'react'
 import { ComponentType } from 'react'
 
 import { CheckboxTree } from '../checkbox_tree/view'
+import { LineChart } from './line_chart/view'
 
 import { ChartController } from './controller'
 import { ChartModel } from './model'
@@ -30,14 +31,13 @@ export class ChartView extends Component<ChartViewProps> {
         <Menu></Menu>
         <div className={style.example}>
           <div className={style.main}>
-            <h1>Chart here</h1>
+            <LineChart model={model} />
           </div>
           <div className={style.sidebar}>
             <CheckboxTree
               model={model.tree}
               onCheck={controller.onNodeCheck}
-              onExpand={controller.onNodeExpand}
-            ></CheckboxTree>
+              onExpand={controller.onNodeExpand} />
           </div>
         </div>
       </div>

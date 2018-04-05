@@ -26,7 +26,7 @@ export class LineChartViewModel {
     const maxValue = this.maxValue
     const minValue = this.minValue
     const yScale = 1 / Math.max(1, (maxValue - minValue)) // Show all the data (autoscale)
-    const xScale = 1 / 5 // Show 5 seconds
+    const xScale = 10 / 1 // Show 5 seconds
 
     return Transform.of({
       scale: {
@@ -34,7 +34,7 @@ export class LineChartViewModel {
         y: yScale,
       },
       translate: {
-        x: Date.now() / 1000,
+        x: -((Date.now() / 1000) - this.model.startTime),
         y: minValue + (maxValue - minValue) / 2,
       },
     })
@@ -95,7 +95,7 @@ export class LineChartViewModel {
 
     const appearance = LineAppearance.of({
       strokeStyle: series.color,
-      lineWidth: 1000,
+      lineWidth: 1,
     })
 
     for (let i = 0; i < values.length - 1; i++) {

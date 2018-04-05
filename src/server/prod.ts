@@ -39,7 +39,7 @@ if (withVirtualRobots) {
     numRobots: 3,
     simulators: [
       { frequency: 1, simulator: OverviewSimulator.of() },
-      { frequency: 60, simulator: SensorDataSimulator.of() },
+      { frequency: 10, simulator: SensorDataSimulator.of() },
       { frequency: 10, simulator: ChartSimulator.of() },
     ],
   })

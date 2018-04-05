@@ -84,7 +84,7 @@ export class ChartNetwork {
 
       const leaf = node.get(key) as DataSeries
 
-      leaf.series.push(Vector2.of(toSeconds(data.timestamp), v))
+      leaf.series.push(Vector2.of(toSeconds(data.timestamp) - this.model.startTime, v))
     })
   }
 
@@ -143,8 +143,6 @@ export class ChartNetwork {
     if (sensorData.servo) {
       sensorData.servo.forEach((servo: Sensors.Servo$Properties, index: number) => {
         const name = ServoIds[servo!.id! || index]
-
-        console.log(servo, name)
 
         // PID gain
         this.onDataPoint(robotModel, new DataPoint({

@@ -26,6 +26,8 @@ export class DataSeries {
 export class ChartModel {
   @observable private robotModels: RobotModel[]
   @observable treeData: TreeData = new Map<string, TreeData | DataSeries>()
+  @observable startTime: number = Date.now() / 1000
+  @observable now: number = Date.now() / 1000
 
   constructor(robotModels: RobotModel[]) {
     this.robotModels = robotModels

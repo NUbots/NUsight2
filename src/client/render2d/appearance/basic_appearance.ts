@@ -1,25 +1,33 @@
 import { observable } from 'mobx'
 
 export class BasicAppearance {
-  @observable fillStyle: string
+  @observable fillColor: number
+  @observable fillAlpha: number
   @observable lineWidth: number
-  @observable strokeStyle: string
+  @observable strokeColor: number
+  @observable strokeAlpha: number
 
   constructor(opts: BasicAppearance) {
-    this.fillStyle = opts.fillStyle
+    this.fillColor = opts.fillColor
+    this.fillAlpha = opts.fillAlpha
     this.lineWidth = opts.lineWidth
-    this.strokeStyle = opts.strokeStyle
+    this.strokeColor = opts.strokeColor
+    this.strokeAlpha = opts.strokeAlpha
   }
 
   static of({
-    fillStyle = '#000',
+    fillColor = 0,
+    fillAlpha = 1,
     lineWidth = 1,
-    strokeStyle = '#000',
+    strokeColor = 0,
+    strokeAlpha = 1,
   }: Partial<BasicAppearance> = {}): BasicAppearance {
     return new BasicAppearance({
-      fillStyle,
+      fillColor,
+      fillAlpha,
       lineWidth,
-      strokeStyle,
+      strokeColor,
+      strokeAlpha,
     })
   }
 }

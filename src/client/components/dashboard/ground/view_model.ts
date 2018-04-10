@@ -42,9 +42,8 @@ export class GroundViewModel {
     return Shape.of(
       this.getRectanglePolygon({ x, y, width, height }),
       BasicAppearance.of({
-        fillStyle: this.model.fieldColor,
-        lineWidth: 0,
-        strokeStyle: 'transparent',
+        fillColor: this.model.fieldColor,
+        strokeAlpha: 0,
       }),
     )
   }
@@ -55,12 +54,12 @@ export class GroundViewModel {
     const width = dimensions.goalWidth
     const height = dimensions.goalDepth
     const y = -width * 0.5
-    const goal = (x: number, strokeStyle: string) => Shape.of(
+    const goal = (x: number, strokeColor: number) => Shape.of(
       this.getRectanglePolygon({ x, y, width, height }),
       BasicAppearance.of({
-        fillStyle: 'transparent',
+        fillAlpha: 0,
         lineWidth: dimensions.lineWidth,
-        strokeStyle,
+        strokeColor,
       }),
     )
     return Group.of({
@@ -90,9 +89,9 @@ export class GroundViewModel {
     return Shape.of(
       CircleGeometry.of({ radius: this.model.dimensions.centerCircleDiameter * 0.5 }),
       BasicAppearance.of({
-        fillStyle: 'transparent',
+        fillAlpha: 0,
         lineWidth: this.model.dimensions.lineWidth,
-        strokeStyle: this.model.lineColor,
+        strokeColor: this.model.lineColor,
       }),
     )
   }
@@ -100,7 +99,7 @@ export class GroundViewModel {
   @computed
   private get centerMark() {
     const lineWidth = this.model.dimensions.lineWidth * 2
-    const strokeStyle = this.model.lineColor
+    const strokeColor = this.model.lineColor
     return Group.of({
       children: [
         Shape.of(
@@ -108,14 +107,14 @@ export class GroundViewModel {
             origin: Vector2.of(0, lineWidth),
             target: Vector2.of(0, -lineWidth),
           }),
-          LineAppearance.of({ lineWidth, strokeStyle }),
+          LineAppearance.of({ lineWidth, strokeColor }),
         ),
         Shape.of(
           LineGeometry.of({
             origin: Vector2.of(lineWidth, 0),
             target: Vector2.of(-lineWidth, 0),
           }),
-          LineAppearance.of({ lineWidth, strokeStyle }),
+          LineAppearance.of({ lineWidth, strokeColor }),
         ),
       ],
     })
@@ -130,7 +129,7 @@ export class GroundViewModel {
       }),
       LineAppearance.of({
         lineWidth: this.model.dimensions.lineWidth,
-        strokeStyle: this.model.lineColor,
+        strokeColor: this.model.lineColor,
       }),
     )
   }
@@ -145,9 +144,9 @@ export class GroundViewModel {
         height: this.model.dimensions.fieldLength,
       }),
       BasicAppearance.of({
-        fillStyle: 'transparent',
+        fillAlpha: 0,
         lineWidth: this.model.dimensions.lineWidth,
-        strokeStyle: this.model.lineColor,
+        strokeColor: this.model.lineColor,
       }),
     )
   }
@@ -161,9 +160,9 @@ export class GroundViewModel {
     const goalArea = (x: number) => Shape.of(
       this.getRectanglePolygon({ x, y, width, height }),
       BasicAppearance.of({
-        fillStyle: 'transparent',
+        fillAlpha: 0,
         lineWidth: this.model.dimensions.lineWidth,
-        strokeStyle: this.model.lineColor,
+        strokeColor: this.model.lineColor,
       }),
     )
     return Group.of({
@@ -188,7 +187,7 @@ export class GroundViewModel {
           }),
           LineAppearance.of({
             lineWidth,
-            strokeStyle: this.model.lineColor,
+            strokeColor: this.model.lineColor,
           }),
         ),
         Shape.of(
@@ -198,7 +197,7 @@ export class GroundViewModel {
           }),
           LineAppearance.of({
             lineWidth,
-            strokeStyle: this.model.lineColor,
+            strokeColor: this.model.lineColor,
           }),
         ),
       ],

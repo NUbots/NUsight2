@@ -5,14 +5,16 @@ export class LineAppearance {
   @observable lineDashOffset: number
   @observable lineJoin: 'bevel' | 'round' | 'miter'
   @observable lineWidth: number
-  @observable strokeStyle: string
+  @observable strokeColor: number
+  @observable strokeAlpha: number
 
   constructor(opts: LineAppearance) {
     this.lineCap = opts.lineCap
     this.lineDashOffset = opts.lineDashOffset
     this.lineJoin = opts.lineJoin
     this.lineWidth = opts.lineWidth
-    this.strokeStyle = opts.strokeStyle
+    this.strokeColor = opts.strokeColor
+    this.strokeAlpha = opts.strokeAlpha
   }
 
   static of({
@@ -20,14 +22,16 @@ export class LineAppearance {
     lineDashOffset = 0,
     lineJoin = 'miter',
     lineWidth = 1,
-    strokeStyle = '#000',
+    strokeColor = 0,
+    strokeAlpha = 1,
   }: Partial<LineAppearance> = {}): LineAppearance {
     return new LineAppearance({
       lineCap,
       lineDashOffset,
       lineJoin,
       lineWidth,
-      strokeStyle,
+      strokeColor,
+      strokeAlpha,
     })
   }
 }

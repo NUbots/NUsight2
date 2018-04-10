@@ -63,8 +63,8 @@ function init() {
       numRobots: 3,
       simulators: [
         { frequency: 1, simulator: OverviewSimulator.of() },
-        { frequency: 1, simulator: SensorDataSimulator.of() },
-        { frequency: 10, simulator: ChartSimulator.of() },
+        { frequency: 60, simulator: SensorDataSimulator.of() },
+        { frequency: 60, simulator: ChartSimulator.of() },
       ],
     })
     virtualRobots.startSimulators()

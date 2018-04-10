@@ -1,19 +1,25 @@
 import { action } from 'mobx'
 
+import { BrowserSystemClock } from '../../../client/time/browser_clock'
+import { Clock } from '../../../shared/time/clock'
 import { CheckedState } from '../checkbox_tree/model'
 import { TreeNodeModel } from '../checkbox_tree/model'
 
 import { ChartModel } from './model'
 
 export class ChartController {
-  private model: ChartModel
 
-  constructor(opts: { model: ChartModel }) {
-    this.model = opts.model
+  private rafId: number
+
+  constructor(private model: ChartModel,
+              private clock: Clock) {
+    this.model = model
+    this.clock = clock
+    this.rafId = requestAnimationFrame(this.onAnimationFrame)
   }
 
   static of(opts: { model: ChartModel }) {
-    return new ChartController(opts)
+    return new ChartController(opts.model, BrowserSystemClock)
   }
 
   @action
@@ -34,5 +40,15 @@ export class ChartController {
         node.checked = CheckedState.Checked
       }
     }
+  }
+
+  @action
+  onAnimationFrame = () => {
+    this.model.now = this.clock.now() - this.model.startTime
+    this.rafId = requestAnimationFrame(this.onAnimationFrame)
+  }
+
+  destroy() {
+    cancelAnimationFrame(this.rafId)
   }
 }

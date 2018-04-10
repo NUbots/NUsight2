@@ -7,6 +7,7 @@ import { ArrowGeometry } from '../geometry/arrow_geometry'
 import { CircleGeometry } from '../geometry/circle_geometry'
 import { LineGeometry } from '../geometry/line_geometry'
 import { MarkerGeometry } from '../geometry/marker_geometry'
+import { PathGeometry } from '../geometry/path_geometry'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Group } from '../object/group'
@@ -18,6 +19,7 @@ import { renderArrow } from './arrow'
 import { renderCircle } from './circle'
 import { renderLine } from './line'
 import { renderMarker } from './marker'
+import { renderPath } from './path'
 import { renderPolygon } from './polygon'
 import { renderText } from './text'
 
@@ -43,6 +45,8 @@ export function renderObject2d(ctx: CanvasRenderingContext2D, obj: Object2d, wor
       renderLine(ctx, obj)
     } else if (obj.geometry instanceof MarkerGeometry) {
       renderMarker(ctx, obj)
+    } else if (obj.geometry instanceof PathGeometry) {
+      renderPath(ctx, obj)
     } else if (obj.geometry instanceof PolygonGeometry) {
       renderPolygon(ctx, obj)
     } else if (obj.geometry instanceof TextGeometry) {

@@ -6,6 +6,7 @@ import { CanvasRenderer } from '../../../render2d/canvas_renderer'
 import { SVGRenderer } from '../../../render2d/svg_renderer'
 import { ChartModel } from '../model'
 
+import { LineChartModel } from './model'
 import * as style from './style.css'
 import { LineChartViewModel } from './view_model'
 
@@ -16,8 +17,9 @@ export type LineChartProps = {
 @observer
 export class LineChart extends Component<LineChartProps> {
   render() {
-    const model = this.props.model
-    const viewModel = LineChartViewModel.of(model)
+    const chartModel = this.props.model
+    const lineChartModel = LineChartModel.of(this.props.model)
+    const viewModel = LineChartViewModel.of(lineChartModel)
     return <div className={style.container}>
       <SVGRenderer
         className={style.field}

@@ -5,37 +5,34 @@ import { createTransformer } from 'mobx-utils'
 import { Transform } from '../../../math/transform'
 import { Vector2 } from '../../../math/vector2'
 import { LineAppearance } from '../../../render2d/appearance/line_appearance'
-import { LineGeometry } from '../../../render2d/geometry/line_geometry'
+import { PathGeometry } from '../../../render2d/geometry/path_geometry'
 import { Group } from '../../../render2d/object/group'
 import { Shape } from '../../../render2d/object/shape'
 import { CheckedState } from '../../checkbox_tree/model'
 import { DataSeries } from '../model'
 import { TreeData } from '../model'
-import { ChartModel } from '../model'
+
+import { LineChartModel } from './model'
 
 export class LineChartViewModel {
-  constructor(private model: ChartModel) {
+  constructor(private model: LineChartModel) {
   }
 
-  static of = createTransformer((model: ChartModel): LineChartViewModel => {
+  static of = createTransformer((model: LineChartModel): LineChartViewModel => {
     return new LineChartViewModel(model)
   })
 
   @computed
   get camera(): Transform {
-    const maxValue = this.maxValue
-    const minValue = this.minValue
-    const yScale = 1 / Math.max(1, (maxValue - minValue)) // Show all the data (autoscale)
-    const xScale = 10 / 1 // Show 5 seconds
+    const maxValue = this.model.yMax === 'auto' ? this.maxValue : this.model.yMax
+    const minValue = this.model.yMin === 'auto' ? this.minValue : this.model.yMin
+    const yScale = 1 / (maxValue - minValue)
+    const xScale = 1 / this.model.viewSeconds
 
     return Transform.of({
       scale: {
         x: xScale,
         y: yScale,
-      },
-      translate: {
-        x: -((Date.now() / 1000) - this.model.startTime),
-        y: minValue + (maxValue - minValue) / 2,
       },
     })
   }
@@ -60,59 +57,71 @@ export class LineChartViewModel {
 
   @computed
   get chart(): Group {
+
+    const maxValue = this.model.yMax === 'auto' ? this.maxValue : this.model.yMax
+    const minValue = this.model.yMin === 'auto' ? this.minValue : this.model.yMin
+
     return Group.of({
-      children: this.dataSeries.map(series => LineChartViewModel.makeLines(series)),
+      transform: Transform.of({
+        translate: {
+          x: -(this.model.now - this.model.viewSeconds / 2),
+          y: -(minValue + (maxValue - minValue) / 2),
+        },
+      }),
+      children: this.dataSeries.map(series => this.makeLines(series)),
     })
   }
 
+  @computed
   private get maxValue(): number {
-    if (this.dataSeries.length === 0) {
-      return 1
-    }
 
     return this.dataSeries.reduce((maxValue, series: DataSeries) => {
-      return series.series.reduce((max, value) => {
+      return series.series.filter(v => {
+        const t = v.x - series.timeDelta
+        return (this.model.now - this.model.viewSeconds) < t && t < this.model.now
+      }).reduce((max, value) => {
         return Math.max(max, value.y)
       }, maxValue)
     }, -Number.MAX_VALUE)
   }
 
+  @computed
   private get minValue(): number {
-    if (this.dataSeries.length === 0) {
-      return -1
-    }
-
     return this.dataSeries.reduce((minValue, series: DataSeries) => {
-      return series.series.reduce((min, value) => {
+
+      return series.series.filter(v => {
+        const t = v.x - series.timeDelta
+        return (this.model.now - this.model.viewSeconds) < t && t < this.model.now
+      }).reduce((min, value) => {
         return Math.min(min, value.y)
       }, minValue)
     }, Number.MAX_VALUE)
   }
 
-  private static makeLines(series: DataSeries): Group {
-    const values = series.series.sort((a, b) => a.x > b.x ? 1 : (a.x < b.x ? -1 : 0))
-    const shapes: Array<Shape<LineGeometry>> = []
+  private makeLines(series: DataSeries): Group {
+
+    // We have to sort the points to make sure timestamps are increasing
+    const values = series.series.filter(v => {
+        const t = v.x - series.timeDelta
+        return (this.model.now - this.model.viewSeconds) < t && t < this.model.now
+    }).sort((a, b) => a.x > b.x ? 1 : (a.x < b.x ? -1 : 0))
 
     const appearance = LineAppearance.of({
       strokeStyle: series.color,
-      lineWidth: 1,
+      lineWidth: 0.05,
     })
 
-    for (let i = 0; i < values.length - 1; i++) {
-      const shape = Shape.of(
-        LineGeometry.of({
-          origin: values[i],
-          target: values[i + 1],
-        }),
-        appearance,
-      )
+    const shape = Shape.of(
+      PathGeometry.of(values),
+      appearance,
+    )
 
-      shapes.push(shape)
-    }
-
-    // TODO: add time delta to series and apply here
+    // Apply our time delta
     return Group.of({
-      children: shapes,
+      transform: Transform.of({
+        translate: Vector2.of(-series.timeDelta, 0),
+      }),
+      children: [shape],
     })
   }
 }

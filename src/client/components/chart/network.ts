@@ -84,7 +84,17 @@ export class ChartNetwork {
 
       const leaf = node.get(key) as DataSeries
 
-      leaf.series.push(Vector2.of(toSeconds(data.timestamp) - this.model.startTime, v))
+      const time = toSeconds(data.timestamp)
+
+      // Estimate the difference between the clocks
+      leaf.updateDelta(time - this.clock.now())
+
+      // Add the series element
+      leaf.series.push(Vector2.of(time - this.model.startTime, v))
+
+      // Remove old series elements (keep 10 seconds of buffer)
+      const cutoff = time - this.model.startTime - 10
+      leaf.series = leaf.series.filter(v => v.x > cutoff)
     })
   }
 

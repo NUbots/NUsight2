@@ -4,17 +4,17 @@ import { TextStyle } from 'pixi.js'
 
 import { Transform } from '../../math/transform'
 import { Vector2 } from '../../math/vector2'
+import { BasicAppearance } from '../appearance/basic_appearance'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Shape } from '../object/shape'
 
-import { BasicAppearance } from '../appearance/basic_appearance'
 import { applyAppearance } from './rendering'
 
 export const renderText = createTransformer((shape: Shape<TextGeometry>): Text => {
 
   const { x, y, text, maxWidth, fontFamily, textAlign, textBaseline, alignToView } = shape.geometry
 
-  if(shape.appearance instanceof BasicAppearance) {
+  if (shape.appearance instanceof BasicAppearance) {
     const t = new Text(text, {
       fontFamily,
       padding: 10,
@@ -31,8 +31,7 @@ export const renderText = createTransformer((shape: Shape<TextGeometry>): Text =
     t.scale.y = t.scale.x
 
     return t
-  }
-  else {
+  } else {
     throw Error('Pixi text only supports basic appearance')
   }
 })

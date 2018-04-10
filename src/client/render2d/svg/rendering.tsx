@@ -43,7 +43,7 @@ export function toSvgProps(appearance: Appearance) {
       strokeDashoffset: appearance.lineDashOffset,
       strokeWidth: appearance.lineWidth,
       stroke: '#' + ('00000' + (appearance.strokeColor | 0).toString(16)).substr(-6),
-      strokeOpacity: appearance.strokeAlpha
+      strokeOpacity: appearance.strokeAlpha,
     }
   } else {
     throw new Error(`Unsupported appearance type ${appearance}`)

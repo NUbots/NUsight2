@@ -69,15 +69,15 @@ export function applyAppearance(ctx: CanvasRenderingContext2D, appearance: Appea
 
   if (appearance instanceof BasicAppearance) {
 
-    const fR = appearance.fillColor >> 16;
-    const fG = appearance.fillColor >> 8 & 0xFF;
-    const fB = appearance.fillColor & 0xFF;
+    const fR = appearance.fillColor >> 16
+    const fG = appearance.fillColor >> 8 & 0xFF
+    const fB = appearance.fillColor & 0xFF
     const fA = appearance.fillAlpha
     ctx.fillStyle = `rgb(${fR}, ${fG}, ${fB}, ${fA})`
 
-    const sR = appearance.strokeColor >> 16;
-    const sG = appearance.strokeColor >> 8 & 0xFF;
-    const sB = appearance.strokeColor & 0xFF;
+    const sR = appearance.strokeColor >> 16
+    const sG = appearance.strokeColor >> 8 & 0xFF
+    const sB = appearance.strokeColor & 0xFF
     const sA = appearance.strokeAlpha
     ctx.lineWidth = appearance.lineWidth
     ctx.strokeStyle = `rgb(${sR}, ${sG}, ${sB}, ${sA})`
@@ -86,9 +86,9 @@ export function applyAppearance(ctx: CanvasRenderingContext2D, appearance: Appea
     ctx.lineDashOffset = appearance.lineDashOffset
     ctx.lineJoin = appearance.lineJoin
 
-    const sR = appearance.strokeColor >> 16;
-    const sG = appearance.strokeColor >> 8 & 0xFF;
-    const sB = appearance.strokeColor & 0xFF;
+    const sR = appearance.strokeColor >> 16
+    const sG = appearance.strokeColor >> 8 & 0xFF
+    const sB = appearance.strokeColor & 0xFF
     const sA = appearance.strokeAlpha
     ctx.lineWidth = appearance.lineWidth
     ctx.strokeStyle = `rgb(${sR}, ${sG}, ${sB}, ${sA})`

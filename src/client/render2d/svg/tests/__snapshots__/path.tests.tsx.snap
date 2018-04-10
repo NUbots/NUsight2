@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PolygonSVGRenderer renders 1`] = `
+exports[`PathSVGRenderer renders 1`] = `
 <_class
   model={
     Shape {
@@ -11,25 +11,8 @@ exports[`PolygonSVGRenderer renders 1`] = `
         "strokeAlpha": 1,
         "strokeColor": 0,
       },
-      "geometry": PolygonGeometry {
-        "points": Array [
-          Vector2 {
-            "x": 0,
-            "y": 0,
-          },
-          Vector2 {
-            "x": 0,
-            "y": 1,
-          },
-          Vector2 {
-            "x": 1,
-            "y": 1,
-          },
-          Vector2 {
-            "x": 1,
-            "y": 0,
-          },
-        ],
+      "geometry": PathGeometry {
+        "points": Array [],
       },
       "group": Group {
         "children": Array [],

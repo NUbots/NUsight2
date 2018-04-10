@@ -5,9 +5,11 @@ exports[`TextSVGRenderer renders 1`] = `
   model={
     Shape {
       "appearance": BasicAppearance {
-        "fillStyle": "#000",
+        "fillAlpha": 1,
+        "fillColor": 0,
         "lineWidth": 1,
-        "strokeStyle": "#000",
+        "strokeAlpha": 1,
+        "strokeColor": 0,
       },
       "geometry": TextGeometry {
         "alignToView": true,

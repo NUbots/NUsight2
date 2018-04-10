@@ -7,20 +7,32 @@ import { Vector2 } from '../../math/vector2'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Shape } from '../object/shape'
 
+import { BasicAppearance } from '../appearance/basic_appearance'
 import { applyAppearance } from './rendering'
 
 export const renderText = createTransformer((shape: Shape<TextGeometry>): Text => {
 
   const { x, y, text, maxWidth, fontFamily, textAlign, textBaseline, alignToView } = shape.geometry
 
-  const t = new Text(text, new TextStyle({
-    fontFamily,
-    textBaseline,
-    align: textAlign,
-    wordWrapWidth: maxWidth,
-  }))
-  t.x = x
-  t.y = y
+  if(shape.appearance instanceof BasicAppearance) {
+    const t = new Text(text, {
+      fontFamily,
+      padding: 10,
+      textBaseline: 'middle',
+      fill: shape.appearance.fillColor,
+      align: textAlign,
+    })
+    t.x = x
+    t.y = y
+    t.anchor.x = 0.5
+    t.anchor.y = 0.75 // Might be hacks? might not be...
 
-  return t
+    t.width = maxWidth
+    t.scale.y = t.scale.x
+
+    return t
+  }
+  else {
+    throw Error('Pixi text only supports basic appearance')
+  }
 })

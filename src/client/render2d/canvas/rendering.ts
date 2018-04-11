@@ -7,7 +7,6 @@ import { ArrowGeometry } from '../geometry/arrow_geometry'
 import { CircleGeometry } from '../geometry/circle_geometry'
 import { LineGeometry } from '../geometry/line_geometry'
 import { MarkerGeometry } from '../geometry/marker_geometry'
-import { PathGeometry } from '../geometry/path_geometry'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Group } from '../object/group'
@@ -19,7 +18,6 @@ import { renderArrow } from './arrow'
 import { renderCircle } from './circle'
 import { renderLine } from './line'
 import { renderMarker } from './marker'
-import { renderPath } from './path'
 import { renderPolygon } from './polygon'
 import { renderText } from './text'
 
@@ -45,8 +43,6 @@ export function renderObject2d(ctx: CanvasRenderingContext2D, obj: Object2d, wor
       renderLine(ctx, obj)
     } else if (obj.geometry instanceof MarkerGeometry) {
       renderMarker(ctx, obj)
-    } else if (obj.geometry instanceof PathGeometry) {
-      renderPath(ctx, obj)
     } else if (obj.geometry instanceof PolygonGeometry) {
       renderPolygon(ctx, obj)
     } else if (obj.geometry instanceof TextGeometry) {
@@ -68,30 +64,15 @@ export function applyTransform(ctx: CanvasRenderingContext2D, transform: Transfo
 export function applyAppearance(ctx: CanvasRenderingContext2D, appearance: Appearance): void {
 
   if (appearance instanceof BasicAppearance) {
-
-    const fR = appearance.fillColor >> 16
-    const fG = appearance.fillColor >> 8 & 0xFF
-    const fB = appearance.fillColor & 0xFF
-    const fA = appearance.fillAlpha
-    ctx.fillStyle = `rgb(${fR}, ${fG}, ${fB}, ${fA})`
-
-    const sR = appearance.strokeColor >> 16
-    const sG = appearance.strokeColor >> 8 & 0xFF
-    const sB = appearance.strokeColor & 0xFF
-    const sA = appearance.strokeAlpha
+    ctx.fillStyle = appearance.fillStyle
     ctx.lineWidth = appearance.lineWidth
-    ctx.strokeStyle = `rgb(${sR}, ${sG}, ${sB}, ${sA})`
+    ctx.strokeStyle = appearance.strokeStyle
   } else if (appearance instanceof LineAppearance) {
     ctx.lineCap = appearance.lineCap
     ctx.lineDashOffset = appearance.lineDashOffset
     ctx.lineJoin = appearance.lineJoin
-
-    const sR = appearance.strokeColor >> 16
-    const sG = appearance.strokeColor >> 8 & 0xFF
-    const sB = appearance.strokeColor & 0xFF
-    const sA = appearance.strokeAlpha
     ctx.lineWidth = appearance.lineWidth
-    ctx.strokeStyle = `rgb(${sR}, ${sG}, ${sB}, ${sA})`
+    ctx.strokeStyle = appearance.strokeStyle
   } else {
     throw new Error(`Unsupported appearance type: ${appearance}`)
   }

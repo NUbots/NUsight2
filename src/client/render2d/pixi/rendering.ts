@@ -70,15 +70,34 @@ export const renderObject2d = createTransformer((obj: Object2d): DisplayObject =
   }
 })
 
+const toPixiColor = (style: string): [number, number] => {
+  if (style === 'transparent') {
+    return [0, 0]
+  }
+  let result = /^#([A-Fa-f0-9])([A-Fa-f0-9])([A-Fa-f0-9])$/.exec(style)
+  if (result !== null) {
+    return[parseInt(result[1] + result[1] + result[2] + result[2] + result[3] + result[3], 16), 1]
+  }
+  result = /^#([A-Fa-f0-9]{6})$/.exec(style)
+  if (result !== null) {
+    return [parseInt(result[1], 16), 1]
+  }
+
+  throw new Error('Pixi cannot handle non hex colours')
+}
+
 export function applyAppearance(obj: Graphics, appearance: Appearance, exec: (obj: Graphics) => void): void {
 
   if (appearance instanceof BasicAppearance) {
-    obj.lineStyle(appearance.lineWidth, appearance.strokeColor, appearance.strokeAlpha)
-    obj.beginFill(appearance.fillColor, appearance.fillAlpha)
+    const line = toPixiColor(appearance.strokeStyle)
+    const fill = toPixiColor(appearance.fillStyle)
+    obj.lineStyle(appearance.lineWidth, line[0], line[1])
+    obj.beginFill(fill[0], fill[1])
     exec(obj)
     obj.endFill()
   } else if (appearance instanceof LineAppearance) {
-    obj.lineStyle(appearance.lineWidth, appearance.strokeColor, appearance.strokeAlpha)
+    const line = toPixiColor(appearance.strokeStyle)
+    obj.lineStyle(appearance.lineWidth, line[0], line[1])
     exec(obj)
     // ctx.lineCap = appearance.lineCap
     // ctx.lineDashOffset = appearance.lineDashOffset

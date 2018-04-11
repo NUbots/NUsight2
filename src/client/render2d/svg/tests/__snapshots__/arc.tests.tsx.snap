@@ -5,11 +5,9 @@ exports[`ArcSVGRenderer renders 1`] = `
   model={
     Shape {
       "appearance": BasicAppearance {
-        "fillAlpha": 1,
-        "fillColor": 0,
+        "fillStyle": "#000",
         "lineWidth": 1,
-        "strokeAlpha": 1,
-        "strokeColor": 0,
+        "strokeStyle": "#000",
       },
       "geometry": ArcGeometry {
         "anticlockwise": false,

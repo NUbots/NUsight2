@@ -85,8 +85,8 @@ export class DashboardRobotViewModel {
       }),
       BasicAppearance.of({
         lineWidth: 0.025,
-        fillAlpha: 0,
-        strokeColor: 0x000000,
+        fillStyle: 'transparent',
+        strokeStyle: '#000',
       }),
     )
   }
@@ -100,8 +100,8 @@ export class DashboardRobotViewModel {
         y: this.model.ballPosition.y,
       }),
       BasicAppearance.of({
-        fillColor: this.model.ballColor,
-        strokeAlpha: 0,
+        fillStyle: this.model.ballColor,
+        strokeStyle: 'transparent',
       }),
     )
   }
@@ -115,7 +115,7 @@ export class DashboardRobotViewModel {
       }),
       LineAppearance.of({
         lineWidth: 0.025,
-        strokeColor: this.model.ballSightColor,
+        strokeStyle: this.model.ballSightColor,
       }),
     )
   }
@@ -134,8 +134,9 @@ export class DashboardRobotViewModel {
         width: 0.025,
       }),
       BasicAppearance.of({
-        fillColor: this.model.kickTargetColor,
-        strokeAlpha: 0,
+        fillStyle: this.model.kickTargetColor,
+        lineWidth: 0,
+        strokeStyle: 'transparent',
       }),
     )
   }
@@ -152,8 +153,9 @@ export class DashboardRobotViewModel {
             y: 0,
           }),
           BasicAppearance.of({
-            fillColor: this.model.robotColor,
-            strokeAlpha: 0,
+            fillStyle: this.model.robotColor,
+            lineWidth: 0.01,
+            strokeStyle: this.model.robotBorderColor,
           }),
         ),
         Shape.of(
@@ -166,8 +168,8 @@ export class DashboardRobotViewModel {
             y: 0,
           }),
           BasicAppearance.of({
-            fillColor: this.model.textColor,
-            strokeAlpha: 0,
+            fillStyle: this.model.textColor,
+            strokeStyle: 'transparent',
           }),
         ),
       ],

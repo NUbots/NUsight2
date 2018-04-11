@@ -83,6 +83,11 @@ export class PixiRenderer extends Component<RendererProps> {
     this.renderer.render(cam)
   }
 
+  /**
+   * This function is executed when the canvas resizes.
+   * It is responsible for updating the viewport used by pixi
+   * as well as adjusting the scale of the world to normalize it
+   */
   @action
   private onResize = (width: number, height: number) => {
 

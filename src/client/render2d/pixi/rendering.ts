@@ -33,11 +33,12 @@ export const renderObject2d = createTransformer((obj: Object2d): DisplayObject =
   if (obj instanceof Group) {
     const g = new Container()
 
-    g.scale.x = obj.transform.scale.x
-    g.scale.y = obj.transform.scale.x
-    g.x = obj.transform.translate.x
-    g.y = obj.transform.translate.y
-    g.rotation = obj.transform.rotate
+    const { transform: { scale, translate, rotate } } = obj;
+    g.scale.x = scale.x
+    g.scale.y = scale.x
+    g.x = translate.x
+    g.y = translate.y
+    g.rotation = rotate
 
     obj.children.forEach(o => {
       g.addChild(renderObject2d(o))
@@ -70,40 +71,39 @@ export const renderObject2d = createTransformer((obj: Object2d): DisplayObject =
   }
 })
 
-const toPixiColor = (style: string): [number, number] => {
+const toPixiColor = (style: string): {color: number, alpha: number} => {
   if (style === 'transparent') {
-    return [0, 0]
+    return {color: 0, alpha: 0}
   }
+  // Colors of the form #FFF
   let result = /^#([A-Fa-f0-9])([A-Fa-f0-9])([A-Fa-f0-9])$/.exec(style)
   if (result !== null) {
-    return[parseInt(result[1] + result[1] + result[2] + result[2] + result[3] + result[3], 16), 1]
+    return{color: parseInt(result[1] + result[1] + result[2] + result[2] + result[3] + result[3], 16), alpha: 1}
   }
+  // Colors of the form #FFFFFF
   result = /^#([A-Fa-f0-9]{6})$/.exec(style)
   if (result !== null) {
-    return [parseInt(result[1], 16), 1]
+    return {color: parseInt(result[1], 16), alpha: 1}
   }
 
   throw new Error('Pixi cannot handle non hex colours')
 }
 
-export function applyAppearance(obj: Graphics, appearance: Appearance, exec: (obj: Graphics) => void): void {
+export function applyAppearance(obj: Graphics, appearance: Appearance, draw: (obj: Graphics) => void): void {
 
   if (appearance instanceof BasicAppearance) {
     const line = toPixiColor(appearance.strokeStyle)
     const fill = toPixiColor(appearance.fillStyle)
-    obj.lineStyle(appearance.lineWidth, line[0], line[1])
-    obj.beginFill(fill[0], fill[1])
-    exec(obj)
+    obj.lineStyle(appearance.lineWidth, line.color, line.alpha)
+    obj.beginFill(fill.color, fill.alpha)
+    draw(obj)
     obj.endFill()
   } else if (appearance instanceof LineAppearance) {
     const line = toPixiColor(appearance.strokeStyle)
-    obj.lineStyle(appearance.lineWidth, line[0], line[1])
-    exec(obj)
-    // ctx.lineCap = appearance.lineCap
-    // ctx.lineDashOffset = appearance.lineDashOffset
-    // ctx.lineJoin = appearance.lineJoin
-    // ctx.lineWidth = appearance.lineWidth
-    // ctx.strokeStyle = appearance.strokeStyle
+    obj.lineStyle(appearance.lineWidth, line.color, line.alpha)
+    draw(obj)
+
+    // TODO: Support lineCap, lineCap, lineJoin, lineWidth, strokeStyle
   } else {
     throw new Error(`Unsupported appearance type: ${appearance}`)
   }

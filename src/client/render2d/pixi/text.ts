@@ -25,7 +25,9 @@ export const renderText = createTransformer((shape: Shape<TextGeometry>): Text =
     t.x = x
     t.y = y
     t.anchor.x = 0.5
-    t.anchor.y = 0.75 // Might be hacks? might not be...
+    t.anchor.y = 0.75 // I would have thought this should be 0.5, but 0.75 works to center text.
+                      // As I have found no documentation to be sure of this, this might be wrong.
+                      // but since it works it's what's here. If something goes wrong with text placement, look here.
 
     t.width = maxWidth
     t.scale.y = t.scale.x

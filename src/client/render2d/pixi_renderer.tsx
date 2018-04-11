@@ -95,7 +95,7 @@ export class PixiRenderer extends Component<RendererProps> {
     width *= devicePixelRatio
     height *= devicePixelRatio
 
-    // Set our canvas size
+    // Update our renderer's viewport
     this.renderer.resize(width, height)
 
     // Translate to the center

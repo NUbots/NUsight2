@@ -1,33 +1,39 @@
 import { observable } from 'mobx'
 
-export class LineAppearance {
-  @observable lineCap: 'butt' | 'round' | 'square'
-  @observable lineDashOffset: number
-  @observable lineJoin: 'bevel' | 'round' | 'miter'
-  @observable lineWidth: number
-  @observable strokeStyle: string
 
-  constructor(opts: LineAppearance) {
-    this.lineCap = opts.lineCap
-    this.lineDashOffset = opts.lineDashOffset
-    this.lineJoin = opts.lineJoin
-    this.lineWidth = opts.lineWidth
-    this.strokeStyle = opts.strokeStyle
+export type LineAppearanceOpts = {
+  stroke?: {
+    color: string,
+    alpha?: number,
+    width?: number,
+    cap?: 'butt' | 'round' | 'square'
+    dashOffset?: number
+    join?: 'bevel' | 'round' | 'miter'
+  }
+}
+
+export class LineAppearance {
+  @observable stroke: {
+    color: string,
+    alpha: number,
+    width: number,
+    cap: 'butt' | 'round' | 'square'
+    dashOffset: number
+    join: 'bevel' | 'round' | 'miter'
+  } = {
+    color: '#000000',
+    alpha: 1,
+    width: 1,
+    cap: 'butt',
+    dashOffset: 0,
+    join: 'miter',
   }
 
-  static of({
-    lineCap = 'butt',
-    lineDashOffset = 0,
-    lineJoin = 'miter',
-    lineWidth = 1,
-    strokeStyle = '#000000',
-  }: Partial<LineAppearance> = {}): LineAppearance {
-    return new LineAppearance({
-      lineCap,
-      lineDashOffset,
-      lineJoin,
-      lineWidth,
-      strokeStyle,
-    })
+  constructor(opts: LineAppearanceOpts) {
+    Object.assign(this.stroke, opts.stroke)
+  }
+
+  static of(opts: LineAppearanceOpts = {}): LineAppearance {
+    return new LineAppearance(opts)
   }
 }

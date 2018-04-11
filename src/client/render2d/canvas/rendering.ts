@@ -7,6 +7,7 @@ import { ArrowGeometry } from '../geometry/arrow_geometry'
 import { CircleGeometry } from '../geometry/circle_geometry'
 import { LineGeometry } from '../geometry/line_geometry'
 import { MarkerGeometry } from '../geometry/marker_geometry'
+import { PathGeometry } from '../geometry/path_geometry'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Group } from '../object/group'
@@ -18,6 +19,7 @@ import { renderArrow } from './arrow'
 import { renderCircle } from './circle'
 import { renderLine } from './line'
 import { renderMarker } from './marker'
+import { renderPath } from './path'
 import { renderPolygon } from './polygon'
 import { renderText } from './text'
 
@@ -43,6 +45,8 @@ export function renderObject2d(ctx: CanvasRenderingContext2D, obj: Object2d, wor
       renderLine(ctx, obj)
     } else if (obj.geometry instanceof MarkerGeometry) {
       renderMarker(ctx, obj)
+    } else if (obj.geometry instanceof PathGeometry) {
+      renderPath(ctx, obj)
     } else if (obj.geometry instanceof PolygonGeometry) {
       renderPolygon(ctx, obj)
     } else if (obj.geometry instanceof TextGeometry) {
@@ -61,18 +65,38 @@ export function applyTransform(ctx: CanvasRenderingContext2D, transform: Transfo
   ctx.rotate(transform.rotate * (transform.anticlockwise ? 1 : -1))
 }
 
+const hexToRGB = (hex: string): [number, number, number] => {
+  const result = /^#([A-Fa-f0-9]{2})([A-Fa-f0-9]{2})([A-Fa-f0-9]{2})/.exec(hex)
+
+  if (result === null) {
+    throw Error(`Color ${hex} was not a hex color`)
+  } else {
+    return [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)]
+  }
+}
+
 export function applyAppearance(ctx: CanvasRenderingContext2D, appearance: Appearance): void {
 
   if (appearance instanceof BasicAppearance) {
-    ctx.fillStyle = appearance.fillStyle
-    ctx.lineWidth = appearance.lineWidth
-    ctx.strokeStyle = appearance.strokeStyle
+
+    const [fR, fG, fB] = hexToRGB(appearance.fill.color)
+    const fA = appearance.fill.alpha
+    ctx.fillStyle = `rgba(${fR}, ${fG}, ${fB}, ${fA})`
+
+    const [sR, sG, sB] = hexToRGB(appearance.stroke.color)
+    const sA = appearance.stroke.alpha
+    ctx.lineWidth = appearance.stroke.width
+    ctx.strokeStyle = `rgba(${sR}, ${sG}, ${sB}, ${sA})`
   } else if (appearance instanceof LineAppearance) {
-    ctx.lineCap = appearance.lineCap
-    ctx.lineDashOffset = appearance.lineDashOffset
-    ctx.lineJoin = appearance.lineJoin
-    ctx.lineWidth = appearance.lineWidth
-    ctx.strokeStyle = appearance.strokeStyle
+    ctx.lineCap = appearance.stroke.cap
+    ctx.lineDashOffset = appearance.stroke.dashOffset
+    ctx.lineJoin = appearance.stroke.join
+
+
+    const [sR, sG, sB] = hexToRGB(appearance.stroke.color)
+    const sA = appearance.stroke.alpha
+    ctx.lineWidth = appearance.stroke.width
+    ctx.strokeStyle = `rgba(${sR}, ${sG}, ${sB}, ${sA})`
   } else {
     throw new Error(`Unsupported appearance type: ${appearance}`)
   }

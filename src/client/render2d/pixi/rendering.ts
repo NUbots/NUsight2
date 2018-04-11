@@ -33,7 +33,7 @@ export const renderObject2d = createTransformer((obj: Object2d): DisplayObject =
   if (obj instanceof Group) {
     const g = new Container()
 
-    const { transform: { scale, translate, rotate } } = obj;
+    const { transform: { scale, translate, rotate } } = obj
     g.scale.x = scale.x
     g.scale.y = scale.x
     g.x = translate.x
@@ -73,17 +73,17 @@ export const renderObject2d = createTransformer((obj: Object2d): DisplayObject =
 
 const toPixiColor = (style: string): {color: number, alpha: number} => {
   if (style === 'transparent') {
-    return {color: 0, alpha: 0}
+    return { color: 0, alpha: 0 }
   }
   // Colors of the form #FFF
   let result = /^#([A-Fa-f0-9])([A-Fa-f0-9])([A-Fa-f0-9])$/.exec(style)
   if (result !== null) {
-    return{color: parseInt(result[1] + result[1] + result[2] + result[2] + result[3] + result[3], 16), alpha: 1}
+    return{ color: parseInt(result[1] + result[1] + result[2] + result[2] + result[3] + result[3], 16), alpha: 1 }
   }
   // Colors of the form #FFFFFF
   result = /^#([A-Fa-f0-9]{6})$/.exec(style)
   if (result !== null) {
-    return {color: parseInt(result[1], 16), alpha: 1}
+    return { color: parseInt(result[1], 16), alpha: 1 }
   }
 
   throw new Error('Pixi cannot handle non hex colours')

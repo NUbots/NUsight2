@@ -18,13 +18,10 @@ import * as style from './style.css'
 @observer
 export class CanvasRenderer extends Component<RendererProps> {
   @observable private resolution: Transform = Transform.of()
-  private canvas: HTMLCanvasElement
+  private canvas: HTMLCanvasElement | null = null
   private stopAutorun: IReactionDisposer
 
   componentDidMount() {
-    if (!this.canvas) {
-      return
-    }
 
     // Render when changes happen
     this.stopAutorun = autorun(this.renderCanvas, {
@@ -61,10 +58,10 @@ export class CanvasRenderer extends Component<RendererProps> {
     const { scene, camera } = this.props
 
     const cam = this.resolution.inverse().then(camera)
-    const ctx = this.canvas.getContext('2d')!
+    const ctx = this.canvas!.getContext('2d')!
 
     ctx.save()
-    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    ctx.clearRect(0, 0, this.canvas!.width, this.canvas!.height)
     applyTransform(ctx, cam)
     renderObject2d(ctx, scene, cam)
     ctx.restore()

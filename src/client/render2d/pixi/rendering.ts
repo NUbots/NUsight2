@@ -71,7 +71,10 @@ export const pixiObject = createTransformer((obj: Object2d): DisplayObject => {
   }
 })
 
-const toPixiColor = (style: string): {color: number, alpha: number} => {
+const toPixiColor = (style: string): {
+  color: number, // range: [0, 0xFFFFFF]
+  alpha: number // range: [0, 1]
+} => {
   if (style === 'transparent') {
     return { color: 0, alpha: 0 }
   }

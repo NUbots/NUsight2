@@ -21,17 +21,14 @@ import * as style from './style.css'
 @observer
 export class PixiRenderer extends Component<RendererProps> {
   @observable private resolution: Transform = Transform.of()
-  private canvas: HTMLCanvasElement
+  private canvas: HTMLCanvasElement | null = null
   private renderer: WebGLRenderer | CanvasRenderer
   private stopAutorun: IReactionDisposer
 
   componentDidMount() {
-    if (!this.canvas) {
-      return
-    }
 
     this.renderer = autoDetectRenderer({
-      view: this.canvas,
+      view: this.canvas!,
       transparent: true,
       antialias: true,
     })
@@ -62,7 +59,7 @@ export class PixiRenderer extends Component<RendererProps> {
     )
   }
 
-  private onRef = (canvas: HTMLCanvasElement) => {
+  private onRef = (canvas: HTMLCanvasElement | null) => {
     this.canvas = canvas
   }
 

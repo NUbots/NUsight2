@@ -20,7 +20,7 @@ export class Field extends Component<FieldProps> {
     const viewModel = FieldViewModel.of(model)
     return <div className={style.container}>
       <Renderer
-        engine='pixi'
+        engine='svg'
         className={style.field}
         scene={viewModel.scene}
         camera={viewModel.camera}

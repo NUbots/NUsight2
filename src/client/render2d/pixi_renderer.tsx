@@ -86,7 +86,10 @@ export class PixiRenderer extends Component<RendererProps> {
   /**
    * This function is executed when the canvas resizes.
    * It is responsible for updating the viewport used by pixi
-   * as well as adjusting the scale of the world to normalize it
+   * as well as adjusting the scale of the world to normalize it.
+   * This means that when aspect ratio is set, the widest size will be [-1, 1]
+   * After applying the camera transformation this means pixel coordinates don't need to be known.
+   * Without aspect ratio the whole field of view will be [-1, 1] in both x and y (stretched view)
    */
   @action
   private onResize = (width: number, height: number) => {

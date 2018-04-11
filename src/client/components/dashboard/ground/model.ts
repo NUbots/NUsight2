@@ -18,7 +18,7 @@ export class GroundModel {
       bottomGoalColor: '#0000ff',
       dimensions: FieldDimensions.postYear2017(),
       fieldColor: '#009688',
-      lineColor: '#fff',
+      lineColor: '#ffffff',
       topGoalColor: '#ffff00',
     })
   }

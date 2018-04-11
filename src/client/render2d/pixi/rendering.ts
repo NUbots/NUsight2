@@ -28,7 +28,7 @@ import { renderPath } from './path'
 import { renderPolygon } from './polygon'
 import { renderText } from './text'
 
-export const renderObject2d = createTransformer((obj: Object2d): DisplayObject => {
+export const pixiObject = createTransformer((obj: Object2d): DisplayObject => {
 
   if (obj instanceof Group) {
     const g = new Container()
@@ -41,7 +41,7 @@ export const renderObject2d = createTransformer((obj: Object2d): DisplayObject =
     g.rotation = rotate
 
     obj.children.forEach(o => {
-      g.addChild(renderObject2d(o))
+      g.addChild(pixiObject(o))
     })
 
     return g

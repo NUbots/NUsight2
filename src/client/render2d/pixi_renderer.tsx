@@ -14,7 +14,7 @@ import ReactResizeDetector from 'react-resize-detector'
 
 import { Transform } from '../math/transform'
 
-import { renderObject2d } from './pixi/rendering'
+import { pixiObject } from './pixi/rendering'
 import { RendererProps } from './renderer_props'
 import * as style from './style.css'
 
@@ -37,7 +37,7 @@ export class PixiRenderer extends Component<RendererProps> {
     })
 
     // Render when changes happen
-    this.stopAutorun = autorun(() => this.renderCanvas(), {
+    this.stopAutorun = autorun(this.renderCanvas, {
       scheduler: requestAnimationFrame,
     })
   }
@@ -78,7 +78,7 @@ export class PixiRenderer extends Component<RendererProps> {
     cam.y = transform.translate.y
     cam.scale.x = transform.scale.x
     cam.scale.y = transform.scale.y
-    cam.addChild(renderObject2d(this.props.scene))
+    cam.addChild(pixiObject(this.props.scene))
 
     this.renderer.render(cam)
   }

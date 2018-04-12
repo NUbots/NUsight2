@@ -100,7 +100,7 @@ export function applyAppearance(obj: Graphics, appearance: Appearance, draw: (ob
     const line = toPixiColor(appearance.strokeStyle)
     obj.lineStyle(appearance.lineWidth, line.color, line.alpha)
 
-    if(appearance.nonScalingStroke) {
+    if (appearance.nonScalingStroke) {
       obj.nativeLines = true
     }
 

@@ -1,6 +1,9 @@
 import { EventEmitter } from 'events'
 
-const NBSPlayerCpp = require('bindings')('nbs_player')
+// tslint:disable-next-line no-require-imports
+import bindings = require('bindings')
+
+const NBSPlayerAPI = bindings('nbs_player')
 
 export type NBSPacket = {
   timestamp: number
@@ -14,7 +17,7 @@ export class NBSPlayer extends EventEmitter {
 
   constructor(private file: string) {
     super()
-    this.player = new NBSPlayerCpp()
+    this.player = new NBSPlayerAPI()
     this.player.load(file, (timestamp?: number, hash?: Buffer, payload?: Buffer) => {
       if (payload !== undefined) {
         this.emit('packet', {

@@ -147,7 +147,7 @@ class PacketProcessor {
   onPacket(event: string, packet: NUClearNetPacket) {
     if (packet.reliable) {
       this.sendReliablePacket(event, packet)
-    } else {
+    } else if (this.isEventBelowLimit(event)) {
       this.sendUnreliablePacket(event, packet)
     }/* else {
       // This event is unreliable and already at the limit, simply drop the packet.

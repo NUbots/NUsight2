@@ -9,6 +9,8 @@ import { ArcGeometry } from '../geometry/arc_geometry'
 import { ArrowGeometry } from '../geometry/arrow_geometry'
 import { CircleGeometry } from '../geometry/circle_geometry'
 import { LineGeometry } from '../geometry/line_geometry'
+import { MarkerGeometry } from '../geometry/marker_geometry'
+import { PathGeometry } from '../geometry/path_geometry'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
 
@@ -21,6 +23,8 @@ export type Geometry =
   | ArrowGeometry
   | CircleGeometry
   | LineGeometry
+  | MarkerGeometry
+  | PathGeometry
   | PolygonGeometry
   | TextGeometry
 

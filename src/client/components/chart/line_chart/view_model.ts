@@ -6,7 +6,10 @@ import { createTransformer } from 'mobx-utils'
 import { Transform } from '../../../math/transform'
 import { Vector2 } from '../../../math/vector2'
 import { LineAppearance } from '../../../render2d/appearance/line_appearance'
+import { BasicAppearance } from '../../../render2d/appearance/basic_appearance'
+import { Geometry } from '../../../render2d/object/shape'
 import { LineGeometry } from '../../../render2d/geometry/line_geometry'
+import { TextGeometry } from '../../../render2d/geometry/text_geometry'
 import { PathGeometry } from '../../../render2d/geometry/path_geometry'
 import { Group } from '../../../render2d/object/group'
 import { Shape } from '../../../render2d/object/shape'
@@ -64,12 +67,6 @@ export class LineChartViewModel {
     const minValue = this.model.yMin === 'auto' ? this.minValue : this.model.yMin
 
     return Group.of({
-      transform: Transform.of({
-        translate: {
-          x: -(this.model.now - this.model.viewSeconds / 2),
-          y: -(minValue + (maxValue - minValue) / 2),
-        },
-      }),
       children: [
         this.chart,
         this.axis,
@@ -100,15 +97,16 @@ export class LineChartViewModel {
     const digits = Math.floor(Math.log10(range))
     const major = Math.pow(10, digits)
     const minor = major / nMinor
+    const offset = min + (max - min) / 2
 
-    const lines: Array<Shape<LineGeometry>> = []
+    const lines: Array<Shape<Geometry>> = []
 
     // Make our major and minor lines
     let lineNo = 0
     for (let y = Math.floor(min / major) * major - major; y <= max + major; y += minor) {
       const geometry = LineGeometry.of({
-        origin: Vector2.of(this.model.now - this.model.viewSeconds, y),
-        target: Vector2.of(this.model.now, y),
+        origin: Vector2.of(-this.model.viewSeconds / 2, y - offset),
+        target: Vector2.of(this.model.viewSeconds / 2, y - offset),
       })
 
       if (lineNo % nMinor === 0) {
@@ -118,6 +116,18 @@ export class LineChartViewModel {
           lineWidth: 1,
           nonScalingStroke: true,
         })))
+
+        lines.push(Shape.of(TextGeometry.of({
+          text: y.toString(),
+          textAlign: 'end',
+          maxWidth: 0.01,
+          x: this.model.viewSeconds / 2,
+          y: y - offset,
+        }), BasicAppearance.of({
+          fillStyle: '#000000',
+          strokeStyle: 'transparent',
+        })))
+
       } else {
         // Minor gridline
         lines.push(Shape.of(geometry, LineAppearance.of({
@@ -144,7 +154,18 @@ export class LineChartViewModel {
 
   @computed
   get chart() {
+
+    // Get our min and max values
+    const minValue = this.model.yMin === 'auto' ? this.minValue : this.model.yMin
+    const maxValue = this.model.yMax === 'auto' ? this.maxValue : this.model.yMax
+
     return Group.of({
+      transform: Transform.of({
+        translate: {
+          x: -(this.model.now - this.model.viewSeconds / 2),
+          y: -(minValue + (maxValue - minValue) / 2),
+        },
+      }),
       children: this.dataSeries.map(series => this.makeLines(series)),
     })
   }

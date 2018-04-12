@@ -22,7 +22,7 @@ export class LineAppearance {
     lineDashOffset = 0,
     lineJoin = 'miter',
     lineWidth = 1,
-    strokeStyle = '#000',
+    strokeStyle = '#000000',
     nonScalingStroke = false,
   }: Partial<LineAppearance> = {}): LineAppearance {
     return new LineAppearance({

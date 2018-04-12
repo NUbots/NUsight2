@@ -1,3 +1,4 @@
+import * as bounds from 'binary-search-bounds'
 import { action } from 'mobx'
 
 import { BrowserSystemClock } from '../../../client/time/browser_clock'
@@ -83,18 +84,35 @@ export class ChartNetwork {
       }
 
       const leaf = node.get(key) as DataSeries
+      const series = leaf.series
 
-      const time = toSeconds(data.timestamp)
+      const now = this.clock.now()
+      const rawTime = toSeconds(data.timestamp)
+      const time = toSeconds(data.timestamp) - this.model.startTime
 
       // Estimate the difference between the clocks
-      leaf.updateDelta(time - this.clock.now())
+      leaf.updateDelta(rawTime - now)
 
       // Add the series element
-      leaf.series.push(Vector2.of(time - this.model.startTime, v))
+      series.push(Vector2.of(time, v))
+
+      // Swap it backward until it's in place (keeping the list sorted)
+      for (let i = series.length - 1; i > 0; i--) {
+        if (series[i - 1].x > time) {
+          [series[i - 1], series[i]] = [series[i], series[i - 1]]
+        } else {
+          break
+        }
+      }
+
+      // Find where our old data starts so we can remove it
+      const cutoff = now - this.model.startTime + leaf.timeDelta - 10
+      const newStart = bounds.lt(series, Vector2.of(), p => p.x - cutoff)
 
       // Remove old series elements (keep 10 seconds of buffer)
-      const cutoff = time - this.model.startTime - 10
-      leaf.series = leaf.series.filter(v => v.x > cutoff)
+      if (newStart > 50) {
+        series.splice(0, newStart)
+      }
     })
   }
 

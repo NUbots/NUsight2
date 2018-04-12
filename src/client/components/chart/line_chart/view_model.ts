@@ -1,3 +1,4 @@
+import * as bounds from 'binary-search-bounds'
 import { computed } from 'mobx'
 import { observable } from 'mobx'
 import { createTransformer } from 'mobx-utils'
@@ -76,10 +77,16 @@ export class LineChartViewModel {
   private get maxValue(): number {
 
     return this.dataSeries.reduce((maxValue, series: DataSeries) => {
-      return series.series.filter(v => {
-        const t = v.x - series.timeDelta
-        return (this.model.now - this.model.viewSeconds) < t && t < this.model.now
-      }).reduce((max, value) => {
+
+      // Get the range we are viewing
+      let end = this.model.now + series.timeDelta
+      let start = end - this.model.viewSeconds
+
+      const values = series.series
+      end = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - end))
+      start = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - start))
+
+      return values.slice(start, end).reduce((max, value) => {
         return Math.max(max, value.y)
       }, maxValue)
     }, -Number.MAX_VALUE)
@@ -89,10 +96,15 @@ export class LineChartViewModel {
   private get minValue(): number {
     return this.dataSeries.reduce((minValue, series: DataSeries) => {
 
-      return series.series.filter(v => {
-        const t = v.x - series.timeDelta
-        return (this.model.now - this.model.viewSeconds) < t && t < this.model.now
-      }).reduce((min, value) => {
+      // Get the range we are viewing
+      let end = this.model.now + series.timeDelta
+      let start = end - this.model.viewSeconds
+
+      const values = series.series
+      end = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - end))
+      start = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - start))
+
+      return values.slice(start, end).reduce((min, value) => {
         return Math.min(min, value.y)
       }, minValue)
     }, Number.MAX_VALUE)
@@ -100,15 +112,20 @@ export class LineChartViewModel {
 
   private makeLines(series: DataSeries): Group {
 
-    // We have to sort the points to make sure timestamps are increasing
-    const values = series.series.filter(v => {
-        const t = v.x - series.timeDelta
-        return (this.model.now - this.model.viewSeconds) < t && t < this.model.now
-    }).sort((a, b) => a.x > b.x ? 1 : (a.x < b.x ? -1 : 0))
+    // Get the range we are viewing
+    let end = this.model.now + series.timeDelta
+    let start = end - this.model.viewSeconds
+
+    let values = series.series
+    end = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - end))
+    start = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - start))
+    values = values.slice(start, end)
+
 
     const appearance = LineAppearance.of({
       strokeStyle: series.color,
-      lineWidth: 0.05,
+      lineWidth: 2,
+      nonScalingStroke: true,
     })
 
     const shape = Shape.of(

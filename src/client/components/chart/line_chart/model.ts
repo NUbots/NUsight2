@@ -16,7 +16,7 @@ export class LineChartModel {
 
   constructor(opts: LineChartModelOpts) {
     this.model = opts.model
-    this.viewSeconds = 10
+    this.viewSeconds = 5
     this.yMin = 'auto'
     this.yMax = 'auto'
   }

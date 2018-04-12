@@ -95,6 +95,7 @@
   "dependencies": {
     "babel-preset-env": "^1.6.1",
     "binary": "^0.3.0",
+    "binary-search-bounds": "^2.0.4",
     "buffers": "^0.1.1",
     "classnames": "^2.2.5",
     "compression": "^1.7.0",

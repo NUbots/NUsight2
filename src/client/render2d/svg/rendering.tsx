@@ -41,6 +41,7 @@ export function toSvgProps(appearance: Appearance) {
       strokeDashoffset: appearance.lineDashOffset,
       strokeWidth: appearance.lineWidth,
       stroke: appearance.strokeStyle,
+      vectorEffect: appearance.nonScalingStroke ? 'non-scaling-stroke' : '',
     }
   } else {
     throw new Error(`Unsupported appearance type ${appearance}`)

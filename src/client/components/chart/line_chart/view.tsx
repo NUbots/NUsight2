@@ -21,7 +21,7 @@ export class LineChart extends Component<LineChartProps> {
     const viewModel = LineChartViewModel.of(lineChartModel)
     return <div className={style.container}>
       <Renderer
-        engine='pixi'
+        engine='svg'
         className={style.field}
         scene={viewModel.scene}
         camera={viewModel.camera} />

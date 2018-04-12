@@ -7,6 +7,7 @@ import { Transform } from '../../../math/transform'
 import { Vector2 } from '../../../math/vector2'
 import { LineAppearance } from '../../../render2d/appearance/line_appearance'
 import { PathGeometry } from '../../../render2d/geometry/path_geometry'
+import { LineGeometry } from '../../../render2d/geometry/line_geometry'
 import { Group } from '../../../render2d/object/group'
 import { Shape } from '../../../render2d/object/shape'
 import { CheckedState } from '../../checkbox_tree/model'
@@ -57,7 +58,7 @@ export class LineChartViewModel {
   }
 
   @computed
-  get chart(): Group {
+  get scene(): Group {
 
     const maxValue = this.model.yMax === 'auto' ? this.maxValue : this.model.yMax
     const minValue = this.model.yMin === 'auto' ? this.minValue : this.model.yMin
@@ -69,6 +70,82 @@ export class LineChartViewModel {
           y: -(minValue + (maxValue - minValue) / 2),
         },
       }),
+      children: [
+        this.chart,
+        this.axis,
+      ]
+    })
+  }
+
+  @computed
+  get axis(): Group {
+    return Group.of({
+      children: [
+        this.yAxis,
+        this.xAxis,
+      ]
+    })
+  }
+
+  @computed
+  get yAxis(): Group {
+
+    // Get our min and max values
+    const max = this.model.yMax === 'auto' ? this.maxValue : this.model.yMax
+    const min = this.model.yMin === 'auto' ? this.minValue : this.model.yMin
+
+    // Work out the distance between our major and minor grid lines
+    const nMinor = 4
+    const range = max - min
+    const digits = Math.floor(Math.log10(range))
+    const major = Math.pow(10, digits)
+    const minor = major / nMinor
+
+    const lines: Shape<LineGeometry>[] = []
+
+    // Make our major and minor lines
+    let lineNo = 0
+    for (let y = Math.floor(min / major) * major - major; y <= max + major; y += minor) {
+      const geometry = LineGeometry.of({
+        origin: Vector2.of(Number.MIN_SAFE_INTEGER, y),
+        target: Vector2.of(Number.MAX_SAFE_INTEGER, y)
+      })
+
+      if (lineNo % nMinor === 0) {
+        // Major gridline
+        lines.push(Shape.of(geometry, LineAppearance.of({
+          strokeStyle: '#444444',
+          lineWidth: 1,
+          nonScalingStroke: true,
+        })))
+      }
+      else {
+        // Minor gridline
+        lines.push(Shape.of(geometry, LineAppearance.of({
+          strokeStyle: '#888888',
+          lineWidth: 0.5,
+          nonScalingStroke: true,
+        })))
+      }
+
+      lineNo++
+    }
+
+    return Group.of({
+      children: lines
+    })
+  }
+
+  @computed
+  get xAxis(): Group {
+
+    return Group.of({
+    })
+  }
+
+  @computed
+  get chart() {
+    return Group.of({
       children: this.dataSeries.map(series => this.makeLines(series)),
     })
   }

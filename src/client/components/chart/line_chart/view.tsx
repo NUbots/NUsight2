@@ -23,7 +23,7 @@ export class LineChart extends Component<LineChartProps> {
     return <div className={style.container}>
       <SVGRenderer
         className={style.field}
-        scene={viewModel.chart}
+        scene={viewModel.scene}
         camera={viewModel.camera} />
     </div>
   }

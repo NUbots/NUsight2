@@ -6,8 +6,8 @@ import { createTransformer } from 'mobx-utils'
 import { Transform } from '../../../math/transform'
 import { Vector2 } from '../../../math/vector2'
 import { LineAppearance } from '../../../render2d/appearance/line_appearance'
-import { PathGeometry } from '../../../render2d/geometry/path_geometry'
 import { LineGeometry } from '../../../render2d/geometry/line_geometry'
+import { PathGeometry } from '../../../render2d/geometry/path_geometry'
 import { Group } from '../../../render2d/object/group'
 import { Shape } from '../../../render2d/object/shape'
 import { CheckedState } from '../../checkbox_tree/model'
@@ -73,7 +73,7 @@ export class LineChartViewModel {
       children: [
         this.chart,
         this.axis,
-      ]
+      ],
     })
   }
 
@@ -83,7 +83,7 @@ export class LineChartViewModel {
       children: [
         this.yAxis,
         this.xAxis,
-      ]
+      ],
     })
   }
 
@@ -101,14 +101,14 @@ export class LineChartViewModel {
     const major = Math.pow(10, digits)
     const minor = major / nMinor
 
-    const lines: Shape<LineGeometry>[] = []
+    const lines: Array<Shape<LineGeometry>> = []
 
     // Make our major and minor lines
     let lineNo = 0
     for (let y = Math.floor(min / major) * major - major; y <= max + major; y += minor) {
       const geometry = LineGeometry.of({
         origin: Vector2.of(Number.MIN_SAFE_INTEGER, y),
-        target: Vector2.of(Number.MAX_SAFE_INTEGER, y)
+        target: Vector2.of(Number.MAX_SAFE_INTEGER, y),
       })
 
       if (lineNo % nMinor === 0) {
@@ -118,8 +118,7 @@ export class LineChartViewModel {
           lineWidth: 1,
           nonScalingStroke: true,
         })))
-      }
-      else {
+      } else {
         // Minor gridline
         lines.push(Shape.of(geometry, LineAppearance.of({
           strokeStyle: '#888888',
@@ -132,7 +131,7 @@ export class LineChartViewModel {
     }
 
     return Group.of({
-      children: lines
+      children: lines,
     })
   }
 

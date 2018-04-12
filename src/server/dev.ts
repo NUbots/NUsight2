@@ -14,6 +14,10 @@ import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulat
 import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
 
+import { NBSPlayer } from './nbs/nbs_player'
+import { NBSPacket } from './nbs/nbs_player'
+import { DirectNUClearNetClient } from './nuclearnet/direct_nuclearnet_client'
+import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
 
@@ -67,6 +71,33 @@ function init() {
     })
     virtualRobots.startSimulators()
   }
+
+  async function playback() {
+    const nuclearnetClient = withVirtualRobots ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+    nuclearnetClient.connect({ name: 'Fake Stream' })
+
+    const player = NBSPlayer.of({
+      file: 'recordings/visualmesh2.nbs',
+    })
+
+    player.on('packet', (packet: NBSPacket) => {
+      nuclearnetClient.send({
+        type: packet.hash,
+        payload: packet.payload,
+      })
+    })
+
+    player.on('end', () => {
+      // tslint:disable-next-line no-console
+      console.log('restarting')
+      player.restart()
+      player.play()
+    })
+
+    player.play()
+  }
+
+  playback()
 }
 
 devMiddleware.waitUntilValid(init)

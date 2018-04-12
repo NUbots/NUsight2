@@ -99,6 +99,11 @@ export function applyAppearance(obj: Graphics, appearance: Appearance, draw: (ob
   } else if (appearance instanceof LineAppearance) {
     const line = toPixiColor(appearance.strokeStyle)
     obj.lineStyle(appearance.lineWidth, line.color, line.alpha)
+
+    if(appearance.nonScalingStroke) {
+      obj.nativeLines = true
+    }
+
     draw(obj)
 
     // TODO: Support lineCap, lineCap, lineJoin, lineWidth, strokeStyle

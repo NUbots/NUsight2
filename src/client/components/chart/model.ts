@@ -19,7 +19,7 @@ export class DataSeries {
   @observable series: Vector2[]
 
   private kf = {
-    processNoise: 1e-6,
+    processNoise: 1e-3,
     measurementNoise: 1e-1,
   }
 

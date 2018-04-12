@@ -2,8 +2,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 
-import { CanvasRenderer } from '../../../render2d/canvas_renderer'
-import { SVGRenderer } from '../../../render2d/svg_renderer'
+import { Renderer } from '../../../render2d/renderer'
 import { ChartModel } from '../model'
 
 import { LineChartModel } from './model'
@@ -21,7 +20,8 @@ export class LineChart extends Component<LineChartProps> {
     const lineChartModel = LineChartModel.of(this.props.model)
     const viewModel = LineChartViewModel.of(lineChartModel)
     return <div className={style.container}>
-      <SVGRenderer
+      <Renderer
+        engine='pixi'
         className={style.field}
         scene={viewModel.scene}
         camera={viewModel.camera} />

@@ -107,8 +107,8 @@ export class LineChartViewModel {
     let lineNo = 0
     for (let y = Math.floor(min / major) * major - major; y <= max + major; y += minor) {
       const geometry = LineGeometry.of({
-        origin: Vector2.of(Number.MIN_SAFE_INTEGER, y),
-        target: Vector2.of(Number.MAX_SAFE_INTEGER, y),
+        origin: Vector2.of(this.model.now - this.model.viewSeconds, y),
+        target: Vector2.of(this.model.now, y),
       })
 
       if (lineNo % nMinor === 0) {
@@ -196,7 +196,6 @@ export class LineChartViewModel {
     end = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - end))
     start = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - start))
     values = values.slice(start, end)
-
 
     const appearance = LineAppearance.of({
       strokeStyle: series.color,

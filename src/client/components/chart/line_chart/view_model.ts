@@ -206,10 +206,12 @@ export class LineChartViewModel {
   }
 
   @computed
-  private get maxValue(): number {
-    if (this.dataSeries.length === 0) {
+  get maxValue(): number {
+    if (this.model.yMax !== 'auto') {
+      return this.model.yMax
+    } else if (this.dataSeries.length === 0) {
       return 1
-    } else if (this.model.yMax === 'auto') {
+    } else {
 
       return this.dataSeries.reduce((maxValue, series: DataSeries) => {
 
@@ -225,16 +227,16 @@ export class LineChartViewModel {
           return Math.max(max, value.y)
         }, maxValue)
       }, -Number.MAX_VALUE)
-    } else {
-      return this.model.yMax
     }
   }
 
   @computed
-  private get minValue(): number {
-    if (this.dataSeries.length === 0) {
+  get minValue(): number {
+    if (this.model.yMin !== 'auto') {
+      return this.model.yMin
+    } else if (this.dataSeries.length === 0) {
       return -1
-    } else if (this.model.yMin === 'auto') {
+    } else {
       return this.dataSeries.reduce((minValue, series: DataSeries) => {
 
         // Get the range we are viewing
@@ -249,8 +251,6 @@ export class LineChartViewModel {
           return Math.min(min, value.y)
         }, minValue)
       }, Number.MAX_VALUE)
-    } else {
-      return this.model.yMin
     }
   }
 

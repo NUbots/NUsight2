@@ -29,9 +29,7 @@ export class LineChartViewModel {
 
   @computed
   get camera(): Transform {
-    const maxValue = this.model.yMax === 'auto' ? this.maxValue : this.model.yMax
-    const minValue = this.model.yMin === 'auto' ? this.minValue : this.model.yMin
-    const yScale = 0.9 / (maxValue - minValue) // 0.9 so there is a little extra above and below the plot
+    const yScale = 0.9 / (this.maxValue - this.minValue) // 0.9 so there is a little extra above and below the plot
     const xScale = 1 / this.model.viewSeconds
 
     return Transform.of({
@@ -62,10 +60,6 @@ export class LineChartViewModel {
 
   @computed
   get scene(): Group {
-
-    const maxValue = this.model.yMax === 'auto' ? this.maxValue : this.model.yMax
-    const minValue = this.model.yMin === 'auto' ? this.minValue : this.model.yMin
-
     return Group.of({
       children: [
         this.chart,
@@ -87,23 +81,19 @@ export class LineChartViewModel {
   @computed
   get yAxis(): Group {
 
-    // Get our min and max values
-    const max = this.model.yMax === 'auto' ? this.maxValue : this.model.yMax
-    const min = this.model.yMin === 'auto' ? this.minValue : this.model.yMin
-
     // Work out the distance between our major and minor grid lines
     const nMinor = 4
-    const range = max - min
+    const range = this.maxValue - this.minValue
     const digits = Math.floor(Math.log10(range))
     const major = Math.pow(10, digits)
     const minor = major / nMinor
-    const offset = min + (max - min) / 2
+    const offset = this.minValue + (this.maxValue - this.minValue) / 2
 
     const lines: Array<Shape<Geometry>> = []
 
     // Make our major and minor lines
     let lineNo = 0
-    for (let y = Math.floor(min / major) * major - major; y <= max + major; y += minor) {
+    for (let y = Math.floor(this.minValue / major) * major - major; y <= this.maxValue + major; y += minor) {
       const geometry = LineGeometry.of({
         origin: Vector2.of(-this.model.viewSeconds / 2, y - offset),
         target: Vector2.of(this.model.viewSeconds / 2, y - offset),
@@ -112,7 +102,7 @@ export class LineChartViewModel {
       if (lineNo % nMinor === 0) {
         // Major gridline
         lines.push(Shape.of(geometry, LineAppearance.of({
-          strokeStyle: '#444444',
+          strokeStyle: '#555555',
           lineWidth: 1,
           nonScalingStroke: true,
         })))
@@ -132,7 +122,7 @@ export class LineChartViewModel {
       } else {
         // Minor gridline
         lines.push(Shape.of(geometry, LineAppearance.of({
-          strokeStyle: '#888888',
+          strokeStyle: '#999999',
           lineWidth: 0.5,
           nonScalingStroke: true,
         })))
@@ -149,7 +139,51 @@ export class LineChartViewModel {
   @computed
   get xAxis(): Group {
 
+    // Work out our min/max value
+    const max = this.model.now
+    const min = max - this.model.viewSeconds
+    const yRange = this.maxValue - this.minValue
+
+    // Work out the distance between our major and minor grid lines
+    const nMinor = 4
+    const range = this.model.viewSeconds
+    const digits = Math.floor(Math.log10(range))
+    const major = Math.pow(10, digits)
+    const minor = major / nMinor
+    const offset = min + (max - min) / 2
+
+    const lines: Array<Shape<Geometry>> = []
+
+    // Make our major and minor lines
+    let lineNo = 0
+    for (let x = Math.floor(min / major) * major - major; x <= max + major; x += minor) {
+      const geometry = LineGeometry.of({
+        origin: Vector2.of(x - offset, -yRange),
+        target: Vector2.of(x - offset, yRange),
+      })
+
+      if (lineNo % nMinor === 0) {
+        // Major gridline
+        lines.push(Shape.of(geometry, LineAppearance.of({
+          strokeStyle: '#555555',
+          lineWidth: 1,
+          nonScalingStroke: true,
+        })))
+
+      } else {
+        // Minor gridline
+        lines.push(Shape.of(geometry, LineAppearance.of({
+          strokeStyle: '#999999',
+          lineWidth: 0.5,
+          nonScalingStroke: true,
+        })))
+      }
+
+      lineNo++
+    }
+
     return Group.of({
+      children: lines
     })
   }
 
@@ -176,21 +210,26 @@ export class LineChartViewModel {
     if (this.dataSeries.length === 0) {
       return 1
     }
+    else if (this.model.yMax === 'auto') {
 
-    return this.dataSeries.reduce((maxValue, series: DataSeries) => {
+      return this.dataSeries.reduce((maxValue, series: DataSeries) => {
 
-      // Get the range we are viewing
-      let end = this.model.now + series.timeDelta
-      let start = end - this.model.viewSeconds
+        // Get the range we are viewing
+        let end = this.model.now + series.timeDelta
+        let start = end - this.model.viewSeconds
 
-      const values = series.series
-      end = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - end))
-      start = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - start))
+        const values = series.series
+        end = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - end))
+        start = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - start))
 
-      return values.slice(start, end).reduce((max, value) => {
-        return Math.max(max, value.y)
-      }, maxValue)
-    }, -Number.MAX_VALUE)
+        return values.slice(start, end).reduce((max, value) => {
+          return Math.max(max, value.y)
+        }, maxValue)
+      }, -Number.MAX_VALUE)
+    }
+    else {
+      return this.model.yMax
+    }
   }
 
   @computed
@@ -198,21 +237,25 @@ export class LineChartViewModel {
     if (this.dataSeries.length === 0) {
       return -1
     }
+    else if (this.model.yMin === 'auto') {
+      return this.dataSeries.reduce((minValue, series: DataSeries) => {
 
-    return this.dataSeries.reduce((minValue, series: DataSeries) => {
+        // Get the range we are viewing
+        let end = this.model.now + series.timeDelta
+        let start = end - this.model.viewSeconds
 
-      // Get the range we are viewing
-      let end = this.model.now + series.timeDelta
-      let start = end - this.model.viewSeconds
+        const values = series.series
+        end = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - end))
+        start = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - start))
 
-      const values = series.series
-      end = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - end))
-      start = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - start))
-
-      return values.slice(start, end).reduce((min, value) => {
-        return Math.min(min, value.y)
-      }, minValue)
-    }, Number.MAX_VALUE)
+        return values.slice(start, end).reduce((min, value) => {
+          return Math.min(min, value.y)
+        }, minValue)
+      }, Number.MAX_VALUE)
+    }
+    else {
+      return this.model.yMin
+    }
   }
 
   private makeLines(series: DataSeries): Group {

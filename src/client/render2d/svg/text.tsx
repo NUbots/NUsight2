@@ -12,6 +12,7 @@ export const Text = observer(({ model: { geometry, appearance }, world }: Props)
   const { x, y, fontFamily, fontSize, text, textAlign, textBaseline, worldAlignment, worldScale } = geometry
 
   const t = Transform.of({
+    translate: {x, y},
     scale:  worldScale ? { x: 1 / world.scale.x, y: 1 / world.scale.y } : { x: 1, y: 1 },
     rotate: worldAlignment ? -world.rotate : 0,
   })
@@ -19,13 +20,12 @@ export const Text = observer(({ model: { geometry, appearance }, world }: Props)
   // TODO (Houliston): Calculate fontSize such that the text fits within the given maxWidth
   // currently the font set here is correct for the dashboard view, but the canvas view is able to dynamically scale it
   return (
-    <g transform={`translate(${x},${y})`}>
+    <g transform={toSvgTransform(t)}>
       <text
         fontFamily={fontFamily}
         fontSize={fontSize}
         textAnchor={textAlign}
         dominantBaseline={textBaseline}
-        transform={toSvgTransform(t)}
         {...toSvgProps(appearance)}
       >
         {text}

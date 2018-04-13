@@ -65,6 +65,7 @@ export function applyTransform(ctx: CanvasRenderingContext2D, transform: Transfo
   ctx.rotate(transform.rotate * (transform.anticlockwise ? 1 : -1))
 }
 
+// e.g. '#ff0000' → { r: 255, g: 0, b: 0 }
 export const hexToRGB = (hex: string): { r: number, g: number, b: number} => {
   const result = /^#([A-Fa-f0-9]{2})([A-Fa-f0-9]{2})([A-Fa-f0-9]{2})/.exec(hex)
 

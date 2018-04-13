@@ -5,7 +5,7 @@ import { Shape } from './shape'
 import { Geometry } from './shape'
 
 export type GroupOpts = {
-  children: any[]
+  children: Array<Group | Shape<Geometry>>
   transform: Transform
 }
 

@@ -1,6 +1,8 @@
 import { observable } from 'mobx'
 
 import { Transform } from '../../math/transform'
+import { Shape } from './shape'
+import { Geometry } from './shape'
 
 export type GroupOpts = {
   children: any[]
@@ -8,7 +10,7 @@ export type GroupOpts = {
 }
 
 export class Group {
-  @observable children: any[]
+  @observable children: Array<Group | Shape<Geometry>>
   @observable transform: Transform
 
   constructor(opts: GroupOpts) {
@@ -26,7 +28,7 @@ export class Group {
     })
   }
 
-  add(obj: any): void {
+  add(obj: Group | Shape<Geometry>): void {
     this.children.push(obj)
   }
 }

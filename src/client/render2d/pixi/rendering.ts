@@ -16,8 +16,8 @@ import { PathGeometry } from '../geometry/path_geometry'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Group } from '../object/group'
-import { Object2d } from '../object/object2d'
 import { Shape } from '../object/shape'
+import { Geometry } from '../object/shape'
 
 import { renderArc } from './arc'
 import { renderArrow } from './arrow'
@@ -28,7 +28,7 @@ import { renderPath } from './path'
 import { renderPolygon } from './polygon'
 import { renderText } from './text'
 
-export const pixiObject = createTransformer((obj: Object2d): DisplayObject => {
+export const pixiObject = createTransformer((obj: Group | Shape<Geometry>): DisplayObject => {
 
   if (obj instanceof Group) {
     const g = new Container()

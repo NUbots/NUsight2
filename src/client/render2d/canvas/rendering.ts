@@ -11,6 +11,7 @@ import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Group } from '../object/group'
 import { Shape } from '../object/shape'
+import { Geometry } from '../object/shape'
 
 import { renderArc } from './arc'
 import { renderArrow } from './arrow'
@@ -20,7 +21,7 @@ import { renderMarker } from './marker'
 import { renderPolygon } from './polygon'
 import { renderText } from './text'
 
-export function renderObject2d(ctx: CanvasRenderingContext2D, obj: any, world: Transform) {
+export function renderObject2d(ctx: CanvasRenderingContext2D, obj: Group | Shape<Geometry>, world: Transform) {
 
   if (obj instanceof Group) {
     const objWorld = world.clone().then(obj.transform)

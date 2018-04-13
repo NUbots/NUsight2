@@ -14,6 +14,7 @@ import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
 import { Group as GroupGeometry } from '../object/group'
 import { Shape } from '../object/shape'
+import { Geometry } from '../object/shape'
 
 import { Arc } from './arc'
 import { Arrow } from './arrow'
@@ -51,7 +52,7 @@ export function toSvgTransform(transform: Transform): string {
   return `translate(${t.x}, ${t.y}) rotate(${r}) scale(${s.x}, ${s.y})`
 }
 
-type Props = { obj: any, world: Transform }
+type Props = { obj: GroupGeometry | Shape<Geometry>, world: Transform }
 
 export const GeometryView = observer(({ obj, world }: Props): JSX.Element => {
   if (obj instanceof GroupGeometry) {

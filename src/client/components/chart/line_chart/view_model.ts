@@ -31,7 +31,7 @@ export class LineChartViewModel {
   get camera(): Transform {
     const maxValue = this.model.yMax === 'auto' ? this.maxValue : this.model.yMax
     const minValue = this.model.yMin === 'auto' ? this.minValue : this.model.yMin
-    const yScale = 1 / (maxValue - minValue)
+    const yScale = 0.9 / (maxValue - minValue) // 0.9 so there is a little extra above and below the plot
     const xScale = 1 / this.model.viewSeconds
 
     return Transform.of({
@@ -173,6 +173,9 @@ export class LineChartViewModel {
 
   @computed
   private get maxValue(): number {
+    if (this.dataSeries.length === 0) {
+      return 1
+    }
 
     return this.dataSeries.reduce((maxValue, series: DataSeries) => {
 
@@ -192,6 +195,10 @@ export class LineChartViewModel {
 
   @computed
   private get minValue(): number {
+    if (this.dataSeries.length === 0) {
+      return -1
+    }
+
     return this.dataSeries.reduce((minValue, series: DataSeries) => {
 
       // Get the range we are viewing

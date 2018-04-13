@@ -12,7 +12,7 @@ export const Text = observer(({ model: { geometry, appearance }, world }: Props)
   const { x, y, fontFamily, fontSize, text, textAlign, textBaseline, worldAlignment, worldScale } = geometry
 
   const t = Transform.of({
-    scale:  worldScale ? { x: 1/world.scale.x, y: 1/world.scale.y }: { x:1, y:1 },
+    scale:  worldScale ? { x: 1 / world.scale.x, y: 1 / world.scale.y } : { x: 1, y: 1 },
     rotate: worldAlignment ? -world.rotate : 0,
   })
 

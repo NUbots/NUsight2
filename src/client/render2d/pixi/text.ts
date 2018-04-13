@@ -17,7 +17,7 @@ export const renderText = createTransformer((shape: Shape<TextGeometry>): Text =
   if (shape.appearance instanceof BasicAppearance) {
     const t = new Text(text, {
       fontFamily,
-      fontSize: fontSize,
+      fontSize,
       padding: 10,
       textBaseline: 'middle',
       fill: shape.appearance.fillStyle,

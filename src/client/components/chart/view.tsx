@@ -30,7 +30,14 @@ export class ChartView extends Component<ChartViewProps> {
     const { Menu, model, controller } = this.props
     return (
       <div className={style.page}>
-        <Menu></Menu>
+        <Menu>
+         <ul className={style.menu}>
+            <li className={style.menuItem}>
+              <button className={style.menuButton}>Line Chart</button>
+              <button className={style.menuButton}>2D Scatter</button>
+            </li>
+          </ul>
+        </Menu>
         <div className={style.example}>
           <div className={style.main}>
             <LineChart model={model} />

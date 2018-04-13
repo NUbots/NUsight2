@@ -119,8 +119,9 @@ export class LineChartViewModel {
 
         lines.push(Shape.of(TextGeometry.of({
           text: y.toString(),
+          worldScale: true,
           textAlign: 'end',
-          maxWidth: 0.01,
+          fontSize: '1em',
           x: this.model.viewSeconds / 2,
           y: y - offset,
         }), BasicAppearance.of({

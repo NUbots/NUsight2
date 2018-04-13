@@ -12,4 +12,11 @@ describe('hexToRGB', () => {
     })
 
   })
+
+  it('throws if not a hex colour', () => {
+
+    expect(() => hexToRGB('#FFF')).toThrowErrorMatchingSnapshot()
+    expect(() => hexToRGB('red')).toThrowErrorMatchingSnapshot()
+
+  })
 })

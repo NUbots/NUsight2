@@ -70,7 +70,7 @@ export const hexToRGB = (hex: string): { r: number, g: number, b: number} => {
   const result = /^#([A-Fa-f0-9]{2})([A-Fa-f0-9]{2})([A-Fa-f0-9]{2})/.exec(hex)
 
   if (result === null) {
-    throw Error(`Color ${hex} was not a hex color`)
+    throw Error(`Color ${hex} is not a hex color`)
   } else {
     return {
       r: parseInt(result[1], 16),

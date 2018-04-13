@@ -1,5 +1,5 @@
-import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { createTransformer } from 'mobx-utils'
 
 import { Transform } from '../../../math/transform'
 import { Vector2 } from '../../../math/vector2'
@@ -86,7 +86,7 @@ export class DashboardRobotViewModel {
       BasicAppearance.of({
         lineWidth: 0.025,
         fillStyle: 'transparent',
-        strokeStyle: '#000',
+        strokeStyle: '#000000',
       }),
     )
   }

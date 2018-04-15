@@ -1,6 +1,6 @@
+import { BasicAppearance } from '../appearance/basic_appearance'
 import { ArrowGeometry } from '../geometry/arrow_geometry'
 import { Shape } from '../object/shape'
-import { BasicAppearance } from '../appearance/basic_appearance'
 
 import { applyAppearance } from './rendering'
 
@@ -28,6 +28,10 @@ export function renderArrow(ctx: CanvasRenderingContext2D, shape: Shape<ArrowGeo
 
   applyAppearance(ctx, shape.appearance)
 
-  if (shape.appearance.stroke) { ctx.stroke() }
-  if (shape.appearance instanceof BasicAppearance && shape.appearance.fill) { ctx.fill() }
+  if (shape.appearance.stroke) {
+    ctx.stroke()
+  }
+  if (shape.appearance instanceof BasicAppearance && shape.appearance.fill) {
+    ctx.fill()
+  }
 }

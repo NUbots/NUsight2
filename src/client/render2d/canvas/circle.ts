@@ -1,6 +1,6 @@
+import { BasicAppearance } from '../appearance/basic_appearance'
 import { CircleGeometry } from '../geometry/circle_geometry'
 import { Shape } from '../object/shape'
-import { BasicAppearance } from '../appearance/basic_appearance'
 
 import { applyAppearance } from './rendering'
 
@@ -19,6 +19,10 @@ export function renderCircle(ctx: CanvasRenderingContext2D, shape: Shape<CircleG
 
   applyAppearance(ctx, shape.appearance)
 
-  if (shape.appearance.stroke) { ctx.stroke() }
-  if (shape.appearance instanceof BasicAppearance && shape.appearance.fill) { ctx.fill() }
+  if (shape.appearance.stroke) {
+    ctx.stroke()
+  }
+  if (shape.appearance instanceof BasicAppearance && shape.appearance.fill) {
+    ctx.fill()
+  }
 }

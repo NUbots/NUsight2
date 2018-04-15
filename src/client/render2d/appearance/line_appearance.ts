@@ -6,7 +6,7 @@ type Stroke = {
   width: number,
   cap: 'butt' | 'round' | 'square',
   dashOffset: number,
-  join: 'bevel' | 'round' | 'miter',
+  join: 'bevel' | 'round' | 'miter'
 }
 
 export type LineAppearanceOpts = {

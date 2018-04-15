@@ -84,7 +84,7 @@ export function applyAppearance(ctx: CanvasRenderingContext2D, appearance: Appea
 
   if (appearance instanceof BasicAppearance) {
 
-    if(appearance.fill) {
+    if (appearance.fill) {
       const fill = hexToRGB(appearance.fill.color)
       const fA = appearance.fill.alpha
       ctx.fillStyle = `rgba(${fill.r}, ${fill.g}, ${fill.b}, ${fA})`

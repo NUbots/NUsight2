@@ -19,7 +19,7 @@ export const renderText = createTransformer((shape: Shape<TextGeometry>): Text =
       fontFamily,
       padding: 10,
       textBaseline: 'middle',
-      ...(shape.appearance.fill ? {fill: shape.appearance.fill.color} : {}),
+      ...(shape.appearance.fill ? { fill: shape.appearance.fill.color } : {}),
       align: textAlign,
     })
     t.x = x

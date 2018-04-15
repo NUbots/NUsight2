@@ -74,10 +74,9 @@ export const pixiObject = createTransformer((obj: Object2d): DisplayObject => {
 export function applyAppearance(obj: Graphics, appearance: Appearance, draw: (obj: Graphics) => void): void {
 
   if (appearance instanceof BasicAppearance) {
-    if(appearance.stroke) {
+    if (appearance.stroke) {
       obj.lineStyle(appearance.stroke.width, parseInt(appearance.stroke.color.slice(1), 16), appearance.stroke.alpha)
-    }
-    else {
+    } else {
       obj.lineStyle(0, 0, 0)
     }
 

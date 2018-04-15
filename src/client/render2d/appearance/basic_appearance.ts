@@ -5,7 +5,7 @@ type Stroke = { color: string, alpha: number, width: number }
 
 export type BasicAppearanceOpts = {
   fill?: Partial<Fill>,
-  stroke?: Partial<Stroke>,
+  stroke?: Partial<Stroke>
 }
 
 export class BasicAppearance {

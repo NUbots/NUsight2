@@ -84,19 +84,24 @@ export function applyAppearance(ctx: CanvasRenderingContext2D, appearance: Appea
 
   if (appearance instanceof BasicAppearance) {
 
-    const fill = hexToRGB(appearance.fill.color)
-    const fA = appearance.fill.alpha
-    ctx.fillStyle = `rgba(${fill.r}, ${fill.g}, ${fill.b}, ${fA})`
+    if(appearance.fill) {
+      const fill = hexToRGB(appearance.fill.color)
+      const fA = appearance.fill.alpha
+      ctx.fillStyle = `rgba(${fill.r}, ${fill.g}, ${fill.b}, ${fA})`
+    }
 
-    const stroke = hexToRGB(appearance.stroke.color)
-    const sA = appearance.stroke.alpha
-    ctx.lineWidth = appearance.stroke.width
-    ctx.strokeStyle = `rgba(${stroke.r}, ${stroke.g}, ${stroke.b}, ${sA})`
+    if (appearance.stroke) {
+      const stroke = hexToRGB(appearance.stroke.color)
+      const sA = appearance.stroke.alpha
+      ctx.lineWidth = appearance.stroke.width
+      ctx.strokeStyle = `rgba(${stroke.r}, ${stroke.g}, ${stroke.b}, ${sA})`
+    }
+
   } else if (appearance instanceof LineAppearance) {
+
     ctx.lineCap = appearance.stroke.cap
     ctx.lineDashOffset = appearance.stroke.dashOffset
     ctx.lineJoin = appearance.stroke.join
-
 
     const stroke = hexToRGB(appearance.stroke.color)
     const sA = appearance.stroke.alpha

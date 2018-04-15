@@ -1,5 +1,6 @@
 import { ArcGeometry } from '../geometry/arc_geometry'
 import { Shape } from '../object/shape'
+import { BasicAppearance } from '../appearance/basic_appearance'
 
 import { applyAppearance } from './rendering'
 
@@ -12,6 +13,6 @@ export function renderArc(ctx: CanvasRenderingContext2D, shape: Shape<ArcGeometr
 
   applyAppearance(ctx, shape.appearance)
 
-  ctx.stroke()
-  ctx.fill()
+  if (shape.appearance.stroke) { ctx.stroke() }
+  if (shape.appearance instanceof BasicAppearance && shape.appearance.fill) { ctx.fill() }
 }

@@ -30,11 +30,19 @@ import { Text } from './text'
 export function toSvgProps(appearance: Appearance) {
   if (appearance instanceof BasicAppearance) {
     return {
-      fill: appearance.fill.color,
-      fillOpacity: appearance.fill.alpha,
-      strokeWidth: appearance.stroke.width,
-      stroke: appearance.stroke.color,
-      strokeOpacity: appearance.stroke.alpha,
+      ...(appearance.fill ? {
+        fill: appearance.fill.color,
+        fillOpacity: appearance.fill.alpha,
+      } : {
+        fill: 'transparent',
+      }),
+      ...(appearance.stroke ? {
+        strokeWidth: appearance.stroke.width,
+        stroke: appearance.stroke.color,
+        strokeOpacity: appearance.stroke.alpha,
+      } : {
+        stroke: 'transparent',
+      }),
     }
   } else if (appearance instanceof LineAppearance) {
     return {
@@ -44,6 +52,7 @@ export function toSvgProps(appearance: Appearance) {
       strokeWidth: appearance.stroke.width,
       stroke: appearance.stroke.color,
       strokeOpacity: appearance.stroke.alpha,
+      fill: 'transparent',
     }
   } else {
     throw new Error(`Unsupported appearance type ${appearance}`)

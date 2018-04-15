@@ -1,5 +1,6 @@
 import { MarkerGeometry } from '../geometry/marker_geometry'
 import { Shape } from '../object/shape'
+import { BasicAppearance } from '../appearance/basic_appearance'
 
 import { applyAppearance } from './rendering'
 
@@ -37,6 +38,6 @@ export function renderMarker(ctx: CanvasRenderingContext2D, shape: Shape<MarkerG
 
   applyAppearance(ctx, shape.appearance)
 
-  ctx.fill()
-  ctx.stroke()
+  if (shape.appearance.stroke) { ctx.stroke() }
+  if (shape.appearance instanceof BasicAppearance && shape.appearance.fill) { ctx.fill() }
 }

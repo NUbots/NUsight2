@@ -29,6 +29,24 @@ export class TreeViewModel implements TreeNodeModel {
   })
 
   @computed
+  get color(): string {
+    // Non-leaf nodes have no color
+    if (!this.leaf) {
+      return ''
+    }
+
+    return (this.model as DataSeries).color
+  }
+
+  set color(color: string) {
+    if (!this.leaf) {
+      throw new Error(`Cannot set the color of a non-leaf node`)
+    }
+
+    (this.model as DataSeries).color = color
+  }
+
+  @computed
   get leaf(): boolean {
     return this.model instanceof DataSeries
   }

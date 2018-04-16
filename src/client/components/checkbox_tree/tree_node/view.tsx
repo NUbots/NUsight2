@@ -17,7 +17,7 @@ import * as style from './style.css'
 export interface TreeNodeProps {
   node: TreeNodeModel
   level?: number
-  renderLabel?(node: TreeNodeModel): JSX.Element
+  renderLabel?(node: TreeNodeModel): JSX.Element | string
   onCheck?(node: TreeNodeModel): void
   onExpand?(node: TreeNodeModel): void
 }

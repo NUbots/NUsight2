@@ -6,6 +6,7 @@ import { CheckedState } from '../checkbox_tree/model'
 import { TreeNodeModel } from '../checkbox_tree/model'
 
 import { ChartModel } from './model'
+import { TreeViewModel } from './view_model'
 
 export class ChartController {
 
@@ -20,6 +21,15 @@ export class ChartController {
 
   static of(opts: { model: ChartModel }) {
     return new ChartController(opts.model, BrowserSystemClock)
+  }
+
+  @action
+  onColorChange = (color: string, node: TreeNodeModel): void => {
+    if (node instanceof TreeViewModel) {
+      node.color = color
+    } else {
+      throw new Error(`Unsupported node: ${node}`)
+    }
   }
 
   @action

@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
 
+import { TreeNodeModel } from '../checkbox_tree/model'
 import { CheckboxTree } from '../checkbox_tree/view'
 
 import { ChartController } from './controller'
@@ -10,6 +11,7 @@ import { LineChart } from './line_chart/view'
 import { ChartModel } from './model'
 import { ChartNetwork } from './network'
 import * as style from './style.css'
+import { TreeLabel } from './tree_label/view'
 
 export type ChartViewProps = {
   Menu: ComponentType<{}>
@@ -38,7 +40,7 @@ export class ChartView extends Component<ChartViewProps> {
             </li>
           </ul>
         </Menu>
-        <div className={style.example}>
+        <div className={style.chart}>
           <div className={style.main}>
             <LineChart model={model} />
           </div>
@@ -46,10 +48,19 @@ export class ChartView extends Component<ChartViewProps> {
             <CheckboxTree
               model={model.tree}
               onCheck={controller.onNodeCheck}
-              onExpand={controller.onNodeExpand} />
+              onExpand={controller.onNodeExpand}
+              renderLabel={this.renderLabel} />
           </div>
         </div>
       </div>
     )
+  }
+
+  renderLabel = (node: TreeNodeModel): JSX.Element | string => {
+    if (node.leaf) {
+      return <TreeLabel node={node} onColorChange={this.props.controller.onColorChange} />
+    }
+
+    return node.label
   }
 }

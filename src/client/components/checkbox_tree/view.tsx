@@ -9,7 +9,7 @@ import { TreeNode } from './tree_node/view'
 
 export type CheckboxTreeProps = {
   model: TreeModel
-  renderLabel?(node: TreeNodeModel): JSX.Element
+  renderLabel?(node: TreeNodeModel): JSX.Element | string
   onCheck?(node: TreeNodeModel): void
   onExpand?(node: TreeNodeModel): void
 }

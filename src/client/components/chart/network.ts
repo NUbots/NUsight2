@@ -13,9 +13,9 @@ import { RobotModel } from '../robot/model'
 import { ChartModel } from './model'
 import { DataSeries } from './model'
 import { TreeData } from './model'
-import Timestamp = google.protobuf.Timestamp$Properties
-import DataPoint = message.support.nubugger.DataPoint
-import DataPoint$Properties = message.support.nubugger.DataPoint$Properties
+import Timestamp = google.protobuf.ITimestamp
+import DataPoint = message.support.nusight.DataPoint
+import IDataPoint = message.support.nusight.IDataPoint
 import Sensors = message.input.Sensors
 
 const ServoIds = [
@@ -147,7 +147,7 @@ export class ChartNetwork {
 
     // FSRs
     if (sensorData.fsr) {
-      sensorData.fsr.forEach((fsr: Sensors.FSR$Properties, index: number) => {
+      sensorData.fsr.forEach((fsr: Sensors.IFSR, index: number) => {
         // Our FSR values
         this.onDataPoint(robotModel, new DataPoint({
           label: `Sensor/FSR/${index ? 'Right' : 'Left'}/Values`,
@@ -169,7 +169,7 @@ export class ChartNetwork {
 
     // Servos
     if (sensorData.servo) {
-      sensorData.servo.forEach((servo: Sensors.Servo$Properties, index: number) => {
+      sensorData.servo.forEach((servo: Sensors.IServo, index: number) => {
         const name = ServoIds[servo!.id! || index]
 
         // PID gain
@@ -250,7 +250,7 @@ export class ChartNetwork {
   }
 }
 
-function toSeconds(timestamp: Timestamp | null): number {
+function toSeconds(timestamp?: Timestamp | null): number {
   if (!timestamp) {
     timestamp = { seconds: 0, nanos: 0 }
   }

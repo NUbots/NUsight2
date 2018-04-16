@@ -2,7 +2,7 @@ import { message } from '../../shared/proto/messages'
 import { Simulator } from '../simulator'
 import { Message } from '../simulator'
 
-import DataPoint = message.support.nubugger.DataPoint
+import DataPoint = message.support.nusight.DataPoint
 
 export class ChartSimulator implements Simulator {
   static of(): ChartSimulator {
@@ -14,7 +14,7 @@ export class ChartSimulator implements Simulator {
     // Offset our time to test the adaptive window
     time = time - 3
 
-    const messageType = 'message.support.nubugger.DataPoint'
+    const messageType = 'message.support.nusight.DataPoint'
     const period = 10
     const theta = 2 * Math.PI * time / period
     const sin = Math.sin(theta)

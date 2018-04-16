@@ -10,13 +10,11 @@ export type LineChartModelOpts = {
 
 export class LineChartModel {
   @observable model: ChartModel
-  @observable viewSeconds: number
   @observable yMin: number | 'auto'
   @observable yMax: number | 'auto'
 
   constructor(opts: LineChartModelOpts) {
     this.model = opts.model
-    this.viewSeconds = 5
     this.yMin = 'auto'
     this.yMax = 'auto'
   }
@@ -40,5 +38,14 @@ export class LineChartModel {
   @computed
   get now() {
     return this.model.now
+  }
+
+  @computed
+  get bufferSeconds() {
+    return this.model.bufferSeconds
+  }
+
+  set bufferSeconds(v: number) {
+    this.model.bufferSeconds = v
   }
 }

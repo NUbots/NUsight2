@@ -20,12 +20,25 @@ export class LineChart extends Component<LineChartProps> {
     const chartModel = this.props.model
     const lineChartModel = LineChartModel.of(this.props.model)
     const viewModel = LineChartViewModel.of(lineChartModel)
+
+    const min = viewModel.minValue.toPrecision(3)
+    const max = viewModel.maxValue.toPrecision(3)
+    const sec = lineChartModel.bufferSeconds.toPrecision(3)
+
     return (<>
-      <div>
-        Minimum Value
-        <input type='number' onChange={this.changeMin} placeholder={viewModel.minValue.toString() + ' (auto)'}/>
-        Maximum Value
-        <input type='number' onChange={this.changeMax} placeholder={viewModel.maxValue.toString() + ' (auto)'} />
+      <div className={style.topBar}>
+        <label className={style.topBarItem}>
+          Minimum Value
+          <input type='number' onChange={this.changeMin} placeholder={`(${min})`}/>
+        </label>
+        <label className={style.topBarItem}>
+          Maximum Value
+          <input type='number' onChange={this.changeMax} placeholder={`(${max})`} />
+        </label>
+        <label className={style.topBarItem}>
+          View Seconds
+          <input type='number' onChange={this.changeBuffer} placeholder={`(${sec})`} />
+        </label>
       </div>
       <div className={style.container}>
         <Renderer
@@ -54,6 +67,16 @@ export class LineChart extends Component<LineChartProps> {
       lineChartModel.yMax = parseInt(event.target.value, 10)
     } else {
       lineChartModel.yMax = 'auto'
+    }
+  }
+
+  @action
+  private changeBuffer = (event: any) => {
+    const lineChartModel = LineChartModel.of(this.props.model)
+    if (event.target.value) {
+      lineChartModel.bufferSeconds = parseInt(event.target.value, 10)
+    } else {
+      lineChartModel.bufferSeconds = 10
     }
   }
 }

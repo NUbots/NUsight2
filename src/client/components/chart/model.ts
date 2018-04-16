@@ -49,6 +49,7 @@ export class ChartModel {
   @observable treeData: TreeData = new Map<string, TreeData | DataSeries>()
   @observable startTime: number = Date.now() / 1000 // TODO work out how to get the clock object here
   @observable now: number = Date.now() / 1000 // TODO work out how to get the clock object here
+  @observable bufferSeconds: number = 10
 
   constructor(robotModels: RobotModel[]) {
     this.robotModels = robotModels

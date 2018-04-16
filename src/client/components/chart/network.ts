@@ -106,7 +106,7 @@ export class ChartNetwork {
       }
 
       // Find where our old data starts so we can remove it
-      const cutoff = now - this.model.startTime + leaf.timeDelta - 10
+      const cutoff = now - this.model.startTime + leaf.timeDelta - this.model.bufferSeconds
       const newStart = bounds.lt(series, Vector2.of(), p => p.x - cutoff)
 
       // Remove old series elements (keep 10 seconds of buffer)

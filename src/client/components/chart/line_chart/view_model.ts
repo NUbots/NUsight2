@@ -30,7 +30,7 @@ export class LineChartViewModel {
   @computed
   get camera(): Transform {
     const yScale = 0.9 / (this.maxValue - this.minValue) // 0.9 so there is a little extra above and below the plot
-    const xScale = 1 / this.model.viewSeconds
+    const xScale = 1 / this.model.bufferSeconds
 
     return Transform.of({
       scale: {
@@ -84,7 +84,7 @@ export class LineChartViewModel {
     // Work out the distance between our major and minor grid lines
     const nMinor = 4
     const range = this.maxValue - this.minValue
-    const digits = Math.floor(Math.log10(range))
+    const digits = Math.floor(Math.log10(range * 0.5))
     const major = Math.pow(10, digits)
     const minor = major / nMinor
     const offset = this.minValue + (this.maxValue - this.minValue) / 2
@@ -95,8 +95,8 @@ export class LineChartViewModel {
     let lineNo = 0
     for (let y = Math.floor(this.minValue / major) * major - major; y <= this.maxValue + major; y += minor) {
       const geometry = LineGeometry.of({
-        origin: Vector2.of(-this.model.viewSeconds / 2, y - offset),
-        target: Vector2.of(this.model.viewSeconds / 2, y - offset),
+        origin: Vector2.of(-this.model.bufferSeconds / 2, y - offset),
+        target: Vector2.of(this.model.bufferSeconds / 2, y - offset),
       })
 
       if (lineNo % nMinor === 0) {
@@ -112,7 +112,7 @@ export class LineChartViewModel {
           worldScale: true,
           textAlign: 'end',
           fontSize: '1em',
-          x: this.model.viewSeconds / 2,
+          x: this.model.bufferSeconds / 2,
           y: y - offset,
         }), BasicAppearance.of({
           fillStyle: '#000000',
@@ -141,12 +141,12 @@ export class LineChartViewModel {
 
     // Work out our min/max value
     const max = this.model.now
-    const min = max - this.model.viewSeconds
+    const min = max - this.model.bufferSeconds
     const yRange = this.maxValue - this.minValue
 
     // Work out the distance between our major and minor grid lines
     const nMinor = 4
-    const range = this.model.viewSeconds
+    const range = this.model.bufferSeconds
     const digits = Math.floor(Math.log10(range))
     const major = Math.pow(10, digits)
     const minor = major / nMinor
@@ -197,7 +197,7 @@ export class LineChartViewModel {
     return Group.of({
       transform: Transform.of({
         translate: {
-          x: -(this.model.now - this.model.viewSeconds / 2),
+          x: -(this.model.now - this.model.bufferSeconds / 2),
           y: -(minValue + (maxValue - minValue) / 2),
         },
       }),
@@ -217,7 +217,7 @@ export class LineChartViewModel {
 
         // Get the range we are viewing
         let end = this.model.now + series.timeDelta
-        let start = end - this.model.viewSeconds
+        let start = end - this.model.bufferSeconds
 
         const values = series.series
         end = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - end))
@@ -241,7 +241,7 @@ export class LineChartViewModel {
 
         // Get the range we are viewing
         let end = this.model.now + series.timeDelta
-        let start = end - this.model.viewSeconds
+        let start = end - this.model.bufferSeconds
 
         const values = series.series
         end = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - end))
@@ -258,7 +258,7 @@ export class LineChartViewModel {
 
     // Get the range we are viewing
     let end = this.model.now + series.timeDelta
-    let start = end - this.model.viewSeconds
+    let start = end - this.model.bufferSeconds
 
     let values = series.series
     end = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - end))

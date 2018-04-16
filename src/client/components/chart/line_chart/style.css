@@ -5,3 +5,11 @@
   top: 0;
   width: 100%;
 }
+
+.topBar {
+  flex-grow: 1;
+}
+
+.topBarItem {
+  padding: 1rem;
+}

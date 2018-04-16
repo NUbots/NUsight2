@@ -5,15 +5,8 @@ exports[`CircleSVGRenderer renders 1`] = `
   model={
     Shape {
       "appearance": BasicAppearance {
-        "fill": Object {
-          "alpha": 0,
-          "color": "#000000",
-        },
-        "stroke": Object {
-          "alpha": 0,
-          "color": "#000000",
-          "width": 1,
-        },
+        "fill": undefined,
+        "stroke": undefined,
       },
       "geometry": CircleGeometry {
         "radius": 1,

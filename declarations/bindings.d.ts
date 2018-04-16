@@ -1,4 +1,4 @@
 declare module 'bindings' {
-  const bindings : <T>(name: string) => typeof T
+  const bindings : <T>(name: string) => T
   export = bindings
 }

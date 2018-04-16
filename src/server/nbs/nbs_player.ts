@@ -7,8 +7,8 @@ export type NBSPacket = {
   payload: Buffer
 }
 
-declare class NBSPlayerAPI {
-  constructor(file: string, cb: (packet: NBSPacket) => void)
+interface NBSPlayerAPI {
+  new(file: string, cb: (packet: NBSPacket) => void): NBSPlayerAPI
   play(): void
   pause(): void
   restart(): void
@@ -39,6 +39,13 @@ export class NBSPlayer {
     this.emitter.on('packet', cb)
     return () => {
       this.emitter.removeListener('packet', cb)
+    }
+  }
+
+  onEnd(cb: () => any) : () => void {
+    this.emitter.on('end', cb)
+    return () => {
+      this.emitter.removeListener('end', cb)
     }
   }
 

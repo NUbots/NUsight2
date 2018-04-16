@@ -87,7 +87,7 @@ function init() {
       })
     })
 
-    player.on('end', () => {
+    player.onEnd(() => {
       // tslint:disable-next-line no-console
       console.log('restarting')
       player.restart()

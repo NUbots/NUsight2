@@ -1,7 +1,5 @@
 import { EventEmitter } from 'events'
-
-// tslint:disable-next-line no-require-imports
-import bindings = require('bindings')
+import * as bindings from 'bindings'
 
 const NBSPlayerAPI = bindings('nbs_player')
 

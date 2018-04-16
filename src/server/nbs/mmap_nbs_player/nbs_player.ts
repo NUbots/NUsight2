@@ -9,7 +9,7 @@ export type NBSPacket = {
   payload: Buffer
 }
 
-export class NBSPlayer implements MMapNBSPlayer {
+export class NBSPlayer {
 
   private readonly player: MMapNBSPlayer
   private readonly emitter: EventEmitter = new EventEmitter()

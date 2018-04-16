@@ -3,8 +3,8 @@
         {
             'target_name': 'nbs_player',
             'sources': [
-                'src/server/nbs/nbs_player.cpp',
-                'src/server/nbs/nbs_play_action.cpp',
+                'src/server/nbs/mmap_nbs_player/nbs_player.cpp',
+                'src/server/nbs/mmap_nbs_player/nbs_play_action.cpp',
             ],
             'cflags': [
             ],

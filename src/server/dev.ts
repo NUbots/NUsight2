@@ -14,8 +14,8 @@ import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulat
 import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
 
-import { NBSPlayer } from './nbs/nbs_player'
-import { NBSPacket } from './nbs/nbs_player'
+import { NBSPlayer } from './nbs/mmap_nbs_player/nbs_player'
+import { NBSPacket } from './nbs/mmap_nbs_player/nbs_player'
 import { DirectNUClearNetClient } from './nuclearnet/direct_nuclearnet_client'
 import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
@@ -90,11 +90,13 @@ function init() {
 
     player.onEnd(() => {
       // tslint:disable-next-line no-console
-      console.log('restarting')
+      console.log('Restarting NBS playback')
       player.restart()
       player.play()
     })
 
+    // tslint:disable-next-line no-console
+    console.log(`Playing NBS file: ${nbsFile}`)
     player.play()
   }
 }

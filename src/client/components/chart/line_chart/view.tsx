@@ -29,15 +29,15 @@ export class LineChart extends Component<LineChartProps> {
       <div className={style.topBar}>
         <label className={style.topBarItem}>
           Minimum Value
-          <input type='number' onChange={this.changeMin} placeholder={`(${min})`}/>
+          <input className={style.topBarInput} type='number' onChange={this.changeMin} placeholder={`(${min})`}/>
         </label>
         <label className={style.topBarItem}>
           Maximum Value
-          <input type='number' onChange={this.changeMax} placeholder={`(${max})`} />
+          <input className={style.topBarInput} type='number' onChange={this.changeMax} placeholder={`(${max})`} />
         </label>
         <label className={style.topBarItem}>
           View Seconds
-          <input type='number' onChange={this.changeBuffer} placeholder={`(${sec})`} />
+          <input className={style.topBarInput} type='number' onChange={this.changeBuffer} placeholder={`(${sec})`} />
         </label>
       </div>
       <div className={style.container}>

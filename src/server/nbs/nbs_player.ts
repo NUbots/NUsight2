@@ -1,5 +1,5 @@
-import { EventEmitter } from 'events'
 import * as bindings from 'bindings'
+import { EventEmitter } from 'events'
 
 const NBSPlayerAPI = bindings('nbs_player')
 

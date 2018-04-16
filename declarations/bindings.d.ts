@@ -1,4 +1,4 @@
 declare module 'bindings' {
-  const bindings : <T>(name: string) => T
+  const bindings: (name: string) => any
   export = bindings
 }

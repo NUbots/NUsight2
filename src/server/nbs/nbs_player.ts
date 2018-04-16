@@ -7,16 +7,23 @@ export type NBSPacket = {
   payload: Buffer
 }
 
-interface NBSPlayerAPI {
+interface NBSPlayerAPIStatic {
   new(file: string, cb: (packet: NBSPacket) => void): NBSPlayerAPI
+}
+
+interface NBSPlayerAPI {
   play(): void
+
   pause(): void
+
   restart(): void
+
   step(steps: number): void
+
   seek(timestamp: number): void
 }
 
-const NBSPlayerAPI = bindings<NBSPlayerAPI>('nbs_player')
+const NBSPlayerAPI = bindings('nbs_player') as NBSPlayerAPIStatic
 
 export class NBSPlayer {
 
@@ -27,7 +34,7 @@ export class NBSPlayer {
     this.player = new NBSPlayerAPI(file, this.onNBSPacket)
   }
 
-  static of(opts: {file: string}) {
+  static of(opts: { file: string }) {
     return new NBSPlayer(opts.file)
   }
 
@@ -42,7 +49,7 @@ export class NBSPlayer {
     }
   }
 
-  onEnd(cb: () => any) : () => void {
+  onEnd(cb: () => any): () => void {
     this.emitter.on('end', cb)
     return () => {
       this.emitter.removeListener('end', cb)

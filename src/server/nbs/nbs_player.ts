@@ -41,10 +41,9 @@ export class NBSPlayer {
   private onNBSPacket = (timestamp?: number, hash?: Buffer, payload?: Buffer) => {
     if (payload) {
       this.emitter.emit('packet', {
-        timestamp, hash, payload
+        timestamp, hash, payload,
       })
-    }
-    else {
+    } else {
       this.emitter.emit('end')
     }
   }

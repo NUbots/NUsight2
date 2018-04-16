@@ -25,7 +25,7 @@ const compiler = webpack(webpackConfig)
 
 const args = minimist(process.argv.slice(2))
 const withVirtualRobots = args['virtual-robots'] || false
-const nbsFile = args['nbs-file']
+const nbsFile = args['play']
 
 const app = express()
 const server = http.createServer(app)

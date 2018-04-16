@@ -10,8 +10,8 @@ import { LineAppearance } from '../../../render2d/appearance/line_appearance'
 import { LineGeometry } from '../../../render2d/geometry/line_geometry'
 import { PathGeometry } from '../../../render2d/geometry/path_geometry'
 import { TextGeometry } from '../../../render2d/geometry/text_geometry'
-import { Group } from '../../../render2d/object/group'
 import { Geometry } from '../../../render2d/object/geometry'
+import { Group } from '../../../render2d/object/group'
 import { Shape } from '../../../render2d/object/shape'
 import { CheckedState } from '../../checkbox_tree/model'
 import { DataSeries } from '../model'
@@ -119,7 +119,7 @@ export class LineChartViewModel {
         }), BasicAppearance.of({
           fill: {
             color: '#000000',
-          }
+          },
         })))
 
       } else {

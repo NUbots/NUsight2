@@ -20,7 +20,6 @@ public:
     static void Pause(const Nan::FunctionCallbackInfo<v8::Value>& info);
     static void Step(const Nan::FunctionCallbackInfo<v8::Value>& info);
     static void Restart(const Nan::FunctionCallbackInfo<v8::Value>& info);
-    static void Load(const Nan::FunctionCallbackInfo<v8::Value>& info);
     static void Seek(const Nan::FunctionCallbackInfo<v8::Value>& info);
 
     static void New(const Nan::FunctionCallbackInfo<v8::Value>& info);

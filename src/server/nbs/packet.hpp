@@ -5,7 +5,7 @@
 
 struct Packet {
     uint64_t timestamp;
-    uint64_t hash;
+    uint8_t* hash;
     uint8_t* payload;
     uint32_t size;
 };

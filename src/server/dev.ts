@@ -80,7 +80,7 @@ function init() {
       file: 'recordings/visualmesh2.nbs',
     })
 
-    player.on('packet', (packet: NBSPacket) => {
+    player.onPacket((packet: NBSPacket) => {
       nuclearnetClient.send({
         type: packet.hash,
         payload: packet.payload,

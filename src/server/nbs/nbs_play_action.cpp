@@ -1,5 +1,8 @@
 #include "nbs_play_action.hpp"
 #include <iostream>
+
+void dont_delete(char*, void*) {};
+
 NBSPlayAction::NBSPlayAction(NBSPlayer* player)
     : Nan::AsyncProgressQueueWorker<Packet>(new Nan::Callback()), player(player) {
 
@@ -68,11 +71,11 @@ void NBSPlayAction::HandleProgressCallback(const Packet* packet, size_t size) {
     else {
         v8::Local<v8::Value> argv[3] = {
             Nan::New<v8::Number>(packet->timestamp).As<v8::Value>(),
-            Nan::CopyBuffer(reinterpret_cast<const char*>(&packet->hash), sizeof(uint64_t))
+            Nan::NewBuffer(reinterpret_cast<char*>(packet->hash), sizeof(uint64_t), dont_delete, nullptr)
                 .ToLocalChecked()
                 .As<v8::Value>(),
             // Since we are memory mapped, our deleter shouldn't do anything
-            Nan::NewBuffer(reinterpret_cast<char*>(packet->payload), packet->size, [](char*, void*) {}, nullptr)
+            Nan::NewBuffer(reinterpret_cast<char*>(packet->payload), packet->size, dont_delete, nullptr)
                 .ToLocalChecked()
                 .As<v8::Value>()};
 

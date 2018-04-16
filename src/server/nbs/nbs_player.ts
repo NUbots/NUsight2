@@ -1,36 +1,45 @@
 import * as bindings from 'bindings'
 import { EventEmitter } from 'events'
 
-const NBSPlayerAPI = bindings('nbs_player')
-
 export type NBSPacket = {
   timestamp: number
   hash: Buffer
   payload: Buffer
 }
 
-export class NBSPlayer extends EventEmitter {
+declare class NBSPlayerAPI {
+  constructor(file: string, cb: (packet: NBSPacket) => void)
+  play(): void
+  pause(): void
+  restart(): void
+  step(steps: number): void
+  seek(timestamp: number): void
+}
 
-  private player: any
+const NBSPlayerAPI = bindings<NBSPlayerAPI>('nbs_player')
+
+export class NBSPlayer {
+
+  private player: NBSPlayerAPI
+  private emitter: EventEmitter = new EventEmitter()
 
   constructor(private file: string) {
-    super()
-    this.player = new NBSPlayerAPI()
-    this.player.load(file, (timestamp?: number, hash?: Buffer, payload?: Buffer) => {
-      if (payload !== undefined) {
-        this.emit('packet', {
-          timestamp,
-          hash,
-          payload,
-        })
-      } else {
-        this.emit('end')
-      }
-    })
+    this.player = new NBSPlayerAPI(file, this.onNBSPacket)
   }
 
   static of(opts: {file: string}) {
     return new NBSPlayer(opts.file)
+  }
+
+  private onNBSPacket = (packet: NBSPacket) => {
+    this.emitter.emit('packet', packet)
+  }
+
+  onPacket(cb: (packet: NBSPacket) => any): () => void {
+    this.emitter.on('packet', cb)
+    return () => {
+      this.emitter.removeListener('packet', cb)
+    }
   }
 
   play() {

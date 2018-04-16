@@ -38,7 +38,7 @@ Packet NBSPlayer::read() {
     pos += sizeof(timestamp);
 
     // Read the hash
-    uint64_t hash = *reinterpret_cast<uint64_t*>(&map[pos]);
+    uint8_t* hash = &map[pos];
     pos += sizeof(hash);
 
     // Read the payload
@@ -89,28 +89,6 @@ void NBSPlayer::build_index() {
     }
 
     std::cerr << "Finished indexing" << std::endl;
-}
-
-void NBSPlayer::Load(const Nan::FunctionCallbackInfo<v8::Value>& info) {
-
-    NBSPlayer* bind       = ObjectWrap::Unwrap<NBSPlayer>(info.Holder());
-    std::string filename  = *Nan::Utf8String(info[0]);
-    bind->packet_callback = std::make_shared<Nan::Callback>(info[1].As<v8::Function>());
-
-    // Check if the file is compressed
-    if (filename.size() > 3
-        && (0 == filename.compare(filename.length() - 2, 2, "gz")
-            || 0 == filename.compare(filename.length() - 3, 3, "nbz"))) {
-
-        // TODO find a good compression stream tool
-    }
-
-    // Open the file
-    std::error_code error;
-    bind->map.map(filename, 0, mio::map_entire_file, error);
-
-    // Index the file
-    bind->build_index();
 }
 
 void NBSPlayer::Play(const Nan::FunctionCallbackInfo<v8::Value>& info) {
@@ -174,20 +152,41 @@ void NBSPlayer::Seek(const Nan::FunctionCallbackInfo<v8::Value>& info) {
 }
 
 void NBSPlayer::New(const Nan::FunctionCallbackInfo<v8::Value>& info) {
+
     // Invoked as constructor: `new MyObject(...)`
     if (info.IsConstructCall()) {
 
         // Create our object and a player thread for it
-        NBSPlayer* obj = new NBSPlayer();
-        Nan::AsyncQueueWorker(new NBSPlayAction(obj));
+        NBSPlayer* bind = new NBSPlayer();
 
-        obj->Wrap(info.This());
+        // Get the file name and callback function from the wrapper
+        std::string filename  = *Nan::Utf8String(info[0]);
+        bind->packet_callback = std::make_shared<Nan::Callback>(info[1].As<v8::Function>());
+
+        // Check if the file is compressed
+        if (filename.size() > 3
+            && (0 == filename.compare(filename.length() - 2, 2, "gz")
+                || 0 == filename.compare(filename.length() - 3, 3, "nbz"))) {
+
+            // TODO find a good compression tool that can work with mmap
+        }
+
+        // Open the file
+        std::error_code error;
+        bind->map.map(filename, 0, mio::map_entire_file, error);
+
+        // Index the file
+        bind->build_index();
+
+        // This starts the player thread
+        Nan::AsyncQueueWorker(new NBSPlayAction(bind));
+
+        bind->Wrap(info.This());
         info.GetReturnValue().Set(info.This());
     }
-    // Invoked as function: `MyObject(...)` convert to construct call
+    // Invoked as function: `MyObject(...)` throw an error
     else {
-        v8::Local<v8::Function> cons = Nan::New<v8::Function>(constructor);
-        info.GetReturnValue().Set(Nan::NewInstance(cons, 0, nullptr).ToLocalChecked());
+        Nan::ThrowError("NBSPlayerAPI must be called as a constructor");
     }
 }
 
@@ -200,7 +199,6 @@ void NBSPlayer::Init(v8::Local<v8::Object> exports, v8::Local<v8::Object> module
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
     // Prototype
-    Nan::SetPrototypeMethod(tpl, "load", Load);
     Nan::SetPrototypeMethod(tpl, "play", Play);
     Nan::SetPrototypeMethod(tpl, "pause", Pause);
     Nan::SetPrototypeMethod(tpl, "restart", Restart);

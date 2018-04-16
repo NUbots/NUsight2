@@ -11,7 +11,7 @@ import { LocalisationModel } from './model'
 import { LocalisationNetwork } from './network'
 import { LocalisationView } from './view'
 
-export function installLocalisation({ nav, appModel, nusightNetwork, menu }: {
+export function install({ nav, appModel, nusightNetwork, menu }: {
   nav: NavigationConfiguration,
   appModel: AppModel,
   nusightNetwork: NUsightNetwork,

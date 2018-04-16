@@ -8,7 +8,7 @@ export type NBSPacket = {
 }
 
 interface NBSPlayerAPIStatic {
-  new(file: string, cb: (packet: NBSPacket) => void): NBSPlayerAPI
+  new(file: string, cb: (timestamp?: number, hash?: Buffer, payload?: Buffer) => void): NBSPlayerAPI
 }
 
 interface NBSPlayerAPI {
@@ -30,7 +30,7 @@ export class NBSPlayer {
   private player: NBSPlayerAPI
   private emitter: EventEmitter = new EventEmitter()
 
-  constructor(private file: string) {
+  private constructor(private file: string) {
     this.player = new NBSPlayerAPI(file, this.onNBSPacket)
   }
 
@@ -38,8 +38,15 @@ export class NBSPlayer {
     return new NBSPlayer(opts.file)
   }
 
-  private onNBSPacket = (packet: NBSPacket) => {
-    this.emitter.emit('packet', packet)
+  private onNBSPacket = (timestamp?: number, hash?: Buffer, payload?: Buffer) => {
+    if (payload) {
+      this.emitter.emit('packet', {
+        timestamp, hash, payload
+      })
+    }
+    else {
+      this.emitter.emit('end')
+    }
   }
 
   onPacket(cb: (packet: NBSPacket) => void): () => void {

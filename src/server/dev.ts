@@ -25,6 +25,7 @@ const compiler = webpack(webpackConfig)
 
 const args = minimist(process.argv.slice(2))
 const withVirtualRobots = args['virtual-robots'] || false
+const nbsFile = args['nbs-file']
 
 const app = express()
 const server = http.createServer(app)
@@ -72,12 +73,12 @@ function init() {
     virtualRobots.startSimulators()
   }
 
-  async function playback() {
+  if (nbsFile) {
     const nuclearnetClient = withVirtualRobots ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
-    nuclearnetClient.connect({ name: 'Fake Stream' })
+    nuclearnetClient.connect({ name: nbsFile })
 
     const player = NBSPlayer.of({
-      file: 'recordings/visualmesh2.nbs',
+      file: nbsFile,
     })
 
     player.onPacket((packet: NBSPacket) => {
@@ -96,8 +97,6 @@ function init() {
 
     player.play()
   }
-
-  playback()
 }
 
 devMiddleware.waitUntilValid(init)

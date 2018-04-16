@@ -4,6 +4,7 @@ import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
 import ReactResizeDetector from 'react-resize-detector'
+
 import { VisionNetwork } from './network'
 import * as styles from './styles.css'
 import { VisionViewModel } from './view_model'
@@ -15,11 +16,11 @@ export class VisionView extends Component<{
   network: VisionNetwork
   Menu: ComponentType
 }> {
-  public componentWillUnmount() {
+  componentWillUnmount() {
     this.props.network.destroy()
   }
 
-  public render() {
+  render() {
     const { viewModel, Menu } = this.props
     // TODO: Some kind of intelligent layout resizing to make it look good.
     return (
@@ -37,15 +38,15 @@ export class VisionView extends Component<{
 export class RobotVisionView extends Component<{ viewModel: RobotViewModel }> {
   private destroy: () => void
 
-  public componentDidMount() {
+  componentDidMount() {
     this.destroy = autorun(() => this.renderScene())
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     this.destroy()
   }
 
-  public render() {
+  render() {
     return (
       // TODO: width/height
       <div className={styles.container}>

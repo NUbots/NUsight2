@@ -1,4 +1,5 @@
 import { action } from 'mobx'
+
 import { google } from '../../../shared/proto/messages'
 import { message } from '../../../shared/proto/messages'
 import { Matrix2 } from '../../math/matrix2'
@@ -8,21 +9,22 @@ import { Vector3 } from '../../math/vector3'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
+
 import { DashboardRobotModel } from './dashboard_robot/model'
-import Timestamp = google.protobuf.Timestamp$Properties
-import Overview = message.support.nubugger.Overview
+import Timestamp = google.protobuf.ITimestamp
+import Overview = message.support.nusight.Overview
 
 export class DashboardNetwork {
-  public constructor(private network: Network) {
+  constructor(private network: Network) {
     this.network.on(Overview, this.onOverview)
   }
 
-  public static of(nusightNetwork: NUsightNetwork): DashboardNetwork {
+  static of(nusightNetwork: NUsightNetwork): DashboardNetwork {
     const network = Network.of(nusightNetwork)
     return new DashboardNetwork(network)
   }
 
-  public destroy() {
+  destroy() {
     this.network.off()
   }
 
@@ -76,7 +78,7 @@ export class DashboardNetwork {
   }
 }
 
-function toSeconds(timestamp: Timestamp | null): number {
+function toSeconds(timestamp?: Timestamp | null): number {
   if (!timestamp) {
     timestamp = { seconds: 0, nanos: 0 }
   }

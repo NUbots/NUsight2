@@ -3,9 +3,11 @@ import * as fs from 'fs'
 import * as stream from 'stream'
 import { PassThrough } from 'stream'
 import { createGunzip } from 'zlib'
+
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { Clock } from '../../shared/time/clock'
 import { NodeSystemClock } from '../time/node_clock'
+
 import { NbsFrameChunker } from './nbs_frame_chunker'
 import { NbsFrame } from './nbs_frame_codecs'
 import { NbsFrameDecoder } from './nbs_frame_streams'
@@ -25,34 +27,34 @@ export class NbsNUClearPlayback extends stream.Writable {
   private firstFrameTimestamp?: number
   private firstLocalTimestamp?: number
 
-  public constructor(private nuclearnetClient: NUClearNetClient,
-                     private clock: Clock) {
+  constructor(private nuclearnetClient: NUClearNetClient,
+              private clock: Clock) {
     super({
       objectMode: true,
     })
   }
 
-  public static of(nuclearnetClient: NUClearNetClient) {
+  static of(nuclearnetClient: NUClearNetClient) {
     return new NbsNUClearPlayback(nuclearnetClient, NodeSystemClock)
   }
 
   /** Convenience method for directly streaming a file to the network. */
-  public static fromFile(filename: string, nuclearnetClient: NUClearNetClient) {
+  static fromFile(filename: string, nuclearnetClient: NUClearNetClient) {
     const playback = NbsNUClearPlayback.of(nuclearnetClient)
-    let rawStream = fs.createReadStream(filename, { highWaterMark: 1024 * 1024 * 32 })
+    const rawStream = fs.createReadStream(filename, { highWaterMark: 1024 * 1024 * 32 })
     const isGzipped = filename.endsWith('.nbz') || filename.endsWith('.nbs.gz')
     const decompress = isGzipped ? createGunzip() : new PassThrough()
     rawStream.pipe(decompress).pipe(new NbsFrameChunker()).pipe(new NbsFrameDecoder()).pipe(playback)
     return playback
   }
 
-  public static fromRawStream(rawStream: ReadStream, nuclearnetClient: NUClearNetClient) {
+  static fromRawStream(rawStream: ReadStream, nuclearnetClient: NUClearNetClient) {
     const playback = NbsNUClearPlayback.of(nuclearnetClient)
     rawStream.pipe(new NbsFrameChunker()).pipe(new NbsFrameDecoder()).pipe(playback)
     return playback
   }
 
-  public _write(frame: NbsFrame, encoding: string, done: Function) {
+  _write(frame: NbsFrame, encoding: string, done: Function) {
     const now = this.clock.performanceNow()
     if (this.firstFrameTimestamp === undefined || this.firstLocalTimestamp === undefined) {
       // This is the first frame we received, use this as reference point.

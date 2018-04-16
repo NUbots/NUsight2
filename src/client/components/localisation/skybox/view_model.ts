@@ -1,5 +1,5 @@
-import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { createTransformer } from 'mobx-utils'
 import { BackSide } from 'three'
 import { Mesh } from 'three'
 import { SphereBufferGeometry } from 'three'
@@ -8,21 +8,22 @@ import { Object3D } from 'three'
 import { ShaderMaterial } from 'three'
 import { Vector3 } from 'three'
 import { PlaneBufferGeometry } from 'three'
+
 import { SkyboxModel } from './model'
 import * as SkyboxFrag from './skybox.frag'
 import * as SkyboxVert from './skybox.vert'
 
 export class SkyboxViewModel {
 
-  public constructor(private model: SkyboxModel) {
+  constructor(private model: SkyboxModel) {
   }
 
-  public static of = createTransformer((model: SkyboxModel): SkyboxViewModel => {
+  static of = createTransformer((model: SkyboxModel): SkyboxViewModel => {
     return new SkyboxViewModel(model)
   })
 
   @computed
-  public get skybox() {
+  get skybox() {
     // reference: http://threejs.org/examples/#webgl_shaders_sky
     const skybox = new Object3D()
 

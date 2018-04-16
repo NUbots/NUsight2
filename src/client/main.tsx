@@ -1,9 +1,10 @@
-import { useStrict } from 'mobx'
+import { configure } from 'mobx'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import { Switch } from 'react-router-dom'
+
 import { AppController } from './components/app/controller'
 import { AppModel } from './components/app/model'
 import { AppNetwork } from './components/app/network'
@@ -16,7 +17,9 @@ import { NavigationConfiguration } from './navigation'
 import { NUsightNetwork } from './network/nusight_network'
 
 // enable MobX strict mode
-useStrict(true)
+configure({
+  enforceActions: true,
+})
 
 const appModel = AppModel.of()
 const nusightNetwork = NUsightNetwork.of(appModel)

@@ -2,27 +2,29 @@ import { action } from 'mobx'
 import { Matrix4 } from 'three'
 import { Quaternion } from 'three'
 import { Vector3 } from 'three'
+
 import { message } from '../../../shared/proto/messages'
-import { mat44$Properties } from '../../../shared/proto/messages'
+import { Imat4 } from '../../../shared/proto/messages'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
+
 import { LocalisationRobotModel } from './darwin_robot/model'
 import { LocalisationModel } from './model'
 import Sensors = message.input.Sensors
 
 export class LocalisationNetwork {
-  public constructor(private network: Network,
-                     private model: LocalisationModel) {
+  constructor(private network: Network,
+              private model: LocalisationModel) {
     this.network.on(Sensors, this.onSensors)
   }
 
-  public static of(nusightNetwork: NUsightNetwork, model: LocalisationModel): LocalisationNetwork {
+  static of(nusightNetwork: NUsightNetwork, model: LocalisationModel): LocalisationNetwork {
     const network = Network.of(nusightNetwork)
     return new LocalisationNetwork(network, model)
   }
 
-  public destroy() {
+  destroy() {
     this.network.off()
   }
 
@@ -65,7 +67,7 @@ function decompose(m: Matrix4): { translation: Vector3, rotation: Quaternion, sc
   return { translation, rotation, scale }
 }
 
-function fromProtoMat44(m: mat44$Properties): Matrix4 {
+function fromProtoMat44(m: Imat4): Matrix4 {
   return new Matrix4().set(
     m!.x!.x!, m!.y!.x!, m!.z!.x!, m!.t!.x!,
     m!.x!.y!, m!.y!.y!, m!.z!.y!, m!.t!.y!,

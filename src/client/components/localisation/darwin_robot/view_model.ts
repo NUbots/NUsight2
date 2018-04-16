@@ -1,22 +1,23 @@
 import { computed } from 'mobx'
-import { createTransformer } from 'mobx'
+import { createTransformer } from 'mobx-utils'
 import { Object3D } from 'three'
 import { Quaternion } from 'three'
+
 import { BodyViewModel } from './body/view_model'
 import { LocalisationRobotModel } from './model'
 
 export const HIP_TO_FOOT = 0.2465
 
 export class RobotViewModel {
-  public constructor(private model: LocalisationRobotModel) {
+  constructor(private model: LocalisationRobotModel) {
   }
 
-  public static of = createTransformer((model: LocalisationRobotModel): RobotViewModel => {
+  static of = createTransformer((model: LocalisationRobotModel): RobotViewModel => {
     return new RobotViewModel(model)
   })
 
   @computed
-  public get robot(): Object3D {
+  get robot(): Object3D {
     const robot = new Object3D()
     robot.position.x = this.model.rWTt.x
     robot.position.y = this.model.rWTt.y

@@ -9,15 +9,15 @@ import * as sio from 'socket.io'
 import * as webpack from 'webpack'
 import * as webpackDevMiddleware from 'webpack-dev-middleware'
 import * as webpackHotMiddleware from 'webpack-hot-middleware'
+
 import webpackConfig from '../../webpack.config'
 import { VisionSimulator } from '../simulators/vision_simulator'
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
 import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
-import { NbsFrameChunker } from './nbs/nbs_frame_chunker'
-import { NbsFrame } from './nbs/nbs_frame_codecs'
-import { NbsFrameDecoder } from './nbs/nbs_frame_streams'
-import { NbsNUClearPlayback } from './nbs/nbs_nuclear_playback'
+
+import { NBSPlayer } from './nbs/mmap_nbs_player/nbs_player'
+import { NBSPacket } from './nbs/mmap_nbs_player/nbs_player'
 import { DirectNUClearNetClient } from './nuclearnet/direct_nuclearnet_client'
 import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
@@ -27,6 +27,7 @@ const compiler = webpack(webpackConfig)
 
 const args = minimist(process.argv.slice(2))
 const withVirtualRobots = args['virtual-robots'] || false
+const nbsFile = args.play
 
 const app = express()
 const server = http.createServer(app)
@@ -57,7 +58,7 @@ app.use(favicon(`${__dirname}/../assets/favicon.ico`))
 
 const port = process.env.PORT || 3000
 server.listen(port, () => {
-  /* tslint:disable no-console */
+  // tslint:disable-next-line no-console
   console.log(`NUsight server started at http://localhost:${port}`)
 })
 
@@ -75,26 +76,32 @@ function init() {
     // virtualRobots.startSimulators()
   }
 
-  async function playback() {
+  if (nbsFile) {
     const nuclearnetClient = withVirtualRobots ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
-    nuclearnetClient.connect({ name: 'Fake Stream' })
-    while (true) {
-      const out = NbsNUClearPlayback.fromFile('recordings/20171113T13_19_36.nbs', nuclearnetClient)
+    nuclearnetClient.connect({ name: nbsFile })
 
-      // const filename = '/Users/brendan/Lab/NUsight2/recordings/20171113T13_19_36.nbs'
-      // let rawStream = fs.createReadStream(filename, { highWaterMark: 1024 * 1024 * 32})
-      // // let rawStream = fs.createReadStream(filename)
-      // const out = rawStream.pipe(new NbsFrameChunker()).pipe(new NbsFrameDecoder())
-      // out.on('data', (data: NbsFrame) => {
-      //   console.log('data', data.hash, data.payload.byteLength)
-      // })
+    const player = NBSPlayer.of({
+      file: nbsFile,
+    })
 
-      await new Promise(res => out.on('finish', res))
-      console.log('end')
-    }
+    player.onPacket((packet: NBSPacket) => {
+      nuclearnetClient.send({
+        type: packet.hash,
+        payload: packet.payload,
+      })
+    })
+
+    player.onEnd(() => {
+      // tslint:disable-next-line no-console
+      console.log('Restarting NBS playback')
+      player.restart()
+      player.play()
+    })
+
+    // tslint:disable-next-line no-console
+    console.log(`Playing NBS file: ${nbsFile}`)
+    player.play()
   }
-
-  playback()
 }
 
 devMiddleware.waitUntilValid(init)

@@ -1,6 +1,7 @@
 import { computed } from 'mobx'
 import { observable } from 'mobx'
 import { IObservableValue } from 'mobx'
+
 import { memoize } from '../../base/memoize'
 import { Matrix4 } from '../../math/matrix4'
 import { Vector2 } from '../../math/vector2'
@@ -9,15 +10,15 @@ import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
 
 export class VisionModel {
-  public constructor(private appModel: AppModel) {
+  constructor(private appModel: AppModel) {
   }
 
-  public static of = memoize((appModel: AppModel) => {
+  static of = memoize((appModel: AppModel) => {
     return new VisionModel(appModel)
   })
 
   @computed
-  public get robots(): VisionRobotModel[] {
+  get robots(): VisionRobotModel[] {
     return this.appModel.robots.map(robot => VisionRobotModel.of(robot))
   }
 }
@@ -44,10 +45,10 @@ type VisionImage = {
 }
 
 export class VisionRobotModel {
-  @observable public balls: VisionBallModel[]
-  @observable public goals: VisionGoal[]
-  @observable.shallow public image?: VisionImage
-  @observable public Hcw: Matrix4
+  @observable balls: VisionBallModel[]
+  @observable goals: VisionGoal[]
+  @observable.shallow image?: VisionImage
+  @observable Hcw: Matrix4
 
   constructor(private robotModel: RobotModel, opts: VisionRobotModelOpts) {
     this.balls = opts.balls
@@ -56,7 +57,7 @@ export class VisionRobotModel {
     this.Hcw = opts.Hcw
   }
 
-  public static of = memoize((robotModel: RobotModel) => {
+  static of = memoize((robotModel: RobotModel) => {
     return new VisionRobotModel(robotModel, {
       balls: [],
       goals: [],
@@ -65,31 +66,31 @@ export class VisionRobotModel {
   })
 
   @computed
-  public get id() {
+  get id() {
     return this.robotModel.id
   }
 
   @computed
-  public get name() {
+  get name() {
     return this.robotModel.name
   }
 
   @computed
-  public get visible() {
+  get visible() {
     return this.robotModel.enabled
   }
 }
 
 export class VisionBallModel {
-  @observable public gradient: number
-  @observable public axis: Vector3
+  @observable gradient: number
+  @observable axis: Vector3
 
   constructor(private model: VisionRobotModel, { gradient, axis }: { gradient: number, axis: Vector3 }) {
     this.gradient = gradient
     this.axis = axis
   }
 
-  public static of = memoize((robotModel: VisionRobotModel) => {
+  static of = memoize((robotModel: VisionRobotModel) => {
     return new VisionBallModel(robotModel, {
       gradient: 0,
       axis: Vector3.of(),

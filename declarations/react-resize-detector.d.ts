@@ -1,4 +1,12 @@
 declare module 'react-resize-detector' {
-  const value: any
-  export default value
+
+  import { ComponentType } from 'react'
+
+  const component: ComponentType<{
+    handleWidth?: boolean,
+    handleHeight?: boolean,
+    onResize: (width: number, height: number) => void
+  }>
+
+  export default component
 }

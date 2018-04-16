@@ -1,8 +1,9 @@
 import { Matrix4 } from 'three'
 import { Vector3 } from 'three'
 import { Quaternion } from 'three'
+
 import { message } from '../../shared/proto/messages'
-import { mat44$Properties } from '../../shared/proto/messages'
+import { Imat4 } from '../../shared/proto/messages'
 import { Simulator } from '../simulator'
 import { Message } from '../simulator'
 import Sensors = message.input.Sensors
@@ -10,11 +11,11 @@ import Sensors = message.input.Sensors
 export const HIP_TO_FOOT = 0.2465
 
 export class SensorDataSimulator implements Simulator {
-  public static of() {
+  static of() {
     return new SensorDataSimulator()
   }
 
-  public simulate(time: number, index: number, numRobots: number): Message[] {
+  simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.input.Sensors'
 
     // Simulate a walk
@@ -66,7 +67,7 @@ function toHtw(x: number, y: number, z: number, heading: number): Matrix4 {
   return new Matrix4().getInverse(new Matrix4().compose(translation, rotation, scale))
 }
 
-function toProtoMat44(m: Matrix4): mat44$Properties {
+function toProtoMat44(m: Matrix4): Imat4 {
   return {
     x: { x: m.elements[0], y: m.elements[1], z: m.elements[2], t: m.elements[3] },
     y: { x: m.elements[4], y: m.elements[5], z: m.elements[6], t: m.elements[7] },

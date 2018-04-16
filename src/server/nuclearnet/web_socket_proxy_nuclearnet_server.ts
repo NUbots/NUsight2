@@ -1,9 +1,11 @@
 import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetPacket } from 'nuclearnet.js'
+
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { Clock } from '../../shared/time/clock'
 import { NodeSystemClock } from '../time/node_clock'
+
 import { DirectNUClearNetClient } from './direct_nuclearnet_client'
 import { FakeNUClearNetClient } from './fake_nuclearnet_client'
 import { WebSocketServer } from './web_socket_server'
@@ -19,11 +21,11 @@ type Opts = {
  * improved to have more intelligent multiplexing.
  */
 export class WebSocketProxyNUClearNetServer {
-  public constructor(private server: WebSocketServer, private nuclearnetClient: NUClearNetClient) {
+  constructor(private server: WebSocketServer, private nuclearnetClient: NUClearNetClient) {
     server.onConnection(this.onClientConnection)
   }
 
-  public static of(server: WebSocketServer, { fakeNetworking }: Opts): WebSocketProxyNUClearNetServer {
+  static of(server: WebSocketServer, { fakeNetworking }: Opts): WebSocketProxyNUClearNetServer {
     const nuclearnetClient: NUClearNetClient = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
     return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
   }
@@ -40,7 +42,7 @@ class WebSocketServerClient {
   private offListenMap: Map<string, () => void>
   private processors: Map<NUClearNetPeer, PacketProcessor>
 
-  public constructor(private nuclearnetClient: NUClearNetClient, private socket: WebSocket) {
+  constructor(private nuclearnetClient: NUClearNetClient, private socket: WebSocket) {
     this.connected = false
     this.offJoin = this.nuclearnetClient.onJoin(this.onJoin)
     this.offLeave = this.nuclearnetClient.onLeave(this.onLeave)
@@ -53,7 +55,7 @@ class WebSocketServerClient {
     this.socket.on('disconnect', this.onDisconnect)
   }
 
-  public static of(nuclearNetClient: NUClearNetClient, socket: WebSocket) {
+  static of(nuclearNetClient: NUClearNetClient, socket: WebSocket) {
     return new WebSocketServerClient(nuclearNetClient, socket)
   }
 
@@ -138,12 +140,11 @@ class PacketProcessor {
     this.eventQueueSize = new Map()
   }
 
-  public static of(socket: WebSocket) {
+  static of(socket: WebSocket) {
     return new PacketProcessor(socket, NodeSystemClock, { limit: 20, timeout: 0 })
   }
 
-  public onPacket(event: string, packet: NUClearNetPacket) {
-    console.log('event queue', event, this.eventQueueSize.get(event))
+  onPacket(event: string, packet: NUClearNetPacket) {
     if (packet.reliable) {
       this.sendReliablePacket(event, packet)
     } else if (this.isEventBelowLimit(event)) {

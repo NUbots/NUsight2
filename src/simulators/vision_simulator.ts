@@ -13,21 +13,21 @@ import NUsightBalls = message.vision.NUsightBalls
 import NUsightGoals = message.vision.NUsightGoals
 
 export class VisionSimulator implements Simulator {
-  public constructor(private random: SeededRandom) {
+  constructor(private random: SeededRandom) {
   }
 
-  public static of() {
+  static of() {
     return new VisionSimulator(SeededRandom.of('vision_simulator'))
   }
 
-  public simulate(time: number, index: number, numRobots: number): Message[] {
+  simulate(time: number, index: number, numRobots: number): Message[] {
     return [
       this.balls(time, index, numRobots),
       this.goals(time, index, numRobots),
     ]
   }
 
-  public balls(time: number, index: number, numRobots: number): Message {
+  balls(time: number, index: number, numRobots: number): Message {
     const numBalls = this.random.integer(0, 3)
     const messageType = MessageTypePath.of().getPath(NUsightBalls)
     // TODO: production reasonable values.
@@ -56,7 +56,7 @@ export class VisionSimulator implements Simulator {
     return { messageType, buffer }
   }
 
-  public goals(time: number, index: number, numRobots: number): Message {
+  goals(time: number, index: number, numRobots: number): Message {
     const numGoals = this.random.integer(0, 3)
     const messageType = MessageTypePath.of().getPath(NUsightGoals)
     // TODO: production reasonable values.

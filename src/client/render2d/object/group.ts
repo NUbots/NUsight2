@@ -1,8 +1,9 @@
 import { observable } from 'mobx'
 
 import { Transform } from '../../math/transform'
+
+import { Geometry } from './geometry'
 import { Shape } from './shape'
-import { Geometry } from './shape'
 
 export type GroupOpts = {
   children: Array<Group | Shape<Geometry>>

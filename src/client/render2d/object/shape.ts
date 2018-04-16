@@ -2,20 +2,8 @@ import { observable } from 'mobx'
 
 import { Appearance } from '../appearance/appearance'
 import { BasicAppearance } from '../appearance/basic_appearance'
-import { ArcGeometry } from '../geometry/arc_geometry'
-import { ArrowGeometry } from '../geometry/arrow_geometry'
-import { CircleGeometry } from '../geometry/circle_geometry'
-import { LineGeometry } from '../geometry/line_geometry'
-import { PolygonGeometry } from '../geometry/polygon_geometry'
-import { TextGeometry } from '../geometry/text_geometry'
 
-export type Geometry =
-  ArcGeometry
-  | ArrowGeometry
-  | CircleGeometry
-  | LineGeometry
-  | PolygonGeometry
-  | TextGeometry
+import { Geometry } from './geometry'
 
 export type ShapeOpts<T extends Geometry> = {
   appearance: Appearance

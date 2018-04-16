@@ -42,14 +42,14 @@ export class NBSPlayer {
     this.emitter.emit('packet', packet)
   }
 
-  onPacket(cb: (packet: NBSPacket) => any): () => void {
+  onPacket(cb: (packet: NBSPacket) => void): () => void {
     this.emitter.on('packet', cb)
     return () => {
       this.emitter.removeListener('packet', cb)
     }
   }
 
-  onEnd(cb: () => any): () => void {
+  onEnd(cb: () => void): () => void {
     this.emitter.on('end', cb)
     return () => {
       this.emitter.removeListener('end', cb)

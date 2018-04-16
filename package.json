@@ -107,6 +107,7 @@
     "mobx": "^4.1.0",
     "mobx-react": "^5.0.0",
     "mobx-utils": "^4.0.0",
+    "npm": "^5.8.0",
     "nuclearnet.js": "^1.5.2",
     "pixi.js": "^4.7.3",
     "protobufjs": "6.7.3",

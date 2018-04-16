@@ -11,7 +11,7 @@ import { LineGeometry } from '../../../render2d/geometry/line_geometry'
 import { PathGeometry } from '../../../render2d/geometry/path_geometry'
 import { TextGeometry } from '../../../render2d/geometry/text_geometry'
 import { Group } from '../../../render2d/object/group'
-import { Geometry } from '../../../render2d/object/shape'
+import { Geometry } from '../../../render2d/object/geometry'
 import { Shape } from '../../../render2d/object/shape'
 import { CheckedState } from '../../checkbox_tree/model'
 import { DataSeries } from '../model'
@@ -102,9 +102,11 @@ export class LineChartViewModel {
       if (lineNo % nMinor === 0) {
         // Major gridline
         lines.push(Shape.of(geometry, LineAppearance.of({
-          strokeStyle: '#555555',
-          lineWidth: 1,
-          nonScalingStroke: true,
+          stroke: {
+            color: '#555555',
+            width: 1,
+            nonScaling: true,
+          },
         })))
 
         lines.push(Shape.of(TextGeometry.of({
@@ -115,16 +117,19 @@ export class LineChartViewModel {
           x: this.model.bufferSeconds / 2,
           y: y - offset,
         }), BasicAppearance.of({
-          fillStyle: '#000000',
-          strokeStyle: 'transparent',
+          fill: {
+            color: '#000000',
+          }
         })))
 
       } else {
         // Minor gridline
         lines.push(Shape.of(geometry, LineAppearance.of({
-          strokeStyle: '#999999',
-          lineWidth: 0.5,
-          nonScalingStroke: true,
+          stroke: {
+            color: '#999999',
+            width: 0.5,
+            nonScaling: true,
+          },
         })))
       }
 
@@ -165,17 +170,21 @@ export class LineChartViewModel {
       if (lineNo % nMinor === 0) {
         // Major gridline
         lines.push(Shape.of(geometry, LineAppearance.of({
-          strokeStyle: '#555555',
-          lineWidth: 1,
-          nonScalingStroke: true,
+          stroke: {
+            color: '#555555',
+            width: 1,
+            nonScaling: true,
+          },
         })))
 
       } else {
         // Minor gridline
         lines.push(Shape.of(geometry, LineAppearance.of({
-          strokeStyle: '#999999',
-          lineWidth: 0.5,
-          nonScalingStroke: true,
+          stroke: {
+            color: '#999999',
+            width: 0.5,
+            nonScaling: true,
+          },
         })))
       }
 
@@ -266,9 +275,11 @@ export class LineChartViewModel {
     values = values.slice(start, end)
 
     const appearance = LineAppearance.of({
-      strokeStyle: series.color,
-      lineWidth: 2,
-      nonScalingStroke: true,
+      stroke: {
+        color: series.color,
+        width: 2,
+        nonScaling: true,
+      },
     })
 
     const shape = Shape.of(

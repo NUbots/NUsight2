@@ -1,37 +1,39 @@
 import { observable } from 'mobx'
 
-export class LineAppearance {
-  @observable lineCap: 'butt' | 'round' | 'square'
-  @observable lineDashOffset: number
-  @observable lineJoin: 'bevel' | 'round' | 'miter'
-  @observable lineWidth: number
-  @observable strokeStyle: string
-  @observable nonScalingStroke: boolean
+type Stroke = {
+  color: string,
+  alpha: number,
+  width: number,
+  cap: 'butt' | 'round' | 'square',
+  dashOffset: number,
+  join: 'bevel' | 'round' | 'miter'
+  nonScaling: boolean
+}
 
-  constructor(opts: LineAppearance) {
-    this.lineCap = opts.lineCap
-    this.lineDashOffset = opts.lineDashOffset
-    this.lineJoin = opts.lineJoin
-    this.lineWidth = opts.lineWidth
-    this.strokeStyle = opts.strokeStyle
-    this.nonScalingStroke = opts.nonScalingStroke
+export type LineAppearanceOpts = {
+  stroke: Partial<Stroke>
+}
+
+
+export class LineAppearance {
+  @observable stroke: Stroke
+
+  constructor({ stroke }: { stroke: Stroke }) {
+    this.stroke = stroke
   }
 
-  static of({
-    lineCap = 'butt',
-    lineDashOffset = 0,
-    lineJoin = 'miter',
-    lineWidth = 1,
-    strokeStyle = '#000000',
-    nonScalingStroke = false,
-  }: Partial<LineAppearance> = {}): LineAppearance {
+  static of({ stroke }: LineAppearanceOpts = { stroke: {} }): LineAppearance {
     return new LineAppearance({
-      lineCap,
-      lineDashOffset,
-      lineJoin,
-      lineWidth,
-      strokeStyle,
-      nonScalingStroke,
+      stroke: {
+        color: '#000000',
+        alpha: 1,
+        width: 1,
+        cap: 'butt',
+        dashOffset: 0,
+        join: 'miter',
+        nonScaling: false,
+        ...stroke,
+      },
     })
   }
 }

@@ -10,8 +10,8 @@ import { MarkerGeometry } from '../geometry/marker_geometry'
 import { PathGeometry } from '../geometry/path_geometry'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
+import { Geometry } from '../object/geometry'
 import { Group } from '../object/group'
-import { Object2d } from '../object/object2d'
 import { Shape } from '../object/shape'
 
 import { renderArc } from './arc'
@@ -23,7 +23,7 @@ import { renderPath } from './path'
 import { renderPolygon } from './polygon'
 import { renderText } from './text'
 
-export function renderObject2d(ctx: CanvasRenderingContext2D, obj: Object2d, world: Transform) {
+export function renderObject2d(ctx: CanvasRenderingContext2D, obj: Group | Shape<Geometry>, world: Transform) {
 
   if (obj instanceof Group) {
     const objWorld = world.clone().then(obj.transform)
@@ -36,21 +36,21 @@ export function renderObject2d(ctx: CanvasRenderingContext2D, obj: Object2d, wor
     }
   } else if (obj instanceof Shape) {
     if (obj.geometry instanceof ArcGeometry) {
-      renderArc(ctx, obj)
+      renderArc(ctx, obj as Shape<ArcGeometry>)
     } else if (obj.geometry instanceof ArrowGeometry) {
-      renderArrow(ctx, obj)
+      renderArrow(ctx, obj as Shape<ArrowGeometry>)
     } else if (obj.geometry instanceof CircleGeometry) {
-      renderCircle(ctx, obj)
+      renderCircle(ctx, obj as Shape<CircleGeometry>)
     } else if (obj.geometry instanceof LineGeometry) {
-      renderLine(ctx, obj)
+      renderLine(ctx, obj as Shape<LineGeometry>)
     } else if (obj.geometry instanceof MarkerGeometry) {
-      renderMarker(ctx, obj)
+      renderMarker(ctx, obj as Shape<MarkerGeometry>)
     } else if (obj.geometry instanceof PathGeometry) {
-      renderPath(ctx, obj)
+      renderPath(ctx, obj as Shape<PathGeometry>)
     } else if (obj.geometry instanceof PolygonGeometry) {
-      renderPolygon(ctx, obj)
+      renderPolygon(ctx, obj as Shape<PolygonGeometry>)
     } else if (obj.geometry instanceof TextGeometry) {
-      renderText(ctx, obj, world)
+      renderText(ctx, obj as Shape<TextGeometry>, world)
     } else {
       throw new Error(`Unsupported geometry type: ${obj.geometry}`)
     }
@@ -65,18 +65,48 @@ export function applyTransform(ctx: CanvasRenderingContext2D, transform: Transfo
   ctx.rotate(transform.rotate * (transform.anticlockwise ? 1 : -1))
 }
 
+// e.g. '#ff0000' → { r: 255, g: 0, b: 0 }
+export const hexToRGB = (hex: string): { r: number, g: number, b: number} => {
+  const result = /^#([A-Fa-f0-9]{2})([A-Fa-f0-9]{2})([A-Fa-f0-9]{2})/.exec(hex)
+
+  if (result === null) {
+    throw Error(`Color ${hex} is not a hex color`)
+  } else {
+    return {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16),
+    }
+  }
+}
+
 export function applyAppearance(ctx: CanvasRenderingContext2D, appearance: Appearance): void {
 
   if (appearance instanceof BasicAppearance) {
-    ctx.fillStyle = appearance.fillStyle
-    ctx.lineWidth = appearance.lineWidth
-    ctx.strokeStyle = appearance.strokeStyle
+
+    if (appearance.fill) {
+      const fill = hexToRGB(appearance.fill.color)
+      const fA = appearance.fill.alpha
+      ctx.fillStyle = `rgba(${fill.r}, ${fill.g}, ${fill.b}, ${fA})`
+    }
+
+    if (appearance.stroke) {
+      const stroke = hexToRGB(appearance.stroke.color)
+      const sA = appearance.stroke.alpha
+      ctx.lineWidth = appearance.stroke.width
+      ctx.strokeStyle = `rgba(${stroke.r}, ${stroke.g}, ${stroke.b}, ${sA})`
+    }
+
   } else if (appearance instanceof LineAppearance) {
-    ctx.lineCap = appearance.lineCap
-    ctx.lineDashOffset = appearance.lineDashOffset
-    ctx.lineJoin = appearance.lineJoin
-    ctx.lineWidth = appearance.lineWidth
-    ctx.strokeStyle = appearance.strokeStyle
+
+    ctx.lineCap = appearance.stroke.cap
+    ctx.lineDashOffset = appearance.stroke.dashOffset
+    ctx.lineJoin = appearance.stroke.join
+
+    const stroke = hexToRGB(appearance.stroke.color)
+    const sA = appearance.stroke.alpha
+    ctx.lineWidth = appearance.stroke.width
+    ctx.strokeStyle = `rgba(${stroke.r}, ${stroke.g}, ${stroke.b}, ${sA})`
   } else {
     throw new Error(`Unsupported appearance type: ${appearance}`)
   }

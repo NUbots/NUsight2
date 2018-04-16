@@ -15,8 +15,8 @@ import { MarkerGeometry } from '../geometry/marker_geometry'
 import { PathGeometry } from '../geometry/path_geometry'
 import { PolygonGeometry } from '../geometry/polygon_geometry'
 import { TextGeometry } from '../geometry/text_geometry'
+import { Geometry } from '../object/geometry'
 import { Group } from '../object/group'
-import { Object2d } from '../object/object2d'
 import { Shape } from '../object/shape'
 
 import { renderArc } from './arc'
@@ -28,7 +28,7 @@ import { renderPath } from './path'
 import { renderPolygon } from './polygon'
 import { renderText } from './text'
 
-export const pixiObject = createTransformer((obj: Object2d): DisplayObject => {
+export const pixiObject = createTransformer((obj: Group | Shape<Geometry>): DisplayObject => {
 
   if (obj instanceof Group) {
     const g = new Container()
@@ -48,21 +48,21 @@ export const pixiObject = createTransformer((obj: Object2d): DisplayObject => {
 
   } else if (obj instanceof Shape) {
     if (obj.geometry instanceof ArcGeometry) {
-      return renderArc(obj)
+      return renderArc(obj as Shape<ArcGeometry>)
     } else if (obj.geometry instanceof ArrowGeometry) {
-      return renderArrow(obj)
+      return renderArrow(obj as Shape<ArrowGeometry>)
     } else if (obj.geometry instanceof CircleGeometry) {
-      return renderCircle(obj)
+      return renderCircle(obj as Shape<CircleGeometry>)
     } else if (obj.geometry instanceof LineGeometry) {
-      return renderLine(obj)
+      return renderLine(obj as Shape<LineGeometry>)
     } else if (obj.geometry instanceof MarkerGeometry) {
-      return renderMarker(obj)
+      return renderMarker(obj as Shape<MarkerGeometry>)
     } else if (obj.geometry instanceof PathGeometry) {
-      return renderPath(obj)
+      return renderPath(obj as Shape<PathGeometry>)
     } else if (obj.geometry instanceof PolygonGeometry) {
-      return renderPolygon(obj)
+      return renderPolygon(obj as Shape<PolygonGeometry>)
     } else if (obj.geometry instanceof TextGeometry) {
-      return renderText(obj)
+      return renderText(obj as Shape<TextGeometry>)
     } else {
       throw new Error(`Unsupported geometry type: ${obj.geometry}`)
     }
@@ -71,42 +71,38 @@ export const pixiObject = createTransformer((obj: Object2d): DisplayObject => {
   }
 })
 
-const toPixiColor = (style: string): {
-  color: number, // range: [0, 0xFFFFFF]
-  alpha: number // range: [0, 1]
-} => {
-  if (style === 'transparent') {
-    return { color: 0, alpha: 0 }
-  }
-  // Colors of the form #FFFFFF
-  const split = /^#([A-Fa-f0-9]{6})$/.exec(style)
-  if (split !== null) {
-    return { color: parseInt(split[1], 16), alpha: 1 }
-  }
-
-  throw new Error('Pixi cannot handle non hex colours')
-}
-
 export function applyAppearance(obj: Graphics, appearance: Appearance, draw: (obj: Graphics) => void): void {
 
   if (appearance instanceof BasicAppearance) {
-    const line = toPixiColor(appearance.strokeStyle)
-    const fill = toPixiColor(appearance.fillStyle)
-    obj.lineStyle(appearance.lineWidth, line.color, line.alpha)
-    obj.beginFill(fill.color, fill.alpha)
-    draw(obj)
-    obj.endFill()
-  } else if (appearance instanceof LineAppearance) {
-    const line = toPixiColor(appearance.strokeStyle)
-    obj.lineStyle(appearance.lineWidth, line.color, line.alpha)
+    if (appearance.stroke) {
+      obj.lineStyle(appearance.stroke.width, parseInt(appearance.stroke.color.slice(1), 16), appearance.stroke.alpha)
+    } else {
+      obj.lineStyle(0, 0, 0)
+    }
 
-    if (appearance.nonScalingStroke) {
-      obj.nativeLines = true
+    if (appearance.fill) {
+      obj.beginFill(parseInt(appearance.fill.color.slice(1), 16), appearance.fill.alpha)
     }
 
     draw(obj)
 
-    // TODO: Support lineCap, lineCap, lineJoin, lineWidth, strokeStyle
+    if (appearance.fill) {
+      obj.endFill()
+    }
+
+  } else if (appearance instanceof LineAppearance) {
+
+    obj.lineStyle(appearance.stroke.width, parseInt(appearance.stroke.color.slice(1), 16), appearance.stroke.alpha)
+    if (appearance.stroke.nonScaling) {
+      obj.nativeLines = true
+    }
+    draw(obj)
+
+    // TODO These properties don't have easy analogs in pixi
+    // appearance.stroke.cap
+    // appearance.stroke.dashOffset
+    // appearance.stroke.join
+    // appearance.stroke.width
   } else {
     throw new Error(`Unsupported appearance type: ${appearance}`)
   }

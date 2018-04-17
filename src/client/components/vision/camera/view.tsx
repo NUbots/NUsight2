@@ -1,9 +1,10 @@
-import { observer } from 'mobx-react'
 import { autorun } from 'mobx'
 import { action } from 'mobx'
+import { observer } from 'mobx-react'
 import * as React from 'react'
-import * as styles from './styles.css'
 import { Component } from 'react'
+
+import * as styles from './styles.css'
 import { CameraViewModel } from './view_model'
 
 @observer
@@ -23,7 +24,7 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
   render() {
     return (
       <div className={styles.container}>
-        <canvas className={styles.canvas} width={640} height={480} ref={this.onRef}/>
+        <canvas className={styles.canvas} width={320} height={240} ref={this.onRef}/>
       </div>
     )
   }

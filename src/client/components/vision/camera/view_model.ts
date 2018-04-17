@@ -11,7 +11,7 @@ import { Mesh } from 'three'
 import { WebGLRenderer } from 'three'
 import { Camera } from 'three'
 import { Object3D } from 'three'
-import { Geometry } from 'three'
+import { OrthographicCamera } from 'three'
 import { Material } from 'three'
 import { DataTexture } from 'three'
 import { LuminanceFormat } from 'three'
@@ -24,11 +24,11 @@ import { NearestFilter } from 'three'
 import { PlaneGeometry } from 'three'
 import { Matrix4 } from 'three'
 import { Vector3 } from 'three'
-import { OrthographicCamera } from 'three'
+import { Geometry } from 'three'
 
 import { memoize } from '../../../base/memoize'
-import { CameraModel } from './model'
 
+import { CameraModel } from './model'
 import * as bayerFragmentShader from './shaders/bayer.frag'
 import * as bayerVertexShader from './shaders/bayer.vert'
 
@@ -126,7 +126,7 @@ export class CameraViewModel {
     // Now, I know these look bananas, but it's because the rawTexture has a flipY
     // If we don't do that then the image will be upside down in the output
     let firstRed
-    switch(this.model.image!.format){
+    switch (this.model.image!.format) {
       case fourcc('GRBG'):
         firstRed = [1, 0]
         break

@@ -7,6 +7,7 @@ import { Vector2 } from '../../math/vector2'
 import { Vector3 } from '../../math/vector3'
 import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
+
 import { CameraModel } from './camera/model'
 
 export class VisionModel {

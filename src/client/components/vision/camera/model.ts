@@ -1,12 +1,13 @@
-import { VisionRobotModel } from '../model'
 import { observable } from 'mobx'
+
 import { Matrix4 } from '../../../math/matrix4'
+import { VisionRobotModel } from '../model'
 
 export type VisionImage = {
   width: number,
   height: number,
   data: Uint8Array,
-  format: number,
+  format: number
 }
 
 export class CameraModel {

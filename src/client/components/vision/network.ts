@@ -7,8 +7,8 @@ import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
 
-import { VisionRobotModel } from './model'
 import { CameraModel } from './camera/model'
+import { VisionRobotModel } from './model'
 import Image = message.input.Image
 
 export class VisionNetwork {
@@ -29,7 +29,7 @@ export class VisionNetwork {
   private onImage = (robotModel: RobotModel, image: Image) => {
     const robot = VisionRobotModel.of(robotModel)
 
-    if(!robot.cameras.has(image.cameraId)) {
+    if (!robot.cameras.has(image.cameraId)) {
       robot.cameras.set(image.cameraId, CameraModel.of({
         model: robot,
         id: image.cameraId,

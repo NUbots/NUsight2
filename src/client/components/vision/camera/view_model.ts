@@ -70,7 +70,7 @@ export class CameraViewModel {
     return camera
   }
 
-  @computed
+  // not computed as otherwise it will update the textures too frequently
   get scene(): Scene {
     const scene = new Scene()
     if (this.model.image) {
@@ -79,7 +79,7 @@ export class CameraViewModel {
     return scene
   }
 
-  @computed
+  // not computed as otherwise it will update the textures too frequently
   private get image(): Mesh {
     const mesh =  new Mesh(this.quadGeometry, this.imageMaterial)
     mesh.scale.y = -1 // We need to flip Y to fix the image coordinates
@@ -100,7 +100,7 @@ export class CameraViewModel {
     })
   }
 
-  @computed
+  // not computed as otherwise it will update the textures too frequently
   private get imageTexture(): Texture {
     switch (this.model.image!.format) {
       case fourcc('GRBG'):
@@ -120,7 +120,7 @@ export class CameraViewModel {
     }
   }
 
-  @computed
+  // not computed as otherwise it will update the textures too frequently
   private get bayerTexture(): Texture {
 
     // Now, I know these look bananas, but it's because the rawTexture has a flipY
@@ -164,6 +164,7 @@ export class CameraViewModel {
     return renderTarget.texture
   }
 
+  // This can be computed as it's a cheap operation
   @computed
   private get rgbTexture(): Texture {
     const texture = new DataTexture(
@@ -183,7 +184,7 @@ export class CameraViewModel {
     return texture
   }
 
-  @computed
+  // not computed as otherwise it will update the textures too frequently
   private get yuyvTexture(): Texture {
     throw Error('Write a shader for me!')
   }

@@ -8,7 +8,7 @@ import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
 
 import { VisionRobotModel } from './model'
-import { VisionBallModel } from './model'
+import { CameraModel } from './camera/model'
 import Image = message.input.Image
 
 export class VisionNetwork {
@@ -28,29 +28,23 @@ export class VisionNetwork {
   @action
   private onImage = (robotModel: RobotModel, image: Image) => {
     const robot = VisionRobotModel.of(robotModel)
-    const BGGR = 0x52474742 // TODO
-    robot.Hcw = Matrix4.from(image.Hcw)
-    if (image.cameraId !== 0) {
-      // TODO
-      return
+
+    if(!robot.cameras.has(image.cameraId)) {
+      robot.cameras.set(image.cameraId, CameraModel.of({
+        model: robot,
+        id: image.cameraId,
+      }))
     }
 
-    if (image.format !== BGGR) {
-      throw new Error(`Unsupported image format: ${image.format}`)
-    }
+    const camera = robot.cameras.get(image.cameraId)!
 
-    robot.image = {
-      format: image.format,
+    camera.image = {
       width: image.dimensions!.x!,
       height: image.dimensions!.y!,
+      format: image.format,
       data: image.data,
     }
-
-    robot.balls = [
-      new VisionBallModel(robot, {
-        axis: new Vector3(1, 0, 0),
-        gradient: Math.cos(Math.random() * 45 * Math.PI / 180),
-      }),
-    ]
+    camera.Hcw = Matrix4.from(image.Hcw)
+    camera.name = image.serialNumber
   }
 }

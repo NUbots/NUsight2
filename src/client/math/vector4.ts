@@ -18,7 +18,7 @@ export class Vector4 {
     return new Vector4(0, 0, 0, 0)
   }
 
-  static from(vec?: { x?: number, y?: number, z?: number, t?: number } | null): Vector4 {
+  static from(vec?: { x?: number | null, y?: number | null, z?: number | null, t?: number | null } | null): Vector4 {
     if (!vec) {
       return Vector4.of()
     }

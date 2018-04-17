@@ -1,5 +1,5 @@
-import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { createTransformer } from 'mobx-utils'
 
 import { CameraViewModel } from './camera/view_model'
 import { VisionModel } from './model'
@@ -25,25 +25,25 @@ export class VisionViewModel {
 }
 
 export class RobotViewModel {
-  constructor(private robotModel: VisionRobotModel) {
+  constructor(private model: VisionRobotModel) {
   }
 
-  static of = createTransformer((robotModel: VisionRobotModel) => {
-    return new RobotViewModel(robotModel)
+  static of = createTransformer((model: VisionRobotModel) => {
+    return new RobotViewModel(model)
   })
 
   @computed
   get id() {
-    return this.robotModel.id
+    return this.model.id
   }
 
   @computed
   get name() {
-    return this.robotModel.name
+    return this.model.name
   }
 
   @computed
-  get cameraViewModel(): CameraViewModel {
-    return CameraViewModel.of(this.robotModel)
+  get cameras(): CameraViewModel[] {
+    return Array.from(this.model.cameras.values()).map(cam => CameraViewModel.of(cam))
   }
 }

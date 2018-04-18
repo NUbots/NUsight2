@@ -1,6 +1,6 @@
 import * as SocketIO from 'socket.io-client'
 
-import * as NUClearProxyParser from '../../shared/network/nuclear_proxy_parser'
+import * as NUClearNetProxyParser from '../../shared/nuclearnet/nuclearnet_proxy_parser'
 
 let socket: SocketIOClient.Socket
 const events: Map<string, number> = new Map()
@@ -29,7 +29,7 @@ addEventListener('message', (e: MessageEvent) => {
       const { uri, opts } = e.data
       socket = SocketIO(uri, {
         ...opts,
-        parser: NUClearProxyParser,
+        parser: NUClearNetProxyParser,
       })
       break
 

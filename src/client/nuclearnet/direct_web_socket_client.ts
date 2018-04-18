@@ -1,6 +1,6 @@
 import * as SocketIO from 'socket.io-client'
 
-import * as NUClearProxyParser from '../../shared/network/nuclear_proxy_parser'
+import * as NUClearNetProxyParser from '../../shared/nuclearnet/nuclearnet_proxy_parser'
 
 import { WebSocketClient } from './web_socket_client'
 
@@ -15,7 +15,7 @@ export class DirectWebSocketClient implements WebSocketClient {
   }
 
   static of(uri: string, opts: SocketIOClient.ConnectOpts) {
-    const socket = SocketIO(uri, { ...opts, parser: NUClearProxyParser } as any)
+    const socket = SocketIO(uri, { ...opts, parser: NUClearNetProxyParser } as any)
     return new DirectWebSocketClient(socket)
   }
 

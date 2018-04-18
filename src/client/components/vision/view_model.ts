@@ -44,6 +44,8 @@ export class RobotViewModel {
 
   @computed
   get cameras(): CameraViewModel[] {
-    return Array.from(this.model.cameras.values()).map(cam => CameraViewModel.of(cam))
+    const cams = Array.from(this.model.cameras.values()).map(cam => CameraViewModel.of(cam))
+    cams.sort((a, b) => a.id - b.id)
+    return cams
   }
 }

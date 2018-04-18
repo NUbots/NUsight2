@@ -38,12 +38,10 @@ export class VisionNetwork {
 
     const camera = robot.cameras.get(image.cameraId)!
 
-    camera.image = {
-      width: image.dimensions!.x!,
-      height: image.dimensions!.y!,
-      format: image.format,
-      data: image.data,
-    }
+    camera.width = image.dimensions!.x!
+    camera.height = image.dimensions!.y!
+    camera.format = image.format!
+    camera.data = image.data
     camera.Hcw = Matrix4.from(image.Hcw)
     camera.name = image.serialNumber
   }

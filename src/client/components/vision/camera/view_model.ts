@@ -73,10 +73,20 @@ export class CameraViewModel {
   // not computed as otherwise it will update the textures too frequently
   get scene(): Scene {
     const scene = new Scene()
-    if (this.model.image) {
+    if (this.model.data) {
       scene.add(this.image)
     }
     return scene
+  }
+
+  @computed
+  get width() {
+    return this.model.width
+  }
+
+  @computed
+  get height() {
+    return this.model.height
   }
 
   // not computed as otherwise it will update the textures too frequently
@@ -102,7 +112,7 @@ export class CameraViewModel {
 
   // not computed as otherwise it will update the textures too frequently
   private get imageTexture(): Texture {
-    switch (this.model.image!.format) {
+    switch (this.model.format) {
       case fourcc('GRBG'):
       case fourcc('RGGB'):
       case fourcc('GBRG'):
@@ -126,7 +136,7 @@ export class CameraViewModel {
     // Now, I know these look bananas, but it's because the rawTexture has a flipY
     // If we don't do that then the image will be upside down in the output
     let firstRed
-    switch (this.model.image!.format) {
+    switch (this.model.format) {
       case fourcc('GRBG'):
         firstRed = [1, 0]
         break
@@ -141,7 +151,7 @@ export class CameraViewModel {
         break
     }
 
-    const { width, height } = this.model.image!
+    const { width, height } = this.model
     const renderTarget = new WebGLRenderTarget(width, height)
     renderTarget.depthBuffer = false
     renderTarget.stencilBuffer = false
@@ -168,9 +178,9 @@ export class CameraViewModel {
   @computed
   private get rgbTexture(): Texture {
     const texture = new DataTexture(
-      this.model.image!.data,
-      this.model.image!.width,
-      this.model.image!.height,
+      this.model.data,
+      this.model.width,
+      this.model.height,
       RGBFormat,
       UnsignedByteType,
       Texture.DEFAULT_MAPPING,
@@ -192,9 +202,9 @@ export class CameraViewModel {
   @computed
   private get grayTexture(): Texture {
     const texture = new DataTexture(
-      this.model.image!.data,
-      this.model.image!.width,
-      this.model.image!.height,
+      this.model.data,
+      this.model.width,
+      this.model.height,
       LuminanceFormat,
       UnsignedByteType,
       Texture.DEFAULT_MAPPING,
@@ -211,9 +221,9 @@ export class CameraViewModel {
   @computed
   private get rawTexture(): Texture {
     const texture = new DataTexture(
-      this.model.image!.data,
-      this.model.image!.width,
-      this.model.image!.height,
+      this.model.data,
+      this.model.width,
+      this.model.height,
       LuminanceFormat,
       UnsignedByteType,
       Texture.DEFAULT_MAPPING,

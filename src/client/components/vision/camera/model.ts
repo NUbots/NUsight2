@@ -3,19 +3,15 @@ import { observable } from 'mobx'
 import { Matrix4 } from '../../../math/matrix4'
 import { VisionRobotModel } from '../model'
 
-export type VisionImage = {
-  width: number,
-  height: number,
-  data: Uint8Array,
-  format: number
-}
-
 export class CameraModel {
 
   private model: VisionRobotModel
   readonly id: number
 
-  @observable.shallow image?: VisionImage
+  @observable width: number = 1280
+  @observable height: number = 1024
+  @observable format: number = 0
+  @observable.ref data: Uint8Array
   @observable Hcw: Matrix4 = Matrix4.of()
   @observable name: string = ''
 

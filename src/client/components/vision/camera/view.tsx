@@ -4,7 +4,6 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
 
-import * as styles from './styles.css'
 import { CameraViewModel } from './view_model'
 
 @observer
@@ -22,10 +21,23 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
   }
 
   render() {
+
+    const { width, height } = this.props.viewModel
+
+    const aspectRatio = width / height
+    const percentage = 60
+
     return (
-      <div className={styles.container}>
-        <canvas className={styles.canvas} width={320} height={240} ref={this.onRef}/>
-      </div>
+      <canvas style={{
+        display: 'inline',
+        width: `${percentage}vw`,
+        height: `${percentage / aspectRatio}vw`,
+        maxHeight: `${percentage}vh`,
+        maxWidth: `${percentage * aspectRatio}vh`,
+      }}
+        width={width}
+        height={height}
+        ref={this.onRef}/>
     )
   }
 

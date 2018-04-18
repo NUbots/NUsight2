@@ -30,7 +30,7 @@ export class VisionView extends Component<{
         <div>
           {viewModel.robots.map(robot => {
             return <div key={robot.id}>
-              <span>{robot.name}</span>
+              <h1>{robot.name}</h1>
               {
                 robot.cameras.map(camera => (
                   <CameraView key={camera.id} viewModel={camera}/>

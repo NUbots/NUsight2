@@ -4,6 +4,7 @@ import { Encoder } from '../nuclearnet_proxy_parser'
 import { Decoder } from '../nuclearnet_proxy_parser'
 import { TYPES } from '../nuclearnet_proxy_parser_socketio'
 import { Packet } from '../nuclearnet_proxy_parser_socketio'
+import { EventPacket } from '../nuclearnet_proxy_parser_socketio'
 
 describe('NUClearNetProxyParser', () => {
 
@@ -124,8 +125,8 @@ describe('NUClearNetProxyParser', () => {
           address: '192.168.2.11',
           port: 40000 + Math.floor(Math.random() * 10000),
         },
-        hash: new ArrayBuffer(8),
-        payload: new ArrayBuffer(1000),
+        hash: new Buffer(8),
+        payload: new Buffer(1000),
         reliable: true,
       },
       {
@@ -134,13 +135,13 @@ describe('NUClearNetProxyParser', () => {
           address: '192.168.2.11',
           port: 40000 + Math.floor(Math.random() * 10000),
         },
-        hash: new ArrayBuffer(8),
-        payload: new ArrayBuffer(1000),
+        hash: new Buffer(8),
+        payload: new Buffer(1000),
         reliable: true,
       },
     ]
 
-    const packets: Packet[] = nuclearPackets.map(p => (
+    const packets: Packet[] = nuclearPackets.map((p): EventPacket => (
     {
       nsp: '/',
       type: TYPES.EVENT,
@@ -160,10 +161,10 @@ describe('NUClearNetProxyParser', () => {
 
     expect(wire).toHaveLength(packets.length * 3)
 
-    expect(wire[1]).toBeInstanceOf(ArrayBuffer)
-    expect(wire[2]).toBeInstanceOf(ArrayBuffer)
-    expect(wire[4]).toBeInstanceOf(ArrayBuffer)
-    expect(wire[5]).toBeInstanceOf(ArrayBuffer)
+    expect(wire[1]).toBeInstanceOf(Buffer)
+    expect(wire[2]).toBeInstanceOf(Buffer)
+    expect(wire[4]).toBeInstanceOf(Buffer)
+    expect(wire[5]).toBeInstanceOf(Buffer)
 
     expect(decoded).toEqual(packets)
   })

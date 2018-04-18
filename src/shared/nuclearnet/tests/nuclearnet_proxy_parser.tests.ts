@@ -8,10 +8,15 @@ import { EventPacket } from '../nuclearnet_proxy_parser_socketio'
 
 describe('NUClearNetProxyParser', () => {
 
-  it('Roundtrips regular socket.io packets', () => {
+  let e: Encoder
+  let d: Decoder
 
-    const e = new Encoder()
-    const d = new Decoder()
+  beforeEach(() => {
+    e = new Encoder()
+    d = new Decoder()
+  })
+
+  it('Roundtrips regular socket.io packets', () => {
 
     const packets: Packet[] = [
       {
@@ -48,9 +53,6 @@ describe('NUClearNetProxyParser', () => {
   })
 
   it('Roundtrips NUClearNet informational packets', () => {
-
-    const e = new Encoder()
-    const d = new Decoder()
 
     const packets: Packet[] = [
       {
@@ -112,9 +114,6 @@ describe('NUClearNetProxyParser', () => {
   })
 
   it('Roundtrips NUClearNet packets with binary data in them', () => {
-
-    const e = new Encoder()
-    const d = new Decoder()
 
     // Encode an image protocol buffer as an example
     //

@@ -2,27 +2,19 @@ import * as Emitter from 'component-emitter'
 import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
 
-enum TYPES {
-  CONNECT = 0,
-  DISCONNECT = 1,
-  EVENT = 2,
-  ACK = 3,
-  ERROR = 4,
-  BINARY_EVENT = 5,
-  BINARY_ACK = 6,
-}
+import { Packet } from './nuclearnet_proxy_parser_socketio'
+import { TYPES } from './nuclearnet_proxy_parser_socketio'
 
 export class Encoder {
 
-  encode(packet: any, callback: (packets: any) => void) {
+  encode(packet: Packet, callback: (wire: any[]) => void) {
     switch (packet.type) {
       case TYPES.EVENT:
 
         const { data: [eventName, eventData] } = packet
 
         switch (eventName) {
-
-            // For our communication layer we can just use JSON
+          // For our communication layer we can just use JSON
           case 'nuclear_join':
           case 'nuclear_leave':
           case 'nuclear_connect':
@@ -31,13 +23,14 @@ export class Encoder {
           case 'unlisten':
             return callback([JSON.stringify(packet)])
 
-            // For NUClearNet packets, we send the payload separately to avoid array slicing later
+          // For NUClearNet packets, we send the payload separately to avoid array slicing later
           default:
             const { id, data: [key, { peer, hash, payload, reliable }] } = packet
 
-              // Send the header as a JSON and then the payload as binary
+            // Send the header as a JSON and then the payload as binary
             return callback([
-              JSON.stringify({ id, key, header: { peer, hash, reliable } }),
+              JSON.stringify({ id, key, header: { peer, reliable } }),
+              hash,
               payload,
             ])
         }
@@ -49,6 +42,7 @@ export class Encoder {
 
 export class Decoder extends Emitter {
 
+  private state: number = 0
   private id?: number
   private key?: string
   private packet?: Partial<NUClearNetPacket>
@@ -69,25 +63,39 @@ export class Decoder extends Emitter {
         this.id = parsed.id
         this.packet = parsed.header
         this.packet!.payload = undefined
+        this.state = 1
       }
     } else {
-      // Things that are not strings are nuclearnet payloads
-      this.packet!.payload = obj
-      this.emit('decoded', {
-        type: TYPES.EVENT,
-        id: this.id,
-        nsp: '/',
-        data: [
-          this.key,
-          this.packet,
-        ],
-      })
+      switch (this.state) {
+        // State 1 means we are getting a hash
+        case 1:
+          this.packet!.hash = obj
+          this.state = 2
+          break
+
+        // State 2 means we are getting a packet
+        case 2:
+          this.packet!.payload = obj
+          this.emit('decoded', {
+            type: TYPES.EVENT,
+            id: this.id,
+            nsp: '/',
+            data: [
+              this.key,
+              this.packet,
+            ],
+          })
+          this.state = 0
+          break
+
+        // Something went wrong, reset
+        default:
+          this.state = 0
+          break
+      }
     }
   }
 
   destroy() {
-    this.key = undefined
-    this.packet = undefined
-    this.id = undefined
   }
 }

@@ -2,10 +2,10 @@ import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
 import { NUClearNetPacket } from 'nuclearnet.js'
 
-import * as NUClearProxyParser from '../../shared/network/nuclear_proxy_parser'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
+import * as NUClearNetProxyParser from '../../shared/nuclearnet/nuclearnet_proxy_parser'
 
 import { WebSocketClient } from './web_socket_client'
 
@@ -35,7 +35,7 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
     return new WebSocketProxyNUClearNetClient(WebSocketClient.of(document.location.origin, {
       upgrade: false,
       transports: ['websocket'],
-      parser: NUClearProxyParser,
+      parser: NUClearNetProxyParser,
     } as any))
   }
 

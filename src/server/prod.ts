@@ -6,7 +6,7 @@ import * as minimist from 'minimist'
 import * as favicon from 'serve-favicon'
 import * as sio from 'socket.io'
 
-import * as NUClearProxyParser from '../shared/network/nuclear_proxy_parser'
+import * as NUClearNetProxyParser from '../shared/nuclearnet/nuclearnet_proxy_parser'
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
 import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
@@ -19,7 +19,7 @@ const withVirtualRobots = args['virtual-robots'] || false
 
 const app = express()
 const server = http.createServer(app)
-const sioNetwork = sio(server, { parser: NUClearProxyParser } as any)
+const sioNetwork = sio(server, { parser: NUClearNetProxyParser } as any)
 
 const root = `${__dirname}/../../build`
 app.use(history())

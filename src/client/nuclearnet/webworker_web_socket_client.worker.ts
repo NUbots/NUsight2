@@ -2,12 +2,25 @@ import * as SocketIO from 'socket.io-client'
 
 import * as NUClearProxyParser from '../../shared/network/nuclear_proxy_parser'
 
-import { WebWorkerCallback } from './webworker_callback'
-
 let socket: SocketIOClient.Socket
 const events: Map<string, number> = new Map()
 let callbackId = 0
 const callbacks: Map<number, Function> = new Map()
+
+const findBuffers = (obj: any): ArrayBuffer[] => {
+
+  const buffers: any[] = []
+
+  Object.keys(obj).forEach(k => {
+    if (obj[k] instanceof ArrayBuffer) {
+      buffers.push(obj[k])
+    } else if (typeof obj[k] === 'object') {
+      buffers.push(...findBuffers(obj[k]))
+    }
+  })
+
+  return buffers
+}
 
 addEventListener('message', (e: MessageEvent) => {
   switch (e.data.command) {
@@ -55,7 +68,7 @@ addEventListener('message', (e: MessageEvent) => {
             event: e.data.event,
             args,
           },
-            args.filter(a => a instanceof ArrayBuffer),
+            findBuffers(args),
           )
         })
       }

@@ -60,6 +60,12 @@
     "@types/express" "*"
     "@types/node" "*"
 
+"@types/buffers@^0.1.30":
+  version "0.1.31"
+  resolved "https://registry.yarnpkg.com/@types/buffers/-/buffers-0.1.31.tgz#ae628d3e97e5862c86743c22bdaef33a93e094b0"
+  dependencies:
+    "@types/node" "*"
+
 "@types/classnames@^2.2.0":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.3.tgz#3f0ff6873da793870e20a260cada55982f38a9e5"
@@ -1543,7 +1549,7 @@ buffer@^4.3.0:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
-buffers@~0.1.1:
+buffers@^0.1.1, buffers@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/buffers/-/buffers-0.1.1.tgz#b24579c3bed4d6d396aeee6d9a8ae7f5482ab7bb"
 
@@ -5293,10 +5299,6 @@ normalize-url@^1.4.0:
     query-string "^4.1.0"
     sort-keys "^1.0.0"
 
-notepack.io@~2.1.0:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/notepack.io/-/notepack.io-2.1.2.tgz#94a47f5e4ce4ace1f3d71b27c6f83c7163393c52"
-
 npm-run-path@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-2.0.2.tgz#35a9232dfa35d7067b4cb2ddf2357b1871536c5f"
@@ -7256,13 +7258,6 @@ socket.io-client@2.0.4, socket.io-client@^2.0.4:
     parseuri "0.0.5"
     socket.io-parser "~3.1.1"
     to-array "0.1.4"
-
-socket.io-msgpack-parser@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/socket.io-msgpack-parser/-/socket.io-msgpack-parser-2.2.0.tgz#90084168d00f15dddf674bcd88263edee868cd55"
-  dependencies:
-    component-emitter "1.2.1"
-    notepack.io "~2.1.0"
 
 socket.io-parser@~3.1.1:
   version "3.1.3"

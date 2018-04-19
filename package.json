@@ -55,7 +55,7 @@
     "@types/serve-favicon": "^2.2.28",
     "@types/socket.io": "^1.4.29",
     "@types/socket.io-client": "^1.4.29",
-    "@types/three": "^0.89.12",
+    "@types/three": "^0.91.0",
     "@types/webpack": "^3.8.2",
     "@types/webpack-dev-middleware": "^2.0.0",
     "@types/webpack-hot-middleware": "^2.15.0",

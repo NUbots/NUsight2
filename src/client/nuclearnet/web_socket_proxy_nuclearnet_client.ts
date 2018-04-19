@@ -5,6 +5,7 @@ import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
+import * as NUClearNetProxyParser from '../../shared/nuclearnet/nuclearnet_proxy_parser'
 
 import { WebSocketClient } from './web_socket_client'
 
@@ -35,7 +36,7 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
     return new WebSocketProxyNUClearNetClient(WebSocketClient.of(uri, {
       upgrade: false,
       transports: ['websocket'],
-      parser: require('socket.io-msgpack-parser'),
+      parser: NUClearNetProxyParser,
     } as any))
   }
 
@@ -43,7 +44,6 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
     this.socket.connect()
     this.socket.on('reconnect', this.onReconnect.bind(this, options))
     this.socket.send('nuclear_connect', options)
-
 
     return () => {
       this.socket.send('nuclear_disconnect')

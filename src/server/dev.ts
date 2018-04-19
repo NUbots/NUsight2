@@ -1,7 +1,6 @@
 import * as compression from 'compression'
 import * as history from 'connect-history-api-fallback'
 import * as express from 'express'
-import * as fs from 'fs'
 import * as http from 'http'
 import * as minimist from 'minimist'
 import * as favicon from 'serve-favicon'
@@ -74,7 +73,7 @@ function init() {
         { frequency: 5, simulator: VisionSimulator.of() },
       ],
     })
-    // virtualRobots.startSimulators()
+    virtualRobots.startSimulators()
   }
 
   if (nbsFile) {

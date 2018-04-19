@@ -23,7 +23,6 @@ export class VisionView extends Component<{
 
   render() {
     const { viewModel, Menu } = this.props
-    // TODO: Some kind of intelligent layout resizing to make it look good.
     return (
       <div className={styles.vision}>
         <Menu/>

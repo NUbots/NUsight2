@@ -5,6 +5,18 @@ import { NUClearNetPeer } from 'nuclearnet.js'
 import { Packet } from './nuclearnet_proxy_parser_socketio'
 import { TYPES } from './nuclearnet_proxy_parser_socketio'
 
+/**
+ * These encoder/decoders are used to improve the performance when transporting NUClearNet packets.
+ * Most of these packets are composed of a few header fields and a large binary blob.
+ * Other parsers such as the default one or msgpack parser do not do a good job of transporting these,
+ * especially when they are large packets.
+ * This is because in order to extract the data back into a usable format, msgpack must perform a buffer.slice()
+ * to extract the bytes. If this is a large buffer, it causes a large memory copy that slows things down considerably.
+ * The default one on the other hand does not handle binary data well.
+ * This custom parser handles sending binary data much better as the resulting buffer is sent unmolested.
+ * This means that at the other end that buffer can be directly used rather than slicing it.
+ */
+
 export class Encoder {
 
   encode(packet: Packet, callback: (wire: any[]) => void) {

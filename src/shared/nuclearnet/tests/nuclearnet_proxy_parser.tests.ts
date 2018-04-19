@@ -1,5 +1,6 @@
 import { NUClearNetPacket } from 'nuclearnet.js'
 
+import { SeededRandom } from '../../../shared/base/random/seeded_random'
 import { Encoder } from '../nuclearnet_proxy_parser'
 import { Decoder } from '../nuclearnet_proxy_parser'
 import { TYPES } from '../nuclearnet_proxy_parser_socketio'
@@ -10,11 +11,25 @@ describe('NUClearNetProxyParser', () => {
 
   let e: Encoder
   let d: Decoder
+  let random: SeededRandom
 
   beforeEach(() => {
     e = new Encoder()
     d = new Decoder()
+    random = SeededRandom.of('NUClearNetProxyParser')
   })
+
+  function randomPacketId() {
+    return random.integer(0, 1000)
+  }
+
+  function randomPort() {
+    return random.integer(40000, 50000)
+  }
+
+  function randomEventId() {
+    return random.integer(0, 1000)
+  }
 
   it('Roundtrips regular socket.io packets', () => {
 
@@ -31,7 +46,7 @@ describe('NUClearNetProxyParser', () => {
         nsp: '/',
         type: TYPES.ACK,
         data: [],
-        id: Math.floor(Math.random() * 1000),
+        id: randomPacketId(),
       },
       {
         nsp: '/',
@@ -61,9 +76,9 @@ describe('NUClearNetProxyParser', () => {
         data: ['nuclear_join', {
           name: 'itsnotme',
           address: '127.0.0.1',
-          port: 40000 + Math.floor(Math.random() * 10000),
+          port: randomPort(),
         }],
-        id: Math.floor(Math.random() * 1000),
+        id: randomPacketId(),
       },
       {
         nsp: '/',
@@ -71,33 +86,33 @@ describe('NUClearNetProxyParser', () => {
         data: ['nuclear_leave', {
           name: 'itsyou',
           address: '192.168.10.11',
-          port: 40000 + Math.floor(Math.random() * 10000),
+          port: randomPort(),
         }],
-        id: Math.floor(Math.random() * 1000),
+        id: randomPacketId(),
       },
       {
         nsp: '/',
         type: TYPES.EVENT,
         data: ['nuclear_connect', {}],
-        id: Math.floor(Math.random() * 1000),
+        id: randomPacketId(),
       },
       {
         nsp: '/',
         type: TYPES.EVENT,
         data: ['nuclear_disconnect'],
-        id: Math.floor(Math.random() * 1000),
+        id: randomPacketId(),
       },
       {
         nsp: '/',
         type: TYPES.EVENT,
-        data: ['listen', 'message.input.Image', Math.floor(Math.random() * 1000)],
-        id: Math.floor(Math.random() * 1000),
+        data: ['listen', 'message.input.Image', randomEventId()],
+        id: randomPacketId(),
       },
       {
         nsp: '/',
         type: TYPES.EVENT,
-        data: ['unlisten', Math.floor(Math.random() * 1000)],
-        id: Math.floor(Math.random() * 1000),
+        data: ['unlisten', randomEventId()],
+        id: randomPacketId(),
       },
     ]
 
@@ -122,7 +137,7 @@ describe('NUClearNetProxyParser', () => {
         peer: {
           name: 'itshard',
           address: '192.168.2.11',
-          port: 40000 + Math.floor(Math.random() * 10000),
+          port: randomPort(),
         },
         hash: new Buffer(8),
         payload: new Buffer(1000),
@@ -132,7 +147,7 @@ describe('NUClearNetProxyParser', () => {
         peer: {
           name: 'tothinkupnames',
           address: '192.168.2.11',
-          port: 40000 + Math.floor(Math.random() * 10000),
+          port: randomPort(),
         },
         hash: new Buffer(8),
         payload: new Buffer(1000),
@@ -145,7 +160,7 @@ describe('NUClearNetProxyParser', () => {
       nsp: '/',
       type: TYPES.EVENT,
       data: ['message.input.Image', p],
-      id: Math.floor(Math.random() * 1000),
+      id: randomPacketId(),
     }
     ))
 

@@ -20,7 +20,7 @@ export class VisionViewModel {
 
   @computed
   private get visibleRobots(): VisionRobotModel[] {
-    return this.model.robots.filter(robot => robot.visible)
+    return this.model.robots.filter(robot => robot.visible && robot.cameras.size > 0)
   }
 }
 

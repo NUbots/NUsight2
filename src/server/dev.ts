@@ -33,7 +33,7 @@ const server = http.createServer(app)
 const sioNetwork = sio(server, { parser: NUClearNetProxyParser } as any)
 
 // Initialize socket.io namespace immediately to catch reconnections.
-WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork), {
+WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
   fakeNetworking: withVirtualRobots,
 })
 

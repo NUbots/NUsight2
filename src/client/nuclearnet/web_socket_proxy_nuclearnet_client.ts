@@ -32,7 +32,8 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
   }
 
   static of() {
-    return new WebSocketProxyNUClearNetClient(WebSocketClient.of(document.location.origin, {
+    const uri = `${document.location.origin}/nuclearnet`
+    return new WebSocketProxyNUClearNetClient(WebSocketClient.of(uri, {
       upgrade: false,
       transports: ['websocket'],
       parser: NUClearNetProxyParser,
@@ -43,7 +44,6 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
     this.socket.connect()
     this.socket.on('reconnect', this.onReconnect.bind(this, options))
     this.socket.send('nuclear_connect', options)
-
 
     return () => {
       this.socket.send('nuclear_disconnect')

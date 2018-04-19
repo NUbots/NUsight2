@@ -23,7 +23,7 @@ export class Encoder {
     switch (packet.type) {
       case TYPES.EVENT:
 
-        const { data: [eventName, eventData] } = packet
+        const { nsp, data: [eventName] } = packet
 
         switch (eventName) {
           // For our communication layer we can just use JSON
@@ -41,7 +41,7 @@ export class Encoder {
 
             // Send the header as a JSON and then the payload as binary
             return callback([
-              JSON.stringify({ id, key, header: { peer, reliable } }),
+              JSON.stringify({ id, nsp, key, header: { peer, reliable } }),
               hash,
               payload,
             ])
@@ -55,9 +55,12 @@ export class Encoder {
 export class Decoder extends Emitter {
 
   private state: number = 0
-  private id?: number
-  private key?: string
-  private packet?: Partial<NUClearNetPacket>
+  private nuclearPacket?: {
+    nsp: string,
+    type: TYPES.EVENT,
+    data: [string, Partial<NUClearNetPacket>],
+    id: number
+  }
 
   add(obj: any) {
 
@@ -69,34 +72,29 @@ export class Decoder extends Emitter {
       if (parsed.type !== undefined) {
         // This was a jsonified packet
         this.emit('decoded', JSON.parse(obj))
+        this.state = 0
       } else {
         // This is a binary packet header
-        this.key = parsed.key
-        this.id = parsed.id
-        this.packet = parsed.header
-        this.packet!.payload = undefined
+        this.nuclearPacket = {
+          nsp: parsed.nsp,
+          type: TYPES.EVENT,
+          id: parsed.id,
+          data: [parsed.key, parsed.header],
+        }
         this.state = 1
       }
     } else {
       switch (this.state) {
         // State 1 means we are getting a hash
         case 1:
-          this.packet!.hash = obj
+          this.nuclearPacket!.data[1].hash = obj
           this.state = 2
           break
 
         // State 2 means we are getting a packet
         case 2:
-          this.packet!.payload = obj
-          this.emit('decoded', {
-            type: TYPES.EVENT,
-            id: this.id,
-            nsp: '/',
-            data: [
-              this.key,
-              this.packet,
-            ],
-          })
+          this.nuclearPacket!.data[1].payload = obj
+          this.emit('decoded', this.nuclearPacket)
           this.state = 0
           break
 
@@ -109,5 +107,6 @@ export class Decoder extends Emitter {
   }
 
   destroy() {
+    this.nuclearPacket = undefined
   }
 }

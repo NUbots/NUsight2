@@ -45,6 +45,6 @@ if (withVirtualRobots) {
   virtualRobots.startSimulators()
 }
 
-WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork), {
+WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
   fakeNetworking: withVirtualRobots,
 })

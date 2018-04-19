@@ -48,9 +48,14 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
 
   private renderScene() {
     const { viewModel } = this.props
-    const { canvas, renderer, scene, camera } = viewModel
+    const { canvas, scene, camera } = viewModel
+    const renderer = viewModel.renderer(canvas)
     if (renderer) {
-      renderer(canvas)!.render(scene, camera)
+      renderer.render(scene, camera)
+
+      // This is needed as we constantly make new scene objects, if we don't do this the renderLists
+      // stores a reference to the scene and mesh causing a memory leak
+      renderer.renderLists.dispose()
     }
   }
 }

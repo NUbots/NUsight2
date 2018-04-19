@@ -25681,8 +25681,8 @@ export namespace message {
             /** Image cameraId */
             cameraId?: (number|null);
 
-            /** Image serialNumber */
-            serialNumber?: (string|null);
+            /** Image name */
+            name?: (string|null);
 
             /** Image timestamp */
             timestamp?: (google.protobuf.ITimestamp|null);
@@ -25715,8 +25715,8 @@ export namespace message {
             /** Image cameraId. */
             public cameraId: number;
 
-            /** Image serialNumber. */
-            public serialNumber: string;
+            /** Image name. */
+            public name: string;
 
             /** Image timestamp. */
             public timestamp?: (google.protobuf.ITimestamp|null);

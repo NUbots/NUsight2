@@ -48,10 +48,9 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
 
   private renderScene() {
     const { viewModel } = this.props
-    const { renderer, scene, camera } = viewModel
+    const { canvas, renderer, scene, camera } = viewModel
     if (renderer) {
-      renderer.render(scene, camera)
-      renderer.renderLists.dispose()
+      renderer(canvas)!.render(scene, camera)
     }
   }
 }

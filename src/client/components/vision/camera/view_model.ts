@@ -29,6 +29,7 @@ import { Geometry } from 'three'
 import { memoize } from '../../../base/memoize'
 
 import { CameraModel } from './model'
+import { ImageModel } from './model'
 import * as bayerFragmentShader from './shaders/bayer.frag'
 import * as bayerVertexShader from './shaders/bayer.vert'
 
@@ -56,12 +57,15 @@ export class CameraViewModel {
     return this.model.name
   }
 
-  @computed
-  get renderer(): WebGLRenderer | undefined {
-    if (this.canvas) {
-      return new WebGLRenderer({ canvas: this.canvas })
+  renderer = createTransformer((canvas: HTMLCanvasElement | null) => {
+    if (canvas) {
+      return new WebGLRenderer({ canvas })
     }
-  }
+  }, (renderer?: WebGLRenderer) => {
+    if (renderer) {
+      renderer.dispose()
+    }
+  })
 
   @computed
   get camera(): Camera {
@@ -70,73 +74,73 @@ export class CameraViewModel {
     return camera
   }
 
-  // not computed as otherwise it will update the textures too frequently
+  @computed
   get scene(): Scene {
     const scene = new Scene()
-    if (this.model.data) {
-      scene.add(this.image)
+    if (this.model.image) {
+      scene.add(this.image(this.model.image))
     }
     return scene
   }
 
   @computed
   get width() {
-    return this.model.width
+    return this.model.image ? this.model.image.width : 1280
   }
 
   @computed
   get height() {
-    return this.model.height
+    return this.model.image ? this.model.image.height : 1024
   }
 
-  // not computed as otherwise it will update the textures too frequently
-  private get image(): Mesh {
-    const mesh =  new Mesh(this.quadGeometry, this.imageMaterial)
+  private image = createTransformer((image: ImageModel): Mesh => {
+    const mesh =  new Mesh(this.quadGeometry, this.imageMaterial(image))
     mesh.scale.y = -1 // We need to flip Y to fix the image coordinates
     return mesh
-  }
+  })
 
   @computed
   private get quadGeometry(): BufferGeometry {
     return new PlaneBufferGeometry(2, 2)
   }
 
-  @computed
-  private get imageMaterial() {
+  private imageMaterial = createTransformer((image: ImageModel) => {
     return new MeshBasicMaterial({
-      map: this.imageTexture,
+      map: this.imageTexture(image),
       depthTest: false,
       depthWrite: false,
     })
-  }
+  }, (material?: MeshBasicMaterial) => {
+    if (material) {
+      material.dispose()
+    }
+  })
 
   // not computed as otherwise it will update the textures too frequently
-  private get imageTexture(): Texture {
-    switch (this.model.format) {
+  private imageTexture = createTransformer((image: ImageModel) => {
+    switch (image.format) {
       case fourcc('GRBG'):
       case fourcc('RGGB'):
       case fourcc('GBRG'):
       case fourcc('BGGR'):
-        return this.bayerTexture
+        return this.bayerTexture(image).texture
       case fourcc('RGB3'):
-        return this.rgbTexture
+        return this.rgbTexture(image)
       case fourcc('YUYV'):
-        return this.yuyvTexture
+        return this.yuyvTexture(image)
       case fourcc('GREY'):
       case fourcc('GRAY'):
-        return this.grayTexture
+        return this.grayTexture(image)
       default:
         throw Error('Unsupported image format')
     }
-  }
+  })
 
-  // not computed as otherwise it will update the textures too frequently
-  private get bayerTexture(): Texture {
-
+  private bayerTexture = createTransformer((image: ImageModel) => {
     // Now, I know these look bananas, but it's because the rawTexture has a flipY
     // If we don't do that then the image will be upside down in the output
     let firstRed
-    switch (this.model.format) {
+    switch (image.format) {
       case fourcc('GRBG'):
         firstRed = [1, 0]
         break
@@ -151,7 +155,7 @@ export class CameraViewModel {
         break
     }
 
-    const { width, height } = this.model
+    const { width, height } = image
     const renderTarget = new WebGLRenderTarget(width, height)
     renderTarget.depthBuffer = false
     renderTarget.stencilBuffer = false
@@ -162,7 +166,7 @@ export class CameraViewModel {
       uniforms: {
         sourceSize: { value: [width, height, 1 / width, 1 / height] },
         firstRed: { value: firstRed },
-        image: { value: this.rawTexture, type: 't' },
+        image: { value: this.rawTexture(image), type: 't' },
       },
       depthTest: false,
       depthWrite: false,
@@ -170,17 +174,21 @@ export class CameraViewModel {
     const mesh = new Mesh(this.quadGeometry, material)
     mesh.frustumCulled = false
     scene.add(mesh)
-    this.renderer!.render(scene, this.camera, renderTarget)
-    return renderTarget.texture
-  }
+    this.renderer(this.canvas)!.render(scene, this.camera, renderTarget)
+    material.dispose()
+    return renderTarget
+  }, (target?: WebGLRenderTarget) => {
+    if (target) {
+      target.dispose()
+      target.texture.dispose()
+    }
+  })
 
-  // This can be computed as it's a cheap operation
-  @computed
-  private get rgbTexture(): Texture {
+  private rgbTexture = createTransformer((image: ImageModel) => {
     const texture = new DataTexture(
-      this.model.data,
-      this.model.width,
-      this.model.height,
+      image.data,
+      image.width,
+      image.height,
       RGBFormat,
       UnsignedByteType,
       Texture.DEFAULT_MAPPING,
@@ -192,19 +200,25 @@ export class CameraViewModel {
     texture.flipY = false
     texture.needsUpdate = true
     return texture
-  }
+  }, (texture?: Texture) => {
+    if (texture) {
+      texture.dispose()
+    }
+  })
 
-  // not computed as otherwise it will update the textures too frequently
-  private get yuyvTexture(): Texture {
+  private yuyvTexture = createTransformer((image: ImageModel) => {
     throw Error('Write a shader for me!')
-  }
+  }, (texture?: Texture) => {
+    if (texture) {
+      texture.dispose()
+    }
+  })
 
-  @computed
-  private get grayTexture(): Texture {
+  private grayTexture = createTransformer((image: ImageModel) => {
     const texture = new DataTexture(
-      this.model.data,
-      this.model.width,
-      this.model.height,
+      image.data,
+      image.width,
+      image.height,
       LuminanceFormat,
       UnsignedByteType,
       Texture.DEFAULT_MAPPING,
@@ -216,14 +230,17 @@ export class CameraViewModel {
     texture.flipY = false
     texture.needsUpdate = true
     return texture
-  }
+  }, (texture?: Texture) => {
+    if (texture) {
+      texture.dispose()
+    }
+  })
 
-  @computed
-  private get rawTexture(): Texture {
+  private rawTexture = createTransformer((image: ImageModel) => {
     const texture = new DataTexture(
-      this.model.data,
-      this.model.width,
-      this.model.height,
+      image.data,
+      image.width,
+      image.height,
       LuminanceFormat,
       UnsignedByteType,
       Texture.DEFAULT_MAPPING,
@@ -234,5 +251,9 @@ export class CameraViewModel {
     )
     texture.needsUpdate = true
     return texture
-  }
+  }, (texture?: Texture) => {
+    if (texture) {
+      texture.dispose()
+    }
+  })
 }

@@ -23,7 +23,8 @@ import { LinearFilter } from 'three'
 import { NearestFilter } from 'three'
 import { PlaneGeometry } from 'three'
 import { Matrix4 } from 'three'
-import { Vector3 } from 'three'
+import { Vector4 } from 'three'
+import { Vector2 } from 'three'
 import { Geometry } from 'three'
 
 import { memoize } from '../../../base/memoize'
@@ -43,7 +44,7 @@ export class CameraViewModel {
   constructor(private model: CameraModel) {
   }
 
-  static of = memoize((model: CameraModel) => {
+  static of = createTransformer((model: CameraModel) => {
     return new CameraViewModel(model)
   })
 
@@ -104,16 +105,23 @@ export class CameraViewModel {
     return new PlaneBufferGeometry(2, 2)
   }
 
-  private imageMaterial = createTransformer((image: ImageModel) => {
+  // This shader must be stored separately as a computed field as if we make it new each time,
+  // it will get compiled each time which is quite expensive.
+  @computed
+  private get imageBasicMaterial() {
     return new MeshBasicMaterial({
-      map: this.imageTexture(image),
       depthTest: false,
       depthWrite: false,
     })
-  }, (material?: MeshBasicMaterial) => {
-    if (material) {
-      material.dispose()
-    }
+  }
+
+  private imageMaterial = createTransformer((image: ImageModel) => {
+    const mat = this.imageBasicMaterial
+
+    // TODO: This is wrong and not very reactive however the alternative is recompiling the shader every time
+    // you have a better idea?
+    mat.map = this.imageTexture(image)
+    return mat
   })
 
   // not computed as otherwise it will update the textures too frequently
@@ -136,9 +144,24 @@ export class CameraViewModel {
     }
   })
 
+  // This shader must be stored separately as a computed field as if we make it new each time,
+  // it will get compiled each time which is quite expensive.
+  @computed
+  private get bayerShader() {
+    return new RawShaderMaterial({
+      vertexShader: String(bayerVertexShader),
+      fragmentShader: String(bayerFragmentShader),
+      uniforms: {
+        sourceSize: { value: new Vector4() },
+        firstRed: { value: new Vector2() },
+        image: { type: 't' },
+      },
+      depthTest: false,
+      depthWrite: false,
+    })
+  }
+
   private bayerTexture = createTransformer((image: ImageModel) => {
-    // Now, I know these look bananas, but it's because the rawTexture has a flipY
-    // If we don't do that then the image will be upside down in the output
     let firstRed
     switch (image.format) {
       case fourcc('GRBG'):
@@ -160,22 +183,18 @@ export class CameraViewModel {
     renderTarget.depthBuffer = false
     renderTarget.stencilBuffer = false
     const scene = new Scene()
-    const material = new RawShaderMaterial({
-      vertexShader: String(bayerVertexShader),
-      fragmentShader: String(bayerFragmentShader),
-      uniforms: {
-        sourceSize: { value: [width, height, 1 / width, 1 / height] },
-        firstRed: { value: firstRed },
-        image: { value: this.rawTexture(image), type: 't' },
-      },
-      depthTest: false,
-      depthWrite: false,
-    })
+    const material = this.bayerShader
+
+    // TODO: This is wrong and not very reactive however the alternative is recompiling the shader every time
+    // you have a better idea?
+    material.uniforms.sourceSize = { value: [width, height, 1 / width, 1 / height] }
+    material.uniforms.firstRed = { value: firstRed }
+    material.uniforms.image = { value: this.rawTexture(image) }
+
     const mesh = new Mesh(this.quadGeometry, material)
     mesh.frustumCulled = false
     scene.add(mesh)
     this.renderer(this.canvas)!.render(scene, this.camera, renderTarget)
-    material.dispose()
     return renderTarget
   }, (target?: WebGLRenderTarget) => {
     if (target) {

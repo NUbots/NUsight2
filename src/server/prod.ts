@@ -7,7 +7,6 @@ import * as favicon from 'serve-favicon'
 import * as sio from 'socket.io'
 
 import * as NUClearNetProxyParser from '../shared/nuclearnet/nuclearnet_proxy_parser'
-import { VisionSimulator } from '../simulators/vision_simulator'
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
 import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
@@ -41,7 +40,6 @@ if (withVirtualRobots) {
     simulators: [
       { frequency: 1, simulator: OverviewSimulator.of() },
       { frequency: 60, simulator: SensorDataSimulator.of() },
-      { frequency: 5, simulator: VisionSimulator.of() },
     ],
   })
   virtualRobots.startSimulators()

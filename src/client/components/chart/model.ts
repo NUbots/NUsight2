@@ -1,6 +1,7 @@
 import { action } from 'mobx'
 import { observable } from 'mobx'
 import { computed } from 'mobx'
+import { now } from 'mobx-utils'
 
 import { memoize } from '../../base/memoize'
 import { Vector2 } from '../../math/vector2'
@@ -64,5 +65,10 @@ export class ChartModel {
       })),
       usePessimisticToggle: true,
     }
+  }
+
+  @computed
+  get now() {
+    return (now('frame') / 1000) - this.startTime
   }
 }

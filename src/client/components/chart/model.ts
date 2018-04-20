@@ -24,7 +24,7 @@ export class DataSeries {
     measurementNoise: 1e-1,
   }
 
-  constructor({ color = '#ff0000', checked = CheckedState.Unchecked }: Partial<DataSeries> = {}) {
+  constructor({ color = '#ffffff', checked = CheckedState.Unchecked }: Partial<DataSeries> = {}) {
     this.color = color
     this.checked = checked
     this.series = []

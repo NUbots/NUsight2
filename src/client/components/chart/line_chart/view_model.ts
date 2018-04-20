@@ -222,7 +222,7 @@ export class LineChartViewModel {
       return 1
     } else {
 
-      return this.dataSeries.reduce((maxValue, series: DataSeries) => {
+      const max = this.dataSeries.reduce((maxValue, series: DataSeries) => {
 
         // Get the range we are viewing
         let end = this.model.now + series.timeDelta
@@ -236,6 +236,7 @@ export class LineChartViewModel {
           return Math.max(max, value.y)
         }, maxValue)
       }, -Number.MAX_VALUE)
+      return max === -Number.MAX_VALUE ? 1 : max
     }
   }
 
@@ -246,7 +247,7 @@ export class LineChartViewModel {
     } else if (this.dataSeries.length === 0) {
       return -1
     } else {
-      return this.dataSeries.reduce((minValue, series: DataSeries) => {
+      const min = this.dataSeries.reduce((minValue, series: DataSeries) => {
 
         // Get the range we are viewing
         let end = this.model.now + series.timeDelta
@@ -260,6 +261,7 @@ export class LineChartViewModel {
           return Math.min(min, value.y)
         }, minValue)
       }, Number.MAX_VALUE)
+      return min === Number.MAX_VALUE ? -1 : min
     }
   }
 
@@ -273,6 +275,11 @@ export class LineChartViewModel {
     end = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - end))
     start = Math.max(0, bounds.lt(values, Vector2.of(), p => p.x - start))
     values = values.slice(start, end)
+
+    // If we have no values, don't draw the line
+    if (values.length === 0) {
+      return Group.of()
+    }
 
     const appearance = LineAppearance.of({
       stroke: {

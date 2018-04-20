@@ -3,7 +3,7 @@ import { action } from 'mobx'
 
 import { BrowserSystemClock } from '../../../client/time/browser_clock'
 import { message } from '../../../shared/proto/messages'
-import { google } from '../../../shared/proto/messages'
+import { toSeconds } from '../../../shared/time/timestamp'
 import { Clock } from '../../../shared/time/clock'
 import { Vector2 } from '../../math/vector2'
 import { Network } from '../../network/network'
@@ -13,7 +13,6 @@ import { RobotModel } from '../robot/model'
 import { ChartModel } from './model'
 import { DataSeries } from './model'
 import { TreeData } from './model'
-import Timestamp = google.protobuf.ITimestamp
 import DataPoint = message.support.nusight.DataPoint
 import IDataPoint = message.support.nusight.IDataPoint
 import Sensors = message.input.Sensors
@@ -250,11 +249,4 @@ export class ChartNetwork {
   }
 }
 
-function toSeconds(timestamp?: Timestamp | null): number {
-  if (!timestamp) {
-    timestamp = { seconds: 0, nanos: 0 }
-  }
-  const seconds: number = Number(timestamp.seconds)
-  const nanos: number = timestamp.nanos! || 0
-  return seconds + (nanos * 1e-9)
-}
+

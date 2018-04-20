@@ -1,6 +1,7 @@
 import { message } from '../../shared/proto/messages'
 import { Simulator } from '../simulator'
 import { Message } from '../simulator'
+import { toTimestamp } from '../../shared/time/timestamp'
 
 import DataPoint = message.support.nusight.DataPoint
 
@@ -23,10 +24,7 @@ export class ChartSimulator implements Simulator {
     const buffer = DataPoint.encode({
       label: 'Debug Waves',
       value: [sin, cos, 2 * sin, 4 * cos],
-      timestamp: {
-        seconds: Math.floor(time),
-        nanos: (time - Math.floor(time)) * 1e9,
-      },
+      timestamp: toTimestamp(time),
     }).finish()
 
     const message = { messageType, buffer }

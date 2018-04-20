@@ -1,7 +1,6 @@
-///<reference path="../../../../node_modules/@types/three/three-core.d.ts"/>
 import { observable } from 'mobx'
 import { computed } from 'mobx'
-import { createTransformer } from 'mobx'
+import { createTransformer } from 'mobx-utils'
 import { PlaneBufferGeometry } from 'three'
 import { WebGLRenderTarget } from 'three'
 import { LinearFilter } from 'three'
@@ -106,12 +105,9 @@ export class VisionRadarRobotViewModel {
     })
 
     // Create a cumulative buffer from our segments so we can index properly
-    const cumulativeSegments = []
-    let cSum = 0
-    for (let i = 0; i < this.model.ringSegments.length; ++i) {
-      cumulativeSegments.push(cSum)
-      cSum += this.model.ringSegments[i]
-    }
+    const cumulativeSegments = this.model.ringSegments.reduce((acc, v, i) => {
+      acc.push(this.model.ringSegments[i] + acc[i])
+    }, [0])
 
     // Create the faces looping from the last ring inward
     for (let i = this.model.ringSegments.length - 1; i > 0; --i) {

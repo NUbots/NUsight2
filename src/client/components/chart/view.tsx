@@ -25,7 +25,6 @@ export class ChartView extends Component<ChartViewProps> {
 
   componentWillUnmount(): void {
     this.props.network.destroy()
-    this.props.controller.destroy()
   }
 
   render() {

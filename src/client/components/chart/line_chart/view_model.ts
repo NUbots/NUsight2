@@ -2,6 +2,7 @@ import * as bounds from 'binary-search-bounds'
 import { computed } from 'mobx'
 import { observable } from 'mobx'
 import { createTransformer } from 'mobx-utils'
+import { now } from 'mobx-utils'
 
 import { Transform } from '../../../math/transform'
 import { Vector2 } from '../../../math/vector2'
@@ -145,7 +146,7 @@ export class LineChartViewModel {
   get xAxis(): Group {
 
     // Work out our min/max value
-    const max = this.model.now
+    const max = now('frame') / 1000
     const min = max - this.model.bufferSeconds
     const yRange = this.maxValue - this.minValue
 
@@ -206,7 +207,7 @@ export class LineChartViewModel {
     return Group.of({
       transform: Transform.of({
         translate: {
-          x: -(this.model.now - this.model.bufferSeconds / 2),
+          x: -((now('frame') / 1000) - this.model.bufferSeconds / 2),
           y: -(minValue + (maxValue - minValue) / 2),
         },
       }),
@@ -225,7 +226,7 @@ export class LineChartViewModel {
       return this.dataSeries.reduce((maxValue, series: DataSeries) => {
 
         // Get the range we are viewing
-        let end = this.model.now + series.timeDelta
+        let end = (now('frame') / 1000) + series.timeDelta
         let start = end - this.model.bufferSeconds
 
         const values = series.series
@@ -249,7 +250,7 @@ export class LineChartViewModel {
       return this.dataSeries.reduce((minValue, series: DataSeries) => {
 
         // Get the range we are viewing
-        let end = this.model.now + series.timeDelta
+        let end = (now('frame') / 1000) + series.timeDelta
         let start = end - this.model.bufferSeconds
 
         const values = series.series
@@ -266,7 +267,7 @@ export class LineChartViewModel {
   private makeLines(series: DataSeries): Group {
 
     // Get the range we are viewing
-    let end = this.model.now + series.timeDelta
+    let end = (now('frame') / 1000) + series.timeDelta
     let start = end - this.model.bufferSeconds
 
     let values = series.series

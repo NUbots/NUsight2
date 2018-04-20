@@ -10,13 +10,10 @@ import { TreeViewModel } from './view_model'
 
 export class ChartController {
 
-  private rafId: number
-
   constructor(private model: ChartModel,
               private clock: Clock) {
     this.model = model
     this.clock = clock
-    this.rafId = requestAnimationFrame(this.onAnimationFrame)
   }
 
   static of(opts: { model: ChartModel }) {
@@ -50,15 +47,5 @@ export class ChartController {
         node.checked = CheckedState.Checked
       }
     }
-  }
-
-  @action
-  onAnimationFrame = () => {
-    this.model.now = this.clock.now() - this.model.startTime
-    this.rafId = requestAnimationFrame(this.onAnimationFrame)
-  }
-
-  destroy() {
-    cancelAnimationFrame(this.rafId)
   }
 }

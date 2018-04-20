@@ -47,8 +47,8 @@ export class DataSeries {
 export class ChartModel {
   @observable private robotModels: RobotModel[]
   @observable treeData: TreeData = new Map<string, TreeData | DataSeries>()
-  @observable startTime: number = Date.now() / 1000 // TODO work out how to get the clock object here
-  @observable now: number = Date.now() / 1000 // TODO work out how to get the clock object here
+  // The exact value of this number isn't important, it's simply here to make the time numbers smaller
+  @observable startTime: number = Date.now() / 1000
   @observable bufferSeconds: number = 10
 
   constructor(robotModels: RobotModel[]) {

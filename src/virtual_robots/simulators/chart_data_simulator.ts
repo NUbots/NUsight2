@@ -1,7 +1,7 @@
 import { message } from '../../shared/proto/messages'
+import { toTimestamp } from '../../shared/time/timestamp'
 import { Simulator } from '../simulator'
 import { Message } from '../simulator'
-import { toTimestamp } from '../../shared/time/timestamp'
 
 import DataPoint = message.support.nusight.DataPoint
 

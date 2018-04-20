@@ -3,8 +3,8 @@ import { action } from 'mobx'
 
 import { BrowserSystemClock } from '../../../client/time/browser_clock'
 import { message } from '../../../shared/proto/messages'
-import { toSeconds } from '../../../shared/time/timestamp'
 import { Clock } from '../../../shared/time/clock'
+import { toSeconds } from '../../../shared/time/timestamp'
 import { Vector2 } from '../../math/vector2'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
@@ -248,5 +248,4 @@ export class ChartNetwork {
     }
   }
 }
-
 

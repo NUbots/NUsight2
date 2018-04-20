@@ -1,9 +1,9 @@
 import { action } from 'mobx'
 
 import { message } from '../../../shared/proto/messages'
+import { toSeconds } from '../../../shared/time/timestamp'
 import { Matrix2 } from '../../math/matrix2'
 import { Matrix3 } from '../../math/matrix3'
-import { toSeconds } from '../../../shared/time/timestamp'
 import { Vector2 } from '../../math/vector2'
 import { Vector3 } from '../../math/vector3'
 import { Network } from '../../network/network'

@@ -32,7 +32,9 @@ export class LocalisationView extends React.Component<LocalisationViewProps> {
       canvas: this.canvas,
       antialias: true,
     })
-    this.stopAutorun = autorun(() => this.renderScene())
+    this.stopAutorun = autorun(() => this.renderScene(), {
+      scheduler: requestAnimationFrame,
+    })
     this.canvas.addEventListener('click', this.onClick, false)
     document.addEventListener('pointerlockchange', this.onPointerLockChange, false)
     document.addEventListener('mousemove', this.onMouseMove, false)

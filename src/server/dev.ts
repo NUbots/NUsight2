@@ -10,11 +10,14 @@ import * as webpackDevMiddleware from 'webpack-dev-middleware'
 import * as webpackHotMiddleware from 'webpack-hot-middleware'
 
 import webpackConfig from '../../webpack.config'
+import * as NUClearNetProxyParser from '../shared/nuclearnet/nuclearnet_proxy_parser'
 import { VisionSimulator } from '../simulators/vision_simulator'
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
 import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
-import { NbsNUClearPlayback } from './nbs/nbs_nuclear_playback'
+
+import { NBSPlayer } from './nbs/mmap_nbs_player/nbs_player'
+import { NBSPacket } from './nbs/mmap_nbs_player/nbs_player'
 import { DirectNUClearNetClient } from './nuclearnet/direct_nuclearnet_client'
 import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
@@ -24,10 +27,11 @@ const compiler = webpack(webpackConfig)
 
 const args = minimist(process.argv.slice(2))
 const withVirtualRobots = args['virtual-robots'] || false
+const nbsFile = args.play
 
 const app = express()
 const server = http.createServer(app)
-const sioNetwork = sio(server as any, { parser: require('socket.io-msgpack-parser') } as any)
+const sioNetwork = sio(server, { parser: NUClearNetProxyParser } as any)
 
 // Initialize socket.io namespace immediately to catch reconnections.
 WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
@@ -91,7 +95,32 @@ function init() {
     }
   }
 
-  playback()
+  if (nbsFile) {
+    const nuclearnetClient = withVirtualRobots ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+    nuclearnetClient.connect({ name: nbsFile })
+
+    const player = NBSPlayer.of({
+      file: nbsFile,
+    })
+
+    player.onPacket((packet: NBSPacket) => {
+      nuclearnetClient.send({
+        type: packet.hash,
+        payload: packet.payload,
+      })
+    })
+
+    player.onEnd(() => {
+      // tslint:disable-next-line no-console
+      console.log('Restarting NBS playback')
+      player.restart()
+      player.play()
+    })
+
+    // tslint:disable-next-line no-console
+    console.log(`Playing NBS file: ${nbsFile}`)
+    player.play()
+  }
 }
 
 devMiddleware.waitUntilValid(init)

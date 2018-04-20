@@ -32,7 +32,7 @@ export class VisionRadarRobotModel {
   @observable.ref ringSegments: number[]
   @observable.ref colors: Array<[number, [number, number, number]]>
   @observable.ref coordinates: Array<[number, [number, number]]>
-  @observable.shallow public image?: VisionRadarImage
+  @observable.shallow image?: VisionRadarImage
 
   constructor(private model: RobotModel, { ringSegments, colors, coordinates }: {
     ringSegments: number[]

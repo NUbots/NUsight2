@@ -5,9 +5,8 @@ exports[`TextSVGRenderer renders 1`] = `
   model={
     Shape {
       "appearance": BasicAppearance {
-        "fillStyle": "#000",
-        "lineWidth": 1,
-        "strokeStyle": "#000",
+        "fill": undefined,
+        "stroke": undefined,
       },
       "geometry": TextGeometry {
         "alignToView": true,
@@ -18,21 +17,6 @@ exports[`TextSVGRenderer renders 1`] = `
         "textBaseline": "alphabetic",
         "x": 0,
         "y": 0,
-      },
-      "group": Group {
-        "children": Array [],
-        "transform": Transform {
-          "anticlockwise": true,
-          "rotate": 0,
-          "scale": Object {
-            "x": 1,
-            "y": 1,
-          },
-          "translate": Object {
-            "x": 0,
-            "y": 0,
-          },
-        },
       },
     }
   }

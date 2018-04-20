@@ -1,6 +1,6 @@
 import { observable } from 'mobx'
-import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { createTransformer } from 'mobx'
 import { BufferGeometry } from 'three'
 import { PlaneBufferGeometry } from 'three'
 import { RawShaderMaterial } from 'three'
@@ -10,7 +10,7 @@ import { Scene } from 'three'
 import { Mesh } from 'three'
 import { WebGLRenderer } from 'three'
 import { Camera } from 'three'
-import { OrthographicCamera } from 'three'
+import { Object3D } from 'three'
 import { Geometry } from 'three'
 import { Material } from 'three'
 import { DataTexture } from 'three'
@@ -22,10 +22,12 @@ import { LinearFilter } from 'three'
 import { PlaneGeometry } from 'three'
 import { Matrix4 } from 'three'
 import { Vector3 } from 'three'
-import { Object3D } from 'three'
+import { OrthographicCamera } from 'three'
+
 import { memoize } from '../../../base/memoize'
 import { VisionRobotModel } from '../model'
 import { VisionBallModel } from '../model'
+
 import * as ballFragmentShader from './shaders/ball.frag'
 import * as horizonFragmentShader from './shaders/horizon.frag'
 import * as imageFragmentShader from './shaders/image.frag'
@@ -33,31 +35,31 @@ import * as imageVertexShader from './shaders/image.vert'
 import * as simpleVertexShader from './shaders/simple.vert'
 
 export class CameraViewModel {
-  @observable.ref public canvas: HTMLCanvasElement | null = null
+  @observable.ref canvas: HTMLCanvasElement | null = null
 
-  public constructor(private robotModel: VisionRobotModel) {
+  constructor(private robotModel: VisionRobotModel) {
   }
 
-  public static of = memoize((robotModel: VisionRobotModel) => {
+  static of = memoize((robotModel: VisionRobotModel) => {
     return new CameraViewModel(robotModel)
   })
 
   @computed
-  public get renderer(): WebGLRenderer | undefined {
+  get renderer(): WebGLRenderer | undefined {
     if (this.canvas) {
       return new WebGLRenderer({ canvas: this.canvas })
     }
   }
 
   @computed
-  public get camera(): Camera {
+  get camera(): Camera {
     const camera = new OrthographicCamera(-1, 1, 1, -1, 1, 3)
     camera.position.z = 2
     return camera
   }
 
   @computed
-  public get scene(): Scene {
+  get scene(): Scene {
     const scene = new Scene()
     if (this.robotModel.image) {
       scene.add(this.plane)
@@ -175,7 +177,7 @@ class BallViewModel {
   constructor(private model: VisionBallModel) {
   }
 
-  public static of = createTransformer((ball: VisionBallModel) => {
+  static of = createTransformer((ball: VisionBallModel) => {
     return new BallViewModel(ball)
   })
 

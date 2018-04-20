@@ -1,7 +1,7 @@
 ///<reference path="../../../../node_modules/@types/three/three-core.d.ts"/>
 import { observable } from 'mobx'
-import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { createTransformer } from 'mobx'
 import { PlaneBufferGeometry } from 'three'
 import { WebGLRenderTarget } from 'three'
 import { LinearFilter } from 'three'
@@ -9,7 +9,7 @@ import { ClampToEdgeWrapping } from 'three'
 import { UnsignedByteType } from 'three'
 import { LuminanceFormat } from 'three'
 import { DataTexture } from 'three'
-import { Texture } from 'three'
+import { RawShaderMaterial } from 'three'
 import { WebGLRenderer } from 'three'
 import { Scene } from 'three'
 import { OrthographicCamera } from 'three'
@@ -18,19 +18,21 @@ import { Mesh } from 'three'
 import { Material } from 'three'
 import { BufferGeometry } from 'three'
 import { Float32BufferAttribute } from 'three'
-import { RawShaderMaterial } from 'three'
+import { Texture } from 'three'
+
+import * as imageFragmentShader from '../vision/camera/shaders/image.frag'
+import * as imageVertexShader from '../vision/camera/shaders/image.vert'
+
 import { VisionRadarModel } from './model'
 import { VisionRadarRobotModel } from './model'
 import * as fragmentShader from './shaders/radar.frag'
 import * as vertexShader from './shaders/radar.vert'
-import * as imageFragmentShader from '../vision/camera/shaders/image.frag'
-import * as imageVertexShader from '../vision/camera/shaders/image.vert'
 
 export class VisionRadarViewModel {
   constructor(private model: VisionRadarModel) {
   }
 
-  public static of = createTransformer((model: VisionRadarModel): VisionRadarViewModel => {
+  static of = createTransformer((model: VisionRadarModel): VisionRadarViewModel => {
     return new VisionRadarViewModel(model)
   })
 
@@ -41,12 +43,12 @@ export class VisionRadarViewModel {
 }
 
 export class VisionRadarRobotViewModel {
-  @observable.ref public canvas: HTMLCanvasElement | null = null
+  @observable.ref canvas: HTMLCanvasElement | null = null
 
   constructor(private model: VisionRadarRobotModel) {
   }
 
-  public static of = createTransformer((model: VisionRadarRobotModel): VisionRadarRobotViewModel => {
+  static of = createTransformer((model: VisionRadarRobotModel): VisionRadarRobotViewModel => {
     return new VisionRadarRobotViewModel(model)
   })
 
@@ -124,14 +126,14 @@ export class VisionRadarRobotViewModel {
       //  the previous one below us
       for (let r = 0; r < outer; ++r) {
         // Work out the index of the point on the previous ring
-        let innerPoint = inner * (r / outer)
-        let inner1 = Math.floor(innerPoint)
+        const innerPoint = inner * (r / outer)
+        const inner1 = Math.floor(innerPoint)
 
         // Make the two triangles clockwise
-        let p0 = r + outerOffset
-        let p1 = ((r + 1) % outer) + outerOffset
-        let p2 = inner1 + innerOffset
-        let p3 = ((inner1 + 1) % inner) + innerOffset
+        const p0 = r + outerOffset
+        const p1 = ((r + 1) % outer) + outerOffset
+        const p2 = inner1 + innerOffset
+        const p3 = ((inner1 + 1) % inner) + innerOffset
 
         // Create our triangles
         indices.push(p0, p1, p3)

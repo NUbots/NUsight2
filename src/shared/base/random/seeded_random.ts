@@ -13,11 +13,11 @@ export class SeededRandom {
     return new SeededRandom(seedrandom(seed))
   }
 
-  public float(min: number = 0, max: number = min + 1): number {
+  float(min: number = 0, max: number = min + 1): number {
     return this.prng() * (max - min) + min
   }
 
-  public integer(min: number, max: number): number {
+  integer(min: number, max: number): number {
     return Math.floor(this.float(min, max))
   }
 

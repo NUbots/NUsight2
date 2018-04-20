@@ -52,7 +52,7 @@ export class VisionRadarRobotView extends Component<{ viewModel: VisionRadarRobo
   }
 
   private onRef = (canvas: HTMLCanvasElement | null) => {
-    this.props.viewModel.canvas = canvas;
+    this.props.viewModel.canvas = canvas
   }
 
   private renderScene() {

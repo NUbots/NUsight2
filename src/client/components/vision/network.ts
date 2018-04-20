@@ -1,25 +1,27 @@
 import { action } from 'mobx'
+
 import { message } from '../../../shared/proto/messages'
 import { Matrix4 } from '../../math/matrix4'
 import { Vector3 } from '../../math/vector3'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
+
 import { VisionRobotModel } from './model'
 import { VisionBallModel } from './model'
 import Image = message.input.Image
 
 export class VisionNetwork {
-  public constructor(private network: Network) {
+  constructor(private network: Network) {
     this.network.on(Image, this.onImage)
   }
 
-  public static of(nusightNetwork: NUsightNetwork): VisionNetwork {
+  static of(nusightNetwork: NUsightNetwork): VisionNetwork {
     const network = Network.of(nusightNetwork)
     return new VisionNetwork(network)
   }
 
-  public destroy() {
+  destroy() {
     this.network.off()
   }
 

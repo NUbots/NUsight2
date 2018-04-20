@@ -1,19 +1,20 @@
 import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+
 import { CameraViewModel } from './camera/view_model'
 import { VisionModel } from './model'
 import { VisionRobotModel } from './model'
 
 export class VisionViewModel {
-  public constructor(private model: VisionModel) {
+  constructor(private model: VisionModel) {
   }
 
-  public static of = createTransformer((model: VisionModel): VisionViewModel => {
+  static of = createTransformer((model: VisionModel): VisionViewModel => {
     return new VisionViewModel(model)
   })
 
   @computed
-  public get robots(): RobotViewModel[] {
+  get robots(): RobotViewModel[] {
     return this.visibleRobots.map(robot => RobotViewModel.of(robot))
   }
 
@@ -24,20 +25,20 @@ export class VisionViewModel {
 }
 
 export class RobotViewModel {
-  public constructor(private robotModel: VisionRobotModel) {
+  constructor(private robotModel: VisionRobotModel) {
   }
 
-  public static of = createTransformer((robotModel: VisionRobotModel) => {
+  static of = createTransformer((robotModel: VisionRobotModel) => {
     return new RobotViewModel(robotModel)
   })
 
   @computed
-  public get id() {
+  get id() {
     return this.robotModel.id
   }
 
   @computed
-  public get name() {
+  get name() {
     return this.robotModel.name
   }
 

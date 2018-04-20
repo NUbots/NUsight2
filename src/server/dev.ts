@@ -11,7 +11,6 @@ import * as webpackHotMiddleware from 'webpack-hot-middleware'
 
 import webpackConfig from '../../webpack.config'
 import * as NUClearNetProxyParser from '../shared/nuclearnet/nuclearnet_proxy_parser'
-import { VisionSimulator } from '../simulators/vision_simulator'
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
 import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
@@ -70,29 +69,9 @@ function init() {
       simulators: [
         { frequency: 1, simulator: OverviewSimulator.of() },
         { frequency: 60, simulator: SensorDataSimulator.of() },
-        { frequency: 5, simulator: VisionSimulator.of() },
       ],
     })
-    // virtualRobots.startSimulators()
-  }
-
-  async function playback() {
-    const nuclearnetClient = withVirtualRobots ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
-    nuclearnetClient.connect({ name: 'Fake Stream' })
-    while (true) {
-      const out = NbsNUClearPlayback.fromFile('recordings/visualmesh2.nbs', nuclearnetClient)
-
-      // const filename = '/Users/brendan/Lab/NUsight2/recordings/20171113T13_19_36.nbs'
-      // let rawStream = fs.createReadStream(filename, { highWaterMark: 1024 * 1024 * 32})
-      // // let rawStream = fs.createReadStream(filename)
-      // const out = rawStream.pipe(new NbsFrameChunker()).pipe(new NbsFrameDecoder())
-      // out.on('data', (data: NbsFrame) => {
-      //   console.log('data', data.hash, data.payload.byteLength)
-      // })
-
-      await new Promise(res => out.on('finish', res))
-      console.log('end')
-    }
+    virtualRobots.startSimulators()
   }
 
   if (nbsFile) {

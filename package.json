@@ -19,9 +19,7 @@
     "tscheck:watch": "yarn tsc --watch",
     "protobuf": "node build_scripts/generate_messages.js",
     "dev": "yarn start:virtual",
-    "dev:debug": "nodemon --inspect ./src/server/dev.ts --virtual-robots",
     "start": "nodemon ./src/server/dev.ts",
-    "start:debug": "nodemon --inspect ./src/server/dev.ts",
     "start:virtual": "nodemon ./src/server/dev.ts --virtual-robots",
     "virtual-robots": "nodemon ./src/virtual_robots/run.ts",
     "prod": "ts-node ./src/server/prod.ts",
@@ -30,12 +28,11 @@
     "clean": "yarn clean:build && yarn clean:coverage",
     "clean:build": "rimraf build",
     "clean:coverage": "rimraf coverage",
-    "message:js": "$(npm bin)/pbjs -t static-module -w commonjs -o src/shared/proto/messages.js -p src/shared/proto $(find src/shared/proto -name \"*.proto\")",
-    "message:ts": "$(npm bin)/pbts src/shared/proto/messages.js -o src/shared/proto/messages.d.ts -n",
     "heroku-postbuild": "yarn build",
     "prepush": "yarn tslint"
   },
   "devDependencies": {
+    "@types/buffers": "^0.1.30",
     "@types/classnames": "^2.2.0",
     "@types/component-emitter": "^1.2.7",
     "@types/compression": "0.0.35",

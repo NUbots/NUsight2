@@ -12,7 +12,6 @@ import { AppView } from './components/app/view'
 import { installDashboard } from './components/dashboard/install'
 import { installLocalisation } from './components/localisation/install'
 import { withRobotSelectorMenuBar } from './components/menu_bar/view'
-import { installVision } from './components/vision/install'
 import { installVisionRadar } from './components/vision_radar/install'
 import { NavigationConfiguration } from './navigation'
 import { NUsightNetwork } from './network/nusight_network'
@@ -34,7 +33,6 @@ const nav = NavigationConfiguration.of()
 installDashboard({ nav, appModel, nusightNetwork, menu })
 installLocalisation({ nav, appModel, nusightNetwork, menu })
 installVisionRadar({ nav, appModel, nusightNetwork, Menu: menu })
-installVision({ nav, appModel, nusightNetwork, Menu: menu })
 
 ReactDOM.render(
   <BrowserRouter>

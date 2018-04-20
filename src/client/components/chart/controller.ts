@@ -60,6 +60,24 @@ export class ChartController {
   }
 
   @action
+  private setHighlight(node: TreeNodeModel, set: boolean) {
+    if (node.leaf) {
+      const leaf = node as TreeViewModel
+      leaf.highlight = set
+    } else {
+      node.children.forEach(n => this.setHighlight(n, set))
+    }
+  }
+
+  onHighlight = (node: TreeNodeModel): void => {
+    this.setHighlight(node, true)
+  }
+
+  onUnhighlight = (node: TreeNodeModel): void => {
+    this.setHighlight(node, false)
+  }
+
+  @action
   onNodeExpand = (node: TreeNodeModel): void => {
     node.expanded = !node.expanded
   }

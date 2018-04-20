@@ -281,25 +281,38 @@ export class LineChartViewModel {
       return Group.of()
     }
 
-    const appearance = LineAppearance.of({
-      stroke: {
-        color: series.color,
-        width: 2,
-        nonScaling: true,
-      },
-    })
+    const lines = []
 
-    const shape = Shape.of(
+    if (series.highlight) {
+      lines.push(Shape.of(
+        PathGeometry.of(values),
+          LineAppearance.of({
+            stroke: {
+              color: '#ffff00',
+              width: 8,
+              nonScaling: true,
+            },
+          }),
+      ))
+    }
+
+    lines.push(Shape.of(
       PathGeometry.of(values),
-      appearance,
-    )
+        LineAppearance.of({
+          stroke: {
+            color: series.color,
+            width: 2,
+            nonScaling: true,
+          },
+        }),
+    ))
 
     // Apply our time delta
     return Group.of({
       transform: Transform.of({
         translate: Vector2.of(-series.timeDelta, 0),
       }),
-      children: [shape],
+      children: lines,
     })
   }
 }

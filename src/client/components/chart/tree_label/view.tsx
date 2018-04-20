@@ -12,6 +12,8 @@ import * as style from './style.css'
 type TreeLabelProps = {
   node: TreeNodeModel
   onColorChange?(color: string, node: TreeNodeModel): void
+  onMouseEnter?(node: TreeNodeModel): void
+  onMouseLeave?(node: TreeNodeModel): void
 }
 
 @observer
@@ -28,11 +30,15 @@ export class TreeLabel extends Component<TreeLabelProps> {
     }
 
     if (!node.leaf) {
-      return node.label
+      return(
+        <div className={style.label} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          {node.label}
+        </div>
+      )
     }
 
     return (
-      <div className={style.label}>
+      <div className={style.label} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <span className={style.labelName}>{ node.label }</span>
 
         <button
@@ -49,6 +55,18 @@ export class TreeLabel extends Component<TreeLabelProps> {
         }
       </div>
     )
+  }
+
+  onMouseEnter = () => {
+    if (this.props.onMouseEnter) {
+      this.props.onMouseEnter(this.props.node)
+    }
+  }
+
+  onMouseLeave = () => {
+    if (this.props.onMouseLeave) {
+      this.props.onMouseLeave(this.props.node)
+    }
   }
 
   onColorChange = (color: ColorResult) => {

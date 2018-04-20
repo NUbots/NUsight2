@@ -13,6 +13,7 @@ import { TreeViewModel } from './view_model'
 export interface TreeData extends Map<string, TreeData | DataSeries> {}
 
 export class DataSeries {
+  @observable highlight: boolean = false
   @observable color: string
   @observable timeDelta: number
   @observable timeVariance: number

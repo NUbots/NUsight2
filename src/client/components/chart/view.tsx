@@ -56,10 +56,11 @@ export class ChartView extends Component<ChartViewProps> {
   }
 
   renderLabel = (node: TreeNodeModel): JSX.Element | string => {
-    if (node.leaf) {
-      return <TreeLabel node={node} onColorChange={this.props.controller.onColorChange} />
-    }
-
-    return node.label
+    return <TreeLabel
+      node={node}
+      onColorChange={this.props.controller.onColorChange}
+      onMouseEnter={this.props.controller.onHighlight}
+      onMouseLeave={this.props.controller.onUnhighlight}
+    />
   }
 }

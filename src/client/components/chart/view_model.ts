@@ -47,6 +47,24 @@ export class TreeViewModel implements TreeNodeModel {
   }
 
   @computed
+  get highlight(): boolean {
+    // Non-leaf nodes have no color
+    if (!this.leaf) {
+      return false
+    }
+
+    return (this.model as DataSeries).highlight
+  }
+
+  set highlight(highlight: boolean) {
+    if (!this.leaf) {
+      throw new Error(`Cannot set the highlight of a non-leaf node`)
+    }
+
+    (this.model as DataSeries).highlight = highlight
+  }
+
+  @computed
   get leaf(): boolean {
     return this.model instanceof DataSeries
   }

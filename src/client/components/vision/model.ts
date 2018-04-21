@@ -2,9 +2,6 @@ import { computed } from 'mobx'
 import { observable } from 'mobx'
 
 import { memoize } from '../../base/memoize'
-import { Matrix4 } from '../../math/matrix4'
-import { Vector2 } from '../../math/vector2'
-import { Vector3 } from '../../math/vector3'
 import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
 
@@ -20,7 +17,7 @@ export class VisionModel {
 
   @computed
   get robots(): VisionRobotModel[] {
-    return this.appModel.robots.map(robot => VisionRobotModel.of(robot))
+    return this.appModel.robots.map(VisionRobotModel.of)
   }
 }
 

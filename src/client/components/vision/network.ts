@@ -2,12 +2,12 @@ import { action } from 'mobx'
 
 import { message } from '../../../shared/proto/messages'
 import { Matrix4 } from '../../math/matrix4'
-import { Vector3 } from '../../math/vector3'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
 
 import { CameraModel } from './camera/model'
+import { ImageModel } from './camera/model'
 import { VisionRobotModel } from './model'
 import Image = message.input.Image
 
@@ -28,23 +28,23 @@ export class VisionNetwork {
   @action
   private onImage = (robotModel: RobotModel, image: Image) => {
     const robot = VisionRobotModel.of(robotModel)
+    const { cameraId, name, dimensions, format, data, Hcw } = image
 
-    if (!robot.cameras.has(image.cameraId)) {
-      robot.cameras.set(image.cameraId, CameraModel.of({
+    const camera = robot.cameras.get(cameraId)
+    if (!camera) {
+      robot.cameras.set(cameraId, CameraModel.of({
         model: robot,
-        id: image.cameraId,
+        id: cameraId,
+        name,
       }))
     }
-
-    const camera = robot.cameras.get(image.cameraId)!
-
-    camera.image = {
-      width: image.dimensions!.x!,
-      height: image.dimensions!.y!,
-      format: image.format!,
-      data: image.data,
-      Hcw: Matrix4.from(image.Hcw),
+    camera!.image = {
+      width: dimensions!.x!,
+      height: dimensions!.y!,
+      format: format!,
+      data,
+      Hcw: Matrix4.from(Hcw),
     }
-    camera.name = image.name
+    camera!.name = name
   }
 }

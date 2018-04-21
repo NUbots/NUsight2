@@ -11,9 +11,7 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
   private destroy: () => void = () => {}
 
   componentDidMount() {
-    this.destroy = autorun(() => this.renderScene(), {
-      scheduler: requestAnimationFrame,
-    })
+    this.destroy = autorun(this.renderScene, { scheduler: requestAnimationFrame })
   }
 
   componentWillUnmount() {
@@ -24,12 +22,11 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
 
     const { width, height } = this.props.viewModel
 
-    const aspectRatio = width / height
+    const aspectRatio = width! / height!
     const percentage = 60
 
     return (
       <canvas style={{
-        display: 'inline',
         width: `${percentage}vw`,
         height: `${percentage / aspectRatio}vw`,
         maxHeight: `${percentage}vh`,
@@ -46,7 +43,7 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
     this.props.viewModel.canvas = canvas
   }
 
-  private renderScene() {
+  private renderScene = () => {
     const { viewModel } = this.props
     const { canvas, scene, camera } = viewModel
     const renderer = viewModel.renderer(canvas)

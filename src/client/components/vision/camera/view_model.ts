@@ -34,6 +34,14 @@ import { ImageModel } from './model'
 import * as bayerFragmentShader from './shaders/bayer.frag'
 import * as bayerVertexShader from './shaders/bayer.vert'
 
+/**
+ * Convert a four letter string into its integer fourcc code (see http://fourcc.org/)
+ * This code allows identification of a stream using the integer.
+ *
+ * @param code four letters that describe the format
+ *
+ * @return the fourcc integer code for this format
+ */
 export function fourcc(code: string): number {
   return code.charCodeAt(3) << 24 | code.charCodeAt(2) << 16 | code.charCodeAt(1) << 8 | code.charCodeAt(0)
 }
@@ -90,17 +98,22 @@ export class CameraViewModel {
 
   @computed
   get width() {
-    return this.model.image ? this.model.image.width : 1280
+    return this.model.image && this.model.image.width
   }
 
   @computed
   get height() {
-    return this.model.image ? this.model.image.height : 1024
+    return this.model.image && this.model.image.height
   }
 
   private image = createTransformer((image: ImageModel): Mesh => {
     const mesh =  new Mesh(this.quadGeometry, this.imageMaterial(image))
-    mesh.scale.y = -1 // We need to flip Y to fix the image coordinates
+
+    // Normally this effect could be achieved by setting texture.flipY to make
+    // the textures the correct way up again. However this is ignored on RenderTargets
+    // We can't flip it at the raw stage either as this would invert things like the Bayer pattern.
+    // Instead we just leave everything flipped and correct it here by scaling by -1 on the y axis
+    mesh.scale.y = -1
     return mesh
   })
 
@@ -138,13 +151,11 @@ export class CameraViewModel {
         return this.bayerTexture(image).texture
       case fourcc('RGB3'):
         return this.rgbTexture(image)
-      case fourcc('YUYV'):
-        return this.yuyvTexture(image)
       case fourcc('GREY'):
       case fourcc('GRAY'):
         return this.grayTexture(image)
       default:
-        throw Error('Unsupported image format')
+        throw Error(`Unsupported image format ${image.format}`)
     }
   })
 
@@ -223,14 +234,6 @@ export class CameraViewModel {
     texture.flipY = false
     texture.needsUpdate = true
     return texture
-  }, (texture?: Texture) => {
-    if (texture) {
-      texture.dispose()
-    }
-  })
-
-  private yuyvTexture = createTransformer((image: ImageModel) => {
-    throw Error('Write a shader for me!')
   }, (texture?: Texture) => {
     if (texture) {
       texture.dispose()

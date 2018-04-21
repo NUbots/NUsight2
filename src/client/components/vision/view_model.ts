@@ -15,7 +15,7 @@ export class VisionViewModel {
 
   @computed
   get robots(): RobotViewModel[] {
-    return this.visibleRobots.map(robot => RobotViewModel.of(robot))
+    return this.visibleRobots.map(RobotViewModel.of)
   }
 
   @computed
@@ -44,8 +44,6 @@ export class RobotViewModel {
 
   @computed
   get cameras(): CameraViewModel[] {
-    const cams = Array.from(this.model.cameras.values()).map(cam => CameraViewModel.of(cam))
-    cams.sort((a, b) => a.id - b.id)
-    return cams
+    return Array.from(this.model.cameras.values(), CameraViewModel.of).sort((a, b) => a.id - b.id)
   }
 }

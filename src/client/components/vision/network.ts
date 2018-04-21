@@ -7,7 +7,6 @@ import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
 
 import { CameraModel } from './camera/model'
-import { ImageModel } from './camera/model'
 import { VisionRobotModel } from './model'
 import Image = message.input.Image
 

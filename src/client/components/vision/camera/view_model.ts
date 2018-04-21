@@ -45,10 +45,6 @@ export class CameraViewModel {
   constructor(private model: CameraModel) {
   }
 
-  // See this createTransformer here? that means that once it is no longer observed
-  // it will be deleted. However the model that creates it will not.
-  // This means that any @computed fields will only live so long as the view does as
-  // this viewModel will only live so long as the view does.
   static of = createTransformer((model: CameraModel) => {
     return new CameraViewModel(model)
   })

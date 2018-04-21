@@ -4,6 +4,9 @@ import { NUClearNetPacket } from 'nuclearnet.js'
 
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { Clock } from '../../shared/time/clock'
+import { WebSocketStream } from '../nbs/nuclearnet_stream'
+import { PeerFilter } from '../nbs/nuclearnet_stream'
+import { NUClearNetStream } from '../nbs/nuclearnet_stream'
 import { NodeSystemClock } from '../time/node_clock'
 
 import { DirectNUClearNetClient } from './direct_nuclearnet_client'
@@ -31,7 +34,11 @@ export class WebSocketProxyNUClearNetServer {
   }
 
   private onClientConnection = (socket: WebSocket) => {
-    WebSocketServerClient.of(this.nuclearnetClient, socket)
+    const nuclearStream = NUClearNetStream.of(this.nuclearnetClient)
+    const socketStream = WebSocketStream.of(socket)
+    nuclearStream.pipe(socketStream)
+    socketStream.pipe(nuclearStream)
+    // WebSocketServerClient.of(this.nuclearnetClient, socket)
   }
 }
 

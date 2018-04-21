@@ -29,19 +29,21 @@ describe('WebSocketProxyNUClearNetServer', () => {
     expect(webSocketServer.onConnection).toHaveBeenCalledTimes(1)
   })
 
-  it('forwards NUClearNet network join events to socket', () => {
+  it('forwards NUClearNet network join events to socket', async () => {
     const webSocket = createMockInstance(WebSocket)
     onClientConnection.mockEvent(webSocket)
 
     const alice = new FakeNUClearNetClient(nuclearnetServer)
     alice.connect({ name: 'alice' })
 
+    await flush()
+
     expect(webSocket.send).toHaveBeenLastCalledWith('nuclear_join', expect.objectContaining({
       name: 'alice',
     }))
   })
 
-  it('forwards NUClearNet network leave events to socket', () => {
+  it('forwards NUClearNet network leave events to socket', async () => {
     const webSocket = createMockInstance(WebSocket)
     onClientConnection.mockEvent(webSocket)
 
@@ -49,8 +51,13 @@ describe('WebSocketProxyNUClearNetServer', () => {
     const disconnect = alice.connect({ name: 'alice' })
     disconnect()
 
+    await flush()
+
     expect(webSocket.send).toHaveBeenLastCalledWith('nuclear_leave', expect.objectContaining({
       name: 'alice',
     }))
   })
 })
+
+
+const flush = () => new Promise(res => setImmediate(res))

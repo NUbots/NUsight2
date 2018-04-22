@@ -8,17 +8,17 @@ export class LineChartController {
   }
 
   @action
-  changeMin = (model: LineChartModel, value: string) => {
+  onChangeMin = (model: LineChartModel, value: string) => {
     model.yMin = value ? parseInt(value, 10) : 'auto'
   }
 
   @action
-  changeMax = (model: LineChartModel, value: string) => {
+  onChangeMax = (model: LineChartModel, value: string) => {
     model.yMax = value ? parseInt(value, 10) : 'auto'
   }
 
   @action
-  changeBuffer = (model: LineChartModel, value: string) => {
+  onChangeBuffer = (model: LineChartModel, value: string) => {
     model.bufferSeconds = value ? parseInt(value, 10) : 10
   }
 }

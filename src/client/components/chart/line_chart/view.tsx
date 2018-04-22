@@ -71,16 +71,16 @@ export class LineChart extends Component<LineChartProps & {
 
   private readonly onChangeMin = (event: ChangeEvent<HTMLInputElement>) => {
     const { controller, model } = this.props
-    controller.changeMin(model, event.target.value)
+    controller.onChangeMin(model, event.target.value)
   }
 
   private readonly onChangeMax = (event: ChangeEvent<HTMLInputElement>) => {
     const { controller, model } = this.props
-    controller.changeMax(model, event.target.value)
+    controller.onChangeMax(model, event.target.value)
   }
 
   private readonly onChangeBuffer = (event: ChangeEvent<HTMLInputElement>) => {
     const { controller, model } = this.props
-    controller.changeBuffer(model, event.target.value)
+    controller.onChangeBuffer(model, event.target.value)
   }
 }

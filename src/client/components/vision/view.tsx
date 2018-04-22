@@ -23,16 +23,14 @@ export class VisionView extends Component<{
     return (
       <div className={styles.vision}>
         <Menu/>
-        <div>
-          {robots.map(({ id, name, cameras }) => (
-            <div key={id}>
-              <h1>{name}</h1>
-              <div className={styles.cameras}>
-                {cameras.map(camera => <CameraView key={camera.id} viewModel={camera}/>)}
-              </div>
+        {robots.map(({ id, name, cameras }) => (
+          <div key={id}>
+            <h1>{name}</h1>
+            <div className={styles.cameras}>
+              {cameras.map(camera => <CameraView key={camera.id} viewModel={camera}/>)}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     )
   }

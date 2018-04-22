@@ -20,7 +20,7 @@ export class LineChart extends Component<LineChartProps & {
   controller: LineChartController
 }> {
   static of(model: ChartModel): ComponentType<LineChartProps> {
-    const controller = new LineChartController()
+    const controller = LineChartController.of()
     const lineChartModel = LineChartModel.of(model)
     return props => <LineChart {...props} model={lineChartModel} controller={controller}/>
   }

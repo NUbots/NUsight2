@@ -1,7 +1,5 @@
 import { computed } from 'mobx'
 import { observable } from 'mobx'
-
-import { memoize } from '../../../base/memoize'
 import { ChartModel } from '../model'
 
 export type LineChartModelOpts = {
@@ -19,11 +17,9 @@ export class LineChartModel {
     this.yMax = 'auto'
   }
 
-  static of = memoize((model: ChartModel): LineChartModel => {
-    return new LineChartModel({
-      model,
-    })
-  })
+  static of(model: ChartModel): LineChartModel {
+    return new LineChartModel({ model })
+  }
 
   @computed
   get startTime() {

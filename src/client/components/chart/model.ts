@@ -3,10 +3,9 @@ import { computed } from 'mobx'
 import { now } from 'mobx-utils'
 
 import { Vector2 } from '../../math/vector2'
+import { BrowserSystemClock } from '../../time/browser_clock'
 import { CheckedState } from '../checkbox_tree/model'
 import { RobotModel } from '../robot/model'
-
-import { LineChartModel } from './line_chart/model'
 import { TreeViewModel } from './view_model'
 
 export interface TreeData extends Map<string, TreeData | DataSeries> {
@@ -46,15 +45,37 @@ export class DataSeries {
   }
 }
 
+type ChartModelOpts = {
+  robotModels: RobotModel[]
+}
+
 export class ChartModel {
   @observable private robotModels: RobotModel[]
-  @observable treeData: TreeData = new Map<string, TreeData | DataSeries>()
-  // The exact value of this number isn't important, it's simply here to make the time numbers smaller
-  @observable startTime: number = Date.now() / 1000
-  @observable bufferSeconds: number = 10
 
-  constructor(robotModels: RobotModel[]) {
+  @observable treeData: TreeData
+  @observable startTime: number
+  @observable bufferSeconds: number
+
+  constructor({ robotModels, treeData, startTime, bufferSeconds }: {
+    robotModels: RobotModel[]
+    treeData: Map<string, TreeData | DataSeries>
+    startTime: number
+    bufferSeconds: number
+  }) {
     this.robotModels = robotModels
+    this.treeData = treeData
+    this.startTime = startTime
+    this.bufferSeconds = bufferSeconds
+  }
+
+  static of({ robotModels }: ChartModelOpts) {
+    return new ChartModel({
+      robotModels,
+      treeData: new Map(),
+      // The exact value of this number isn't important, it's simply here to make the time numbers smaller
+      startTime: BrowserSystemClock.now(),
+      bufferSeconds: 10,
+    })
   }
 
   @computed

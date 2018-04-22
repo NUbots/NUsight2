@@ -42,11 +42,21 @@ export function fourcc(code: string): number {
 export class CameraViewModel {
   @observable.ref canvas: HTMLCanvasElement | null = null
 
-  constructor(private model: CameraModel) {
+  constructor(
+    private model: CameraModel,
+    // We cache both the scene and the camera here as THREE.js uses these objects to store its own render lists.
+    // So to conserve memory, it is best to keep them referentially identical across renders.
+    private scene: Scene,
+    private camera: Camera,
+  ) {
   }
 
   static of = createTransformer((model: CameraModel) => {
-    return new CameraViewModel(model)
+    return new CameraViewModel(
+      model,
+      new Scene(),
+      new OrthographicCamera(-1, 1, 1, -1, 1, 3),
+    )
   })
 
   @computed
@@ -69,16 +79,15 @@ export class CameraViewModel {
     }
   })
 
-  @computed
-  get camera(): Camera {
-    const camera = new OrthographicCamera(-1, 1, 1, -1, 1, 3)
+  getCamera(): Camera {
+    const camera = this.camera
     camera.position.z = 2
     return camera
   }
 
-  @computed
-  get scene(): Scene {
-    const scene = new Scene()
+  getScene(): Scene {
+    const scene = this.scene
+    scene.remove(...scene.children)
     if (this.model.image) {
       scene.add(this.image(this.model.image))
     }
@@ -96,7 +105,7 @@ export class CameraViewModel {
   }
 
   private image = createTransformer((image: ImageModel): Mesh => {
-    const mesh =  new Mesh(this.quadGeometry, this.imageMaterial(image))
+    const mesh = new Mesh(this.quadGeometry, this.imageMaterial(image))
 
     // Normally this effect could be achieved by setting texture.flipY to make
     // the textures the correct way up again. However this is ignored on RenderTargets
@@ -198,7 +207,7 @@ export class CameraViewModel {
     const mesh = new Mesh(this.quadGeometry, material)
     mesh.frustumCulled = false
     scene.add(mesh)
-    this.renderer(this.canvas)!.render(scene, this.camera, renderTarget)
+    this.renderer(this.canvas)!.render(scene, this.getCamera(), renderTarget)
     return renderTarget
   }, (target?: WebGLRenderTarget) => {
     if (target) {

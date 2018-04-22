@@ -78,7 +78,7 @@ export class ChartNetwork {
       const key = keys[i]!
 
       if (!node.has(key)) {
-        node.set(key, new DataSeries())
+        node.set(key, DataSeries.of())
       }
 
       const leaf = node.get(key) as DataSeries

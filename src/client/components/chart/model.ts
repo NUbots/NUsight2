@@ -13,6 +13,8 @@ export interface TreeData extends Map<string, TreeData | DataSeries> {
 }
 
 export class DataSeries {
+  private kf: { processNoise: number, measurementNoise: number }
+
   @observable highlight: boolean = false
   @observable color: string
   @observable timeDelta: number
@@ -20,17 +22,31 @@ export class DataSeries {
   @observable checked: CheckedState
   @observable series: Vector2[]
 
-  private kf = {
-    processNoise: 1e-3,
-    measurementNoise: 1e-1,
-  }
-
-  constructor({ color = '#ffffff', checked = CheckedState.Unchecked }: Partial<DataSeries> = {}) {
+  constructor({ color, checked, series, timeDelta, timeVariance, kf }: {
+    color: string
+    checked: CheckedState
+    series: Vector2[]
+    timeDelta: number
+    timeVariance: number
+    kf: { processNoise: number, measurementNoise: number }
+  }) {
     this.color = color
     this.checked = checked
-    this.series = []
-    this.timeDelta = 0
-    this.timeVariance = 1
+    this.series = series
+    this.timeDelta = timeDelta
+    this.timeVariance = timeVariance
+    this.kf = kf
+  }
+
+  static of() {
+    return new DataSeries({
+      color: '#ffffff',
+      checked: CheckedState.Unchecked,
+      series: [],
+      timeDelta: 0,
+      timeVariance: 1,
+      kf: { processNoise: 1e-3, measurementNoise: 1e-1 },
+    })
   }
 
   updateDelta(delta: number) {

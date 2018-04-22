@@ -60,12 +60,12 @@ export class CameraViewModel {
   })
 
   @computed
-  get id() {
+  get id(): number {
     return this.model.id
   }
 
   @computed
-  get name() {
+  get name(): string {
     return this.model.name
   }
 
@@ -91,12 +91,12 @@ export class CameraViewModel {
   }
 
   @computed
-  get width() {
+  get width(): number | undefined {
     return this.model.image && this.model.image.width
   }
 
   @computed
-  get height() {
+  get height(): number | undefined  {
     return this.model.image && this.model.image.height
   }
 

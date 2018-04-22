@@ -29,13 +29,14 @@ export class VisionNetwork {
     const robot = VisionRobotModel.of(robotModel)
     const { cameraId, name, dimensions, format, data, Hcw } = image
 
-    const camera = robot.cameras.get(cameraId)
+    let camera = robot.cameras.get(cameraId)
     if (!camera) {
-      robot.cameras.set(cameraId, CameraModel.of({
+      camera = CameraModel.of({
         model: robot,
         id: cameraId,
         name,
-      }))
+      })
+      robot.cameras.set(cameraId, camera)
     }
     camera!.image = {
       width: dimensions!.x!,

@@ -61,7 +61,7 @@ export class LineChart extends Component<LineChartProps> {
           engine='svg'
           className={style.field}
           scene={viewModel.scene}
-          camera={viewModel.camera} />
+          camera={viewModel.camera}/>
       </div>
     </>)
   }

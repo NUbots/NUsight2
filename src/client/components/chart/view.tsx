@@ -32,7 +32,7 @@ export class ChartView extends Component<ChartViewProps> {
     return (
       <div className={style.page}>
         <Menu>
-         <ul className={style.menu}>
+          <ul className={style.menu}>
             <li className={style.menuItem}>
               <button className={style.menuButton}>Line Chart</button>
               <button className={style.menuButton}>2D Scatter</button>
@@ -41,14 +41,14 @@ export class ChartView extends Component<ChartViewProps> {
         </Menu>
         <div className={style.chart}>
           <div className={style.main}>
-            <LineChart model={model} />
+            <LineChart model={model}/>
           </div>
           <div className={style.sidebar}>
             <CheckboxTree
               model={model.tree}
               onCheck={controller.onNodeCheck}
               onExpand={controller.onNodeExpand}
-              renderLabel={this.renderLabel} />
+              renderLabel={this.renderLabel}/>
           </div>
         </div>
       </div>

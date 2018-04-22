@@ -1,16 +1,15 @@
-import { action } from 'mobx'
 import { observable } from 'mobx'
 import { computed } from 'mobx'
 import { now } from 'mobx-utils'
 
-import { memoize } from '../../base/memoize'
 import { Vector2 } from '../../math/vector2'
 import { CheckedState } from '../checkbox_tree/model'
 import { RobotModel } from '../robot/model'
 
 import { TreeViewModel } from './view_model'
 
-export interface TreeData extends Map<string, TreeData | DataSeries> {}
+export interface TreeData extends Map<string, TreeData | DataSeries> {
+}
 
 export class DataSeries {
   @observable highlight: boolean = false

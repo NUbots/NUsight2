@@ -1,6 +1,5 @@
 import * as bounds from 'binary-search-bounds'
 import { computed } from 'mobx'
-import { observable } from 'mobx'
 import { createTransformer } from 'mobx-utils'
 
 import { Transform } from '../../../math/transform'
@@ -286,25 +285,25 @@ export class LineChartViewModel {
     if (series.highlight) {
       lines.push(Shape.of(
         PathGeometry.of(values),
-          LineAppearance.of({
-            stroke: {
-              color: '#ffff00',
-              width: 8,
-              nonScaling: true,
-            },
-          }),
+        LineAppearance.of({
+          stroke: {
+            color: '#ffff00',
+            width: 8,
+            nonScaling: true,
+          },
+        }),
       ))
     }
 
     lines.push(Shape.of(
       PathGeometry.of(values),
-        LineAppearance.of({
-          stroke: {
-            color: series.color,
-            width: 2,
-            nonScaling: true,
-          },
-        }),
+      LineAppearance.of({
+        stroke: {
+          color: series.color,
+          width: 2,
+          nonScaling: true,
+        },
+      }),
     ))
 
     // Apply our time delta

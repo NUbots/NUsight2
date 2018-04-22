@@ -13,9 +13,8 @@ import { RobotModel } from '../robot/model'
 import { ChartModel } from './model'
 import { DataSeries } from './model'
 import { TreeData } from './model'
-import DataPoint = message.support.nusight.DataPoint
-import IDataPoint = message.support.nusight.IDataPoint
 import Sensors = message.input.Sensors
+import DataPoint = message.support.nusight.DataPoint
 
 const ServoIds = [
   'Right Shoulder Pitch',

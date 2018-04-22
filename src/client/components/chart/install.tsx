@@ -26,7 +26,7 @@ export function installChart({ nav, appModel, nusightNetwork, menu }: {
     Content: () => {
       const network = ChartNetwork.of(nusightNetwork, model)
       const controller = ChartController.of({ model })
-      return <ChartView controller={controller} Menu={menu} model={model} network={network} />
+      return <ChartView controller={controller} Menu={menu} model={model} network={network}/>
     },
   })
 }

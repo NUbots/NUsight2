@@ -44,7 +44,7 @@ export class ChartView extends Component<ChartViewProps & {
         </Menu>
         <div className={style.chart}>
           <div className={style.main}>
-            <LineChart model={model.lineChart}/>
+            <LineChart/>
           </div>
           <div className={style.sidebar}>
             <CheckboxTree

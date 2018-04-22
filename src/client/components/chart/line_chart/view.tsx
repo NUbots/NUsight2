@@ -5,23 +5,24 @@ import * as React from 'react'
 import { Component } from 'react'
 
 import { Renderer } from '../../../render2d/renderer'
+import { ChartModel } from '../model'
 
 import { LineChartController } from './controller'
 import { LineChartModel } from './model'
 import * as style from './style.css'
 import { LineChartViewModel } from './view_model'
 
-export type LineChartProps = {
-  model: LineChartModel
-}
+export type LineChartProps = {}
 
 @observer
 export class LineChart extends Component<LineChartProps & {
+  model: LineChartModel
   controller: LineChartController
 }> {
-  static of(): ComponentType<LineChartProps> {
+  static of(model: ChartModel): ComponentType<LineChartProps> {
     const controller = new LineChartController()
-    return props => <LineChart {...props} controller={controller}/>
+    const lineChartModel = LineChartModel.of(model)
+    return props => <LineChart {...props} model={lineChartModel} controller={controller}/>
   }
 
   render() {

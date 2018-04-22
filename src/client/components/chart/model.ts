@@ -72,9 +72,4 @@ export class ChartModel {
   get now() {
     return (now('frame') / 1000) - this.startTime
   }
-
-  get lineChart() {
-    // TODO: Move somewhere.
-    return LineChartModel.of(this)
-  }
 }

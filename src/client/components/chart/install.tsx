@@ -19,7 +19,7 @@ export function installChart({ nav, appModel, nusightNetwork, menu }: {
   menu: ComponentType
 }) {
   const model = new ChartModel(appModel.robots)
-  const LineChart = LineChartImpl.of()
+  const LineChart = LineChartImpl.of(model)
   nav.addRoute({
     path: '/chart',
     exact: true,

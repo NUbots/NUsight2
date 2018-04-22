@@ -141,7 +141,7 @@ class PacketProcessor {
   }
 
   static of(socket: WebSocket) {
-    return new PacketProcessor(socket, NodeSystemClock, { limit: 20, timeout: 0 })
+    return new PacketProcessor(socket, NodeSystemClock, { limit: 2, timeout: 10 })
   }
 
   onPacket(event: string, packet: NUClearNetPacket) {

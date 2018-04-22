@@ -26,10 +26,10 @@ export class Matrix4 {
   }
 
   static from(mat?: {
-    x?: { x?: number, y?: number, z?: number, t?: number },
-    y?: { x?: number, y?: number, z?: number, t?: number },
-    z?: { x?: number, y?: number, z?: number, t?: number },
-    t?: { x?: number, y?: number, z?: number, t?: number }
+    x?: { x?: number | null, y?: number | null, z?: number | null, t?: number | null } | null,
+    y?: { x?: number | null, y?: number | null, z?: number | null, t?: number | null } | null,
+    z?: { x?: number | null, y?: number | null, z?: number | null, t?: number | null } | null,
+    t?: { x?: number | null, y?: number | null, z?: number | null, t?: number | null } | null
   } | null): Matrix4 {
     if (!mat) {
       return Matrix4.of()

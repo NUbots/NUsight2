@@ -73,11 +73,7 @@ export class CameraViewModel {
     if (canvas) {
       return new WebGLRenderer({ canvas })
     }
-  }, (renderer?: WebGLRenderer) => {
-    if (renderer) {
-      renderer.dispose()
-    }
-  })
+  }, renderer => renderer && renderer.dispose())
 
   getCamera(): Camera {
     const camera = this.camera
@@ -209,10 +205,10 @@ export class CameraViewModel {
     scene.add(mesh)
     this.renderer(this.canvas)!.render(scene, this.getCamera(), renderTarget)
     return renderTarget
-  }, (target?: WebGLRenderTarget) => {
+  }, target => {
     if (target) {
-      target.dispose()
       target.texture.dispose()
+      target.dispose()
     }
   })
 
@@ -232,11 +228,7 @@ export class CameraViewModel {
     texture.flipY = false
     texture.needsUpdate = true
     return texture
-  }, (texture?: Texture) => {
-    if (texture) {
-      texture.dispose()
-    }
-  })
+  }, texture => texture && texture.dispose())
 
   private grayTexture = createTransformer((image: ImageModel) => {
     const texture = new DataTexture(
@@ -254,11 +246,7 @@ export class CameraViewModel {
     texture.flipY = false
     texture.needsUpdate = true
     return texture
-  }, (texture?: Texture) => {
-    if (texture) {
-      texture.dispose()
-    }
-  })
+  }, texture => texture && texture.dispose())
 
   private rawTexture = createTransformer((image: ImageModel) => {
     const texture = new DataTexture(
@@ -275,9 +263,5 @@ export class CameraViewModel {
     )
     texture.needsUpdate = true
     return texture
-  }, (texture?: Texture) => {
-    if (texture) {
-      texture.dispose()
-    }
-  })
+  }, texture => texture && texture.dispose())
 }

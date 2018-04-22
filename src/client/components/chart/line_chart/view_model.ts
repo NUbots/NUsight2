@@ -27,6 +27,11 @@ export class LineChartViewModel {
   })
 
   @computed
+  get bufferSeconds() {
+    return this.model.bufferSeconds
+  }
+
+  @computed
   get camera(): Transform {
     const yScale = 0.9 / (this.maxValue - this.minValue) // 0.9 so there is a little extra above and below the plot
     const xScale = 1 / this.model.bufferSeconds

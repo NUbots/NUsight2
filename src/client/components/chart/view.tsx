@@ -7,6 +7,7 @@ import { TreeNodeModel } from '../checkbox_tree/model'
 import { CheckboxTree } from '../checkbox_tree/view'
 
 import { ChartController } from './controller'
+import { LineChartProps } from './line_chart/view'
 import { LineChart } from './line_chart/view'
 import { ChartModel } from './model'
 import { ChartNetwork } from './network'
@@ -14,21 +15,23 @@ import * as style from './style.css'
 import { TreeLabel } from './tree_label/view'
 
 export type ChartViewProps = {
-  Menu: ComponentType<{}>
+  Menu: ComponentType,
   model: ChartModel
   network: ChartNetwork,
   controller: ChartController
 }
 
 @observer
-export class ChartView extends Component<ChartViewProps> {
+export class ChartView extends Component<ChartViewProps & {
+  LineChart: ComponentType<LineChartProps>
+}> {
 
   componentWillUnmount(): void {
     this.props.network.destroy()
   }
 
   render() {
-    const { Menu, model, controller } = this.props
+    const { Menu, model, controller, LineChart } = this.props
     return (
       <div className={style.page}>
         <Menu>
@@ -41,7 +44,7 @@ export class ChartView extends Component<ChartViewProps> {
         </Menu>
         <div className={style.chart}>
           <div className={style.main}>
-            <LineChart model={model}/>
+            <LineChart model={model.lineChart}/>
           </div>
           <div className={style.sidebar}>
             <CheckboxTree

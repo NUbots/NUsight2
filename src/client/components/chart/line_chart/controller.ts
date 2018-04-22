@@ -3,39 +3,22 @@ import { action } from 'mobx'
 import { LineChartModel } from './model'
 
 export class LineChartController {
-
-  constructor(private model: LineChartModel) {
-    this.model = model
-  }
-
-  static of(model: LineChartModel) {
-    return new LineChartController(model)
+  static of() {
+    return new LineChartController()
   }
 
   @action
-  changeMin = (event: any) => {
-    if (event.target.value) {
-      this.model.yMin = parseInt(event.target.value, 10)
-    } else {
-      this.model.yMin = 'auto'
-    }
+  changeMin = (model: LineChartModel, value: string) => {
+    model.yMin = value ? parseInt(value, 10) : 'auto'
   }
 
   @action
-  changeMax = (event: any) => {
-    if (event.target.value) {
-      this.model.yMax = parseInt(event.target.value, 10)
-    } else {
-      this.model.yMax = 'auto'
-    }
+  changeMax = (model: LineChartModel, value: string) => {
+    model.yMax = value ? parseInt(value, 10) : 'auto'
   }
 
   @action
-  changeBuffer = (event: any) => {
-    if (event.target.value) {
-      this.model.bufferSeconds = parseInt(event.target.value, 10)
-    } else {
-      this.model.bufferSeconds = 10
-    }
+  changeBuffer = (model: LineChartModel, value: string) => {
+    model.bufferSeconds = value ? parseInt(value, 10) : 10
   }
 }

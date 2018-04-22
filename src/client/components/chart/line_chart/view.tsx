@@ -1,9 +1,10 @@
 import { observer } from 'mobx-react'
+import { ChangeEvent } from 'react'
+import { ComponentType } from 'react'
 import * as React from 'react'
 import { Component } from 'react'
 
 import { Renderer } from '../../../render2d/renderer'
-import { ChartModel } from '../model'
 
 import { LineChartController } from './controller'
 import { LineChartModel } from './model'
@@ -11,30 +12,31 @@ import * as style from './style.css'
 import { LineChartViewModel } from './view_model'
 
 export type LineChartProps = {
-  model: ChartModel
+  model: LineChartModel
 }
 
 @observer
-export class LineChart extends Component<LineChartProps> {
+export class LineChart extends Component<LineChartProps & {
+  controller: LineChartController
+}> {
+  static of(): ComponentType<LineChartProps> {
+    const controller = new LineChartController()
+    return props => <LineChart {...props} controller={controller}/>
+  }
+
   render() {
-    const chartModel = this.props.model
-    const lineChartModel = LineChartModel.of(this.props.model)
-    const viewModel = LineChartViewModel.of(lineChartModel)
-    const controller = LineChartController.of(lineChartModel)
+    const viewModel = LineChartViewModel.of(this.props.model)
+    const { bufferSeconds, minValue, maxValue } = viewModel
 
-    const min = viewModel.minValue.toPrecision(3)
-    const max = viewModel.maxValue.toPrecision(3)
-    const sec = lineChartModel.bufferSeconds.toPrecision(3)
-
-    return (<>
+    return <>
       <div className={style.topBar}>
         <label className={style.topBarItem}>
           Minimum Value
           <input
             className={style.topBarInput}
             type='number'
-            onChange={controller.changeMin}
-            placeholder={`(${min})`}
+            onChange={this.onChangeMin}
+            placeholder={`(${minValue.toPrecision(3)})`}
           />
         </label>
         <label className={style.topBarItem}>
@@ -42,8 +44,8 @@ export class LineChart extends Component<LineChartProps> {
           <input
             className={style.topBarInput}
             type='number'
-            onChange={controller.changeMax}
-            placeholder={`(${max})`}
+            onChange={this.onChangeMax}
+            placeholder={`(${maxValue.toPrecision(3)})`}
           />
         </label>
         <label className={style.topBarItem}>
@@ -51,8 +53,8 @@ export class LineChart extends Component<LineChartProps> {
           <input
             className={style.topBarInput}
             type='number'
-            onChange={controller.changeBuffer}
-            placeholder={`(${sec})`}
+            onChange={this.onChangeBuffer}
+            placeholder={`(${bufferSeconds.toPrecision(3)})`}
           />
         </label>
       </div>
@@ -63,7 +65,21 @@ export class LineChart extends Component<LineChartProps> {
           scene={viewModel.scene}
           camera={viewModel.camera}/>
       </div>
-    </>)
+    </>
   }
 
+  private readonly onChangeMin = (event: ChangeEvent<HTMLInputElement>) => {
+    const { controller, model } = this.props
+    controller.changeMin(model, event.target.value)
+  }
+
+  private readonly onChangeMax = (event: ChangeEvent<HTMLInputElement>) => {
+    const { controller, model } = this.props
+    controller.changeMax(model, event.target.value)
+  }
+
+  private readonly onChangeBuffer = (event: ChangeEvent<HTMLInputElement>) => {
+    const { controller, model } = this.props
+    controller.changeBuffer(model, event.target.value)
+  }
 }

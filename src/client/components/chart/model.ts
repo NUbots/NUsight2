@@ -6,6 +6,7 @@ import { Vector2 } from '../../math/vector2'
 import { CheckedState } from '../checkbox_tree/model'
 import { RobotModel } from '../robot/model'
 
+import { LineChartModel } from './line_chart/model'
 import { TreeViewModel } from './view_model'
 
 export interface TreeData extends Map<string, TreeData | DataSeries> {
@@ -70,5 +71,10 @@ export class ChartModel {
   @computed
   get now() {
     return (now('frame') / 1000) - this.startTime
+  }
+
+  get lineChart() {
+    // TODO: Move somewhere.
+    return LineChartModel.of(this)
   }
 }

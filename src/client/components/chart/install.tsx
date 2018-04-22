@@ -7,6 +7,7 @@ import { AppModel } from '../app/model'
 
 import { ChartController } from './controller'
 import Icon from './icon.svg'
+import { LineChart as LineChartImpl } from './line_chart/view'
 import { ChartModel } from './model'
 import { ChartNetwork } from './network'
 import { ChartView } from './view'
@@ -18,6 +19,7 @@ export function installChart({ nav, appModel, nusightNetwork, menu }: {
   menu: ComponentType
 }) {
   const model = new ChartModel(appModel.robots)
+  const LineChart = LineChartImpl.of()
   nav.addRoute({
     path: '/chart',
     exact: true,
@@ -26,7 +28,7 @@ export function installChart({ nav, appModel, nusightNetwork, menu }: {
     Content: () => {
       const network = ChartNetwork.of(nusightNetwork, model)
       const controller = ChartController.of({ model })
-      return <ChartView controller={controller} Menu={menu} model={model} network={network}/>
+      return <ChartView controller={controller} Menu={menu} model={model} network={network} LineChart={LineChart}/>
     },
   })
 }

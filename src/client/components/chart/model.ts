@@ -6,6 +6,7 @@ import { Vector2 } from '../../math/vector2'
 import { BrowserSystemClock } from '../../time/browser_clock'
 import { CheckedState } from '../checkbox_tree/model'
 import { RobotModel } from '../robot/model'
+
 import { TreeViewModel } from './view_model'
 
 export interface TreeData extends Map<string, TreeData | DataSeries> {

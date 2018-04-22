@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
 
+import { NUsightNetwork } from '../../network/nusight_network'
 import { TreeNodeModel } from '../checkbox_tree/model'
 import { CheckboxTree } from '../checkbox_tree/view'
 
@@ -14,17 +15,25 @@ import { ChartNetwork } from './network'
 import * as style from './style.css'
 import { TreeLabel } from './tree_label/view'
 
-export type ChartViewProps = {
+@observer
+export class ChartView extends Component<{
   Menu: ComponentType,
   model: ChartModel
   network: ChartNetwork,
   controller: ChartController
-}
-
-@observer
-export class ChartView extends Component<ChartViewProps & {
   LineChart: ComponentType<LineChartProps>
 }> {
+
+  static of({ model, menu, nusightNetwork, LineChart }: {
+    model: ChartModel
+    menu: ComponentType
+    nusightNetwork: NUsightNetwork
+    LineChart: ComponentType<LineChartProps>
+  }): ComponentType {
+    const network = ChartNetwork.of(nusightNetwork, model)
+    const controller = ChartController.of({ model })
+    return () => <ChartView controller={controller} Menu={menu} model={model} network={network} LineChart={LineChart}/>
+  }
 
   componentWillUnmount(): void {
     this.props.network.destroy()

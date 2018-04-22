@@ -1,5 +1,6 @@
 import { computed } from 'mobx'
 import { observable } from 'mobx'
+
 import { ChartModel } from '../model'
 
 export type LineChartModelOpts = {

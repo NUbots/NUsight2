@@ -16,12 +16,13 @@ import { WebSocketServer } from './nuclearnet/web_socket_server'
 
 const args = minimist(process.argv.slice(2))
 const withVirtualRobots = args['virtual-robots'] || false
+const nbsFile = args.play
 
 const app = express()
 const server = http.createServer(app)
 const sioNetwork = sio(server, { parser: NUClearNetProxyParser } as any)
 
-const root = `${__dirname}/../../build`
+const root = `${__dirname}/../../dist`
 app.use(history())
 app.use(compression())
 app.use(express.static(root))
@@ -48,3 +49,31 @@ if (withVirtualRobots) {
 WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
   fakeNetworking: withVirtualRobots,
 })
+
+if (nbsFile) {
+  const nuclearnetClient = withVirtualRobots ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
+  nuclearnetClient.connect({ name: nbsFile })
+
+  const player = NBSPlayer.of({
+    file: nbsFile,
+  })
+
+  player.onPacket((packet: NBSPacket) => {
+    nuclearnetClient.send({
+      type: packet.hash,
+      payload: packet.payload,
+    })
+  })
+
+  player.onEnd(() => {
+    // tslint:disable-next-line no-console
+    console.log('Restarting NBS playback')
+    player.restart()
+    player.play()
+  })
+
+  // tslint:disable-next-line no-console
+  console.log(`Playing NBS file: ${nbsFile}`)
+  player.play()
+}
+

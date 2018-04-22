@@ -98,7 +98,7 @@ export class ChartModel {
   @computed
   get tree() {
     return {
-      nodes: Array.from(this.treeData.entries()).map(([label, model]) => TreeViewModel.of({ label, model })),
+      nodes: Array.from(this.treeData.entries(), ([label, model]) => TreeViewModel.of({ label, model })),
       usePessimisticToggle: true,
     }
   }

@@ -23,8 +23,11 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
 
     const { width, height } = this.props.viewModel
 
-    const aspectRatio = width!
-    / height!
+    if (width == null || height == null) {
+      return null
+    }
+
+    const aspectRatio = width / height
     const percentage = 60
 
     return (

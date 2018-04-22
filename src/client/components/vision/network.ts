@@ -31,8 +31,7 @@ export class VisionNetwork {
 
     let camera = robot.cameras.get(cameraId)
     if (!camera) {
-      camera = CameraModel.of({
-        model: robot,
+      camera = CameraModel.of(robot, {
         id: cameraId,
         name,
       })

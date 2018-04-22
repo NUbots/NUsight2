@@ -8,7 +8,8 @@ import { CameraViewModel } from './view_model'
 
 @observer
 export class CameraView extends Component<{ viewModel: CameraViewModel }> {
-  private destroy: () => void = () => {}
+  private destroy: () => void = () => {
+  }
 
   componentDidMount() {
     this.destroy = autorun(this.renderScene, { scheduler: requestAnimationFrame })
@@ -22,7 +23,8 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
 
     const { width, height } = this.props.viewModel
 
-    const aspectRatio = width! / height!
+    const aspectRatio = width!
+    / height!
     const percentage = 60
 
     return (
@@ -32,9 +34,9 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
         maxHeight: `${percentage}vh`,
         maxWidth: `${percentage * aspectRatio}vh`,
       }}
-        width={width}
-        height={height}
-        ref={this.onRef}/>
+              width={width}
+              height={height}
+              ref={this.onRef}/>
     )
   }
 

@@ -20,21 +20,15 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
   }
 
   render() {
-    const { width, height } = this.props.viewModel
-    if (width == null || height == null) {
-      return null
-    }
-    const aspectRatio = width / height
-    const percentage = 60
     return <canvas
       style={{
-        width: `${percentage}vw`,
-        height: `${percentage / aspectRatio}vw`,
-        maxHeight: `${percentage}vh`,
-        maxWidth: `${percentage * aspectRatio}vh`,
+        width: `60vw`,
+        height: `$60vw`,
+        maxHeight: `$60vh`,
+        maxWidth: `$60vh`,
       }}
-      width={width}
-      height={height}
+      width={1000}
+      height={1000}
       ref={this.onRef}
     />
   }

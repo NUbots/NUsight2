@@ -23,9 +23,9 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
     return <canvas
       style={{
         width: `60vw`,
-        height: `$60vw`,
-        maxHeight: `$60vh`,
-        maxWidth: `$60vh`,
+        height: `60vw`,
+        maxHeight: `60vh`,
+        maxWidth: `60vh`,
       }}
       width={1000}
       height={1000}

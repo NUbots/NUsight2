@@ -1,5 +1,5 @@
-precision highp float;
-precision highp int;
+precision lowp float;
+precision lowp int;
 
 uniform sampler2D image;
 

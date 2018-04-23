@@ -50,15 +50,15 @@ export class VisualMeshNetwork {
     ]] as [number, [number, number]])
 
     // Each of the output layer classes
-    camera.mesh.classes = classifications.map((layer) => (
-      indices.map((idx, i) => {
-        const v = []
-        for (let d = 0; i < layer.dimensions!; d++) {
-          v.push(layer.values![i * layer.dimensions! + d])
-        }
-        return [idx, v] as [number, number[]]
-      })
-    ))
+    // camera.mesh.classes = classifications.map((layer) => (
+    //   indices.map((idx, i) => {
+    //     const v = []
+    //     for (let d = 0; i < layer.dimensions!; d++) {
+    //       v.push(layer.values![i * layer.dimensions! + d])
+    //     }
+    //     return [idx, v] as [number, number[]]
+    //   })
+    // ))
   }
 
   @action

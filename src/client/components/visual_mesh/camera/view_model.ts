@@ -171,7 +171,7 @@ export class CameraViewModel {
     uvs.fill(0)
     mesh.coordinates.forEach(v => {
       uvs[v[0] * 2 + 0] = v[1][0] / this.model.image!.width
-      uvs[v[0] * 2 + 1] = 1 - (v[1][1] / this.model.image!.height) // flip y
+      uvs[v[0] * 2 + 1] = v[1][1] / this.model.image!.height
     })
 
     const geometry = new BufferGeometry()

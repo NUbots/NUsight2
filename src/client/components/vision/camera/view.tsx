@@ -35,6 +35,7 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
     return (
       <div
         style={{
+          position: 'relative',
           width: `${percentage}vw`,
           height: `${percentage / aspectRatio}vw`,
           maxHeight: `${percentage}vh`,
@@ -61,13 +62,13 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
 
     const { renderer, canvas } = this.props.viewModel
 
-    // TODO work out how to make this work
-    // width *= devicePixelRatio
-    // height *= devicePixelRatio
+    // Adapt to the dpi of the display
+    width *= devicePixelRatio
+    height *= devicePixelRatio
 
     this.props.viewModel.viewWidth = width
     this.props.viewModel.viewHeight = height
-    renderer(canvas)!.setSize(width, height)
+    renderer(canvas)!.setSize(width, height, false)
   }
 
   private renderScene = () => {

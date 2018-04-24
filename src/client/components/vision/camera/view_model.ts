@@ -41,6 +41,8 @@ export function fourcc(code: string): number {
 
 export class CameraViewModel {
   @observable.ref canvas: HTMLCanvasElement | null = null
+  @observable viewWidth?: number
+  @observable viewHeight?: number
 
   constructor(
     private model: CameraModel,
@@ -91,12 +93,12 @@ export class CameraViewModel {
   }
 
   @computed
-  get width(): number | undefined {
+  get imageWidth(): number | undefined {
     return this.model.image && this.model.image.width
   }
 
   @computed
-  get height(): number | undefined  {
+  get imageHeight(): number | undefined  {
     return this.model.image && this.model.image.height
   }
 

@@ -8,6 +8,7 @@ type ImageModelOpts = {
   height: number
   format: number
   data: Uint8Array
+  lens: { projection: number, focalLength: number }
   Hcw: Matrix4
 }
 
@@ -16,18 +17,20 @@ export class ImageModel {
   @observable height: number
   @observable format: number
   @observable.ref data: Uint8Array
+  @observable lens: { projection: number, focalLength: number }
   @observable Hcw: Matrix4
 
-  constructor({ width, height, format, data, Hcw }: ImageModelOpts) {
+  constructor({ width, height, format, data, lens, Hcw }: ImageModelOpts) {
     this.width = width
     this.height = height
     this.format = format
     this.data = data
+    this.lens = lens
     this.Hcw = Hcw
   }
 
-  static of({ width, height, format, data, Hcw }: ImageModelOpts) {
-    return new ImageModel({ width, height, format, data, Hcw })
+  static of({ width, height, format, data, lens, Hcw }: ImageModelOpts) {
+    return new ImageModel({ width, height, format, data, lens, Hcw })
   }
 }
 

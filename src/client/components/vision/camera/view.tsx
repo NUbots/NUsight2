@@ -30,7 +30,6 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
       return null
     }
 
-    // TODO THE CANVAS WIDTH/HEIGHT NEEDS TO BE CALCULATED AUTOMATICALLY USING DPI ETC NONSENSE
     const aspectRatio = imageWidth / imageHeight
     const percentage = 60
     return (

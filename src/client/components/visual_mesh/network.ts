@@ -41,24 +41,13 @@ export class VisualMeshNetwork {
     }
 
     // We don't need to know phi, just how many items are in each ring
-    camera.mesh.segments = mesh!.map(v => v.segments!)
-
-    // Coordinates for UV mapping
-    camera.mesh.coordinates = indices!.map((idx, i) => [idx, [
-      coordinates[i].x,
-      coordinates[i].y,
-    ]] as [number, [number, number]])
-
-    // Each of the output layer classes
-    // camera.mesh.classes = classifications.map((layer) => (
-    //   indices.map((idx, i) => {
-    //     const v = []
-    //     for (let d = 0; i < layer.dimensions!; d++) {
-    //       v.push(layer.values![i * layer.dimensions! + d])
-    //     }
-    //     return [idx, v] as [number, number[]]
-    //   })
-    // ))
+    camera.mesh = {
+      rows: mesh!.map(v => v.segments!),
+      indices,
+      neighbours: neighbourhood.map(v => [v.s0!, v.s1!, v.s2!, v.s3!, v.s4!, v.s5!]),
+      coordinates: coordinates.map(v => [v.x!, v.y!] as [number, number]),
+      classifications: classifications.map(v => ({ dim: v.dimensions!, values: v.values! })),
+    }
   }
 
   @action

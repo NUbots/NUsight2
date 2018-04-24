@@ -32,7 +32,7 @@ export class VisionNetwork {
     // TODO DEBUG for now the recording in use has no lens information, so we are attaching it here
     const lens = {
       projection: Image.Lens.Projection.EQUIDISTANT,
-      focalLength: 1.0 / 0.0026997136600899543,
+      focalLength: (1.0 / 0.0026997136600899543) / 1280.0,
     }
 
     let camera = robot.cameras.get(cameraId)

@@ -61,11 +61,12 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
 
     const { renderer, canvas } = this.props.viewModel
 
-    width *= devicePixelRatio
-    height *= devicePixelRatio
+    // TODO work out how to make this work
+    // width *= devicePixelRatio
+    // height *= devicePixelRatio
 
-    this.props.viewModel.viewWidth = width * devicePixelRatio
-    this.props.viewModel.viewHeight = height * devicePixelRatio
+    this.props.viewModel.viewWidth = width
+    this.props.viewModel.viewHeight = height
     renderer(canvas)!.setSize(width, height)
   }
 

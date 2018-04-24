@@ -15,6 +15,7 @@ import { OrthographicCamera } from 'three'
 import { Material } from 'three'
 import { DataTexture } from 'three'
 import { LuminanceFormat } from 'three'
+import { Object3D } from 'three'
 import { RGBFormat } from 'three'
 import { Texture } from 'three'
 import { UnsignedByteType } from 'three'
@@ -136,7 +137,10 @@ export class CameraViewModel {
   }
 
   private horizon = createTransformer((m: Matrix4Model) => {
-    return new Mesh(this.horizonGeometry(m), this.worldLineMaterial)
+    const obj = new Object3D()
+    obj.add(new Mesh(this.horizonGeometry(m), this.worldLineMaterial))
+    obj.add(new Mesh(this.directionGeometry(m), this.worldLineMaterial))
+    return obj
   })
 
   private horizonGeometry = createTransformer((m: Matrix4Model) => {
@@ -154,7 +158,7 @@ export class CameraViewModel {
     // Start and end are equal as we are drawing the entire horizon
     const end = start
 
-    const colour = [0, 0, 1]  // 1 copy
+    const colour = [0, 0, 1, 0.7]  // 1 copy
     colour.push(...colour)  // 2 copies
     colour.push(...colour)  // 4 copies
 
@@ -165,7 +169,42 @@ export class CameraViewModel {
     geom.addAttribute('axis', new Float32BufferAttribute(axis, 3))
     geom.addAttribute('start', new Float32BufferAttribute(start, 3))
     geom.addAttribute('end', new Float32BufferAttribute(end, 3))
-    geom.addAttribute('colour', new Float32BufferAttribute(colour, 3))
+    geom.addAttribute('colour', new Float32BufferAttribute(colour, 4))
+    geom.addAttribute('lineWidth', new Float32BufferAttribute(lineWidth, 1))
+
+    return geom
+
+  }, (geometry?: BufferGeometry) => geometry && geometry.dispose())
+
+  private directionGeometry = createTransformer((m: Matrix4Model) => {
+
+    const geom = new PlaneBufferGeometry(2, 2)
+
+    const axis = [m.y.x, m.y.y, m.y.z]  // 1 copy
+    axis.push(...axis)  // 2 copies
+    axis.push(...axis)  // 4 copies
+
+    const start = [m.x.x, m.x.y, m.x.z]  // 1 copy
+    start.push(...start)  // 2 copies
+    start.push(...start)  // 4 copies
+
+    // Only draw the lower half
+    const end = [-m.x.x, -m.x.y, -m.x.z]  // 1 copy
+    end.push(...end)  // 2 copies
+    end.push(...end)  // 4 copies
+
+    const colour = [0.7, 0.7, 0.7, 0.5]  // 1 copy
+    colour.push(...colour)  // 2 copies
+    colour.push(...colour)  // 4 copies
+
+    const lineWidth = [6]  // 1 copy
+    lineWidth.push(...lineWidth)  // 2 copies
+    lineWidth.push(...lineWidth)  // 4 copies
+
+    geom.addAttribute('axis', new Float32BufferAttribute(axis, 3))
+    geom.addAttribute('start', new Float32BufferAttribute(start, 3))
+    geom.addAttribute('end', new Float32BufferAttribute(end, 3))
+    geom.addAttribute('colour', new Float32BufferAttribute(colour, 4))
     geom.addAttribute('lineWidth', new Float32BufferAttribute(lineWidth, 1))
 
     return geom

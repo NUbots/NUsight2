@@ -7,7 +7,7 @@ attribute vec3 axis;
 attribute vec3 start;
 attribute vec3 end;
 attribute float lineWidth;
-attribute vec3 colour;
+attribute vec4 colour;
 
 uniform mat4 projectionMatrix;
 uniform mat4 modelViewMatrix;
@@ -17,7 +17,7 @@ varying vec3 vAxis;
 varying vec3 vStart;
 varying vec3 vEnd;
 varying float vLineWidth;
-varying vec3 vColour;
+varying vec4 vColour;
 
 void main() {
   vUv = uv;

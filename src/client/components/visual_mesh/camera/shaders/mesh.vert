@@ -15,7 +15,7 @@ const float PI = 3.1415926535897932384626433832795;
 
 void main() {
   // Forward our varyings
-	vUv = uv;
+  vUv = uv;
   vClassification = classification;
 
   // Calculate our position in the mesh

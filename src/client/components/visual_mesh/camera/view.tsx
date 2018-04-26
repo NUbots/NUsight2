@@ -3,7 +3,9 @@ import { action } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
+import ReactResizeDetector from 'react-resize-detector'
 
+import * as styles from './styles.css'
 import { CameraViewModel } from './view_model'
 
 @observer
@@ -20,22 +22,23 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
   }
 
   render() {
-    return <canvas
-      style={{
-        width: `60vw`,
-        height: `60vw`,
-        maxHeight: `60vh`,
-        maxWidth: `60vh`,
-      }}
-      width={1000}
-      height={1000}
-      ref={this.onRef}
-    />
+    return (
+      <div className={styles.viewport}>
+        <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
+        <canvas ref={this.onRef} />
+      </div>
+    )
   }
 
   @action
   private onRef = (canvas: HTMLCanvasElement | null) => {
     this.props.viewModel.canvas = canvas
+  }
+
+  @action
+  private onResize = (width: number, height: number) => {
+    const { renderer, canvas } = this.props.viewModel
+    renderer(canvas)!.setSize(width, height)
   }
 
   private renderScene = () => {

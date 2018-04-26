@@ -55,8 +55,8 @@ export class ImageModel {
     this.data = data
   }
 
-  static of({ width, height, format, data }: ImageModelOpts) {
-    return new ImageModel({ width, height, format, data })
+  static of(opts: ImageModelOpts) {
+    return new ImageModel(opts)
   }
 }
 

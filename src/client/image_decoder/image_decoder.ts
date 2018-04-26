@@ -1,10 +1,8 @@
 import { observable } from 'mobx'
-import { computed } from 'mobx'
 import { createTransformer } from 'mobx-utils'
 import { BufferGeometry } from 'three'
 import { PlaneBufferGeometry } from 'three'
 import { RawShaderMaterial } from 'three'
-import { MeshBasicMaterial } from 'three'
 import { WebGLRenderTarget } from 'three'
 import { Scene } from 'three'
 import { Mesh } from 'three'
@@ -21,8 +19,6 @@ import { LinearFilter } from 'three'
 import { NearestFilter } from 'three'
 import { Vector4 } from 'three'
 import { Camera } from 'three'
-
-import { memoize } from '../base/memoize'
 
 import * as bayerFragmentShader from './shaders/bayer.frag'
 import * as bayerVertexShader from './shaders/bayer.vert'
@@ -59,8 +55,8 @@ export class ImageModel {
     this.data = data
   }
 
-  static of({ width, height, format, data }: ImageModelOpts) {
-    return new ImageModel({ width, height, format, data })
+  static of(opts: ImageModelOpts) {
+    return new ImageModel(opts)
   }
 }
 
@@ -72,7 +68,7 @@ export class ImageDecoder {
               private geometry: BufferGeometry) {
   }
 
-  static of = memoize((renderer: WebGLRenderer) => {
+  static of = createTransformer((renderer: WebGLRenderer) => {
     return new ImageDecoder(
       renderer,
       new Scene(),
@@ -150,7 +146,7 @@ export class ImageDecoder {
     scene.remove(...this.scene.children)
     scene.add(mesh)
 
-    this.renderer!.render(scene, this.camera, renderTarget)
+    this.renderer.render(scene, this.camera, renderTarget)
     return renderTarget
   }, (target?: WebGLRenderTarget) => target && target.dispose())
 

@@ -98,9 +98,8 @@ export class ImageDecoder {
     }
   })
 
-  // This shader must be stored separately as a computed field as if we make it new each time,
-  // it will get compiled each time which is quite expensive.
-  private get bayerShader() {
+  // By making this a transformer, we ensure that when we are no longer observed, the material is cleaned up
+  private bayerShader = createTransformer((renderer: WebGLRenderer): RawShaderMaterial => {
     return new RawShaderMaterial({
       vertexShader: String(bayerVertexShader),
       fragmentShader: String(bayerFragmentShader),
@@ -112,7 +111,7 @@ export class ImageDecoder {
       depthTest: false,
       depthWrite: false,
     })
-  }
+  }, (material?: RawShaderMaterial) => material && material.dispose())
 
   private bayerTexture = createTransformer((image: ImageModel) => {
     let firstRed
@@ -135,13 +134,13 @@ export class ImageDecoder {
     const renderTarget = new WebGLRenderTarget(width, height)
     renderTarget.depthBuffer = false
     renderTarget.stencilBuffer = false
-    const material = this.bayerShader
+    const material = this.bayerShader(this.renderer)
 
     // TODO: This is wrong and not very reactive however the alternative is recompiling the shader every time
     // you have a better idea?
-    material.uniforms.sourceSize = { value: [width, height, 1 / width, 1 / height] }
-    material.uniforms.firstRed = { value: firstRed }
-    material.uniforms.image = { value: this.rawTexture(image) }
+    material.uniforms.sourceSize.value = [width, height, 1 / width, 1 / height]
+    material.uniforms.firstRed.value = firstRed
+    material.uniforms.image.value = this.rawTexture(image)
 
     const mesh = new Mesh(this.geometry, material)
     mesh.frustumCulled = false
@@ -153,12 +152,7 @@ export class ImageDecoder {
 
     this.renderer!.render(scene, this.camera, renderTarget)
     return renderTarget
-  }, target => {
-    if (target) {
-      target.texture.dispose()
-      target.dispose()
-    }
-  })
+  }, (target?: WebGLRenderTarget) => target && target.dispose())
 
   private rgbTexture = createTransformer((image: ImageModel) => {
     const texture = new DataTexture(

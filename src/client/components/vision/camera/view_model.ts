@@ -49,7 +49,7 @@ export class CameraViewModel {
 
   @computed
   private get decoder() {
-    return ImageDecoder.of(this.renderer(this.canvas))
+    return ImageDecoder.of(this.renderer(this.canvas)!)
   }
 
   renderer = createTransformer((canvas: HTMLCanvasElement | null) => {

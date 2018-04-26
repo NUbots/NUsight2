@@ -139,8 +139,8 @@ export class CameraViewModel {
 
   private horizon = createTransformer((m: Matrix4Model) => {
     const obj = new Object3D()
-    obj.add(new Mesh(this.horizonGeometry(m), this.worldLineMaterial))
     obj.add(new Mesh(this.directionGeometry(m), this.worldLineMaterial))
+    obj.add(new Mesh(this.horizonGeometry(m), this.worldLineMaterial))
     return obj
   })
 
@@ -232,7 +232,7 @@ export class CameraViewModel {
     return this.makeWorldLine({
       axis: new Vector3(m.y.x, m.y.y, m.y.z),
       start: new Vector3(m.x.x, m.x.y, m.x.z),
-      end: new Vector3(-m.x.x, -m.x.y, -m.x.z),
+      end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
       colour: new Vector4(0.7, 0.7, 0.7, 0.5),
       lineWidth: 5,
     })

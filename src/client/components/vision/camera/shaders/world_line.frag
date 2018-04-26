@@ -45,11 +45,13 @@ float angleAround(vec3 axis, vec3 start, vec3 vec) {
   vec3 aStart = normalize(cross(axis, start));
   vec3 aVec = normalize(cross(axis, vec));
 
-  float y = dot(aStart, aVec);
-  float x = dot(axis, cross(aVec, aStart));
+  float x = dot(aStart, aVec); // cos(theta)
+  float y = dot(axis, cross(aStart, aVec)); // sin(theta)
 
   // Cross and dot to get our y and x and atan2 to get angle
-  return atan(y, x) + M_PI;
+  float theta = atan(y, x);
+  theta += theta < 0.0 ? (M_PI * 2.0) : 0.0;
+  return theta;
 }
 
 void main() {
@@ -84,6 +86,7 @@ void main() {
   // We get the distance from us to the nearest pixel and smoothstep to make a line
   float pixelDistance = length(screenPoint - nearestPixel);
   float alpha = smoothstep(0.0, vLineWidth * 0.5, vLineWidth * 0.5 - pixelDistance);
+
   gl_FragColor = vec4(vColour.xyz, vColour.w * alpha);
 }
 

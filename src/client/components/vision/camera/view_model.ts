@@ -5,7 +5,7 @@ import { BufferGeometry } from 'three'
 import { PlaneBufferGeometry } from 'three'
 import { RawShaderMaterial } from 'three'
 import { MeshBasicMaterial } from 'three'
-import { Float32BufferAttribute } from 'three'
+import { BufferAttribute } from 'three'
 import { WebGLRenderTarget } from 'three'
 import { Scene } from 'three'
 import { Mesh } from 'three'
@@ -23,6 +23,7 @@ import { ClampToEdgeWrapping } from 'three'
 import { LinearFilter } from 'three'
 import { NearestFilter } from 'three'
 import { Vector4 } from 'three'
+import { Vector3 } from 'three'
 import { Vector2 } from 'three'
 
 import { Matrix4 as Matrix4Model } from '../../../math/matrix4'
@@ -143,71 +144,98 @@ export class CameraViewModel {
     return obj
   })
 
-  private horizonGeometry = createTransformer((m: Matrix4Model) => {
+  /**
+   * There are three different combinations of parameters we can accept.
+   * Just an axis means draw a line around this entire plane
+   * Just a start and end implies that the axis is `cross(start, end)` and is straight
+   * An axis plus a start + end means draw a line segment around axis from start to end
+   */
+  private makeWorldLine({ axis, start, end, colour, lineWidth }: {
+    axis?: Vector3,
+    start?: Vector3,
+    end?: Vector3,
+    colour?: Vector4,
+    lineWidth?: number
+  }): BufferGeometry {
 
+    // If we don't have an axis, derive it from start and end
+    if (!axis) {
+      if (start && end) {
+        axis = new Vector3()
+        axis.crossVectors(start, end)
+      } else {
+        throw new Error('No axis was provided and there was no start and end to derive it')
+      }
+    }
+
+    // If we don't have a start, we need to generate one from axis or end
+    if (!start) {
+      if (end) {
+        start = end
+      } else if (axis) {
+        if (!axis.x && !axis.y) {
+          start = new Vector3(0, 1, 0)
+        } else {
+          start = new Vector3(-axis.y, axis.x, 0).normalize()
+        }
+      } else {
+        throw new Error('No start point was provided, and no axis to derive one')
+      }
+    }
+
+    // If we don't have an end, it's the start
+    if (!end) {
+      end = start
+    }
+
+    colour = colour || new Vector4(0, 0, 1, 1)
+    lineWidth = lineWidth || 8
+
+    // Make our geometry
     const geom = new PlaneBufferGeometry(2, 2)
 
-    const axis = [m.z.x, m.z.y, m.z.z]  // 1 copy
-    axis.push(...axis)  // 2 copies
-    axis.push(...axis)  // 4 copies
-
-    const start = [m.x.x, m.x.y, m.x.z]  // 1 copy
-    start.push(...start)  // 2 copies
-    start.push(...start)  // 4 copies
-
-    // Start and end are equal as we are drawing the entire horizon
-    const end = start
-
-    const colour = [0, 0, 1, 0.7]  // 1 copy
-    colour.push(...colour)  // 2 copies
-    colour.push(...colour)  // 4 copies
-
-    const lineWidth = [8]  // 1 copy
-    lineWidth.push(...lineWidth)  // 2 copies
-    lineWidth.push(...lineWidth)  // 4 copies
-
-    geom.addAttribute('axis', new Float32BufferAttribute(axis, 3))
-    geom.addAttribute('start', new Float32BufferAttribute(start, 3))
-    geom.addAttribute('end', new Float32BufferAttribute(end, 3))
-    geom.addAttribute('colour', new Float32BufferAttribute(colour, 4))
-    geom.addAttribute('lineWidth', new Float32BufferAttribute(lineWidth, 1))
+    // Copy across our attributes with four copies, one for each vertex
+    geom.addAttribute(
+      'axis',
+      new BufferAttribute(new Float32Array(12), 3).copyVector3sArray([axis, axis, axis, axis]),
+    )
+    geom.addAttribute(
+      'start',
+      new BufferAttribute(new Float32Array(12), 3).copyVector3sArray([start, start, start, start]),
+    )
+    geom.addAttribute(
+      'end',
+      new BufferAttribute(new Float32Array(12), 3).copyVector3sArray([end, end, end, end]),
+    )
+    geom.addAttribute(
+      'colour',
+      new BufferAttribute(new Float32Array(16), 4).copyVector4sArray([colour, colour, colour, colour]),
+    )
+    geom.addAttribute(
+      'lineWidth',
+      new BufferAttribute(new Float32Array(4), 1).copyArray([lineWidth, lineWidth, lineWidth, lineWidth]),
+    )
 
     return geom
+  }
 
+  private horizonGeometry = createTransformer((m: Matrix4Model) => {
+    return this.makeWorldLine({
+      axis: new Vector3(m.z.x, m.z.y, m.z.z),
+      colour: new Vector4(0, 0, 1, 0.7),
+      lineWidth: 10,
+    })
   }, (geometry?: BufferGeometry) => geometry && geometry.dispose())
 
   private directionGeometry = createTransformer((m: Matrix4Model) => {
 
-    const geom = new PlaneBufferGeometry(2, 2)
-
-    const axis = [m.y.x, m.y.y, m.y.z]  // 1 copy
-    axis.push(...axis)  // 2 copies
-    axis.push(...axis)  // 4 copies
-
-    const start = [m.x.x, m.x.y, m.x.z]  // 1 copy
-    start.push(...start)  // 2 copies
-    start.push(...start)  // 4 copies
-
-    // Only draw the lower half
-    const end = [-m.x.x, -m.x.y, -m.x.z]  // 1 copy
-    end.push(...end)  // 2 copies
-    end.push(...end)  // 4 copies
-
-    const colour = [0.7, 0.7, 0.7, 0.5]  // 1 copy
-    colour.push(...colour)  // 2 copies
-    colour.push(...colour)  // 4 copies
-
-    const lineWidth = [6]  // 1 copy
-    lineWidth.push(...lineWidth)  // 2 copies
-    lineWidth.push(...lineWidth)  // 4 copies
-
-    geom.addAttribute('axis', new Float32BufferAttribute(axis, 3))
-    geom.addAttribute('start', new Float32BufferAttribute(start, 3))
-    geom.addAttribute('end', new Float32BufferAttribute(end, 3))
-    geom.addAttribute('colour', new Float32BufferAttribute(colour, 4))
-    geom.addAttribute('lineWidth', new Float32BufferAttribute(lineWidth, 1))
-
-    return geom
+    return this.makeWorldLine({
+      axis: new Vector3(m.y.x, m.y.y, m.y.z),
+      start: new Vector3(m.x.x, m.x.y, m.x.z),
+      end: new Vector3(-m.x.x, -m.x.y, -m.x.z),
+      colour: new Vector4(0.7, 0.7, 0.7, 0.5),
+      lineWidth: 5,
+    })
 
   }, (geometry?: BufferGeometry) => geometry && geometry.dispose())
 

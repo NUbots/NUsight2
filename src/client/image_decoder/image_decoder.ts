@@ -148,7 +148,7 @@ export class ImageDecoder {
     scene.remove(...this.scene.children)
     scene.add(mesh)
 
-    this.renderer!.render(scene, this.camera, renderTarget)
+    this.renderer.render(scene, this.camera, renderTarget)
     return renderTarget
   }, (target?: WebGLRenderTarget) => target && target.dispose())
 

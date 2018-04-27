@@ -4,13 +4,13 @@ precision lowp float;
 
 uniform vec2 viewSize;
 uniform float focalLength;
+uniform vec3 axis;
+uniform vec3 start;
+uniform vec3 end;
+uniform vec4 colour;
+uniform float lineWidth;
 
 varying vec2 vUv;
-varying vec3 vAxis;
-varying vec3 vStart;
-varying vec3 vEnd;
-varying vec4 vColour;
-varying float vLineWidth;
 
 vec3 unprojectEquidistant(vec2 point, float focalLength) {
   float r = length(point);
@@ -60,33 +60,33 @@ void main() {
   vec2 screenPoint = vec2(0.5 - vUv.x, vUv.y - 0.5) * viewSize;
 
   // Get the gradient of the curve we are drawing
-  float gradient = dot(vAxis, vStart);
+  float gradient = dot(axis, start);
 
   // Project it into the world space
   vec3 cam = unprojectEquidistant(screenPoint, focalLength * viewSize.x);
 
   // Rotate the axis vector towards the screen point by the angle to gradient
   // This gives the closest point on the curve
-  vec3 nearestPoint = rotateByAxisAngle(vAxis, normalize(cross(vAxis, cam)), acos(gradient));
+  vec3 nearestPoint = rotateByAxisAngle(axis, normalize(cross(axis, cam)), acos(gradient));
 
   // Work out if we are in range
-  float range = angleAround(vAxis, vStart, vEnd);
-  float value = angleAround(vAxis, vStart, nearestPoint);
+  float range = angleAround(axis, start, end);
+  float value = angleAround(axis, start, nearestPoint);
 
   // start == end means do the whole circle
-  range = all(equal(vStart, vEnd)) ? 2.0 * M_PI : range;
+  range = all(equal(start, end)) ? 2.0 * M_PI : range;
 
   // If we are past the start or end, snap to start/end
-  nearestPoint = value > range && value - range > (M_PI * 2.0 - range) * 0.5 ? vStart : nearestPoint;
-  nearestPoint = value > range && value - range < (M_PI * 2.0 - range) * 0.5 ? vEnd : nearestPoint;
+  nearestPoint = value > range && value - range > (M_PI * 2.0 - range) * 0.5 ? start : nearestPoint;
+  nearestPoint = value > range && value - range < (M_PI * 2.0 - range) * 0.5 ? end : nearestPoint;
 
   // When we project this back onto the image we get the nearest pixel
   vec2 nearestPixel = projectEquidistant(nearestPoint, focalLength * viewSize.x);
 
   // We get the distance from us to the nearest pixel and smoothstep to make a line
   float pixelDistance = length(screenPoint - nearestPixel);
-  float alpha = smoothstep(0.0, vLineWidth * 0.5, vLineWidth * 0.5 - pixelDistance);
+  float alpha = smoothstep(0.0, lineWidth * 0.5, lineWidth * 0.5 - pixelDistance);
 
-  gl_FragColor = vec4(vColour.xyz, vColour.w * alpha);
+  gl_FragColor = vec4(colour.rgb, colour.a * alpha);
 }
 

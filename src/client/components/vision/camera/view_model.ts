@@ -76,6 +76,7 @@ export class CameraViewModel {
     scene.remove(...scene.children)
     if (this.model.image) {
       scene.add(this.image(this.model.image))
+      scene.add(this.direction(this.model.image.Hcw))
       scene.add(this.horizon(this.model.image.Hcw))
     }
     return scene
@@ -117,13 +118,6 @@ export class CameraViewModel {
     })
   }
 
-  private horizon = createTransformer((m: Matrix4Model) => {
-    const obj = new Object3D()
-    obj.add(new Mesh(this.directionGeometry(m), this.worldLineMaterial))
-    obj.add(new Mesh(this.horizonGeometry(m), this.worldLineMaterial))
-    return obj
-  })
-
   /**
    * There are three different combinations of parameters we can accept.
    * Just an axis means draw a line around this entire plane
@@ -136,7 +130,7 @@ export class CameraViewModel {
     end?: Vector3,
     colour?: Vector4,
     lineWidth?: number
-  }): BufferGeometry {
+  }): Mesh {
 
     // If we don't have an axis, derive it from start and end
     if (!axis) {
@@ -171,44 +165,30 @@ export class CameraViewModel {
     colour = colour || new Vector4(0, 0, 1, 1)
     lineWidth = lineWidth || 8
 
-    // Make our geometry
-    const geom = new PlaneBufferGeometry(2, 2)
+    // Get the shader and make a copy of it so we can set our own uniforms
+    // This does not recompile the shader so we are fine
+    const shader = this.worldLineShader.clone()
 
-    // Copy across our attributes with four copies, one for each vertex
-    geom.addAttribute(
-      'axis',
-      new BufferAttribute(new Float32Array(12), 3).copyVector3sArray([axis, axis, axis, axis]),
-    )
-    geom.addAttribute(
-      'start',
-      new BufferAttribute(new Float32Array(12), 3).copyVector3sArray([start, start, start, start]),
-    )
-    geom.addAttribute(
-      'end',
-      new BufferAttribute(new Float32Array(12), 3).copyVector3sArray([end, end, end, end]),
-    )
-    geom.addAttribute(
-      'colour',
-      new BufferAttribute(new Float32Array(16), 4).copyVector4sArray([colour, colour, colour, colour]),
-    )
-    geom.addAttribute(
-      'lineWidth',
-      new BufferAttribute(new Float32Array(4), 1).copyArray([lineWidth, lineWidth, lineWidth, lineWidth]),
-    )
+    shader.uniforms.viewSize = { value: new Vector2(this.viewWidth, this.viewHeight) }
+    shader.uniforms.focalLength = { value: this.model.image!.lens.focalLength }
+    shader.uniforms.axis = { value: axis }
+    shader.uniforms.start = { value: start }
+    shader.uniforms.end = { value: end }
+    shader.uniforms.colour = { value: colour }
+    shader.uniforms.lineWidth = { value: lineWidth }
 
-    return geom
+    return new Mesh(this.quadGeometry, shader)
   }
 
-  private horizonGeometry = createTransformer((m: Matrix4Model) => {
+  private horizon = createTransformer((m: Matrix4Model) => {
     return this.makeWorldLine({
       axis: new Vector3(m.z.x, m.z.y, m.z.z),
       colour: new Vector4(0, 0, 1, 0.7),
       lineWidth: 10,
     })
-  }, (geometry?: BufferGeometry) => geometry && geometry.dispose())
+  })
 
-  private directionGeometry = createTransformer((m: Matrix4Model) => {
-
+  private direction = createTransformer((m: Matrix4Model) => {
     return this.makeWorldLine({
       axis: new Vector3(m.y.x, m.y.y, m.y.z),
       start: new Vector3(m.x.x, m.x.y, m.x.z),
@@ -216,8 +196,7 @@ export class CameraViewModel {
       colour: new Vector4(0.7, 0.7, 0.7, 0.5),
       lineWidth: 5,
     })
-
-  }, (geometry?: BufferGeometry) => geometry && geometry.dispose())
+  })
 
   @computed
   private get worldLineShader() {
@@ -227,28 +206,13 @@ export class CameraViewModel {
       depthTest: false,
       depthWrite: false,
       transparent: true,
-      uniforms: {
-        viewSize: { v: new Vector2() },
-        focalLength: { v: 1 },
-      },
     })
   }
 
-  @computed // This is separated from the shader so the shader does not have to recompile
-  private get worldLineMaterial() {
-    const shader = this.worldLineShader
-
-    shader.uniforms.viewSize.value = new Vector2(this.viewWidth, this.viewHeight)
-    shader.uniforms.focalLength.value = this.model.image!.lens.focalLength
-
-    return shader
-  }
-
   private imageMaterial = createTransformer((image: Image) => {
-    const mat = this.imageBasicMaterial
 
-    // TODO: This is wrong and not very reactive however the alternative is recompiling the shader every time
-    // you have a better idea?
+    // Cloning a material allows for new uniforms without recompiling the shader
+    const mat = this.imageBasicMaterial.clone()
     mat.map = this.decoder.decode(image)
     return mat
   })

@@ -12,6 +12,7 @@ uniform float lineWidth;
 
 varying vec2 vUv;
 
+// TODO(trent) these should be moved into a separate GLSL file once there is a decent #include system
 vec3 unprojectEquidistant(vec2 point, float focalLength) {
   float r = length(point);
   vec3 s = vec3(
@@ -65,6 +66,7 @@ void main() {
   float gradient = dot(axis, start);
 
   // Project it into the world space
+  // TODO(trent) this can't handle different lens types, in a future PR fix this
   vec3 cam = unprojectEquidistant(screenPoint, focalLength * viewSize.x);
 
   // Rotate the axis vector towards the screen point by the angle to gradient

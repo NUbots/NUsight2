@@ -1,7 +1,6 @@
 import { action } from 'mobx'
 
 import { message } from '../../../shared/proto/messages'
-import { Matrix4 } from '../../math/matrix4'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'

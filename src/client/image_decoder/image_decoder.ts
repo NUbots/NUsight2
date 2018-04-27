@@ -1,4 +1,3 @@
-import { observable } from 'mobx'
 import { createTransformer } from 'mobx-utils'
 import { BufferGeometry } from 'three'
 import { PlaneBufferGeometry } from 'three'

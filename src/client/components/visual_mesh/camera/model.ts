@@ -1,7 +1,6 @@
 import { observable } from 'mobx'
 
 import { Image } from '../../../image_decoder/image_decoder'
-import { Matrix4 } from '../../../math/matrix4'
 import { VisualMeshRobotModel } from '../model'
 
 export interface VisualMesh {

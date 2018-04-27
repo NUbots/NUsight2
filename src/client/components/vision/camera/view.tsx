@@ -22,7 +22,7 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
   }
 
   render() {
-    const { imageWidth, imageHeight, viewWidth, viewHeight } = this.props.viewModel
+    const { imageWidth, imageHeight } = this.props.viewModel
 
     if (!imageWidth || !imageHeight) {
       return null

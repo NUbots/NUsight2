@@ -30,7 +30,7 @@ export class VisionNetwork {
     const { cameraId, name, dimensions, format, data, Hcw } = image
 
     // TODO DEBUG for now the recording in use has no lens information, so we are attaching it here
-    const lens = {
+    const lens = image.lens || {
       projection: Image.Lens.Projection.EQUIDISTANT,
       focalLength: (1.0 / 0.0026997136600899543) / 1280.0,
     }

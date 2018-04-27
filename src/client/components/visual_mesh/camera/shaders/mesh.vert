@@ -11,7 +11,7 @@ attribute vec2 uv;
 varying vec2 vUv;
 varying vec3 vClassification;
 
-const float PI = 3.1415926535897932384626433832795;
+#define M_PI 3.1415926535897932384626433832795
 
 void main() {
   // Forward our varyings
@@ -19,7 +19,7 @@ void main() {
   vClassification = classification;
 
   // Calculate our position in the mesh
-  float theta = PI * 2.0 * position.y;
+  float theta = M_PI * 2.0 * position.y;
   vec2 pos = vec2(cos(theta) * position.x, sin(theta) * position.x);
 
   gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 0.0, 1.0);

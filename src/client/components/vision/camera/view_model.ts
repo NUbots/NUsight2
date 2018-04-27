@@ -11,7 +11,6 @@ import { OrthographicCamera } from 'three'
 import { Camera } from 'three'
 import { Vector4 } from 'three'
 import { RawShaderMaterial } from 'three'
-import { Quaternion } from 'three'
 import { Vector3 } from 'three'
 import { Vector2 } from 'three'
 
@@ -166,13 +165,7 @@ export class CameraViewModel {
     // Pick an arbitrary orthogonal vector
     const start = (!axis.x && !axis.y) ? new Vector3(0, 1, 0) : new Vector3(-axis.y, axis.x, 0).normalize()
 
-    return this.makeConeSegment({
-      axis,
-      start,
-      end: start,
-      colour,
-      lineWidth,
-    })
+    return this.makeConeSegment({ axis, start, end: start, colour, lineWidth })
   }
 
   /**
@@ -222,13 +215,7 @@ export class CameraViewModel {
     // Rotate our axis by this gradient to get a start
     const start = axis.clone().applyAxisAngle(orth, Math.acos(gradient))
 
-    return this.makeConeSegment({
-      axis,
-      start,
-      end: start,
-      colour,
-      lineWidth,
-    })
+    return this.makeConeSegment({ axis, start, end: start, colour, lineWidth })
   }
 
   private horizon = createTransformer((m: Matrix4Model) => {

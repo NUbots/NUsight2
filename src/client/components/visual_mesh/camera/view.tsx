@@ -5,11 +5,11 @@ import * as React from 'react'
 import { Component } from 'react'
 import ReactResizeDetector from 'react-resize-detector'
 
+import * as styles from './styles.css'
 import { CameraViewModel } from './view_model'
 
 @observer
 export class CameraView extends Component<{ viewModel: CameraViewModel }> {
-
   private destroy: () => void = () => {
   }
 
@@ -22,22 +22,8 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
   }
 
   render() {
-    const { imageWidth, imageHeight, viewWidth, viewHeight } = this.props.viewModel
-
-    if (!imageWidth || !imageHeight) {
-      return null
-    }
-
-    const aspectRatio = imageWidth / imageHeight
-    const percentage = 60
     return (
-      <div
-        style={{
-          width: `${percentage}vw`,
-          height: `${percentage / aspectRatio}vw`,
-          maxHeight: `${percentage}vh`,
-          maxWidth: `${percentage * aspectRatio}vh`,
-        }}>
+      <div className={styles.viewport}>
         <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
         <canvas ref={this.onRef} />
       </div>
@@ -51,11 +37,8 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
 
   @action
   private onResize = (width: number, height: number) => {
-
     const { renderer, canvas } = this.props.viewModel
     renderer(canvas)!.setSize(width, height)
-    this.props.viewModel.viewWidth = width
-    this.props.viewModel.viewHeight = height
   }
 
   private renderScene = () => {

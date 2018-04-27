@@ -41,7 +41,7 @@ export class VisualMeshNetwork {
 
     // We don't need to know phi, just how many items are in each ring
     camera.mesh = {
-      rows: mesh!.map(v => v.segments!),
+      rows: mesh.map(v => v.segments!),
       indices,
       neighbours: neighbourhood.map(v => [v.s0!, v.s1!, v.s2!, v.s3!, v.s4!, v.s5!]),
       coordinates: coordinates.map(v => [v.x!, v.y!] as [number, number]),
@@ -62,12 +62,12 @@ export class VisualMeshNetwork {
       })
       robot.cameras.set(cameraId, camera)
     }
-    camera!.image = {
+    camera.image = {
       width: dimensions!.x!,
       height: dimensions!.y!,
-      format: format!,
+      format,
       data,
     }
-    camera!.name = name
+    camera.name = name
   }
 }

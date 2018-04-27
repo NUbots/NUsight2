@@ -30,10 +30,12 @@ export class VisionNetwork {
     const { cameraId, name, dimensions, format, data, Hcw } = image
 
     // TODO DEBUG for now the recording in use has no lens information, so we are attaching it here
-    const lens = image.lens || {
+    const lens = {
       projection: Image.Lens.Projection.EQUIDISTANT,
       focalLength: (1.0 / 0.0026997136600899543) / 1280.0,
     }
+    lens.projection = image!.lens!.projection || lens.projection
+    lens.focalLength = image!.lens!.focalLength || lens.focalLength
 
     let camera = robot.cameras.get(cameraId)
     if (!camera) {

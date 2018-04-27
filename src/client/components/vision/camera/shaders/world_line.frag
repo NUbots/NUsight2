@@ -48,8 +48,10 @@ float angleAround(vec3 axis, vec3 start, vec3 vec) {
   float x = dot(aStart, aVec); // cos(theta)
   float y = dot(axis, cross(aStart, aVec)); // sin(theta)
 
-  // Cross and dot to get our y and x and atan2 to get angle
+  // sin(theta)/cos(theta) = tan(theta)
   float theta = atan(y, x);
+
+  // We want 0 -> 2pi not -pi -> pi
   theta += theta < 0.0 ? (M_PI * 2.0) : 0.0;
   return theta;
 }

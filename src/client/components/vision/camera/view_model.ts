@@ -11,6 +11,7 @@ import { OrthographicCamera } from 'three'
 import { Camera } from 'three'
 import { Vector4 } from 'three'
 import { RawShaderMaterial } from 'three'
+import { Quaternion } from 'three'
 import { Vector3 } from 'three'
 import { Vector2 } from 'three'
 
@@ -117,48 +118,23 @@ export class CameraViewModel {
   }
 
   /**
-   * There are three different combinations of parameters we can accept.
-   * Just an axis means draw a line around this entire plane
-   * Just a start and end implies that the axis is `cross(start, end)` and is straight
-   * An axis plus a start + end means draw a line segment around axis from start to end
+   * Everything else we draw can be reduced to a cone segment so this function is the one that does all the work.
+   * The other functions setup the parameters to make their shapes be a cone segment.
+   * If start === end this will draw the entire cone.
+   *
+   * @param axis      the normal axis of the plane. This is only needed if start and end are parallel or anti-parallel
+   * @param start     the vector pointing to the start of the line segment
+   * @param end       the vector pointing to the end of the line segment
+   * @param colour    the colour of the line to draw
+   * @param lineWidth the width of the line to draw on the screen in pixels
    */
-  private makeWorldLine({ axis, start, end, colour, lineWidth }: {
-    axis?: Vector3,
-    start?: Vector3,
-    end?: Vector3,
+  private makeConeSegment({ axis, start, end, colour, lineWidth }: {
+    axis: Vector3,
+    start: Vector3,
+    end: Vector3,
     colour?: Vector4,
     lineWidth?: number
   }): Mesh {
-
-    // If we don't have an axis, derive it from start and end
-    if (!axis) {
-      if (start && end) {
-        axis = new Vector3()
-        axis.crossVectors(start, end)
-      } else {
-        throw new Error('No axis was provided and there was no start and end to derive it')
-      }
-    }
-
-    // If we don't have a start, we need to generate one from axis or end
-    if (!start) {
-      if (end) {
-        start = end
-      } else if (axis) {
-        if (!axis.x && !axis.y) {
-          start = new Vector3(0, 1, 0)
-        } else {
-          start = new Vector3(-axis.y, axis.x, 0).normalize()
-        }
-      } else {
-        throw new Error('No start point was provided, and no axis to derive one')
-      }
-    }
-
-    // If we don't have an end, it's the start
-    if (!end) {
-      end = start
-    }
 
     colour = colour || new Vector4(0, 0, 1, 1)
     lineWidth = lineWidth || 8
@@ -178,8 +154,85 @@ export class CameraViewModel {
     return new Mesh(this.quadGeometry, shader)
   }
 
+  /**
+   * Draw a plane defined by its normal axis
+   *
+   * @param axis      a unit vector normal to the plane
+   * @param colour    the colour of the line to draw
+   * @param lineWidth the width of the line to draw on the screen in pixels
+   */
+  private makePlane({ axis, colour, lineWidth }: { axis: Vector3, colour?: Vector4, lineWidth?: number }) {
+
+    // Pick an arbitrary orthogonal vector
+    const start = (!axis.x && !axis.y) ? new Vector3(0, 1, 0) : new Vector3(-axis.y, axis.x, 0).normalize()
+
+    return this.makeConeSegment({
+      axis,
+      start,
+      end: start,
+      colour,
+      lineWidth,
+    })
+  }
+
+  /**
+   * Draws a segment of a plane projected to infinity in world space.
+   *
+   * @param axis      the normal axis of the plane. This is only needed if start and end are parallel or anti-parallel.
+   *                  note that if this axis is not orthogonal to start and end this will draw a cone.
+   * @param start     the vector pointing to the start of the line segment.
+   * @param end       the vector pointing to the end of the line segment.
+   * @param colour    the colour of the line to draw.
+   * @param lineWidth the width of the line to draw on the screen in pixels.
+   */
+  private makePlaneSegment({ axis, start, end, colour, lineWidth }: {
+    axis?: Vector3,
+    start: Vector3,
+    end: Vector3,
+    colour?: Vector4,
+    lineWidth?: number
+  }) {
+    return this.makeConeSegment({
+      axis: axis || new Vector3().crossVectors(start, end).normalize(),
+      start,
+      end,
+      colour,
+      lineWidth,
+    })
+  }
+
+  /**
+   * Draw a cone. Note that it only draws the positive cone, not the negative cone.
+   *
+   * @param axis      the axis of the cone to draw.
+   * @param gradient  the gradient of the cone to draw (cos of the angle).
+   * @param colour    the colour of the line to draw.
+   * @param lineWidth the width of the line to draw on the screen in pixels.
+   */
+  private makeCone({ axis, gradient, colour, lineWidth }: {
+    axis: Vector3,
+    gradient: number,
+    colour?: Vector4,
+    lineWidth?: number
+  }) {
+
+    // Pick an arbitrary orthogonal vector
+    const orth = !axis.x && !axis.y ? new Vector3(0, 1, 0) : new Vector3(-axis.y, axis.x, 0).normalize()
+
+    // Rotate our axis by this gradient to get a start
+    const start = axis.clone().applyAxisAngle(orth, Math.acos(gradient))
+
+    return this.makeConeSegment({
+      axis,
+      start,
+      end: start,
+      colour,
+      lineWidth,
+    })
+  }
+
   private horizon = createTransformer((m: Matrix4Model) => {
-    return this.makeWorldLine({
+    return this.makePlane({
       axis: new Vector3(m.z.x, m.z.y, m.z.z),
       colour: new Vector4(0, 0, 1, 0.7),
       lineWidth: 10,
@@ -187,8 +240,7 @@ export class CameraViewModel {
   })
 
   private direction = createTransformer((m: Matrix4Model) => {
-    return this.makeWorldLine({
-      axis: new Vector3(m.y.x, m.y.y, m.y.z),
+    return this.makePlaneSegment({
       start: new Vector3(m.x.x, m.x.y, m.x.z),
       end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
       colour: new Vector4(0.7, 0.7, 0.7, 0.5),

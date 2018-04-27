@@ -27,10 +27,9 @@ import { Vector4 } from 'three'
 import { Vector2 } from 'three'
 
 import { ImageDecoder } from '../../../image_decoder/image_decoder'
-import { ImageModel } from '../../../image_decoder/image_decoder'
 
 import { CameraModel } from './model'
-import { MeshModel } from './model'
+import { VisualMesh } from './model'
 import * as fragmentShader from './shaders/mesh.frag'
 import * as vertexShader from './shaders/mesh.vert'
 
@@ -86,7 +85,7 @@ export class CameraViewModel {
     return scene
   }
 
-  private visualMesh = createTransformer((mesh: MeshModel): Mesh => {
+  private visualMesh = createTransformer((mesh: VisualMesh): Mesh => {
     const material = this.meshMaterial
     material.uniforms.image.value = this.decoder.decode(this.model.image!)
     material.uniforms.dimensions.value = new Vector2(this.model.image!.width, this.model.image!.height)
@@ -108,7 +107,7 @@ export class CameraViewModel {
     })
   }
 
-  private meshGeometry = createTransformer((mesh: MeshModel): BufferGeometry => {
+  private meshGeometry = createTransformer((mesh: VisualMesh): BufferGeometry => {
 
     const { rows, indices, neighbours, coordinates, classifications } = mesh
 

@@ -9,10 +9,12 @@ import { CameraModel } from './camera/model'
 import { VisualMeshRobotModel } from './model'
 import VisualMesh = message.vision.VisualMesh
 import Image = message.input.Image
+import CompressedImage = message.output.CompressedImage
 
 export class VisualMeshNetwork {
   constructor(private network: Network) {
     this.network.on(Image, this.onImage)
+    this.network.on(CompressedImage, this.onImage)
     this.network.on(VisualMesh, this.onVisualMesh)
   }
 

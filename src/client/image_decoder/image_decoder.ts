@@ -41,6 +41,12 @@ export interface Image {
 
 export class ImageDecoder {
 
+  // Image tag for those that need it to load images
+  private jpegDecoder?: {
+    image: HTMLImageElement
+    texture: Texture
+  }
+
   constructor(private renderer: WebGLRenderer,
               private scene: Scene,
               private camera: Camera,
@@ -58,6 +64,8 @@ export class ImageDecoder {
 
   decode = createTransformer((image: Image) => {
     switch (image.format) {
+      case fourcc('JPEG'):
+        return this.jpegTexture(image)
       case fourcc('GRBG'):
       case fourcc('RGGB'):
       case fourcc('GBRG'):
@@ -122,6 +130,44 @@ export class ImageDecoder {
     this.renderer.render(scene, this.camera, renderTarget)
     return renderTarget
   }, (target?: WebGLRenderTarget) => target && target.dispose())
+
+  private jpegUrl = createTransformer((image: Image) => {
+
+    const blob = new Blob([image.data], { type: 'image/jpeg' })
+    return window.URL.createObjectURL(blob)
+
+  }, (url?: string) => url && window.URL.revokeObjectURL(url))
+
+  private jpegTexture = createTransformer((image: Image) => {
+
+    // If we have started to try to decode jpegs, make our jpeg decoder variables
+    if (!this.jpegDecoder) {
+
+      const image = document.createElement('img')
+
+      // When we eventually do finish loading, this texture needs updating
+      // While this won't help so much for this frame, if anything changes besides
+      // the image in the scene, the new texture will be used
+      image.onload = () => this.jpegDecoder!.texture.needsUpdate = true
+
+      const texture = new Texture(image)
+      texture.minFilter = LinearFilter
+      texture.flipY = false
+
+      this.jpegDecoder = { image, texture }
+    }
+
+    const url = this.jpegUrl(image)
+
+    // Setting a timeout of 0 will make this happen when the current event loop has finished
+    // Since threejs is about to try to load this image, it'll wont work if the source has
+    // just changed as the image will be loading
+    // This way the source wont change until after threejs has loaded the image and will be ready
+    // for the next frame
+    setTimeout(() => this.jpegDecoder!.image.src = url, 0)
+
+    return this.jpegDecoder.texture
+  }, texture => texture && texture.dispose())
 
   private rgbTexture = createTransformer((image: Image) => {
     const texture = new DataTexture(

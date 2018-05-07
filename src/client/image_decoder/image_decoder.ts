@@ -1,3 +1,5 @@
+import { IAtom } from 'mobx'
+import { createAtom } from 'mobx'
 import { createTransformer } from 'mobx-utils'
 import { BufferGeometry } from 'three'
 import { PlaneBufferGeometry } from 'three'
@@ -5,7 +7,8 @@ import { RawShaderMaterial } from 'three'
 import { WebGLRenderTarget } from 'three'
 import { Scene } from 'three'
 import { Mesh } from 'three'
-import { WebGLRenderer } from 'three'
+import { PixelFormat } from 'three'
+import { Camera } from 'three'
 import { OrthographicCamera } from 'three'
 import { DataTexture } from 'three'
 import { LuminanceFormat } from 'three'
@@ -15,7 +18,7 @@ import { UnsignedByteType } from 'three'
 import { ClampToEdgeWrapping } from 'three'
 import { LinearFilter } from 'three'
 import { NearestFilter } from 'three'
-import { Camera } from 'three'
+import { WebGLRenderer } from 'three'
 
 import * as bayerFragmentShader from './shaders/bayer.frag'
 import * as bayerVertexShader from './shaders/bayer.vert'
@@ -32,6 +35,13 @@ export function fourcc(code: string): number {
   return code.charCodeAt(3) << 24 | code.charCodeAt(2) << 16 | code.charCodeAt(1) << 8 | code.charCodeAt(0)
 }
 
+export function ccruof(code: number): string {
+  return String.fromCharCode(code & 0xFF) +
+  String.fromCharCode(code >> 8 & 0xFF) +
+  String.fromCharCode(code >> 16 & 0xFF) +
+  String.fromCharCode(code >> 24 & 0xFF)
+}
+
 export interface Image {
   readonly width: number
   readonly height: number
@@ -41,184 +51,226 @@ export interface Image {
 
 export class ImageDecoder {
 
-  // Image tag for those that need it to load images
-  private jpegDecoder?: {
-    image: HTMLImageElement
-    texture: Texture
+  private atom: IAtom
+
+  // These two functions are used to cache/destroy textures as they are created
+  private cache: {
+    get(): Texture
+    destroy(): void
   }
 
-  constructor(private renderer: WebGLRenderer,
-              private scene: Scene,
-              private camera: Camera,
-              private geometry: BufferGeometry) {
+  // Variables needed by the bayer decoder
+  private bayerDecoder?: { scene: Scene, camera: Camera, geometry: BufferGeometry, shader: RawShaderMaterial }
+
+  constructor(private renderer: WebGLRenderer) {
+
+    this.atom = createAtom('ImageDecoder', () => {}, this.destroy)
+
+    this.cache = {
+      get: () => new Texture(),
+      destroy: () => {},
+    }
   }
 
   static of = createTransformer((renderer: WebGLRenderer) => {
-    return new ImageDecoder(
-      renderer,
-      new Scene(),
-      new OrthographicCamera(-1, 1, 1, -1, 0, 1),
-      new PlaneBufferGeometry(2, 2),
-    )
-  })
+    return new ImageDecoder(renderer)
+  }, decoder => decoder && decoder.destroy())
 
-  decode = createTransformer((image: Image) => {
+  private destroy() {
+    this.cache.destroy()
+
+    // Cleanup the bayer shader if we used it
+    if (this.bayerDecoder) {
+      this.bayerDecoder.geometry.dispose()
+      this.bayerDecoder.shader.dispose()
+    }
+  }
+
+  private updateCache(get: () => Texture, destroy: () => void) {
+    // Destroy the previous texture
+    this.cache.destroy()
+
+    // Update the cache
+    this.cache = { get, destroy }
+  }
+
+  // Update our stored texture
+  update(image: Image): void {
     switch (image.format) {
       case fourcc('JPEG'):
-        return this.jpegTexture(image)
+        this.jpeg(image)
+        break
       case fourcc('GRBG'):
       case fourcc('RGGB'):
       case fourcc('GBRG'):
       case fourcc('BGGR'):
-        return this.bayerTexture(image).texture
+        this.bayer(image)
+        break
       case fourcc('RGB3'):
-        return this.rgbTexture(image)
+        this.dataTexture(image, RGBFormat)
+        break
       case fourcc('GREY'):
       case fourcc('GRAY'):
-        return this.grayTexture(image)
+        this.dataTexture(image, LuminanceFormat)
+        break
       default:
-        throw Error(`Unsupported image format ${image.format}`)
+        throw Error(`Unsupported image format ${ccruof(image.format)}`)
     }
-  })
+  }
 
-  // By making this a transformer, we ensure that when we are no longer observed, the material is cleaned up
-  private bayerShader = createTransformer((renderer: WebGLRenderer): RawShaderMaterial => {
-    return new RawShaderMaterial({
-      vertexShader: String(bayerVertexShader),
-      fragmentShader: String(bayerFragmentShader),
-      depthTest: false,
-      depthWrite: false,
-    })
-  }, (material?: RawShaderMaterial) => material && material.dispose())
+  get texture(): Texture {
+    if (this.atom.reportObserved()) {
+      return this.cache.get()
+    } else {
+      throw new Error('Atom accessed from a non reaction context')
+    }
+  }
 
-  private bayerTexture = createTransformer((image: Image) => {
-    let firstRed
-    switch (image.format) {
-      case fourcc('GRBG'):
-        firstRed = [1, 0]
-        break
-      case fourcc('RGGB'):
-        firstRed = [0, 0]
-        break
-      case fourcc('GBRG'):
-        firstRed = [0, 1]
-        break
-      case fourcc('BGGR'):
-        firstRed = [1, 1]
-        break
+  private bayer(image: Image) {
+
+    // If we have never decoded bayer with this decoder before we need to make our threejs objects
+    this.bayerDecoder = {
+      scene: new Scene(),
+      camera: new OrthographicCamera(-1, 1, 1, -1, 0, 1),
+      geometry: new PlaneBufferGeometry(2, 2),
+      shader: new RawShaderMaterial({
+        vertexShader: String(bayerVertexShader),
+        fragmentShader: String(bayerFragmentShader),
+        depthTest: false,
+        depthWrite: false,
+      }),
     }
 
     const { width, height } = image
-    const renderTarget = new WebGLRenderTarget(width, height)
-    renderTarget.depthBuffer = false
-    renderTarget.stencilBuffer = false
+    const target = new WebGLRenderTarget(width, height)
+    target.depthBuffer = false
+    target.stencilBuffer = false
 
-    // Cloning a material allows for new uniforms without recompiling the shader itself
-    const material = this.bayerShader(this.renderer).clone()
-    material.uniforms.sourceSize = { value: [width, height, 1 / width, 1 / height] }
-    material.uniforms.firstRed = { value: firstRed }
-    material.uniforms.image = { value: this.rawTexture(image) }
+    // Create our getter function to debayer the first time it's called
+    const get = () => {
 
-    const mesh = new Mesh(this.geometry, material)
-    mesh.frustumCulled = false
+      let firstRed
+      switch (image.format) {
+        case fourcc('GRBG'):
+          firstRed = [1, 0]
+          break
+        case fourcc('RGGB'):
+          firstRed = [0, 0]
+          break
+        case fourcc('GBRG'):
+          firstRed = [0, 1]
+          break
+        case fourcc('BGGR'):
+          firstRed = [1, 1]
+          break
+      }
 
-    // Cleanup last render
-    const scene = this.scene
-    scene.remove(...this.scene.children)
-    scene.add(mesh)
+      // The raw bayer texture
+      const rawTexture = new DataTexture(
+        image.data,
+        image.width,
+        image.height,
+        LuminanceFormat,
+        UnsignedByteType,
+        Texture.DEFAULT_MAPPING,
+        ClampToEdgeWrapping,
+        ClampToEdgeWrapping,
+        NearestFilter,
+        NearestFilter,
+      )
+      rawTexture.needsUpdate = true
 
-    this.renderer.render(scene, this.camera, renderTarget)
-    return renderTarget
-  }, (target?: WebGLRenderTarget) => target && target.dispose())
+      // Cloning a material allows for new uniforms without recompiling the shader itself
+      const material = this.bayerDecoder!.shader.clone()
+      material.uniforms.sourceSize = { value: [width, height, 1 / width, 1 / height] }
+      material.uniforms.firstRed = { value: firstRed }
+      material.uniforms.image = { value: rawTexture }
 
-  private jpegUrl = createTransformer((image: Image) => {
+      const mesh = new Mesh(this.bayerDecoder!.geometry, material)
+      mesh.frustumCulled = false
 
+      // Cleanup last render
+      const scene = this.bayerDecoder!.scene
+      scene.remove(...this.bayerDecoder!.scene.children)
+      scene.add(mesh)
+
+      this.renderer.render(scene, this.bayerDecoder!.camera, target)
+
+      // We don't need the raw texture anymore since we already rendered the bayer
+      rawTexture.dispose()
+
+      // Now that we have debayered once, we can just keep returning the result
+      this.cache.get = () => target.texture
+
+      return target.texture
+    }
+
+    // Set our cache to use the getter function
+    this.updateCache(get, () => target.dispose())
+
+    // The image is ready to be read now
+    this.atom.reportChanged()
+  }
+
+  private jpeg(image: Image) {
+
+    // Create a blob URL for our loaded data
     const blob = new Blob([image.data], { type: 'image/jpeg' })
-    return window.URL.createObjectURL(blob)
+    const url = window.URL.createObjectURL(blob)
 
-  }, (url?: string) => url && window.URL.revokeObjectURL(url))
+    // Create our image tag and load the url in
+    const tag = document.createElement('img')
 
-  private jpegTexture = createTransformer((image: Image) => {
-
-    // If we have started to try to decode jpegs, make our jpeg decoder variables
-    if (!this.jpegDecoder) {
-
-      const image = document.createElement('img')
-
-      // When we eventually do finish loading, this texture needs updating
-      // While this won't help so much for this frame, if anything changes besides
-      // the image in the scene, the new texture will be used
-      image.onload = () => this.jpegDecoder!.texture.needsUpdate = true
-
-      const texture = new Texture(image)
+    // Don't bother doing anything until the image loads
+    tag.onload = () => {
+      const texture = new Texture(tag)
+      texture.needsUpdate = true
       texture.minFilter = LinearFilter
       texture.flipY = false
 
-      this.jpegDecoder = { image, texture }
+      this.updateCache(
+        () => texture,
+        () => {
+          texture.dispose()
+          window.URL.revokeObjectURL(url)
+        },
+      )
+
+      this.atom.reportChanged()
     }
+    tag.src = url
+  }
 
-    const url = this.jpegUrl(image)
+  private dataTexture(image: Image, format: PixelFormat) {
+    this.updateCache(() => {
+      const texture = new DataTexture(
+          image.data,
+          image.width,
+          image.height,
+          format,
+          UnsignedByteType,
+          Texture.DEFAULT_MAPPING,
+          ClampToEdgeWrapping,
+          ClampToEdgeWrapping,
+          LinearFilter,
+          LinearFilter,
+        )
+      texture.flipY = false
+      texture.needsUpdate = true
 
-    // Setting a timeout of 0 will make this happen when the current event loop has finished
-    // Since threejs is about to try to load this image, it'll wont work if the source has
-    // just changed as the image will be loading
-    // This way the source wont change until after threejs has loaded the image and will be ready
-    // for the next frame
-    setTimeout(() => this.jpegDecoder!.image.src = url, 0)
+        // Update our cache so we don't upload to the GPU each time, and we dispose of our texture
+        // Don't use update cache though as we don't want to dispose of ourself
+      this.cache.get = () => texture
+      this.cache.destroy = () => {
+        texture.dispose()
+      }
 
-    return this.jpegDecoder.texture
-  }, texture => texture && texture.dispose())
-
-  private rgbTexture = createTransformer((image: Image) => {
-    const texture = new DataTexture(
-      image.data,
-      image.width,
-      image.height,
-      RGBFormat,
-      UnsignedByteType,
-      Texture.DEFAULT_MAPPING,
-      ClampToEdgeWrapping,
-      ClampToEdgeWrapping,
-      LinearFilter,
-      LinearFilter,
+      return texture
+    },
+      () => {},
     )
-    texture.flipY = false
-    texture.needsUpdate = true
-    return texture
-  }, texture => texture && texture.dispose())
 
-  private grayTexture = createTransformer((image: Image) => {
-    const texture = new DataTexture(
-      image.data,
-      image.width,
-      image.height,
-      LuminanceFormat,
-      UnsignedByteType,
-      Texture.DEFAULT_MAPPING,
-      ClampToEdgeWrapping,
-      ClampToEdgeWrapping,
-      LinearFilter,
-      LinearFilter,
-    )
-    texture.flipY = false
-    texture.needsUpdate = true
-    return texture
-  }, texture => texture && texture.dispose())
-
-  private rawTexture = createTransformer((image: Image) => {
-    const texture = new DataTexture(
-      image.data,
-      image.width,
-      image.height,
-      LuminanceFormat,
-      UnsignedByteType,
-      Texture.DEFAULT_MAPPING,
-      ClampToEdgeWrapping,
-      ClampToEdgeWrapping,
-      NearestFilter,
-      NearestFilter,
-    )
-    texture.needsUpdate = true
-    return texture
-  }, texture => texture && texture.dispose())
+    // This is ready immediately
+    this.atom.reportChanged()
+  }
 }

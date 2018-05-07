@@ -76,7 +76,7 @@ export class ImageDecoder {
     return new ImageDecoder(renderer)
   }, decoder => decoder && decoder.destroy())
 
-  private destroy() {
+  private destroy = () => {
     this.cache.destroy()
 
     // Cleanup the bayer shader if we used it

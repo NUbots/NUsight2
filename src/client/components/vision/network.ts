@@ -28,7 +28,7 @@ export class VisionNetwork {
   }
 
   @action
-  private onImage = (robotModel: RobotModel, image: Image) => {
+  private onImage = (robotModel: RobotModel, image: Image | CompressedImage) => {
     const robot = VisionRobotModel.of(robotModel)
     const { cameraId, name, dimensions, format, data, Hcw } = image
 

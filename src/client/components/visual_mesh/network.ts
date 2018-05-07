@@ -52,7 +52,7 @@ export class VisualMeshNetwork {
   }
 
   @action
-  private onImage = (robotModel: RobotModel, image: Image) => {
+  private onImage = (robotModel: RobotModel, image: Image | CompressedImage) => {
     const robot = VisualMeshRobotModel.of(robotModel)
     const { cameraId, name, dimensions, format, data, Hcw } = image
 

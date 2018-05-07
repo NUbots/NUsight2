@@ -98,7 +98,6 @@ export class CameraViewModel {
     return this.model.image && this.model.image.height
   }
 
-  @computed
   private get image(): Mesh {
     const mesh = new Mesh(this.quadGeometry, this.imageMaterial)
 
@@ -125,7 +124,6 @@ export class CameraViewModel {
     })
   }
 
-  @computed
   private get imageMaterial() {
 
     // Cloning a material allows for new uniforms without recompiling the shader

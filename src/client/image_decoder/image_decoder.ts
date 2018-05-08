@@ -97,22 +97,14 @@ export class ImageDecoder {
   // Update our stored texture
   update(image: Image): void {
     switch (image.format) {
-      case fourcc('JPEG'):
-        this.jpeg(image)
-        break
-      case fourcc('GRBG'):
-      case fourcc('RGGB'):
-      case fourcc('GBRG'):
-      case fourcc('BGGR'):
-        this.bayer(image)
-        break
-      case fourcc('RGB3'):
-        this.dataTexture(image, RGBFormat)
-        break
+      case fourcc('JPEG'): return this.jpeg(image)
+      case fourcc('GRBG'): return this.bayer(image, [1, 0])
+      case fourcc('RGGB'): return this.bayer(image, [0, 0])
+      case fourcc('GBRG'): return this.bayer(image, [0, 1])
+      case fourcc('BGGR'): return this.bayer(image, [1, 1])
+      case fourcc('RGB3'): return this.dataTexture(image, RGBFormat)
       case fourcc('GREY'):
-      case fourcc('GRAY'):
-        this.dataTexture(image, LuminanceFormat)
-        break
+      case fourcc('GRAY'): return this.dataTexture(image, LuminanceFormat)
       default:
         throw Error(`Unsupported image format ${fourccToString(image.format)}`)
     }
@@ -126,7 +118,7 @@ export class ImageDecoder {
     }
   }
 
-  private bayer(image: Image) {
+  private bayer(image: Image, firstRed: [number, number]): void {
 
     // If we have never decoded bayer with this decoder before we need to make our threejs objects
     this.bayerDecoder = {
@@ -148,22 +140,6 @@ export class ImageDecoder {
 
     // Create our getter function to debayer the first time it's called
     const get = () => {
-
-      let firstRed
-      switch (image.format) {
-        case fourcc('GRBG'):
-          firstRed = [1, 0]
-          break
-        case fourcc('RGGB'):
-          firstRed = [0, 0]
-          break
-        case fourcc('GBRG'):
-          firstRed = [0, 1]
-          break
-        case fourcc('BGGR'):
-          firstRed = [1, 1]
-          break
-      }
 
       // The raw bayer texture
       const rawTexture = new DataTexture(
@@ -212,7 +188,7 @@ export class ImageDecoder {
     this.atom.reportChanged()
   }
 
-  private jpeg(image: Image) {
+  private jpeg(image: Image): void {
 
     // Create a blob URL for our loaded data
     const blob = new Blob([image.data], { type: 'image/jpeg' })
@@ -241,7 +217,7 @@ export class ImageDecoder {
     tag.src = url
   }
 
-  private dataTexture(image: Image, format: PixelFormat) {
+  private dataTexture(image: Image, format: PixelFormat): void {
     this.updateCache(() => {
       const texture = new DataTexture(
           image.data,

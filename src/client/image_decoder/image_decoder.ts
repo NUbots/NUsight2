@@ -35,7 +35,7 @@ export function fourcc(code: string): number {
   return code.charCodeAt(3) << 24 | code.charCodeAt(2) << 16 | code.charCodeAt(1) << 8 | code.charCodeAt(0)
 }
 
-export function ccruof(code: number): string {
+export function fourccToString(code: number): string {
   return String.fromCharCode(code & 0xFF) +
   String.fromCharCode(code >> 8 & 0xFF) +
   String.fromCharCode(code >> 16 & 0xFF) +
@@ -114,7 +114,7 @@ export class ImageDecoder {
         this.dataTexture(image, LuminanceFormat)
         break
       default:
-        throw Error(`Unsupported image format ${ccruof(image.format)}`)
+        throw Error(`Unsupported image format ${fourccToString(image.format)}`)
     }
   }
 

@@ -1,4 +1,4 @@
-import { useStrict } from 'mobx'
+import { configure } from 'mobx'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
@@ -10,18 +10,23 @@ import { AppModel } from './components/app/model'
 import { AppNetwork } from './components/app/network'
 import { AppView } from './components/app/view'
 import { installClassifier } from './components/classifier/install'
+import { installChart } from './components/chart/install'
 import { installDashboard } from './components/dashboard/install'
 import { installLocalisation } from './components/localisation/install'
 import { withRobotSelectorMenuBar } from './components/menu_bar/view'
+import { installVision } from './components/vision/install'
+import { installVisualMesh } from './components/visual_mesh/install'
 import { NavigationConfiguration } from './navigation'
 import { NUsightNetwork } from './network/nusight_network'
 
 // enable MobX strict mode
-useStrict(true)
+configure({
+  enforceActions: true,
+})
 
 const appModel = AppModel.of()
 const nusightNetwork = NUsightNetwork.of(appModel)
-nusightNetwork.connect({ name: 'nusight' })
+nusightNetwork.connect({ name: 'nusight', address: '10.1.255.255' })
 
 const appController = AppController.of()
 AppNetwork.of(nusightNetwork, appModel)
@@ -31,6 +36,9 @@ const nav = NavigationConfiguration.of()
 installDashboard({ nav, appModel, nusightNetwork, menu })
 installLocalisation({ nav, appModel, nusightNetwork, menu })
 installClassifier({ nav, appModel, nusightNetwork, Menu: menu })
+installChart({ nav, appModel, nusightNetwork, menu })
+installVision({ nav, appModel, nusightNetwork, Menu: menu })
+installVisualMesh({ nav, appModel, nusightNetwork, Menu: menu })
 
 ReactDOM.render(
   <BrowserRouter>

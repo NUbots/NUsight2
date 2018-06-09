@@ -23,7 +23,6 @@ export class DashboardRobotModel {
   @observable ballSightColor: string
   @observable kickTargetColor: string
   @observable private robot: RobotModel
-  @observable robotBorderColor: string
   @observable robotColor: string
   @observable textColor: string
 
@@ -95,12 +94,11 @@ export class DashboardRobotModel {
       lastSeenBall: 0,
       lastSeenGoal: 0,
       penaltyReason: PenaltyReason.UNKNOWN_PENALTY_REASON,
-      robotBorderColor: 'transparent',
       robotColor: '#015457',
       robotPosition: Vector3.of(),
       robotPositionCovariance: Matrix3.of(),
       roleName: '',
-      textColor: '#fff',
+      textColor: '#ffffff',
       time: BrowserSystemClock.now(),
       voltage: -1,
       walkCommand: Vector3.of(),
@@ -134,7 +132,6 @@ interface DashboardRobotModelOpts {
   ballColor: string
   ballSightColor: string
   kickTargetColor: string
-  robotBorderColor: string
   robotColor: string
   textColor: string
   time: number

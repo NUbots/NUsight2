@@ -1,7 +1,7 @@
 import { action } from 'mobx'
 
-import { google } from '../../../shared/proto/messages'
 import { message } from '../../../shared/proto/messages'
+import { toSeconds } from '../../../shared/time/timestamp'
 import { Matrix2 } from '../../math/matrix2'
 import { Matrix3 } from '../../math/matrix3'
 import { Vector2 } from '../../math/vector2'
@@ -11,8 +11,7 @@ import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
 
 import { DashboardRobotModel } from './dashboard_robot/model'
-import Timestamp = google.protobuf.Timestamp$Properties
-import Overview = message.support.nubugger.Overview
+import Overview = message.support.nusight.Overview
 
 export class DashboardNetwork {
   constructor(private network: Network) {
@@ -76,13 +75,4 @@ export class DashboardNetwork {
     robot.walkCommand = Vector3.from(overview.walkCommand)
     robot.walkPathPlan = overview.walkPathPlan.map(Vector2.from)
   }
-}
-
-function toSeconds(timestamp: Timestamp | null): number {
-  if (!timestamp) {
-    timestamp = { seconds: 0, nanos: 0 }
-  }
-  const seconds: number = Number(timestamp.seconds)
-  const nanos: number = timestamp.nanos! || 0
-  return seconds + (nanos * 1e-9)
 }

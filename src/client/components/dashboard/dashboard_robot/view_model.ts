@@ -1,18 +1,18 @@
-import { createTransformer } from 'mobx'
 import { computed } from 'mobx'
+import { createTransformer } from 'mobx-utils'
 
-import { BasicAppearance } from '../../../canvas/appearance/basic_appearance'
-import { LineAppearance } from '../../../canvas/appearance/line_appearance'
-import { ArcGeometry } from '../../../canvas/geometry/arc_geometry'
-import { ArrowGeometry } from '../../../canvas/geometry/arrow_geometry'
-import { CircleGeometry } from '../../../canvas/geometry/circle_geometry'
-import { LineGeometry } from '../../../canvas/geometry/line_geometry'
-import { MarkerGeometry } from '../../../canvas/geometry/marker_geometry'
-import { TextGeometry } from '../../../canvas/geometry/text_geometry'
-import { Group } from '../../../canvas/object/group'
-import { Shape } from '../../../canvas/object/shape'
 import { Transform } from '../../../math/transform'
 import { Vector2 } from '../../../math/vector2'
+import { BasicAppearance } from '../../../render2d/appearance/basic_appearance'
+import { LineAppearance } from '../../../render2d/appearance/line_appearance'
+import { ArcGeometry } from '../../../render2d/geometry/arc_geometry'
+import { ArrowGeometry } from '../../../render2d/geometry/arrow_geometry'
+import { CircleGeometry } from '../../../render2d/geometry/circle_geometry'
+import { LineGeometry } from '../../../render2d/geometry/line_geometry'
+import { MarkerGeometry } from '../../../render2d/geometry/marker_geometry'
+import { TextGeometry } from '../../../render2d/geometry/text_geometry'
+import { Group } from '../../../render2d/object/group'
+import { Shape } from '../../../render2d/object/shape'
 
 import { DashboardRobotModel } from './model'
 
@@ -84,9 +84,7 @@ export class DashboardRobotViewModel {
         anticlockwise: rotation < 0,
       }),
       BasicAppearance.of({
-        lineWidth: 0.025,
-        fillStyle: 'transparent',
-        strokeStyle: '#000',
+        stroke: { width: 0.025, color: '#000000' },
       }),
     )
   }
@@ -100,8 +98,7 @@ export class DashboardRobotViewModel {
         y: this.model.ballPosition.y,
       }),
       BasicAppearance.of({
-        fillStyle: this.model.ballColor,
-        strokeStyle: 'transparent',
+        fill: { color: this.model.ballColor },
       }),
     )
   }
@@ -114,8 +111,7 @@ export class DashboardRobotViewModel {
         target: this.model.ballPosition.clone(),
       }),
       LineAppearance.of({
-        lineWidth: 0.025,
-        strokeStyle: this.model.ballSightColor,
+        stroke: { width: 0.025, color: this.model.ballSightColor },
       }),
     )
   }
@@ -134,9 +130,7 @@ export class DashboardRobotViewModel {
         width: 0.025,
       }),
       BasicAppearance.of({
-        fillStyle: this.model.kickTargetColor,
-        lineWidth: 0,
-        strokeStyle: 'transparent',
+        fill: { color: this.model.kickTargetColor },
       }),
     )
   }
@@ -153,23 +147,21 @@ export class DashboardRobotViewModel {
             y: 0,
           }),
           BasicAppearance.of({
-            fillStyle: this.model.robotColor,
-            lineWidth: 0.01,
-            strokeStyle: this.model.robotBorderColor,
+            fill: { color: this.model.robotColor },
           }),
         ),
         Shape.of(
           TextGeometry.of({
             text: this.model.playerId.toString(),
-            textAlign: 'center',
+            worldAlignment: true,
+            textAlign: 'middle',
             textBaseline: 'middle',
-            maxWidth: radius,
+            fontSize: `${radius * 1.9}px`,
             x: 0,
             y: 0,
           }),
           BasicAppearance.of({
-            fillStyle: this.model.textColor,
-            strokeStyle: 'transparent',
+            fill: { color: this.model.textColor },
           }),
         ),
       ],

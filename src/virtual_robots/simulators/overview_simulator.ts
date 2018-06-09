@@ -3,14 +3,15 @@ import { Vector3 } from '../../client/math/vector3'
 import { SeededRandom } from '../../shared/base/random/seeded_random'
 import { FieldDimensions } from '../../shared/field/dimensions'
 import { message } from '../../shared/proto/messages'
-import { vec2$Properties } from '../../shared/proto/messages'
+import { Ivec2 } from '../../shared/proto/messages'
+import { toTimestamp } from '../../shared/time/timestamp'
 import { Simulator } from '../simulator'
 import { Message } from '../simulator'
 import State = message.behaviour.Behaviour.State
 import Mode = message.input.GameState.Data.Mode
 import PenaltyReason = message.input.GameState.Data.PenaltyReason
 import Phase = message.input.GameState.Data.Phase
-import Overview = message.support.nubugger.Overview
+import Overview = message.support.nusight.Overview
 
 export class OverviewSimulator implements Simulator {
   constructor(private field: FieldDimensions,
@@ -25,7 +26,7 @@ export class OverviewSimulator implements Simulator {
   }
 
   simulate(time: number, index: number, numRobots: number): Message[] {
-    const messageType = 'message.support.nubugger.Overview'
+    const messageType = 'message.support.nusight.Overview'
 
     const t = time / 10 - index
 
@@ -46,7 +47,7 @@ export class OverviewSimulator implements Simulator {
     const penaltyReasons = getEnumValues<PenaltyReason>(PenaltyReason)
 
     const buffer = Overview.encode({
-      timestamp: { seconds: time },
+      timestamp: toTimestamp(time),
       robotId: index + 1,
       roleName: 'Overview Simulator',
       battery: this.random.float(),
@@ -67,9 +68,9 @@ export class OverviewSimulator implements Simulator {
       gameMode: this.random.choice(modes),
       gamePhase: this.random.choice(phases),
       penaltyReason: this.random.choice(penaltyReasons),
-      lastCameraImage: { seconds: this.randomSeconds(time, -5) },
-      lastSeenBall: { seconds: this.randomSeconds(time, -30) },
-      lastSeenGoal: { seconds: this.randomSeconds(time, -30) },
+      lastCameraImage: toTimestamp(this.randomSeconds(time, -5)),
+      lastSeenBall: toTimestamp(this.randomSeconds(time, -30)),
+      lastSeenGoal: toTimestamp(this.randomSeconds(time, -30)),
       walkCommand: {
         x: Math.cos(time / 3 + index),
         y: Math.cos(time / 5 + index),
@@ -89,7 +90,7 @@ export class OverviewSimulator implements Simulator {
     return [message]
   }
 
-  private randomFieldPosition(): vec2$Properties {
+  private randomFieldPosition(): Ivec2 {
     const fieldLength = this.field.fieldLength
     const fieldWidth = this.field.fieldWidth
     return {

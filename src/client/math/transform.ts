@@ -25,11 +25,11 @@ export class Transform {
   }
 
   static of({
-                     anticlockwise = true,
-                     rotate = 0,
-                     scale = { x: 1, y: 1 },
-                     translate = { x: 0, y: 0 },
-                   }: Partial<Transform> = {}): Transform {
+              anticlockwise = true,
+              rotate = 0,
+              scale = { x: 1, y: 1 },
+              translate = { x: 0, y: 0 },
+            }: Partial<Transform> = {}): Transform {
     return new Transform({
       anticlockwise,
       rotate,
@@ -73,6 +73,14 @@ export class Transform {
       rotate: -this.rotate,
       translate: { x: -this.translate.x, y: -this.translate.y },
     })
+  }
+
+  isIdentity(): boolean {
+    return this.scale.x === 1
+      && this.scale.y === 1
+      && this.translate.x === 0
+      && this.translate.y === 0
+      && this.rotate === 0
   }
 
   clone(): Transform {

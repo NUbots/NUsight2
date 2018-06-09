@@ -7,7 +7,7 @@ import Devtool = webpack.Options.Devtool
 
 const isProduction = process.argv.indexOf('-p') >= 0
 const sourcePath = path.join(__dirname, './src')
-const outPath = path.join(__dirname, './build')
+const outPath = path.join(__dirname, './dist')
 
 const devtool: Devtool = isProduction ? 'source-map' : 'inline-source-map'
 
@@ -46,6 +46,8 @@ export default [{
   },
   module: {
     rules: [
+      // webworkers
+      { test: /\.worker\.ts$/, use: 'worker-loader' },
       // .ts, .tsx
       {
         test: /\.tsx?$/,
@@ -125,8 +127,7 @@ export default [{
       { test: /\.html$/, use: 'html-loader' },
       { test: /\.png$/, use: 'url-loader?limit=10000' },
       { test: /\.jpg$/, use: 'file-loader' },
-      { test: /\.vert$/, use: 'raw-loader' },
-      { test: /\.frag$/, use: 'raw-loader' },
+      { test: /\.(vert|frag)$/, use: 'raw-loader' },
     ],
   },
   plugins: [

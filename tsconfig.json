@@ -3,6 +3,7 @@
     "sourceMap": true,
     "target": "es5",
     "jsx": "react",
+    "skipLibCheck": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -17,7 +18,8 @@
     "lib": [
       "es6",
       "es7",
-      "dom"
+      "dom",
+      "webworker"
     ]
   },
   "include": [

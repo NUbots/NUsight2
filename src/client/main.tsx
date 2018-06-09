@@ -35,9 +35,9 @@ const menu = withRobotSelectorMenuBar(appModel.robots, appController.toggleRobot
 const nav = NavigationConfiguration.of()
 installDashboard({ nav, appModel, nusightNetwork, menu })
 installLocalisation({ nav, appModel, nusightNetwork, menu })
-installClassifier({ nav, appModel, nusightNetwork, Menu: menu })
 installChart({ nav, appModel, nusightNetwork, menu })
 installVision({ nav, appModel, nusightNetwork, Menu: menu })
+installClassifier({ nav, appModel, nusightNetwork, Menu: menu })
 installVisualMesh({ nav, appModel, nusightNetwork, Menu: menu })
 
 ReactDOM.render(

@@ -25,9 +25,9 @@ export class VisionSimulator implements Simulator {
 
   simulate(time: number, index: number, numRobots: number): Message[] {
     const messageType = 'message.output.CompressedImage'
-    const period = 10
+    const t = time / 10 - index
     const numImages = this.images.length
-    const imageIndex = Math.floor((Math.sin(2 * Math.PI * time / period) + 1) / 2 * numImages) % numImages
+    const imageIndex = Math.floor((Math.cos(2 * Math.PI * t) + 1) / 2 * numImages) % numImages
     const data = this.images[imageIndex]
     const buffer = CompressedImage.encode({
       format: fourcc('JPEG'),

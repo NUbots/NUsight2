@@ -1,4 +1,5 @@
-import { Atom } from 'mobx'
+import { IAtom } from 'mobx'
+import { createAtom } from 'mobx'
 import { observable } from 'mobx'
 import { computed } from 'mobx'
 
@@ -51,12 +52,12 @@ export class ClassifierRobotModel {
 }
 
 export class Lut {
-  private atom: Atom
+  private atom: IAtom
   private rawData: Uint8Array
   @observable.shallow size: { x: number, y: number, z: number }
 
   constructor({ atom, data, size }: {
-    atom: Atom,
+    atom: IAtom,
     data: Uint8Array,
     size: { x: number, y: number, z: number }
   }) {
@@ -67,7 +68,7 @@ export class Lut {
 
   static of() {
     return new Lut({
-      atom: new Atom('Lut'),
+      atom: createAtom('Lut'),
       data: new Uint8Array(2 ** (6 + 6 + 6)).fill(117),
       size: { x: 6, y: 6, z: 6 },
     })

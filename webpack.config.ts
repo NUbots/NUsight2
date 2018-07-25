@@ -20,17 +20,6 @@ export default [{
     ].concat(isProduction ? [] : [
       'webpack-hot-middleware/client',
     ]),
-    vendor: [
-      'classnames',
-      'mobx',
-      'mobx-react',
-      'react',
-      'react-dom',
-      'react-router',
-      'react-router-dom',
-      'socket.io-client',
-      'three',
-    ],
   },
   output: {
     path: outPath,
@@ -47,16 +36,15 @@ export default [{
   module: {
     rules: [
       // webworkers
-      { test: /\.worker\.ts$/, use: 'worker-loader' },
+      {
+        test: /\.worker\.ts$/,
+        loader: 'worker-loader',
+        options: { inline: true, fallback: false },
+      },
       // .ts, .tsx
       {
         test: /\.tsx?$/,
-        use: isProduction
-          ? 'awesome-typescript-loader?module=es6'
-          : [
-            'react-hot-loader/webpack',
-            'awesome-typescript-loader',
-          ],
+        loader: 'ts-loader',
       },
       // local css
       {
@@ -154,11 +142,5 @@ export default [{
         },
       },
     },
-  },
-  node: {
-    // workaround for webpack-dev-server issue
-    // https://github.com/webpack/webpack-dev-server/issues/60#issuecomment-103411179
-    fs: 'empty',
-    net: 'empty',
   },
 }]

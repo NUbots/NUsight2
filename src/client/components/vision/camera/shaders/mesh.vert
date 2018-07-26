@@ -11,7 +11,7 @@ void main() {
 //   vClassification = classification;
 
   // Calculate our position in the mesh
-  vec2 pos = (position / dimensions) - 0.5;
+  vec2 pos = 2.0 * ((position / dimensions) - 0.5);
   pos.y *= -1.0;
 
   gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 0.0, 1.0);

@@ -3,7 +3,7 @@ import { autorun } from 'mobx'
 import { computed } from 'mobx'
 import { createTransformer } from 'mobx-utils'
 import { Float32BufferAttribute } from 'three'
-import { Line } from 'three'
+import { LineSegments } from 'three'
 import { BufferGeometry } from 'three'
 import { Object3D } from 'three'
 import { PlaneBufferGeometry } from 'three'
@@ -157,7 +157,7 @@ export class CameraViewModel {
   private mesh = createTransformer((mesh: VisualMesh) => {
     const material = this.meshMaterial.clone()
     material.uniforms.dimensions.value = new Vector2(this.model.image!.width, this.model.image!.height)
-    return new Line(this.meshGeometry(mesh), material)
+    return new LineSegments(this.meshGeometry(mesh), material)
   })
 
   @computed

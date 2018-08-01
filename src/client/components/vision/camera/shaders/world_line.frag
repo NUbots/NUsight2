@@ -6,7 +6,7 @@ precision lowp float;
 uniform vec2 viewSize;
 uniform float focalLength;
 uniform int projection;
-uniform vec2 centreOffset;
+uniform vec2 centre;
 
 // Line parameters
 uniform vec3 axis;
@@ -73,7 +73,7 @@ vec2 projectEquisolid(vec3 ray, float f, vec2 c) {
 }
 
 vec3 unprojectRectilinear(vec2 point, float f, vec2 c) {
-  return normalize(vec3(point + c, f));
+  return normalize(vec3(f, point + c));
 }
 
 vec2 projectRectilinear(vec3 ray, float f, vec2 c) {
@@ -128,7 +128,7 @@ void main() {
   float gradient = dot(axis, start);
 
   // Project it into the world space
-  vec3 cam = unproject(screenPoint, focalLength * viewSize.x, centreOffset, projection);
+  vec3 cam = unproject(screenPoint, focalLength * viewSize.x, centre, projection);
 
   // Rotate the axis vector towards the screen point by the angle to gradient
   // This gives the closest point on the curve
@@ -146,7 +146,7 @@ void main() {
   nearestPoint = value > range && value - range < (M_PI * 2.0 - range) * 0.5 ? end : nearestPoint;
 
   // When we project this back onto the image we get the nearest pixel
-  vec2 nearestPixel = projectEquidistant(nearestPoint, focalLength * viewSize.x);
+  vec2 nearestPixel = project(nearestPoint, focalLength * viewSize.x, centre, projection);
 
   // We get the distance from us to the nearest pixel and smoothstep to make a line
   float pixelDistance = length(screenPoint - nearestPixel);

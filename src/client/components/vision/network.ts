@@ -75,7 +75,7 @@ export class VisionNetwork {
     }
 
     // We don't need to know phi, just how many items are in each ring
-    camera.mesh = {
+    camera.visualmesh = {
       neighbours: neighbourhood!.v!,
       coordinates: coordinates!.v!,
       classifications: { dim: classifications!.cols!, values: classifications!.v! },

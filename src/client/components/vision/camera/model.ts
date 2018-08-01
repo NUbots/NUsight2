@@ -28,7 +28,7 @@ type CameraModelOpts = {
 export class CameraModel {
   readonly id: number
 
-  @observable.shallow mesh?: VisualMesh
+  @observable.shallow visualmesh?: VisualMesh
   @observable.shallow image?: VisionImage
   @observable name: string
 

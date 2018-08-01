@@ -90,8 +90,8 @@ export class CameraViewModel {
       scene.add(this.compass(this.model.image.Hcw))
       scene.add(this.horizon(this.model.image.Hcw))
     }
-    if (this.model.mesh) {
-      scene.add(this.mesh(this.model.mesh))
+    if (this.model.visualmesh) {
+      scene.add(this.visualmesh(this.model.visualmesh))
     }
     return scene
   }
@@ -117,7 +117,7 @@ export class CameraViewModel {
     return mesh
   }
 
-  private meshGeometry = createTransformer((mesh: VisualMesh) => {
+  private meshGeometry = createTransformer((mesh: VisualMesh): BufferGeometry => {
 
     const { neighbours, coordinates, classifications } = mesh
 
@@ -139,7 +139,7 @@ export class CameraViewModel {
     geometry.addAttribute('position', new Float32BufferAttribute(coordinates, 2))
     geometry.addAttribute('classification', new Float32BufferAttribute(classifications.values, classifications.dim))
     return geometry
-  })
+  }, (geom?: BufferGeometry) => geom && geom.dispose())
 
   @computed
   private get meshMaterial() {
@@ -155,10 +155,12 @@ export class CameraViewModel {
     })
   }
 
-  private mesh = createTransformer((mesh: VisualMesh) => {
+  private visualmesh = createTransformer((mesh: VisualMesh) => {
     const material = this.meshMaterial.clone()
     material.uniforms.dimensions.value = new Vector2(this.model.image!.width, this.model.image!.height)
-    return new LineSegments(this.meshGeometry(mesh), material)
+    const lines = new LineSegments(this.meshGeometry(mesh), material)
+    lines.frustumCulled = false
+    return lines
   })
 
   @computed

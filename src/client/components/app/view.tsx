@@ -5,14 +5,14 @@ import { Switch } from 'react-router'
 import { Route } from 'react-router'
 import { BrowserRouter } from 'react-router-dom'
 
-import { install } from '../../install'
 import { NavigationConfiguration } from '../../navigation'
 import { NavigationView } from '../navigation/view'
 
+import { installNav } from './install'
 import * as style from './style.css'
 
 class AppView extends Component {
-  private readonly nav: NavigationConfiguration = install()
+  private readonly nav: NavigationConfiguration = installNav()
 
   render() {
     return (

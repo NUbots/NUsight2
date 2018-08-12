@@ -1,16 +1,17 @@
-import { AppController } from './components/app/controller'
-import { AppModel } from './components/app/model'
-import { AppNetwork } from './components/app/network'
-import { installChart } from './components/chart/install'
-import { installDashboard } from './components/dashboard/install'
-import { installLocalisation } from './components/localisation/install'
-import { withRobotSelectorMenuBar } from './components/menu_bar/view'
-import { installVision } from './components/vision/install'
-import { installVisualMesh } from './components/visual_mesh/install'
-import { NavigationConfiguration } from './navigation'
-import { NUsightNetwork } from './network/nusight_network'
+import { NavigationConfiguration } from '../../navigation'
+import { NUsightNetwork } from '../../network/nusight_network'
+import { installChart } from '../chart/install'
+import { installDashboard } from '../dashboard/install'
+import { installLocalisation } from '../localisation/install'
+import { withRobotSelectorMenuBar } from '../menu_bar/view'
+import { installVision } from '../vision/install'
+import { installVisualMesh } from '../visual_mesh/install'
 
-export function install() {
+import { AppController } from './controller'
+import { AppModel } from './model'
+import { AppNetwork } from './network'
+
+export function installNav() {
   const nav = NavigationConfiguration.of()
   const appModel = AppModel.of()
   const nusightNetwork = NUsightNetwork.of(appModel)

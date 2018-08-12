@@ -9,6 +9,7 @@ const sourcePath = path.join(__dirname, './src')
 const outPath = path.join(__dirname, './dist')
 
 const config: webpack.Configuration = {
+  mode: isProduction ? 'production' : 'development',
   context: sourcePath,
   devtool: isProduction ? 'source-map' : 'inline-source-map',
   entry: {

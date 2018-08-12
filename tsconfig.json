@@ -17,8 +17,9 @@
     "downlevelIteration": true,
     "outDir": "build",
     "lib": [
-      "es6",
-      "es7",
+      "ES2015",
+      "ES2016",
+      "ES2017",
       "dom",
       "webworker"
     ]

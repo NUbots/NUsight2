@@ -17,13 +17,6 @@ env:
   - CXX=g++-4.9 YARN_COMMAND=tslint
   - CXX=g++-4.9 YARN_COMMAND=test:ci
   - CXX=g++-4.9 YARN_COMMAND=protobuf
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.9
-
 # Only build the master branch, PRs will build also due to settings in the web ui
 branches:
   only:

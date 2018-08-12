@@ -1,6 +1,3 @@
-import { action } from 'mobx'
-import { observable } from 'mobx'
-import { observer } from 'mobx-react'
 import { Component } from 'react'
 import * as React from 'react'
 import { hot } from 'react-hot-loader'
@@ -14,18 +11,11 @@ import { NavigationView } from '../navigation/view'
 
 import * as style from './style.css'
 
-@observer
 class AppView extends Component {
-  @observable.ref
-  private nav?: NavigationConfiguration
-
-  @action
-  componentDidMount() {
-    this.nav = install()
-  }
+  private readonly nav: NavigationConfiguration = install()
 
   render() {
-    return this.nav ? (
+    return (
       <BrowserRouter>
         <div className={style.app}>
           <NavigationView nav={this.nav}/>
@@ -40,7 +30,7 @@ class AppView extends Component {
           </div>
         </div>
       </BrowserRouter>
-    ) : null
+    )
   }
 }
 

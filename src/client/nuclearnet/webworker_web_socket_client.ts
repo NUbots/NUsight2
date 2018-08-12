@@ -2,7 +2,7 @@ import * as Emitter from 'component-emitter'
 import * as SocketIO from 'socket.io-client'
 
 import { WebSocketClient } from './web_socket_client'
-import * as WebSocketWorker from './webworker_web_socket_client.worker.ts'
+import WebSocketWorker from './webworker_web_socket_client.worker.ts'
 
 export class WebWorkerWebSocketClient extends Emitter implements WebSocketClient {
 

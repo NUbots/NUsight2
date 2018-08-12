@@ -39,7 +39,6 @@
     "@babel/plugin-syntax-decorators": "^7.0.0-rc.1",
     "@babel/plugin-syntax-jsx": "^7.0.0-rc.1",
     "@babel/plugin-syntax-typescript": "^7.0.0-rc.1",
-    "@babel/preset-env": "^7.0.0-rc.1",
     "@types/classnames": "^2.2.0",
     "@types/component-emitter": "^1.2.7",
     "@types/compression": "0.0.35",

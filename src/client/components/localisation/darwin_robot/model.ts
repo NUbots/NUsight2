@@ -2,9 +2,9 @@ import { observable } from 'mobx'
 import { computed } from 'mobx'
 
 import { memoize } from '../../../base/memoize'
+import { Quaternion } from '../../../math/quaternion'
 import { Vector3 } from '../../../math/vector3'
 import { RobotModel } from '../../robot/model'
-import { Quaternion } from '../model'
 
 class DarwinMotor {
   @observable angle: number

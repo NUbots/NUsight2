@@ -63,7 +63,7 @@
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
     "copy-webpack-plugin": "^4.5.2",
-    "css-loader": "^0.28.8",
+    "css-loader": "^1.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "1.1.11",
     "html-loader": "0.5.5",

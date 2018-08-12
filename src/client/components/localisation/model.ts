@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx'
+import { observable } from 'mobx'
 import { computed } from 'mobx'
 
 import { memoize } from '../../base/memoize'
@@ -33,41 +33,6 @@ export enum ViewMode {
   FreeCamera,
   FirstPerson,
   ThirdPerson,
-}
-
-export class LocalisationModel {
-  @observable private appModel: AppModel
-  @observable aspect: number
-  @observable field: FieldModel
-  @observable skybox: SkyboxModel
-  @observable camera: CameraModel
-  @observable locked: boolean
-  @observable controls: ControlsModel
-  @observable viewMode: ViewMode
-  @observable target?: LocalisationRobotModel
-  @observable time: TimeModel
-
-  constructor(appModel: AppModel, opts: Partial<LocalisationModel>) {
-    this.appModel = appModel
-    Object.assign(this, opts)
-  }
-
-  static of = memoize((appModel: AppModel): LocalisationModel => {
-    return new LocalisationModel(appModel, {
-      aspect: 300 / 150,
-      field: FieldModel.of(),
-      skybox: SkyboxModel.of(),
-      camera: CameraModel.of(),
-      locked: false,
-      controls: ControlsModel.of(),
-      viewMode: ViewMode.FreeCamera,
-      time: TimeModel.of(),
-    })
-  })
-
-  @computed get robots(): LocalisationRobotModel[] {
-    return this.appModel.robots.map(robot => LocalisationRobotModel.of(robot))
-  }
 }
 
 class CameraModel {
@@ -115,6 +80,41 @@ export class ControlsModel {
       pitch: 0,
       yaw: 0,
     })
+  }
+}
+
+export class LocalisationModel {
+  @observable private appModel: AppModel
+  @observable aspect: number
+  @observable field: FieldModel
+  @observable skybox: SkyboxModel
+  @observable camera: CameraModel
+  @observable locked: boolean
+  @observable controls: ControlsModel
+  @observable viewMode: ViewMode
+  @observable target?: LocalisationRobotModel
+  @observable time: TimeModel
+
+  constructor(appModel: AppModel, opts: Partial<LocalisationModel>) {
+    this.appModel = appModel
+    Object.assign(this, opts)
+  }
+
+  static of = memoize((appModel: AppModel): LocalisationModel => {
+    return new LocalisationModel(appModel, {
+      aspect: 300 / 150,
+      field: FieldModel.of(),
+      skybox: SkyboxModel.of(),
+      camera: CameraModel.of(),
+      locked: false,
+      controls: ControlsModel.of(),
+      viewMode: ViewMode.FreeCamera,
+      time: TimeModel.of(),
+    })
+  })
+
+  @computed get robots(): LocalisationRobotModel[] {
+    return this.appModel.robots.map(robot => LocalisationRobotModel.of(robot))
   }
 }
 

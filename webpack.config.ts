@@ -38,15 +38,13 @@ const config: webpack.Configuration = {
         exclude: [
           path.resolve(__dirname, 'node_modules'),
         ],
-        use: [
-          {
-            loader: 'awesome-typescript-loader',
-            options: {
-              useBabel: true,
-              babelCore: '@babel/core',
-            },
+        use: [{
+          loader: 'awesome-typescript-loader',
+          options: {
+            useBabel: true,
+            babelCore: '@babel/core',
           },
-        ],
+        }],
       },
       // local css
       {
@@ -132,7 +130,6 @@ const config: webpack.Configuration = {
         },
       },
     },
-    runtimeChunk: true,
   },
   plugins: [
     new CopyWebpackPlugin([{ from: 'assets/images', to: 'images' }]),

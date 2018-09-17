@@ -5338,9 +5338,9 @@ nth-check@~1.0.1:
   dependencies:
     boolbase "~1.0.0"
 
-nuclearnet.js@^1.5.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/nuclearnet.js/-/nuclearnet.js-1.5.2.tgz#60c3bb2c369c5b4fdeab62240346647df4ac7f8e"
+nuclearnet.js@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/nuclearnet.js/-/nuclearnet.js-1.5.3.tgz#73b86a1024c62e0a20e8b8034ac77220019b5f0c"
   dependencies:
     bindings "^1.2.1"
     nan "^2.0.0"
@@ -5743,9 +5743,9 @@ pixi-gl-core@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/pixi-gl-core/-/pixi-gl-core-1.1.4.tgz#8b4b5c433b31e419bc379dc565ce1b835a91b372"
 
-pixi.js@^4.8.1:
-  version "4.8.1"
-  resolved "https://registry.yarnpkg.com/pixi.js/-/pixi.js-4.8.1.tgz#e35f370b0c635b5c542014d0649317d63d2ec7c4"
+pixi.js@^4.8.2:
+  version "4.8.2"
+  resolved "https://registry.yarnpkg.com/pixi.js/-/pixi.js-4.8.2.tgz#c9e6f5f3b6780d2236705a7539e4e5ca3d74151f"
   dependencies:
     bit-twiddle "^1.0.2"
     earcut "^2.1.3"

@@ -47,6 +47,8 @@ const config: webpack.Configuration = {
           loader: 'awesome-typescript-loader',
           options: {
             useBabel: true,
+            useCache: true,
+            forceIsolatedModules: true,
             transpileOnly,
             babelCore: '@babel/core',
           },

@@ -12,7 +12,7 @@ const outPath = path.join(__dirname, './dist')
 const config: webpack.Configuration = {
   mode: isProduction ? 'production' : 'development',
   context: sourcePath,
-  devtool: isProduction ? 'source-map' : 'eval-source-map',
+  devtool: isProduction ? false : 'eval-source-map',
   entry: {
     main: [
       './client/main.tsx',

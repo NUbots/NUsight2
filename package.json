@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "jest",
-    "test:ci": "yarn test --ci",
+    "test:ci": "yarn test --ci --runInBand",
     "test:watch": "yarn test --watch",
     "coverage": "yarn test --coverage",
     "coverage:ci": "yarn test:ci --coverage",

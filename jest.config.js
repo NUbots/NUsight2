@@ -10,6 +10,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       'tsConfigFile': './tsconfig.test.json',
+      'skipBabel': true,
     },
   },
   moduleDirectories: [

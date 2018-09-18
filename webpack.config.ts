@@ -5,6 +5,7 @@ import * as path from 'path'
 import * as webpack from 'webpack'
 
 const isProduction = process.argv.indexOf('-p') >= 0
+const isContinuousIntegration = process.argv.indexOf('--ci') >= 0
 const transpileOnly = process.argv.indexOf('-t') >= 0
 const sourcePath = path.join(__dirname, './src')
 const outPath = path.join(__dirname, './dist')
@@ -12,7 +13,7 @@ const outPath = path.join(__dirname, './dist')
 const config: webpack.Configuration = {
   mode: isProduction ? 'production' : 'development',
   context: sourcePath,
-  devtool: isProduction ? false : 'eval-source-map',
+  detvtool: isContinuousIntegration ? false : isProduction ? 'source-map' : 'eval-source-map',
   entry: {
     main: [
       './client/main.tsx',

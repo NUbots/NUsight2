@@ -14,7 +14,7 @@ cache:
 
 # We need to set this so our compiler is g++-4.9 for NUClearNet.js
 env:
-  - CXX=g++-4.9 YARN_COMMAND=build
+  - CXX=g++-4.9 YARN_COMMAND=build:ci
   - CXX=g++-4.9 YARN_COMMAND=tslint
   - CXX=g++-4.9 YARN_COMMAND=test:ci
   - CXX=g++-4.9 YARN_COMMAND=protobuf

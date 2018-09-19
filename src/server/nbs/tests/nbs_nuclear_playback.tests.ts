@@ -30,7 +30,7 @@ describe('NbsNUClearPlayback', () => {
       payload: Buffer.alloc(8),
     }
 
-    nuclearnetClient.connect({ name: 'Bob' });
+    nuclearnetClient.connect({ name: 'Bob' })
 
     jest.spyOn(nuclearnetClient, 'send')
 

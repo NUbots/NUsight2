@@ -60,7 +60,7 @@ export class FakeNUClearNetServer {
 
   send(client: FakeNUClearNetClient, opts: NUClearNetSend) {
     if (!client.peer) {
-      throw new Error('Cannot send a packaet to a client who has not connected to the network');
+      throw new Error('Cannot send a packaet to a client who has not connected to the network')
     }
 
     const hash: Buffer = typeof opts.type === 'string' ? hashType(opts.type) : opts.type

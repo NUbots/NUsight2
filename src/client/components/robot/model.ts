@@ -9,12 +9,12 @@ export class RobotModel {
   @observable port: number
 
   constructor({ id, connected, enabled, name, address, port }: RobotModel) {
-    this.id = id;
-    this.connected = connected;
-    this.enabled = enabled;
-    this.name = name;
-    this.address = address;
-    this.port = port;
+    this.id = id
+    this.connected = connected
+    this.enabled = enabled
+    this.name = name
+    this.address = address
+    this.port = port
   }
 
   static of(opts: RobotModel) {

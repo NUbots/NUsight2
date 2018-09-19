@@ -70,14 +70,14 @@ export class ControlsModel {
   @observable yaw: number
 
   constructor({ forward, left, right, back, up, down, pitch, yaw }: ControlsModel) {
-     this.forward = forward
-     this.left = left
-     this.right = right
-     this.back = back
-     this.up = up
-     this.down = down
-     this.pitch = pitch
-     this.yaw = yaw
+    this.forward = forward
+    this.left = left
+    this.right = right
+    this.back = back
+    this.up = up
+    this.down = down
+    this.pitch = pitch
+    this.yaw = yaw
   }
 
   static of() {
@@ -115,7 +115,7 @@ export class LocalisationModel {
     controls: ControlsModel,
     viewMode: ViewMode,
     target?: LocalisationRobotModel,
-    time: TimeModel,
+    time: TimeModel
   }) {
     this.appModel = appModel
     this.aspect = aspect

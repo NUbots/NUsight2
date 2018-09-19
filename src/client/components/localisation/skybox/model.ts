@@ -1,7 +1,6 @@
 import { observable } from 'mobx'
 
 export class SkyboxModel {
-
   @observable turbidity: number
   @observable rayleigh: number
   @observable mieCoefficient: number
@@ -11,7 +10,9 @@ export class SkyboxModel {
   @observable azimuth: number // Facing front,
   @observable showSun: boolean
 
-  constructor({ turbidity, rayleigh, mieCoefficient, mieDirectionalG, luminance, inclination, azimuth, showSun }: SkyboxModel) {
+  constructor(
+    { turbidity, rayleigh, mieCoefficient, mieDirectionalG, luminance, inclination, azimuth, showSun }: SkyboxModel,
+  ) {
     this.turbidity = turbidity
     this.rayleigh = rayleigh
     this.mieCoefficient = mieCoefficient

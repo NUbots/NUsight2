@@ -124,7 +124,7 @@ export class LocalisationRobotModel {
     color?: string,
     rWTt: Vector3,
     Rwt: Quaternion,
-    motors: DarwinMotorSet,
+    motors: DarwinMotorSet
   }) {
     this.model = model
     this.name = name

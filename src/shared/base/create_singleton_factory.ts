@@ -1,10 +1,4 @@
-/**
- * Creates a function which will cache the value of the given factory function.
- * e.g.
- *
- * const fn = createSingleton(() => new MyClass())
- * fn() === fn() // true
- */
+/** Creates a function which will cache the value of the given factory function. */
 export const createSingletonFactory = <T>(factory: () => T) => {
   let instance: T
   return () => {

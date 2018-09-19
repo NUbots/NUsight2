@@ -3,6 +3,7 @@ import * as history from 'connect-history-api-fallback'
 import * as express from 'express'
 import * as http from 'http'
 import * as minimist from 'minimist'
+import { reaction } from 'mobx'
 import * as favicon from 'serve-favicon'
 import * as sio from 'socket.io'
 
@@ -34,6 +35,11 @@ server.listen(port, () => {
   console.log(`NUsight server started at http://localhost:${port}`)
 })
 
+const webSocketProxyNUClearNetServer = WebSocketProxyNUClearNetServer.of(
+  WebSocketServer.of(sioNetwork.of('/nuclearnet')),
+  { fakeNetworking: withVirtualRobots },
+)
+
 if (withVirtualRobots) {
   const virtualRobots = VirtualRobots.of({
     fakeNetworking: true,
@@ -44,9 +50,19 @@ if (withVirtualRobots) {
       { frequency: 10, simulator: ChartSimulator.of() },
     ],
   })
-  virtualRobots.startSimulators()
+  let stopSimulators: () => void | undefined
+  reaction(
+    () => webSocketProxyNUClearNetServer.numConnections > 0,
+    enable => {
+      if (enable) {
+        // tslint:disable-next-line no-console
+        console.log('Client connected, starting simulator')
+        stopSimulators = virtualRobots.startSimulators()
+      } else if (stopSimulators) {
+        // tslint:disable-next-line no-console
+        console.log('No clients remain connected, stopping simulator')
+      }
+    },
+    { fireImmediately: true },
+  )
 }
-
-WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
-  fakeNetworking: withVirtualRobots,
-})

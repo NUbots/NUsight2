@@ -1,3 +1,5 @@
+import { action } from 'mobx'
+import { observable } from 'mobx'
 import { NUClearNetOptions } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetPacket } from 'nuclearnet.js'
@@ -21,6 +23,8 @@ type Opts = {
  * improved to have more intelligent multiplexing.
  */
 export class WebSocketProxyNUClearNetServer {
+  @observable numConnections: number = 0
+
   constructor(private server: WebSocketServer, private nuclearnetClient: NUClearNetClient) {
     server.onConnection(this.onClientConnection)
   }
@@ -30,8 +34,11 @@ export class WebSocketProxyNUClearNetServer {
     return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
   }
 
-  private onClientConnection = (socket: WebSocket) => {
+  @action.bound
+  private onClientConnection(socket: WebSocket) {
+    this.numConnections++
     WebSocketServerClient.of(this.nuclearnetClient, socket)
+    socket.onDisconnect(action(() => this.numConnections--))
   }
 }
 
@@ -149,9 +156,9 @@ class PacketProcessor {
       this.sendReliablePacket(event, packet)
     } else if (this.isEventBelowLimit(event)) {
       this.sendUnreliablePacket(event, packet)
-    }/* else {
-      // This event is unreliable and already at the limit, simply drop the packet.
-    }*/
+    } else {
+      return // The event is unreliable and already at the limit, simply drop the packet.
+    }
   }
 
   private isEventBelowLimit(event: string) {

@@ -3,6 +3,8 @@ import * as history from 'connect-history-api-fallback'
 import * as express from 'express'
 import * as http from 'http'
 import * as minimist from 'minimist'
+import { reaction } from 'mobx'
+import { IObservableValue } from 'mobx'
 import * as favicon from 'serve-favicon'
 import * as sio from 'socket.io'
 import * as webpack from 'webpack'
@@ -34,9 +36,10 @@ const server = http.createServer(app)
 const sioNetwork = sio(server, { parser: NUClearNetProxyParser } as any)
 
 // Initialize socket.io namespace immediately to catch reconnections.
-WebSocketProxyNUClearNetServer.of(WebSocketServer.of(sioNetwork.of('/nuclearnet')), {
-  fakeNetworking: withVirtualRobots,
-})
+const webSocketProxyNUClearNetServer = WebSocketProxyNUClearNetServer.of(
+  WebSocketServer.of(sioNetwork.of('/nuclearnet')),
+  { fakeNetworking: withVirtualRobots },
+)
 
 const devMiddleware = webpackDevMiddleware(compiler, {
   publicPath: '/',
@@ -73,7 +76,21 @@ function init() {
         { frequency: 60, simulator: ChartSimulator.of() },
       ],
     })
-    virtualRobots.startSimulators()
+    let stopSimulators: () => void | undefined
+    reaction(
+      () => webSocketProxyNUClearNetServer.numConnections > 0,
+      enable => {
+        if (enable) {
+          // tslint:disable-next-line no-console
+          console.log('Client connected, starting simulator')
+          stopSimulators = virtualRobots.startSimulators()
+        } else if (stopSimulators) {
+          // tslint:disable-next-line no-console
+          console.log('No clients remain connected, stopping simulator')
+        }
+      },
+      { fireImmediately: true },
+    )
   }
 
   if (nbsFile) {

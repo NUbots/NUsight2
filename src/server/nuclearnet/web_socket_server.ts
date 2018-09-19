@@ -34,6 +34,10 @@ export class WebSocket {
     this.sioSocket.on(event, cb)
   }
 
+  onDisconnect(cb: () => void) {
+    this.on('disconnect', cb)
+  }
+
   send(event: string, ...args: any[]) {
     this.sioSocket.emit(event, ...args)
   }

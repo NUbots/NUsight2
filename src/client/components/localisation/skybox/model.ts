@@ -11,8 +11,15 @@ export class SkyboxModel {
   @observable azimuth: number // Facing front,
   @observable showSun: boolean
 
-  constructor(opts: SkyboxModel) {
-    Object.assign(this, opts)
+  constructor({ turbidity, rayleigh, mieCoefficient, mieDirectionalG, luminance, inclination, azimuth, showSun }: SkyboxModel) {
+    this.turbidity = turbidity
+    this.rayleigh = rayleigh
+    this.mieCoefficient = mieCoefficient
+    this.mieDirectionalG = mieDirectionalG
+    this.luminance = luminance
+    this.inclination = inclination
+    this.azimuth = azimuth
+    this.showSun = showSun
   }
 
   static of() {

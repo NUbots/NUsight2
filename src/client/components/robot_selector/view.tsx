@@ -38,7 +38,7 @@ export const RobotSelector = observer((props: RobotSelectorProps) => {
                 No connected robots
               </div>
               <span className={style.emptyDescription}>
-                Run yarn start:sim to simulate robots
+                Run yarn start:virtual to simulate robots
               </span>
             </div>
           }

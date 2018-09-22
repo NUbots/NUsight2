@@ -6,9 +6,9 @@ import { PointLight } from 'three'
 import { PerspectiveCamera } from 'three'
 import { Object3D } from 'three'
 
-import { RobotViewModel } from './darwin_robot/view_model'
 import { FieldViewModel } from './field/view_model'
 import { LocalisationModel } from './model'
+import { RobotViewModel } from './nugus_robot/view_model'
 import { SkyboxViewModel } from './skybox/view_model'
 
 export class LocalisationViewModel {

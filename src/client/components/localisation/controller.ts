@@ -6,10 +6,10 @@ import { Matrix4 } from 'three'
 
 import { Vector3 } from '../../math/vector3'
 
-import { HIP_TO_FOOT } from './darwin_robot/view_model'
 import { KeyCode } from './keycodes'
 import { LocalisationModel } from './model'
 import { ViewMode } from './model'
+import { HIP_TO_FOOT } from './nugus_robot/view_model'
 
 interface KeyModifiers {
   shiftKey: boolean

@@ -29,9 +29,9 @@ export class RightArmViewModel {
   private get rightShoulder() {
     const { geometry, materials } = this.rightShoulderGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(-0.082, 0, 0)
+    mesh.position.set(70, 180, 50)
     mesh.rotation.set(this.model.motors.rightShoulderPitch.angle - Math.PI / 2, 0, 0)
-    mesh.add(this.rightUpperArm)
+    // mesh.add(this.rightUpperArm)
     return mesh
   }
 

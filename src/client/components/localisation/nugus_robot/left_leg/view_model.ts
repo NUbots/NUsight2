@@ -28,22 +28,13 @@ export class LeftLegViewModel {
     return leftLeg
   }
 
-  // @computed
-  // private get leftPelvisY() {
-  //   const { geometry, materials } = this.leftPelvisYGeometryAndMaterial
-  //   const mesh = new Mesh(geometry, materials)
-  //   mesh.position.set(0.037, -0.1222, -0.005)
-  //   mesh.rotation.set(0, this.model.motors.leftHipYaw.angle, 0)
-  //   mesh.add(this.leftPelvis)
-  //   return mesh
-  // }
-
   @computed
   private get leftPelvis() {
     const { geometry, materials } = this.leftPelvisGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
     mesh.rotation.set(0, 0, this.model.motors.leftHipRoll.angle)
-    mesh.add(this.leftUpperLeg)
+    mesh.position.set(120, -338, 20)
+    // mesh.add(this.leftUpperLeg)
     return mesh
   }
 
@@ -66,16 +57,6 @@ export class LeftLegViewModel {
     return mesh
   }
 
-  // @computed
-  // private get leftAnkle() {
-  //   const { geometry, materials } = this.leftAnkleGeometryAndMaterial
-  //   const mesh = new Mesh(geometry, materials)
-  //   mesh.position.set(0, -0.093, 0)
-  //   mesh.rotation.set(this.model.motors.leftAnklePitch.angle, 0, 0)
-  //   mesh.add(this.leftFoot)
-  //   return mesh
-  // }
-
   @computed
   private get leftFoot() {
     const { geometry, materials } = this.leftFootGeometryAndMaterial
@@ -83,11 +64,6 @@ export class LeftLegViewModel {
     mesh.rotation.set(0, 0, this.model.motors.leftAnkleRoll.angle)
     return mesh
   }
-
-  // @computed
-  // private get leftPelvisYGeometryAndMaterial() {
-  //   return geometryAndMaterial(LeftPelvisYConfig, this.model.color)
-  // }
 
   @computed
   private get leftPelvisGeometryAndMaterial() {
@@ -103,11 +79,6 @@ export class LeftLegViewModel {
   private get leftLowerLegGeometryAndMaterial() {
     return geometryAndMaterial(LeftLowerLegConfig, this.model.color)
   }
-
-  // @computed
-  // private get leftAnkleGeometryAndMaterial() {
-  //   return geometryAndMaterial(LeftAnkleConfig, this.model.color)
-  // }
 
   @computed
   private get leftFootGeometryAndMaterial() {

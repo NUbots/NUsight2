@@ -9,7 +9,6 @@ import { LocalisationRobotModel } from '../model'
 import * as RightFootConfig from './config/RightFoot.json'
 import * as RightPelvisConfig from './config/RightHip.json'
 import * as RightLowerLegConfig from './config/RightLowerLeg.json'
-// import * as RightPelvisYConfig from './config/right_pelvis_y.json'
 import * as RightUpperLegConfig from './config/RightUpperLeg.json'
 
 export class RightLegViewModel {
@@ -26,16 +25,6 @@ export class RightLegViewModel {
     rightLeg.add(this.rightPelvis)
     return rightLeg
   }
-
-  // @computed
-  // private get rightPelvisY() {
-  //   const { geometry, materials } = this.rightPelvisYGeometryAndMaterial
-  //   const mesh = new Mesh(geometry, materials)
-  //   mesh.position.set(-0.037, -0.1222, -0.005)
-  //   mesh.rotation.set(0, this.model.motors.rightHipYaw.angle, 0)
-  //   mesh.add(this.rightPelvis)
-  //   return mesh
-  // }
 
   @computed
   private get rightPelvis() {

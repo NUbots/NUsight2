@@ -28,9 +28,9 @@ export class BodyViewModel {
     mesh.scale.set(0.001, 0.001, 0.001) // TODO: scale down the jsons
     mesh.add(this.head)
     mesh.add(this.leftArm)
-    mesh.add(this.rightArm)
-    mesh.add(this.leftLeg)
-    mesh.add(this.rightLeg)
+    // mesh.add(this.rightArm)
+    // mesh.add(this.leftLeg)
+    // mesh.add(this.rightLeg)
     mesh.rotation.x = Math.PI / 2
     mesh.rotation.y = Math.PI / 2
     return mesh

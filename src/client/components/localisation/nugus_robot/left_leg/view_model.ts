@@ -34,7 +34,7 @@ export class LeftLegViewModel {
     const mesh = new Mesh(geometry, materials)
     mesh.rotation.set(0, 0, this.model.motors.leftHipRoll.angle)
     mesh.position.set(120, -338, 20)
-    // mesh.add(this.leftUpperLeg)
+    mesh.add(this.leftUpperLeg)
     return mesh
   }
 
@@ -42,7 +42,9 @@ export class LeftLegViewModel {
   private get leftUpperLeg() {
     const { geometry, materials } = this.leftUpperLegGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.rotation.set(this.model.motors.leftHipPitch.angle, 0, 0)
+    mesh.rotation.set(0, Math.PI, 0)
+    // mesh.rotation.set(this.model.motors.leftHipPitch.angle, Math.PI, 0)
+    mesh.position.set(-152, 0, 20)
     mesh.add(this.leftLowerLeg)
     return mesh
   }
@@ -51,8 +53,8 @@ export class LeftLegViewModel {
   private get leftLowerLeg() {
     const { geometry, materials } = this.leftLowerLegGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, -0.093, 0)
-    mesh.rotation.set(this.model.motors.leftKnee.angle, 0, 0)
+    mesh.position.set(0, 15, -20)
+    // mesh.rotation.set(-this.model.motors.leftKnee.angle, 0, 0)
     mesh.add(this.leftFoot)
     return mesh
   }
@@ -61,7 +63,8 @@ export class LeftLegViewModel {
   private get leftFoot() {
     const { geometry, materials } = this.leftFootGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.rotation.set(0, 0, this.model.motors.leftAnkleRoll.angle)
+    mesh.position.set(-110, 10, 0)
+    // mesh.rotation.set(0, 0, this.model.motors.leftAnkleRoll.angle)
     return mesh
   }
 

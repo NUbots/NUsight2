@@ -24,7 +24,7 @@ export class BodyViewModel {
   get body(): Mesh {
     const { geometry, materials } = this.bodyGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, 0, 0.096)
+    mesh.position.set(0, 0, 0.3)
     mesh.scale.set(0.001, 0.001, 0.001) // TODO: scale down the jsons
     mesh.add(this.head)
     mesh.add(this.leftArm)

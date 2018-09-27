@@ -6,7 +6,7 @@ import { Quaternion } from 'three'
 import { BodyViewModel } from './body/view_model'
 import { LocalisationRobotModel } from './model'
 
-export const HIP_TO_FOOT = 0.2465
+export const HIP_TO_FOOT = 400
 
 export class RobotViewModel {
   constructor(private model: LocalisationRobotModel) {

@@ -6,11 +6,9 @@ import { Object3D } from 'three'
 import { geometryAndMaterial } from '../../utils'
 import { LocalisationRobotModel } from '../model'
 
-// import * as LeftAnkleConfig from './config/left_ankle.json'
 import * as LeftFootConfig from './config/LeftFoot.json'
 import * as LeftPelvisConfig from './config/LeftHip.json'
 import * as LeftLowerLegConfig from './config/LeftLowerLeg.json'
-// import * as LeftPelvisYConfig from './config/left_pelvis_y.json'
 import * as LeftUpperLegConfig from './config/LeftUpperLeg.json'
 
 export class LeftLegViewModel {
@@ -42,9 +40,8 @@ export class LeftLegViewModel {
   private get leftUpperLeg() {
     const { geometry, materials } = this.leftUpperLegGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.rotation.set(0, Math.PI, 0)
-    // mesh.rotation.set(this.model.motors.leftHipPitch.angle, Math.PI, 0)
-    mesh.position.set(-152, 0, 20)
+    mesh.rotation.set(-this.model.motors.leftHipPitch.angle * (1 / 8), Math.PI, 0)
+    mesh.position.set(-152, 0, 2)
     mesh.add(this.leftLowerLeg)
     return mesh
   }
@@ -54,7 +51,7 @@ export class LeftLegViewModel {
     const { geometry, materials } = this.leftLowerLegGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
     mesh.position.set(0, 15, -20)
-    // mesh.rotation.set(-this.model.motors.leftKnee.angle, 0, 0)
+    mesh.rotation.set(-this.model.motors.leftKnee.angle * (1 / 8), 0, 0)
     mesh.add(this.leftFoot)
     return mesh
   }
@@ -64,7 +61,7 @@ export class LeftLegViewModel {
     const { geometry, materials } = this.leftFootGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
     mesh.position.set(-110, 10, 0)
-    // mesh.rotation.set(0, 0, this.model.motors.leftAnkleRoll.angle)
+    mesh.rotation.set(0, 0, this.model.motors.leftAnkleRoll.angle)
     return mesh
   }
 

@@ -6,39 +6,39 @@ import { Quaternion } from '../../../math/quaternion'
 import { Vector3 } from '../../../math/vector3'
 import { RobotModel } from '../../robot/model'
 
-class NugusMotor {
+class DarwinMotor {
   @observable angle: number
 
-  constructor({ angle }: NugusMotor) {
+  constructor({ angle }: DarwinMotor) {
     this.angle = angle
   }
 
   static of() {
-    return new NugusMotor({ angle: 0 })
+    return new DarwinMotor({ angle: 0 })
   }
 }
 
-export class NugusMotorSet {
-  @observable rightShoulderPitch: NugusMotor
-  @observable leftShoulderPitch: NugusMotor
-  @observable rightShoulderRoll: NugusMotor
-  @observable leftShoulderRoll: NugusMotor
-  @observable rightElbow: NugusMotor
-  @observable leftElbow: NugusMotor
-  @observable rightHipYaw: NugusMotor
-  @observable leftHipYaw: NugusMotor
-  @observable rightHipRoll: NugusMotor
-  @observable leftHipRoll: NugusMotor
-  @observable rightHipPitch: NugusMotor
-  @observable leftHipPitch: NugusMotor
-  @observable rightKnee: NugusMotor
-  @observable leftKnee: NugusMotor
-  @observable rightAnklePitch: NugusMotor
-  @observable leftAnklePitch: NugusMotor
-  @observable rightAnkleRoll: NugusMotor
-  @observable leftAnkleRoll: NugusMotor
-  @observable headPan: NugusMotor
-  @observable headTilt: NugusMotor
+export class DarwinMotorSet {
+  @observable rightShoulderPitch: DarwinMotor
+  @observable leftShoulderPitch: DarwinMotor
+  @observable rightShoulderRoll: DarwinMotor
+  @observable leftShoulderRoll: DarwinMotor
+  @observable rightElbow: DarwinMotor
+  @observable leftElbow: DarwinMotor
+  @observable rightHipYaw: DarwinMotor
+  @observable leftHipYaw: DarwinMotor
+  @observable rightHipRoll: DarwinMotor
+  @observable leftHipRoll: DarwinMotor
+  @observable rightHipPitch: DarwinMotor
+  @observable leftHipPitch: DarwinMotor
+  @observable rightKnee: DarwinMotor
+  @observable leftKnee: DarwinMotor
+  @observable rightAnklePitch: DarwinMotor
+  @observable leftAnklePitch: DarwinMotor
+  @observable rightAnkleRoll: DarwinMotor
+  @observable leftAnkleRoll: DarwinMotor
+  @observable headPan: DarwinMotor
+  @observable headTilt: DarwinMotor
 
   constructor({
     rightShoulderPitch,
@@ -61,7 +61,7 @@ export class NugusMotorSet {
     leftAnkleRoll,
     headPan,
     headTilt,
-  }: NugusMotorSet) {
+  }: DarwinMotorSet) {
     this.rightShoulderPitch = rightShoulderPitch
     this.leftShoulderPitch = leftShoulderPitch
     this.rightShoulderRoll = rightShoulderRoll
@@ -85,27 +85,27 @@ export class NugusMotorSet {
   }
 
   static of() {
-    return new NugusMotorSet({
-      rightShoulderPitch: NugusMotor.of(),
-      leftShoulderPitch: NugusMotor.of(),
-      rightShoulderRoll: NugusMotor.of(),
-      leftShoulderRoll: NugusMotor.of(),
-      rightElbow: NugusMotor.of(),
-      leftElbow: NugusMotor.of(),
-      rightHipYaw: NugusMotor.of(),
-      leftHipYaw: NugusMotor.of(),
-      rightHipRoll: NugusMotor.of(),
-      leftHipRoll: NugusMotor.of(),
-      rightHipPitch: NugusMotor.of(),
-      leftHipPitch: NugusMotor.of(),
-      rightKnee: NugusMotor.of(),
-      leftKnee: NugusMotor.of(),
-      rightAnklePitch: NugusMotor.of(),
-      leftAnklePitch: NugusMotor.of(),
-      rightAnkleRoll: NugusMotor.of(),
-      leftAnkleRoll: NugusMotor.of(),
-      headPan: NugusMotor.of(),
-      headTilt: NugusMotor.of(),
+    return new DarwinMotorSet({
+      rightShoulderPitch: DarwinMotor.of(),
+      leftShoulderPitch: DarwinMotor.of(),
+      rightShoulderRoll: DarwinMotor.of(),
+      leftShoulderRoll: DarwinMotor.of(),
+      rightElbow: DarwinMotor.of(),
+      leftElbow: DarwinMotor.of(),
+      rightHipYaw: DarwinMotor.of(),
+      leftHipYaw: DarwinMotor.of(),
+      rightHipRoll: DarwinMotor.of(),
+      leftHipRoll: DarwinMotor.of(),
+      rightHipPitch: DarwinMotor.of(),
+      leftHipPitch: DarwinMotor.of(),
+      rightKnee: DarwinMotor.of(),
+      leftKnee: DarwinMotor.of(),
+      rightAnklePitch: DarwinMotor.of(),
+      leftAnklePitch: DarwinMotor.of(),
+      rightAnkleRoll: DarwinMotor.of(),
+      leftAnkleRoll: DarwinMotor.of(),
+      headPan: DarwinMotor.of(),
+      headTilt: DarwinMotor.of(),
     })
   }
 }
@@ -116,7 +116,7 @@ export class LocalisationRobotModel {
   @observable color?: string
   @observable rWTt: Vector3 // Torso to world translation in torso space.
   @observable Rwt: Quaternion // Torso to world rotation.
-  @observable motors: NugusMotorSet
+  @observable motors: DarwinMotorSet
 
   constructor({ model, name, color, rWTt, Rwt, motors }: {
     model: RobotModel,
@@ -124,7 +124,7 @@ export class LocalisationRobotModel {
     color?: string,
     rWTt: Vector3,
     Rwt: Quaternion,
-    motors: NugusMotorSet
+    motors: DarwinMotorSet
   }) {
     this.model = model
     this.name = name
@@ -140,7 +140,7 @@ export class LocalisationRobotModel {
       name: model.name,
       rWTt: Vector3.of(),
       Rwt: Quaternion.of(),
-      motors: NugusMotorSet.of(),
+      motors: DarwinMotorSet.of(),
     })
   })
 

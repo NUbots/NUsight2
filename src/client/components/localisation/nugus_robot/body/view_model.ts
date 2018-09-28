@@ -10,7 +10,7 @@ import { LocalisationRobotModel } from '../model'
 import { RightArmViewModel } from '../right_arm/view_model'
 import { RightLegViewModel } from '../right_leg/view_model'
 
-import * as BodyConfig from './config/Torso.json'
+import * as BodyConfig from './config/body.json'
 
 export class BodyViewModel {
   constructor(private model: LocalisationRobotModel) {
@@ -24,8 +24,7 @@ export class BodyViewModel {
   get body(): Mesh {
     const { geometry, materials } = this.bodyGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, 0, 0.3)
-    mesh.scale.set(0.001, 0.001, 0.001)
+    mesh.position.set(0, 0, 0.096)
     mesh.add(this.head)
     mesh.add(this.leftArm)
     mesh.add(this.rightArm)

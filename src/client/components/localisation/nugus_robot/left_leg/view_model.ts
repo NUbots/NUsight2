@@ -8,10 +8,10 @@ import { LocalisationRobotModel } from '../model'
 
 import * as LeftAnkleConfig from './config/left_ankle.json'
 import * as LeftFootConfig from './config/left_foot.json'
-import * as LeftLowerLegConfig from './config/left_lower_leg.json'
-import * as LeftPelvisConfig from './config/left_pelvis.json'
-import * as LeftPelvisYConfig from './config/left_pelvis_y.json'
-import * as LeftUpperLegConfig from './config/left_upper_leg.json'
+import * as LeftPelvisConfig from './config/left_hip_roll.json'
+import * as LeftPelvisYConfig from './config/left_hip_yaw.json'
+import * as LeftLowerLegConfig from './config/left_shank.json'
+import * as LeftUpperLegConfig from './config/left_thigh.json'
 
 export class LeftLegViewModel {
   constructor(private model: LocalisationRobotModel) {

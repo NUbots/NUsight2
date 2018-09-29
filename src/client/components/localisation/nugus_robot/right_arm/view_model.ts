@@ -7,7 +7,7 @@ import { geometryAndMaterial } from '../../utils'
 import { LocalisationRobotModel } from '../model'
 
 import * as RightLowerArmConfig from './config/right_lower_arm.json'
-import * as RightShoulderConfig from './config/right_shoulder.json'
+import * as RightShoulderConfig from './config/right_shoulder_pitch.json'
 import * as RightUpperArmConfig from './config/right_upper_arm.json'
 
 export class RightArmViewModel {

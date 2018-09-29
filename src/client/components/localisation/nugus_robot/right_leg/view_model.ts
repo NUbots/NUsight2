@@ -8,10 +8,10 @@ import { LocalisationRobotModel } from '../model'
 
 import * as RightAnkleConfig from './config/right_ankle.json'
 import * as RightFootConfig from './config/right_foot.json'
-import * as RightLowerLegConfig from './config/right_lower_leg.json'
-import * as RightPelvisConfig from './config/right_pelvis.json'
-import * as RightPelvisYConfig from './config/right_pelvis_y.json'
-import * as RightUpperLegConfig from './config/right_upper_leg.json'
+import * as RightPelvisConfig from './config/right_hip_roll.json'
+import * as RightPelvisYConfig from './config/right_hip_yaw.json'
+import * as RightLowerLegConfig from './config/right_shank.json'
+import * as RightUpperLegConfig from './config/right_thigh.json'
 
 export class RightLegViewModel {
   constructor(private model: LocalisationRobotModel) {

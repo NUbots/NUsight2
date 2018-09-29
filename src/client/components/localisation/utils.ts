@@ -10,7 +10,7 @@ export function geometryAndMaterial(config: any, color?: string) {
   const geometry = geometryAndMaterial.geometry
   let materials = geometryAndMaterial.materials
   if (materials !== undefined) {
-    materials = materials.map(material => coloredMaterial(material, color))
+    materials = materials.map((material: any) => coloredMaterial(material, color))
   }
   return { geometry, materials }
 }

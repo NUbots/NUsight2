@@ -28,7 +28,7 @@ export class HeadViewModel {
   private get neck() {
     const { geometry, materials } = this.neckGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, 0.051, 0)
+    mesh.position.set(0, 0.051, 0.08)
     mesh.rotation.set(0, this.model.motors.headPan.angle, 0)
     mesh.add(this.skull)
     return mesh

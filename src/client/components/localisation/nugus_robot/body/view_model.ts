@@ -24,13 +24,13 @@ export class BodyViewModel {
   get body(): Mesh {
     const { geometry, materials } = this.bodyGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, 0, 0.3)
+    mesh.position.set(0, 0, 0.45)
     mesh.rotation.set(0, 0, Math.PI / 2)
     mesh.add(this.head)
     mesh.add(this.leftArm)
     mesh.add(this.rightArm)
     mesh.add(this.leftLeg)
-    // mesh.add(this.rightLeg)
+    mesh.add(this.rightLeg)
     return mesh
   }
 

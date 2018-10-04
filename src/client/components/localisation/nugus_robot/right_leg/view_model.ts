@@ -32,8 +32,8 @@ export class RightLegViewModel {
   private get rightPelvisY() {
     const { geometry, materials } = this.rightPelvisYGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(-0.037, -0.1222, -0.005)
-    mesh.rotation.set(0, this.model.motors.rightHipYaw.angle, 0)
+    mesh.position.set(-0.06, 0.06, -0.58)
+    mesh.rotation.set(Math.PI, this.model.motors.rightHipYaw.angle, 0)
     mesh.add(this.rightPelvis)
     return mesh
   }
@@ -42,6 +42,7 @@ export class RightLegViewModel {
   private get rightPelvis() {
     const { geometry, materials } = this.rightPelvisGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
+    mesh.position.set(-0.01, 0.05, -0.3)
     mesh.rotation.set(0, 0, this.model.motors.rightHipRoll.angle)
     mesh.add(this.rightUpperLeg)
     return mesh
@@ -51,7 +52,8 @@ export class RightLegViewModel {
   private get rightUpperLeg() {
     const { geometry, materials } = this.rightUpperLegGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.rotation.set(this.model.motors.rightHipPitch.angle, 0, 0)
+    mesh.position.set(0.06, 0, -0.1)
+    mesh.rotation.set(this.model.motors.rightHipPitch.angle, Math.PI, 0)
     mesh.add(this.rightLowerLeg)
     return mesh
   }
@@ -60,8 +62,8 @@ export class RightLegViewModel {
   private get rightLowerLeg() {
     const { geometry, materials } = this.rightLowerLegGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, -0.093, 0)
-    mesh.rotation.set(this.model.motors.rightKnee.angle, 0, 0)
+    mesh.position.set(0, 0, -0.33)
+    mesh.rotation.set(this.model.motors.rightKnee.angle + 3 * Math.PI / 4, 0, 0)
     mesh.add(this.rightAnkle)
     return mesh
   }
@@ -70,8 +72,8 @@ export class RightLegViewModel {
   private get rightAnkle() {
     const { geometry, materials } = this.rightAnkleGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, -0.093, 0)
-    mesh.rotation.set(this.model.motors.rightAnklePitch.angle, 0, 0)
+    mesh.position.set(0.05, -0.02, 0.12)
+    mesh.rotation.set(this.model.motors.rightAnklePitch.angle, 0, Math.PI / 2)
     mesh.add(this.rightFoot)
     return mesh
   }
@@ -80,7 +82,8 @@ export class RightLegViewModel {
   private get rightFoot() {
     const { geometry, materials } = this.rightFootGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.rotation.set(0, 0, this.model.motors.rightAnkleRoll.angle)
+    mesh.position.set(-0.03, 0.06, -0.1)
+    mesh.rotation.set(0, 0, this.model.motors.rightAnkleRoll.angle - Math.PI / 2)
     return mesh
   }
 

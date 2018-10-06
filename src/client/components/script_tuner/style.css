@@ -1,0 +1,22 @@
+
+.container {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  grid-template-rows: 50% 50%;
+}
+
+.viewer {
+
+}
+
+.balance {
+
+}
+
+.editor {
+
+}
+
+.controls {
+
+}

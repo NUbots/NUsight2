@@ -2,10 +2,14 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import { ComponentType } from 'react'
 
+import { Balance } from './balance/view'
 import { ScriptTunerController } from './controller'
+import { Controls } from './controls/view'
+import { Editor } from './editor/view'
 import { ScriptTunerModel } from './model'
 import { ScriptTunerNetwork } from './network'
 import * as style from './style.css'
+import { Viewer } from './viewer/view'
 
 export type ScriptTunerProps = {
   controller: ScriptTunerController
@@ -17,10 +21,10 @@ export type ScriptTunerProps = {
 export const ScriptTuner = observer(({ controller, menu, model, network }: ScriptTunerProps) => {
   return (
     <div className={style.container}>
-      <div className={style.viewer}>3d Robot View</div>
-      <div className={style.editor}>Scripts Bar</div>
-      <div className={style.balance}>Balance View</div>
-      <div className={style.controls}>Controls</div>
+      <Viewer className={style.viewer} />
+      <Balance className={style.balance} />
+      <Editor className={style.editor} />
+      <Controls className={style.controls} />
     </div>
   )
 })

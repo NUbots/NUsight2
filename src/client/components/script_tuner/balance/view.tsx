@@ -1,6 +1,10 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
 
-export const Balance = observer(() => {
-  return <>Balance</>
+type BalanceProps = {
+  className?: string
+}
+
+export const Balance = observer(({ className }: BalanceProps) => {
+  return <div className={className}>Balance</div>
 })

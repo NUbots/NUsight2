@@ -1,6 +1,10 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
 
-export const Viewer = observer(({ controller, menu, model, network }: ScriptTunerProps) => {
-  return <>Viewer</>
+type ViewerProps = {
+  className?: string
+}
+
+export const Viewer = observer(({ className }: ViewerProps) => {
+  return <div className={className}>Viewer</div>
 })

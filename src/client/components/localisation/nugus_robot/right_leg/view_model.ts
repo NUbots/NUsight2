@@ -54,6 +54,7 @@ export class RightLegViewModel {
     const mesh = new Mesh(geometry, materials)
     mesh.position.set(0.13, 0.04, 0.02)
     mesh.rotation.set(0, Math.PI / 2, 0)
+    mesh.rotateX(this.model.motors.rightHipPitch.angle + 3 * Math.PI / 16) // global rotation
     mesh.add(this.rightLowerLeg)
     return mesh
   }

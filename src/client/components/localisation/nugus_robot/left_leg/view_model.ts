@@ -54,7 +54,7 @@ export class LeftLegViewModel {
     const mesh = new Mesh(geometry, materials)
     // mesh.rotation.set(this.model.motors.leftHipPitch.angle, Math.PI / 2, 0)
     mesh.rotation.set(0, Math.PI / 2, 0)
-    mesh.position.set(0.1, 0.04, -0.08)
+    mesh.position.set(0.1, 0.04, -0.065)
     mesh.add(this.leftLowerLeg)
     return mesh
   }

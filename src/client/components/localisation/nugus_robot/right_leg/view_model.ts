@@ -42,7 +42,7 @@ export class RightLegViewModel {
   private get rightPelvis() {
     const { geometry, materials } = this.rightPelvisGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0.02, 0.03, -0.3)
+    mesh.position.set(0.02, 0, -0.27)
     mesh.rotation.set(0, Math.PI / 2, this.model.motors.rightHipRoll.angle)
     mesh.add(this.rightUpperLeg)
     return mesh
@@ -52,7 +52,7 @@ export class RightLegViewModel {
   private get rightUpperLeg() {
     const { geometry, materials } = this.rightUpperLegGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0.11, 0.04, 0.01)
+    mesh.position.set(0.13, 0.04, 0.02)
     mesh.rotation.set(0, Math.PI / 2, 0)
     mesh.add(this.rightLowerLeg)
     return mesh

@@ -6,9 +6,9 @@ import { Object3D } from 'three'
 import { geometryAndMaterial } from '../../utils'
 import { LocalisationRobotModel } from '../model'
 
-import * as RightLowerArmConfig from './config/right_lower_arm.json'
-import * as RightShoulderConfig from './config/right_shoulder_pitch.json'
-import * as RightUpperArmConfig from './config/right_upper_arm.json'
+import * as RightLowerArmConfig from './config/lower_right_arm.json'
+import * as RightShoulderConfig from './config/right_shoulder.json'
+import * as RightUpperArmConfig from './config/upper_right_arm.json'
 
 export class RightArmViewModel {
   constructor(private model: LocalisationRobotModel) {

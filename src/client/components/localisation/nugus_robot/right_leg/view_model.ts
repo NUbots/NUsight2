@@ -6,12 +6,10 @@ import { Object3D } from 'three'
 import { geometryAndMaterial } from '../../utils'
 import { LocalisationRobotModel } from '../model'
 
-import * as RightAnkleConfig from './config/right_ankle.json'
+import * as RightLowerLegConfig from './config/lower_right_leg.json'
 import * as RightFootConfig from './config/right_foot.json'
-import * as RightPelvisConfig from './config/right_hip_roll.json'
-import * as RightPelvisYConfig from './config/right_hip_yaw.json'
-import * as RightLowerLegConfig from './config/right_shank.json'
-import * as RightUpperLegConfig from './config/right_thigh.json'
+import * as RightPelvisConfig from './config/right_hip.json'
+import * as RightUpperLegConfig from './config/upper_right_leg.json'
 
 export class RightLegViewModel {
   constructor(private model: LocalisationRobotModel) {
@@ -24,18 +22,8 @@ export class RightLegViewModel {
   @computed
   get rightLeg() {
     const rightLeg = new Object3D()
-    rightLeg.add(this.rightPelvisY)
+    rightLeg.add(this.rightPelvis)
     return rightLeg
-  }
-
-  @computed
-  private get rightPelvisY() {
-    const { geometry, materials } = this.rightPelvisYGeometryAndMaterial
-    const mesh = new Mesh(geometry, materials)
-    mesh.position.set(-0.06, 0.06, -0.58)
-    mesh.rotation.set(Math.PI, this.model.motors.rightHipYaw.angle, 0)
-    mesh.add(this.rightPelvis)
-    return mesh
   }
 
   @computed
@@ -65,16 +53,6 @@ export class RightLegViewModel {
     const mesh = new Mesh(geometry, materials)
     mesh.position.set(0, 0, -0.33)
     mesh.rotation.set(this.model.motors.rightKnee.angle + 3 * Math.PI / 4, 0, 0)
-    mesh.add(this.rightAnkle)
-    return mesh
-  }
-
-  @computed
-  private get rightAnkle() {
-    const { geometry, materials } = this.rightAnkleGeometryAndMaterial
-    const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0.05, -0.02, 0.12)
-    mesh.rotation.set(this.model.motors.rightAnklePitch.angle, 0, Math.PI / 2)
     mesh.add(this.rightFoot)
     return mesh
   }
@@ -86,11 +64,6 @@ export class RightLegViewModel {
     mesh.position.set(-0.03, 0.06, -0.1)
     mesh.rotation.set(0, 0, this.model.motors.rightAnkleRoll.angle - Math.PI / 2)
     return mesh
-  }
-
-  @computed
-  private get rightPelvisYGeometryAndMaterial() {
-    return geometryAndMaterial(RightPelvisYConfig, this.model.color)
   }
 
   @computed
@@ -106,11 +79,6 @@ export class RightLegViewModel {
   @computed
   private get rightLowerLegGeometryAndMaterial() {
     return geometryAndMaterial(RightLowerLegConfig, this.model.color)
-  }
-
-  @computed
-  private get rightAnkleGeometryAndMaterial() {
-    return geometryAndMaterial(RightAnkleConfig, this.model.color)
   }
 
   @computed

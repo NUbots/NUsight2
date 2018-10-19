@@ -39,8 +39,8 @@ export class RightArmViewModel {
   private get rightUpperArm() {
     const { geometry, materials } = this.rightUpperArmGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0.04, 0, 0)
-    mesh.rotation.set(Math.PI / 2, 3 * Math.PI / 4, Math.PI)
+    mesh.position.set(0.038, 0, 0)
+    mesh.rotation.set(7 * Math.PI / 16 + this.model.motors.leftShoulderRoll.angle, 5 * Math.PI / 8, Math.PI)
     mesh.add(this.rightLowerArm)
     return mesh
   }
@@ -49,8 +49,8 @@ export class RightArmViewModel {
   private get rightLowerArm() {
     const { geometry, materials } = this.rightLowerArmGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0.13, 0, 0)
-    mesh.rotation.set(Math.PI, 0, 0)
+    mesh.position.set(0.128, 0, 0)
+    mesh.rotation.set(Math.PI, 0, this.model.motors.leftElbow.angle)
     return mesh
   }
 

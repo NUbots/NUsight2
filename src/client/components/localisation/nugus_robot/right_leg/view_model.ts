@@ -50,8 +50,8 @@ export class RightLegViewModel {
   private get rightLowerLeg() {
     const { geometry, materials } = this.rightLowerLegGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0.3, 0, 0)
-    mesh.rotation.set(0, Math.PI, 0)
+    mesh.position.set(0.16, 0, 0)
+    mesh.rotation.set(0, 0, 0)
     // mesh.rotation.set(this.model.motors.rightKnee.angle + 3 * Math.PI / 4, 0, 0)
     mesh.add(this.rightFoot)
     return mesh
@@ -61,8 +61,8 @@ export class RightLegViewModel {
   private get rightFoot() {
     const { geometry, materials } = this.rightFootGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, 0, 0)
-    mesh.rotation.set(Math.PI, 0, this.model.motors.rightAnkleRoll.angle - Math.PI / 2)
+    mesh.position.set(0.16, 0, 0)
+    mesh.rotation.set(Math.PI, Math.PI, this.model.motors.rightAnkleRoll.angle - Math.PI / 2)
     return mesh
   }
 

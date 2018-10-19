@@ -24,7 +24,7 @@ export class BodyViewModel {
   get body(): Mesh {
     const { geometry, materials } = this.bodyGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, 0, 0.135)
+    mesh.position.set(0, 0, 0.24)
     mesh.rotation.set(Math.PI / 2, 0, 0)
     mesh.add(this.head)
     mesh.add(this.leftArm)

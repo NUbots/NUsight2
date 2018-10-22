@@ -1,0 +1,20 @@
+.editor {
+  background-color: #DDD;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.editorHeader {
+  background-color: #777;
+  padding: 0 4px;
+  color: white;
+  font-size: 13px;
+}
+
+.editorLines {
+  padding: 4px;
+  flex-grow: 1;
+  overflow: auto;
+}

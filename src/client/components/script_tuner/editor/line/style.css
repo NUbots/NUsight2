@@ -1,0 +1,23 @@
+.lineEditor {
+  border: 1px solid #777;
+  background-color: white;
+  font-family: monospace;
+  margin-bottom: 4px;
+}
+
+.lineEditor:last-child {
+  margin-bottom: 0;
+}
+
+.lineEditorSvg {
+  user-select: none;
+}
+
+.lineEditorText {
+  font-size: 0.25px;
+  fill: #999;
+}
+
+.lineEditorDraggable {
+  cursor: move;
+}

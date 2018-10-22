@@ -19,7 +19,7 @@ export class LineEditorViewModel {
 
   @computed
   get points() {
-    return this.servo.data.concat().sort((a, b) => {
+    return this.servo.frames.concat().sort((a, b) => {
       if (a.time < b.time) {
         return -1
       } else if (a.time > b.time) {

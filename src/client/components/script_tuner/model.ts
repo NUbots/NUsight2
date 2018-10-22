@@ -4,10 +4,10 @@ import { observable } from 'mobx'
 import { RobotModel } from '../robot/model'
 
 export interface Servo {
-  data: ScriptData[]
+  frames: Frame[]
 }
 
-export interface ScriptData {
+export interface Frame {
   time: number,
   angle: number,
   pGain: number,
@@ -34,13 +34,13 @@ export class ScriptTunerModel {
   }
 
   private makeSampleServo(): Servo {
-    const data = []
+    const frames = []
     const period = 10
 
     for (let i = 0; i < 31; i++) {
       const theta = (2 * Math.PI * i) / period
 
-      data.push({
+      frames.push({
         time: i,
         angle: Math.sin(theta),
         pGain: 0,
@@ -50,6 +50,6 @@ export class ScriptTunerModel {
       })
     }
 
-    return { data }
+    return { frames }
   }
 }

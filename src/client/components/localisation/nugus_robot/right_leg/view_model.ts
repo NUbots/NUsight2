@@ -30,7 +30,7 @@ export class RightLegViewModel {
   private get rightPelvis() {
     const { geometry, materials } = this.rightPelvisGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, 0.0125, 0.04)
+    mesh.position.set(0, 0.0125, 0.055)
     mesh.rotation.set(0, Math.PI, -Math.PI / 2 + this.model.motors.rightHipRoll.angle)
     mesh.add(this.rightUpperLeg)
     return mesh

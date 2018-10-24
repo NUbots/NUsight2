@@ -31,7 +31,7 @@ export class LeftLegViewModel {
     const { geometry, materials } = this.leftPelvisGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
     mesh.rotation.set(0, Math.PI, -Math.PI / 2 + this.model.motors.leftHipRoll.angle)
-    mesh.position.set(0, 0.0125, -0.04)
+    mesh.position.set(0, 0.0125, -0.041)
     mesh.add(this.leftUpperLeg)
     return mesh
   }

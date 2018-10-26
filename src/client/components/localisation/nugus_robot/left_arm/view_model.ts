@@ -30,7 +30,7 @@ export class LeftArmViewModel {
     const { geometry, materials } = this.leftShoulderGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
     mesh.position.set(0, 0.18125, -0.08)
-    mesh.rotation.set(Math.PI / 2, this.model.motors.leftShoulderPitch.angle, -Math.PI / 2)
+    mesh.rotation.set(0, 0, -this.model.motors.leftShoulderPitch.angle)
     mesh.add(this.leftUpperArm)
     return mesh
   }
@@ -39,8 +39,8 @@ export class LeftArmViewModel {
   private get leftUpperArm() {
     const { geometry, materials } = this.leftUpperArmGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0.0475, 0, 0)
-    mesh.rotation.set(5 * Math.PI / 16 + this.model.motors.leftShoulderRoll.angle,  -3 * Math.PI / 8, 0)
+    mesh.position.set(0, 0, -0.0475)
+    mesh.rotation.set(-this.model.motors.leftShoulderRoll.angle,  0, Math.PI / 2)
     mesh.add(this.leftLowerArm)
     return mesh
   }
@@ -49,7 +49,7 @@ export class LeftArmViewModel {
   private get leftLowerArm() {
     const { geometry, materials } = this.leftLowerArmGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0.16, 0, 0)
+    mesh.position.set(0.16, 0.02, 0)
     mesh.rotation.set(0, 0, -Math.PI / 4 - this.model.motors.leftElbow.angle)
     return mesh
   }

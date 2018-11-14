@@ -21,16 +21,33 @@ export class RightArmViewModel {
   @computed
   get rightArm() {
     const rightArm = new Object3D()
-    rightArm.add(this.rightShoulder)
+    rightArm.add(this.rightShoulderServo)
     return rightArm
+  }
+
+  @computed
+  private get rightShoulderServo() {
+    const mesh = new Mesh()
+    mesh.position.set(0, 0.18125, 0.075)
+    mesh.rotation.set(0, 0, -this.model.motors.rightShoulderPitch.angle)
+    mesh.add(this.rightShoulder)
+    return mesh
   }
 
   @computed
   private get rightShoulder() {
     const { geometry, materials } = this.rightShoulderGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, 0.18125, 0.075)
-    mesh.rotation.set(0, 0, -this.model.motors.rightShoulderPitch.angle)
+    mesh.position.set(0, 0, 0)
+    mesh.add(this.rightUpperArmServo)
+    return mesh
+  }
+
+  @computed
+  private get rightUpperArmServo() {
+    const mesh = new Mesh()
+    mesh.position.set(0, 0, 0.0475)
+    mesh.rotation.set(-this.model.motors.rightShoulderRoll.angle,  0, 0)
     mesh.add(this.rightUpperArm)
     return mesh
   }
@@ -39,8 +56,17 @@ export class RightArmViewModel {
   private get rightUpperArm() {
     const { geometry, materials } = this.rightUpperArmGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, 0, 0.0475)
-    mesh.rotation.set(-this.model.motors.rightShoulderRoll.angle,  0, Math.PI / 2)
+    mesh.position.set(0, 0, 0)
+    mesh.rotation.set(0,  0, Math.PI / 2)
+    mesh.add(this.rightLowerArmServo)
+    return mesh
+  }
+
+  @computed
+  private get rightLowerArmServo() {
+    const mesh = new Mesh()
+    mesh.position.set(0.16, 0.02, 0)
+    mesh.rotation.set(0, 0, this.model.motors.rightElbow.angle)
     mesh.add(this.rightLowerArm)
     return mesh
   }
@@ -49,8 +75,8 @@ export class RightArmViewModel {
   private get rightLowerArm() {
     const { geometry, materials } = this.rightLowerArmGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0.16, 0.02, 0)
-    mesh.rotation.set(Math.PI, 0, Math.PI / 4 + this.model.motors.rightElbow.angle)
+    mesh.position.set(0, 0, 0)
+    mesh.rotation.set(Math.PI, 0, 3 * Math.PI / 4)
     return mesh
   }
 

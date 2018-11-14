@@ -26,8 +26,25 @@ export class HeadViewModel {
   @computed
   private get neck() {
     const mesh = new Mesh()
+    mesh.position.set(0, 0.25625, 0)
+    mesh.add(this.neckPanServo)
+    return mesh
+  }
+
+  @computed
+  private get neckPanServo() {
+    const mesh = new Mesh()
     mesh.position.set(0, 0, 0)
     mesh.rotation.set(0, this.model.motors.headPan.angle, 0)
+    mesh.add(this.neckTiltServo)
+    return mesh
+  }
+
+  @computed
+  private get neckTiltServo() {
+    const mesh = new Mesh()
+    mesh.position.set(0, 0, 0)
+    mesh.rotation.set(0, 0, -this.model.motors.headTilt.angle)
     mesh.add(this.skull)
     return mesh
   }
@@ -36,8 +53,8 @@ export class HeadViewModel {
   private get skull() {
     const { geometry, materials } = this.skullGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0, 0.25625, 0)
-    mesh.rotation.set(0, 0, -this.model.motors.headTilt.angle)
+    mesh.position.set(0, 0, 0)
+    mesh.rotation.set(0, 0, 0)
     return mesh
   }
 

@@ -30,6 +30,23 @@ export class RightLegViewModel {
   private get rightPelvisServo() {
     const mesh = new Mesh()
     mesh.position.set(0, 0.0125, 0.055)
+    mesh.add(this.rightPelvisYawServo)
+    return mesh
+  }
+
+  @computed
+  private get rightPelvisYawServo() {
+    const mesh = new Mesh()
+    mesh.position.set(0, 0, 0)
+    mesh.rotation.set(0, this.model.motors.rightHipYaw.angle, 0)
+    mesh.add(this.rightPelvisRollServo)
+    return mesh
+  }
+
+  @computed
+  private get rightPelvisRollServo() {
+    const mesh = new Mesh()
+    mesh.position.set(0, 0, 0)
     mesh.rotation.set(0, 0, this.model.motors.rightHipRoll.angle)
     mesh.add(this.rightPelvis)
     return mesh

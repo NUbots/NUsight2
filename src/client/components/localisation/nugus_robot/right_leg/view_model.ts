@@ -30,7 +30,7 @@ export class RightLegViewModel {
   @computed
   private get rightPelvisServo() {
     const mesh = new Mesh()
-    mesh.position.set(0, 0.0125, 0.0415)
+    mesh.position.set(0, 0.0125, 0.043)
     mesh.add(this.rightPelvisYawServo)
     return mesh
   }
@@ -67,8 +67,8 @@ export class RightLegViewModel {
   private get rightUpperLegServo() {
     const { geometry, materials } = this.servoGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.position.set(0.05, 0, 0.0075)
-    mesh.rotation.set(-Math.PI / 2, Math.PI, 0)
+    mesh.position.set(0.052, -0.008, 0)
+    mesh.rotation.set(-Math.PI / 2, -Math.PI / 2, 0)
     mesh.add(this.rightUpperLeg)
     return mesh
   }
@@ -78,7 +78,7 @@ export class RightLegViewModel {
     const { geometry, materials } = this.rightUpperLegGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
     mesh.position.set(-0.016, 0, 0)
-    mesh.rotation.set(-Math.PI / 2, Math.PI, -this.model.motors.rightHipPitch.angle)
+    mesh.rotation.set(-Math.PI / 2, Math.PI, Math.PI / 2 - this.model.motors.rightHipPitch.angle)
     mesh.add(this.rightLowerLegServo)
     return mesh
   }

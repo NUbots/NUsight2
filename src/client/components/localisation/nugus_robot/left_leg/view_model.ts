@@ -5,12 +5,12 @@ import { Object3D } from 'three'
 
 import { geometryAndMaterial } from '../../utils'
 import { LocalisationRobotModel } from '../model'
+import * as ServoConfig from '../servo/config/servo_block.json'
 
 import * as LeftFootConfig from './config/left_foot.json'
 import * as LeftPelvisConfig from './config/left_hip.json'
 import * as LeftLowerLegConfig from './config/lower_left_leg.json'
 import * as LeftUpperLegConfig from './config/upper_left_leg.json'
-import * as ServoConfig from '../servo/config/servo_block.json'
 
 export class LeftLegViewModel {
   constructor(private model: LocalisationRobotModel) {

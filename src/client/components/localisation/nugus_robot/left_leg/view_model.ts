@@ -10,6 +10,7 @@ import * as LeftFootConfig from './config/left_foot.json'
 import * as LeftPelvisConfig from './config/left_hip.json'
 import * as LeftLowerLegConfig from './config/lower_left_leg.json'
 import * as LeftUpperLegConfig from './config/upper_left_leg.json'
+import * as ServoConfig from '../servo/config/servo_block.json'
 
 export class LeftLegViewModel {
   constructor(private model: LocalisationRobotModel) {
@@ -29,7 +30,7 @@ export class LeftLegViewModel {
   @computed
   private get leftPelvisServo() {
     const mesh = new Mesh()
-    mesh.position.set(0, 0.0125, -0.042)
+    mesh.position.set(0, 0.0125, -0.0415)
     mesh.add(this.leftPelvisYawServo)
     return mesh
   }
@@ -64,9 +65,10 @@ export class LeftLegViewModel {
 
   @computed
   private get leftUpperLegServo() {
-    const mesh = new Mesh()
-    mesh.rotation.set(0, 0, this.model.motors.leftHipPitch.angle)
-    mesh.position.set(0.05, 0, 0.0075)
+    const { geometry, materials } = this.servoGeometryAndMaterial
+    const mesh = new Mesh(geometry, materials)
+    mesh.rotation.set(Math.PI / 2, Math.PI, 0)
+    mesh.position.set(0.06, 0, 0.0075)
     mesh.add(this.leftUpperLeg)
     return mesh
   }
@@ -75,8 +77,8 @@ export class LeftLegViewModel {
   private get leftUpperLeg() {
     const { geometry, materials } = this.leftUpperLegGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.rotation.set(Math.PI, 0, 0)
-    mesh.position.set(0, 0, 0)
+    mesh.rotation.set(-Math.PI / 2, Math.PI, -this.model.motors.leftHipPitch.angle)
+    mesh.position.set(-0.016, 0, 0)
     mesh.add(this.leftLowerLegServo)
     return mesh
   }
@@ -101,9 +103,10 @@ export class LeftLegViewModel {
 
   @computed
   private get leftFootServo() {
-    const mesh = new Mesh()
-    mesh.position.set(0.2, 0, 0)
-    mesh.rotation.set(0, 0, this.model.motors.leftAnkleRoll.angle)
+    const { geometry, materials } = this.servoGeometryAndMaterial
+    const mesh = new Mesh(geometry, materials)
+    mesh.position.set(0.185, 0, 0)
+    mesh.rotation.set(-Math.PI / 2, Math.PI, this.model.motors.leftAnkleRoll.angle)
     mesh.add(this.leftFoot)
     return mesh
   }
@@ -113,7 +116,7 @@ export class LeftLegViewModel {
     const { geometry, materials } = this.leftFootGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
     mesh.position.set(0, 0, 0)
-    mesh.rotation.set(Math.PI, Math.PI, -Math.PI / 2)
+    mesh.rotation.set(-Math.PI / 2, Math.PI, 0)
     return mesh
   }
 
@@ -135,5 +138,10 @@ export class LeftLegViewModel {
   @computed
   private get leftFootGeometryAndMaterial() {
     return geometryAndMaterial(LeftFootConfig, this.model.color)
+  }
+
+  @computed
+  private get servoGeometryAndMaterial() {
+    return geometryAndMaterial(ServoConfig, this.model.color)
   }
 }

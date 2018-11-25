@@ -19,7 +19,7 @@
 	"DbgColor" : 15658734,
 	"DbgIndex" : 0,
 	"DbgName" : "ObjectColor",
-	"colorDiffuse" : [0.602353, 0.602353, 0.602353],
+	"colorDiffuse" : [0.48, 0.48, 0.48],
 	"colorSpecular" : [0.5, 0.5, 0.5],
 	"illumination" : 2,
 	"opacity" : 1.0,

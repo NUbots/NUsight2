@@ -23,23 +23,15 @@ export class LeftLegViewModel {
   @computed
   get leftLeg() {
     const leftLeg = new Object3D()
-    leftLeg.add(this.leftPelvisServo)
+    leftLeg.add(this.leftPelvisYawServo)
     return leftLeg
-  }
-
-  @computed
-  private get leftPelvisServo() {
-    const mesh = new Mesh()
-    mesh.position.set(0, 0.0125, -0.043)
-    mesh.add(this.leftPelvisYawServo)
-    return mesh
   }
 
   @computed
   private get leftPelvisYawServo() {
     const mesh = new Mesh()
     mesh.rotation.set(0, this.model.motors.leftHipYaw.angle, 0)
-    mesh.position.set(0, 0, 0)
+    mesh.position.set(0, 0.0125, -0.045)
     mesh.add(this.leftPelvisRollServo)
     return mesh
   }
@@ -67,8 +59,8 @@ export class LeftLegViewModel {
   private get leftUpperLegServo() {
     const { geometry, materials } = this.servoGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.rotation.set(Math.PI / 2, -Math.PI / 2, 0)
-    mesh.position.set(0.052, 0.008, 0)
+    mesh.rotation.set(-Math.PI / 2, -Math.PI / 2, 0)
+    mesh.position.set(0.052, -0.008, 0)
     mesh.add(this.leftUpperLeg)
     return mesh
   }
@@ -77,7 +69,7 @@ export class LeftLegViewModel {
   private get leftUpperLeg() {
     const { geometry, materials } = this.leftUpperLegGeometryAndMaterial
     const mesh = new Mesh(geometry, materials)
-    mesh.rotation.set(-Math.PI / 2, Math.PI, Math.PI / 2 - this.model.motors.leftHipPitch.angle)
+    mesh.rotation.set(-Math.PI / 2, 0, Math.PI / 2 - this.model.motors.leftHipPitch.angle)
     mesh.position.set(-0.016, 0, 0)
     mesh.add(this.leftLowerLegServo)
     return mesh

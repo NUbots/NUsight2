@@ -1,7 +1,4 @@
 .lineEditor {
-  border: 1px solid #777;
-  background-color: white;
-  font-family: monospace;
   margin-bottom: 4px;
 }
 
@@ -10,7 +7,11 @@
 }
 
 .lineEditorSvg {
+  font-family: monospace;
   user-select: none;
+  border: 1px solid #777;
+  background-color: white;
+  height: 200px;
 }
 
 .lineEditorText {

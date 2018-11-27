@@ -22,17 +22,18 @@ export class LineEditor extends Component<LineEditorProps> {
 
     return <div className={style.lineEditor}>
       <svg
-        viewBox='0 0 30 6.283185307179586'
+        viewBox='0 0 60 6.283185307179586'
         xmlns='http://www.w3.org/2000/svg'
         className={style.lineEditorSvg}
+        vectorEffect='non-scaling-stroke'
       >
-        <line x1='0' y1='50%' x2='100%' y2='50%' stroke='gray' strokeWidth='0.005'></line>
+        <line x1='0' y1='50%' x2='100%' y2='50%' stroke='gray' strokeWidth='0.01'></line>
 
         {
           viewModel.points.map((point, index) => {
-            const position = index - 1
+            const position = index
             return <g key={position}>
-              <line x1={position} y1='0' x2={position} y2='100%' stroke='gray' strokeWidth='0.005' />
+              <line x1={position} y1='0' x2={position} y2='100%' stroke='gray' strokeWidth='0.01' />
               <text x={(position) + 0.05} y='100%' className={style.lineEditorText}>{ position }</text>
             </g>
           })
@@ -48,7 +49,7 @@ export class LineEditor extends Component<LineEditorProps> {
               y2={segment.y2}
 
               stroke='black'
-              strokeWidth='0.005'
+              strokeWidth='0.01'
             />
           })
         }
@@ -65,7 +66,7 @@ export class LineEditor extends Component<LineEditorProps> {
               fill='orange'
               r='0.08'
               stroke='black'
-              strokeWidth='0.005'
+              strokeWidth='0.01'
             >
               <title>{ `(${point.x}, ${point.y})` }</title>
             </circle>

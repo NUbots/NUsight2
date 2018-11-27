@@ -23,9 +23,9 @@ export class ScriptTunerModel {
   constructor(robotModels: RobotModel[]) {
     this.robotModels = robotModels
     this.servos = [
-      this.makeSampleServo(),
-      this.makeSampleServo(),
-      this.makeSampleServo(),
+      this.makeSampleServo(15),
+      this.makeSampleServo(30),
+      this.makeSampleServo(60),
     ]
   }
 
@@ -33,11 +33,11 @@ export class ScriptTunerModel {
     return new ScriptTunerModel(robots)
   }
 
-  private makeSampleServo(): Servo {
+  private makeSampleServo(length: number = 30): Servo {
     const frames = []
     const period = 10
 
-    for (let i = 0; i < 31; i++) {
+    for (let i = 0; i <= length; i++) {
       const theta = (2 * Math.PI * i) / period
 
       frames.push({

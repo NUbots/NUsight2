@@ -19,40 +19,25 @@ export class LineEditorViewModel {
 
   @computed
   get points() {
-    return this.servo.frames.concat().sort((a, b) => {
-      if (a.time < b.time) {
-        return -1
-      } else if (a.time > b.time) {
-        return 1
-      } else {
-        return 0
-      }
-    })
+    return this.servo.frames.concat().sort((a, b) => a.time - b.time)
   }
 
   @computed
   get svgLineSegments() {
-    return this.points
-      .map((point, index) => {
-        // Create a blank line segment for the last data point.
-        // This is removed in the .slice() call below.
-        if (index === this.points.length - 1) {
-          return {
-            x1: 0,
-            x2: 0,
-            y1: 0,
-            y2: 0,
-          }
-        }
+    const segments = []
 
-        return {
-          x1: point.time,
-          x2: this.points[index + 1].time,
-          y1: Math.PI - point.angle,
-          y2: Math.PI - this.points[index + 1].angle,
-        }
+    for (let i = 0; i < this.points.length - 1; i++) {
+      const point = this.points[i]
+
+      segments.push({
+        x1: point.time,
+        x2: this.points[i + 1].time,
+        y1: Math.PI - point.angle,
+        y2: Math.PI - this.points[i + 1].angle,
       })
-      .slice(0, this.points.length - 1)
+    }
+
+    return segments
   }
 
   @computed

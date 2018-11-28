@@ -17,12 +17,17 @@ export class Timeline extends React.Component<TimelineProps> {
     const cells = new Array(Math.ceil(width / cellWidth)).fill(0)
 
     return <div className={style.timeline}>
-      <svg xmlns='http://www.w3.org/2000/svg' className={style.timelineSvg} width={width + 'px'}>
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        className={style.timelineSvg}
+        width={width + 'px'}
+        vectorEffect='non-scaling-stroke'
+      >
         <g transform='translate(0, 0)'>
           <rect width={width} height={height} fill='#AAA' />
           <g>
             {
-              cells.map((_, i) => <g>
+              cells.map((_, i) => <g key={i}>
                 <line
                   x1={i * cellWidth}
                   x2={i * cellWidth}

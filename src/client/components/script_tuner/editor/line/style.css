@@ -5,7 +5,7 @@
 .lineEditorSvg {
   font-family: monospace;
   user-select: none;
-  border: 1px solid #777;
+  /*border: 1px solid #777;*/
   background-color: white;
   height: 200px;
 }

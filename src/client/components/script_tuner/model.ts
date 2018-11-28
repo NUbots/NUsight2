@@ -23,8 +23,8 @@ export class ScriptTunerModel {
   constructor(robotModels: RobotModel[]) {
     this.robotModels = robotModels
     this.servos = [
-      this.makeSampleServo(15),
-      this.makeSampleServo(30),
+      this.makeSampleServo(60),
+      this.makeSampleServo(60),
       this.makeSampleServo(60),
     ]
   }

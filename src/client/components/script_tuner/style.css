@@ -1,6 +1,6 @@
 .container {
   display: grid;
-  grid-template-columns: 70% 30%;
+  grid-template-columns: 50% 30% 20%;
   grid-template-rows: 50% 50%;
   width: 100%;
 }
@@ -14,7 +14,8 @@
 }
 
 .editor {
-
+  grid-column-start: 1;
+  grid-column-end: span 3;
 }
 
 .controls {

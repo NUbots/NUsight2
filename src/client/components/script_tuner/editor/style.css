@@ -13,7 +13,7 @@
   font-size: 13px;
 }
 
-.editorLines {
+.editorBody {
   padding: 4px;
   flex-grow: 1;
   overflow: auto;

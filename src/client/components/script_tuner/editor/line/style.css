@@ -1,9 +1,5 @@
 .lineEditor {
-  margin-bottom: 4px;
-}
 
-.lineEditor:last-child {
-  margin-bottom: 0;
 }
 
 .lineEditorSvg {
@@ -12,11 +8,6 @@
   border: 1px solid #777;
   background-color: white;
   height: 200px;
-}
-
-.lineEditorText {
-  font-size: 0.25px;
-  fill: #999;
 }
 
 .lineEditorDraggable {

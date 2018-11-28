@@ -23,8 +23,8 @@ export const ScriptTuner = observer(({ controller, menu, model, network }: Scrip
     <div className={style.container}>
       <Viewer className={style.viewer} />
       <Balance className={style.balance} />
-      <Editor className={style.editor} controller={controller} model={model} />
       <Controls className={style.controls} />
+      <Editor className={style.editor} controller={controller} model={model} />
     </div>
   )
 })

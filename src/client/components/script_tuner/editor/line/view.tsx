@@ -32,10 +32,7 @@ export class LineEditor extends Component<LineEditorProps> {
         {
           viewModel.points.map((point, index) => {
             const position = index
-            return <g key={position}>
-              <line x1={position} y1='0' x2={position} y2='100%' stroke='gray' strokeWidth='0.01' />
-              <text x={(position) + 0.05} y='100%' className={style.lineEditorText}>{ position }</text>
-            </g>
+            return <line x1={position} y1='0' x2={position} y2='100%' stroke='gray' strokeWidth='0.01' />
           })
         }
 

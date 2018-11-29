@@ -45,7 +45,7 @@ export class LineEditorViewModel {
 
   @computed
   get points() {
-    return this.servo.frames.concat().sort((a, b) => a.time - b.time)
+    return this.servo.frames
   }
 
   @computed
@@ -70,7 +70,6 @@ export class LineEditorViewModel {
   get svgPoints() {
     return this.points.map(point => {
       return {
-        id: point.time,
         x: this.timeToSvg(point.time),
         y: this.angleToSVG(point.angle),
         label: `(${point.time}, ${point.angle.toFixed(2)})`,

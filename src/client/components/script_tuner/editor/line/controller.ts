@@ -21,28 +21,23 @@ export class LineEditorController {
       dGain: 0,
       torque: 0,
     })
+
+    // Perserve the sorting by time. Array replaced as MobX's sort() is not in-place.
+    this.model.frames = this.model.frames.slice().sort((a, b) => a.time - b.time)
   }
 
   @action
-  updateFrame = (frameId: number, data: { time: number, angle: number }) => {
-    const index = this.findFrame(frameId)
-
-    if (index > -1) {
-      this.model.frames[index].time = data.time
-      this.model.frames[index].angle = data.angle
+  updateFrame = (frameIndex: number, data: { time: number, angle: number }) => {
+    if (frameIndex > -1) {
+      this.model.frames[frameIndex].time = data.time
+      this.model.frames[frameIndex].angle = data.angle
     }
   }
 
   @action
-  removeFrame = (frameId: number): void => {
-    const index = this.findFrame(frameId)
-
-    if (index > -1) {
-      this.model.frames.splice(index, 1)
+  removeFrame = (frameIndex: number) => {
+    if (frameIndex > -1) {
+      this.model.frames.splice(frameIndex, 1)
     }
-  }
-
-  private findFrame(frameId: number) {
-    return this.model.frames.findIndex(frame => frame.time === frameId)
   }
 }

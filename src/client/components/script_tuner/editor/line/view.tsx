@@ -84,7 +84,6 @@ export class LineEditor extends Component<LineEditorProps> {
               cx={point.x}
               cy={point.y}
 
-              data-id={point.id}
               data-index={index}
               data-draggable='true'
 
@@ -93,7 +92,7 @@ export class LineEditor extends Component<LineEditorProps> {
               stroke='black'
               strokeWidth='1'
 
-              onContextMenu={(e) => this.onRightClick(e, point.id)}
+              onContextMenu={(e) => this.onRightClick(e, index)}
             >
               <title>{ point.label }</title>
             </circle>
@@ -118,9 +117,9 @@ export class LineEditor extends Component<LineEditorProps> {
     })
   }
 
-  private onRightClick = ({ nativeEvent: event }: React.MouseEvent, pointId: number) => {
+  private onRightClick = ({ nativeEvent: event }: React.MouseEvent, pointIndex: number) => {
     event.preventDefault()
-    this.props.controller.removeFrame(pointId)
+    this.props.controller.removeFrame(pointIndex)
   }
 
   private startDrag() {
@@ -177,10 +176,7 @@ export class LineEditor extends Component<LineEditorProps> {
 
     const angle = viewModel.svgToAngle(mouse.y)
 
-    this.props.controller.updateFrame(
-      Number(this.selectedElement.dataset.id),
-      { time, angle },
-    )
+    this.props.controller.updateFrame(index, { time, angle })
   }
 
   private getMousePositionInSvgSpace(event: MouseEvent) {

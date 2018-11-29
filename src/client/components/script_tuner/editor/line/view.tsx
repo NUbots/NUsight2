@@ -39,7 +39,7 @@ export class LineEditor extends Component<LineEditorProps> {
 
         {
           // Horizontal grid lines
-          viewModel.points.map((point, index) => {
+          new Array(viewModel.width).fill(0).map((_, index) => {
             const x = index * viewModel.cellWidth
             return <line x1={x} y1='0' x2={x} y2='100%' stroke='#CCC' strokeWidth='1' key={index} />
           })

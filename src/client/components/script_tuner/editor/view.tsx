@@ -34,7 +34,7 @@ export class Editor extends React.Component<EditorProps> {
   render() {
     const { className, controller, model } = this.props
     const lineEditorController = LineEditorController.of()
-    const viewModel = new EditorViewModel()
+    const viewModel = EditorViewModel.of(model)
 
     return <div className={classNames([className, style.editor])}>
       <div className={style.editorHeader}>Editor</div>

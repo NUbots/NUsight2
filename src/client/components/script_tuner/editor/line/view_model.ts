@@ -35,7 +35,7 @@ export class LineEditorViewModel {
 
   @computed
   get width() {
-    return this.points.length * this.cellWidth
+    return this.editorViewModel.timelineLength * this.cellWidth
   }
 
   @computed

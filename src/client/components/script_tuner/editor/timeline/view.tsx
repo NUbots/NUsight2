@@ -13,7 +13,7 @@ type TimelineProps = {
 @observer
 export class Timeline extends React.Component<TimelineProps> {
   render() {
-    const length = this.props.length + 1 // How many points on the timeline
+    const length = this.props.length // How many points on the timeline
     const scaleX = this.props.scaleX
     const cellWidth = this.props.cellWidth // Space between each point on the timeline
     const width = length * cellWidth * scaleX // Full width of the timeline

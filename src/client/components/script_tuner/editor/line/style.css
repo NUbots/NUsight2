@@ -7,6 +7,7 @@
   user-select: none;
   border: 1px solid #AAA;
   background-color: white;
+  cursor: crosshair;
 }
 
 .lineEditorDraggable {

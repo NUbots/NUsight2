@@ -28,16 +28,12 @@ export class LineEditorController {
 
   @action
   updateFrame = (frameIndex: number, data: { time: number, angle: number }) => {
-    if (frameIndex > -1) {
-      this.model.frames[frameIndex].time = data.time
-      this.model.frames[frameIndex].angle = data.angle
-    }
+    this.model.frames[frameIndex].time = data.time
+    this.model.frames[frameIndex].angle = data.angle
   }
 
   @action
   removeFrame = (frameIndex: number) => {
-    if (frameIndex > -1) {
-      this.model.frames.splice(frameIndex, 1)
-    }
+    this.model.frames.splice(frameIndex, 1)
   }
 }

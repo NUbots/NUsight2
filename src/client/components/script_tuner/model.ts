@@ -42,7 +42,7 @@ export class ScriptTunerModel {
 
       frames.push({
         time: i,
-        angle: Math.sin(theta),
+        angle: 2 * Math.sin(theta),
         pGain: 0,
         iGain: 0,
         dGain: 0,

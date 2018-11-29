@@ -5,9 +5,8 @@
 .lineEditorSvg {
   font-family: monospace;
   user-select: none;
-  /*border: 1px solid #777;*/
+  border: 1px solid #AAA;
   background-color: white;
-  height: 200px;
 }
 
 .lineEditorDraggable {

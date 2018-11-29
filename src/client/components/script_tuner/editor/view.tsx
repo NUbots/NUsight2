@@ -10,6 +10,7 @@ import { LineEditorController } from './line/controller'
 import { LineEditor } from './line/view'
 import * as style from './style.css'
 import { Timeline } from './timeline/view'
+import { EditorViewModel } from './view_model'
 
 type EditorProps = {
   className?: string
@@ -33,13 +34,29 @@ export class Editor extends React.Component<EditorProps> {
   render() {
     const { className, controller, model } = this.props
     const lineEditorController = LineEditorController.of()
+    const viewModel = new EditorViewModel()
 
     return <div className={classNames([className, style.editor])}>
       <div className={style.editorHeader}>Editor</div>
-      <Timeline className={style.editorTimeline} length={90} ref={this.timelineRef} />
+
+      <Timeline
+        className={style.editorTimeline}
+        length={viewModel.timelineLength}
+        cellWidth={viewModel.cellWidth}
+        scaleX={viewModel.scaleX}
+        ref={this.timelineRef}
+      />
+
       <div className={style.editorBody} ref={this.bodyRef}>
         {
-          model.servos.map((servo, index) => <LineEditor controller={lineEditorController} servo={servo} key={index} />)
+          model.servos.map((servo, index) => {
+            return <LineEditor
+              controller={lineEditorController}
+              servo={servo}
+              editorViewModel={viewModel}
+              key={index}
+            />
+          })
         }
       </div>
     </div>

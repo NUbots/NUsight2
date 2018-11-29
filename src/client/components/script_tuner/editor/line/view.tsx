@@ -19,6 +19,15 @@ type LineEditorProps = {
 
 @observer
 export class LineEditor extends Component<LineEditorProps> {
+  isDragging: boolean = false
+  selectedElement: HTMLElement | undefined
+  svgRef: React.RefObject<SVGSVGElement>
+
+  constructor(props: LineEditorProps) {
+    super(props)
+    this.svgRef = React.createRef()
+  }
+
   render() {
     const viewModel = LineEditorViewModel.of({
       servo: this.props.servo,
@@ -31,6 +40,11 @@ export class LineEditor extends Component<LineEditorProps> {
         vectorEffect='non-scaling-stroke'
         height={viewModel.height + 'px'}
         width={viewModel.width + 'px'}
+        ref={this.svgRef}
+
+        onMouseDown={(e) => this.onMouseDown(e, viewModel)}
+        onMouseMove={(e) => this.onMouseMove(e, viewModel)}
+        onDoubleClick={(e) => this.onDoubleClick(e.nativeEvent, viewModel)}
       >
         // Vertical grid lines
         <line x1='0' y1='25%' x2='100%' y2='25%' stroke='#CCC' strokeWidth='1'></line>
@@ -41,7 +55,7 @@ export class LineEditor extends Component<LineEditorProps> {
           // Horizontal grid lines
           new Array(viewModel.width).fill(0).map((_, index) => {
             const x = index * viewModel.cellWidth
-            return <line x1={x} y1='0' x2={x} y2='100%' stroke='#CCC' strokeWidth='1' key={index} />
+            return <line key={index} x1={x} y1='0' x2={x} y2='100%' stroke='#CCC' strokeWidth='1' />
           })
         }
 
@@ -65,16 +79,21 @@ export class LineEditor extends Component<LineEditorProps> {
           // Points on the main plot line
           viewModel.svgPoints.map((point, index) => {
             return <circle
-              className={style.lineEditorDraggable}
               key={index}
+              className={style.lineEditorDraggable}
               cx={point.x}
               cy={point.y}
+
+              data-id={point.id}
               data-index={index}
+              data-draggable='true'
 
               fill='orange'
               r='4'
               stroke='black'
               strokeWidth='1'
+
+              onContextMenu={(e) => this.onRightClick(e, point.id)}
             >
               <title>{ point.label }</title>
             </circle>
@@ -82,5 +101,99 @@ export class LineEditor extends Component<LineEditorProps> {
         }
       </svg>
     </div>
+  }
+
+  private onDoubleClick(event: MouseEvent, viewModel: LineEditorViewModel) {
+    const svg = this.svgRef.current!
+    const reference = svg.createSVGPoint()
+
+    reference.x = event.clientX
+    reference.y = event.clientY
+
+    const { x, y } = reference.matrixTransform(svg.getScreenCTM()!.inverse())
+
+    this.props.controller.addFrame({
+      time: viewModel.svgToTime(x),
+      angle: viewModel.svgToAngle(y),
+    })
+  }
+
+  private onRightClick = ({ nativeEvent: event }: React.MouseEvent, pointId: number) => {
+    event.preventDefault()
+    this.props.controller.removeFrame(pointId)
+  }
+
+  private startDrag() {
+    this.isDragging = true
+
+    document.addEventListener('mouseup', (event: MouseEvent) => {
+      this.endDrag()
+    }, { once: true })
+  }
+
+  private endDrag() {
+    this.isDragging = false
+    this.selectedElement = undefined
+  }
+
+  private onMouseDown = ({ nativeEvent: event }: React.MouseEvent, viewModel: LineEditorViewModel) => {
+    if ((event.target as HTMLElement).dataset.draggable) {
+      this.selectedElement = (event.target as HTMLElement)
+    }
+  }
+
+  private onMouseMove = ({ nativeEvent: event }: React.MouseEvent, viewModel: LineEditorViewModel) => {
+    if (!this.selectedElement) {
+      return
+    }
+
+    // Prevent things that happen on drag, like text selection
+    event.preventDefault()
+
+    // Start the drag if not already dragging
+    if (!this.isDragging) {
+      this.startDrag()
+    }
+
+    const index = Number(this.selectedElement.dataset.index!)
+    const mouse = this.getMousePositionInSvgSpace(event)
+
+    const minFrameSeparation = 0.05
+
+    const previousFrameTime = index === 0
+      ? 0 - minFrameSeparation
+      : viewModel.points[index - 1].time
+
+    const nextFrameTime = index === viewModel.points.length - 1
+      ? viewModel.points.length + minFrameSeparation
+      : viewModel.points[index + 1].time
+
+    // The drag needs to be constrained between the points's neighbours
+    const time = this.clampToRange(
+      viewModel.svgToTime(mouse.x),
+      previousFrameTime + minFrameSeparation,
+      nextFrameTime - minFrameSeparation,
+    )
+
+    const angle = viewModel.svgToAngle(mouse.y)
+
+    this.props.controller.updateFrame(
+      Number(this.selectedElement.dataset.id),
+      { time, angle },
+    )
+  }
+
+  private getMousePositionInSvgSpace(event: MouseEvent) {
+    const svg = this.svgRef.current!
+    const CTM = svg.getScreenCTM()!
+
+    return {
+      x: (event.clientX - CTM.e) / CTM.a,
+      y: (event.clientY - CTM.f) / CTM.d,
+    }
+  }
+
+  private clampToRange(value: number, min: number, max: number) {
+    return Math.min(Math.max(value, min), max)
   }
 }

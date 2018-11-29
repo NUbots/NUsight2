@@ -33,7 +33,6 @@ export class Editor extends React.Component<EditorProps> {
 
   render() {
     const { className, controller, model } = this.props
-    const lineEditorController = LineEditorController.of()
     const viewModel = EditorViewModel.of(model)
 
     return <div className={classNames([className, style.editor])}>
@@ -50,8 +49,9 @@ export class Editor extends React.Component<EditorProps> {
       <div className={style.editorBody} ref={this.bodyRef}>
         {
           model.servos.map((servo, index) => {
+            const controller = LineEditorController.of(servo)
             return <LineEditor
-              controller={lineEditorController}
+              controller={controller}
               servo={servo}
               editorViewModel={viewModel}
               key={index}

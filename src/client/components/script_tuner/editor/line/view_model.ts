@@ -56,10 +56,10 @@ export class LineEditorViewModel {
       const point = this.points[i]
 
       segments.push({
-        x1: point.time * this.cellWidth,
-        x2: this.points[i + 1].time * this.cellWidth,
-        y1: this.scaleY(Math.PI - point.angle),
-        y2: this.scaleY(Math.PI - this.points[i + 1].angle),
+        x1: this.timeToSvg(point.time),
+        x2: this.timeToSvg(this.points[i + 1].time),
+        y1: this.angleToSVG(point.angle),
+        y2: this.angleToSVG(this.points[i + 1].angle),
       })
     }
 
@@ -70,18 +70,33 @@ export class LineEditorViewModel {
   get svgPoints() {
     return this.points.map(point => {
       return {
-        x: point.time * this.cellWidth,
-        y: this.scaleY(Math.PI - point.angle),
+        id: point.time,
+        x: this.timeToSvg(point.time),
+        y: this.angleToSVG(point.angle),
         label: `(${point.time}, ${point.angle.toFixed(2)})`,
       }
     })
   }
 
-  scaleY(value: number) {
-    return this.scale(value, -Math.PI, Math.PI, -this.height / 2, this.height / 2)
+  timeToSvg(time: number) {
+    return time * this.cellWidth
   }
 
-  scale(num: number, inMin: number, inMax: number, outMin: number, outMax: number) {
+  svgToTime(coordinate: number) {
+    return coordinate / this.cellWidth
+  }
+
+  angleToSVG(angle: number) {
+    const translated = Math.PI - angle
+    return this.scale(translated, -Math.PI, Math.PI, -this.height / 2, this.height / 2)
+  }
+
+  svgToAngle(coordinate: number) {
+    const unscaled = this.scale(coordinate, -this.height / 2, this.height / 2, -Math.PI, Math.PI)
+    return -(unscaled - Math.PI)
+  }
+
+  private scale(num: number, inMin: number, inMax: number, outMin: number, outMax: number) {
     return (num - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
   }
 }

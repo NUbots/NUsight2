@@ -30,8 +30,8 @@ export class LeftLegViewModel {
   @computed
   private get leftPelvisYawServo() {
     const mesh = new Mesh()
-    mesh.rotation.set(0, this.model.motors.leftHipYaw.angle, 0)
     mesh.position.set(0, 0.0125, -0.045)
+    mesh.rotation.set(0, this.model.motors.leftHipYaw.angle, 0)
     mesh.add(this.leftPelvisRollServo)
     return mesh
   }
@@ -39,8 +39,8 @@ export class LeftLegViewModel {
   @computed
   private get leftPelvisRollServo() {
     const mesh = new Mesh()
-    mesh.rotation.set(0, 0, this.model.motors.leftHipRoll.angle)
     mesh.position.set(0, 0, 0)
+    mesh.rotation.set(0, 0, this.model.motors.leftHipRoll.angle)
     mesh.add(this.leftPelvis)
     return mesh
   }

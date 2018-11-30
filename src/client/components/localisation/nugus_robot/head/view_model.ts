@@ -20,22 +20,14 @@ export class HeadViewModel {
   @computed
   get head() {
     const head = new Object3D()
-    head.add(this.neck)
+    head.add(this.neckPanServo)
     return head
-  }
-
-  @computed
-  private get neck() {
-    const mesh = new Mesh()
-    mesh.position.set(0, 0.25625, 0)
-    mesh.add(this.neckPanServo)
-    return mesh
   }
 
   @computed
   private get neckPanServo() {
     const mesh = new Mesh()
-    mesh.position.set(0, 0, 0)
+    mesh.position.set(0, 0.25625, 0)
     mesh.rotation.set(0, 0, 0)
     mesh.add(this.neckTiltServo)
     return mesh

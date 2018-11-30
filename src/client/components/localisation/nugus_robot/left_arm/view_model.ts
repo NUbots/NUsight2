@@ -29,6 +29,13 @@ export class LeftArmViewModel {
   private get leftShoulderServo() {
     const mesh = new Mesh()
     mesh.position.set(0, 0.18125, -0.08)
+    mesh.add(this.leftShoulderAxis)
+    return mesh
+  }
+
+  @computed
+  private get leftShoulderAxis() {
+    const mesh = new Mesh()
     mesh.rotation.set(0, 0, -this.model.motors.leftShoulderPitch.angle)
     mesh.add(this.leftShoulder)
     return mesh
@@ -47,6 +54,13 @@ export class LeftArmViewModel {
   private get leftUpperArmServo() {
     const mesh = new Mesh()
     mesh.position.set(0, 0, -0.0475)
+    mesh.add(this.leftUpperArmAxis)
+    return mesh
+  }
+
+  @computed
+  private get leftUpperArmAxis() {
+    const mesh = new Mesh()
     mesh.rotation.set(-this.model.motors.leftShoulderRoll.angle,  0, 0)
     mesh.add(this.leftUpperArm)
     return mesh
@@ -66,6 +80,13 @@ export class LeftArmViewModel {
   private get leftLowerArmServo() {
     const mesh = new Mesh()
     mesh.position.set(0.16, 0.02, 0)
+    mesh.add(this.leftLowerArmAxis)
+    return mesh
+  }
+
+  @computed
+  private get leftLowerArmAxis() {
+    const mesh = new Mesh()
     mesh.rotation.set(0, 0, -this.model.motors.leftElbow.angle)
     mesh.add(this.leftLowerArm)
     return mesh

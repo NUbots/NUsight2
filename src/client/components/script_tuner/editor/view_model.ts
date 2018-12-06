@@ -9,7 +9,8 @@ export class EditorViewModel {
   @observable cellWidth = 32
   @observable scaleX = 2
   @observable height = 200
-  @observable currentTime = 1
+  @observable currentTime = 0
+  @observable isPlaying = false
 
   constructor(private model: ScriptTunerModel) {
   }

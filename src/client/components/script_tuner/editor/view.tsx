@@ -38,7 +38,30 @@ export class Editor extends React.Component<EditorProps> {
     const controller = EditorController.of(viewModel)
 
     return <div className={classNames([className, style.editor])}>
-      <div className={style.editorHeader}>Editor</div>
+      <div className={style.editorHeader}>
+        <div className={style.editorTitle}>Editor</div>
+        <div className={style.editorControls}>
+          <button title='Jump to start' onClick={() => controller.jumpToStart() }>
+            <svg width='24' height='24' viewBox='0 0 24 24'>
+              <path d='M6 6h2v12H6zm3.5 6l8.5 6V6z'/><path d='M0 0h24v24H0z' fill='none'/>
+            </svg>
+          </button>
+          <button title='Pause' onClick={() => controller.togglePlayback() }>
+            <svg width='24' height='24' viewBox='0 0 24 24'>
+              {
+                viewModel.isPlaying
+                  ? <path d='M6 19h4V5H6v14zm8-14v14h4V5h-4z'/>
+                  : <path d='M8 5v14l11-7z'/>
+              }
+            </svg>
+          </button>
+          <button title='Jump to end' onClick={() => controller.jumpToEnd() }>
+            <svg width='24' height='24' viewBox='0 0 24 24'>
+              <path d='M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z'/><path d='M0 0h24v24H0z' fill='none'/>
+            </svg>
+          </button>
+        </div>
+      </div>
 
       <Timeline
         className={style.editorTimeline}

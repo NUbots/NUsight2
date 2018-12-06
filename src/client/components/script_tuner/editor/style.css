@@ -10,7 +10,43 @@
   background-color: #777;
   padding: 0 4px;
   color: white;
-  font-size: 13px;
+  font-size: 14px;
+  display: flex;
+  min-height: 24px;
+  align-items: center;
+}
+
+.editorControls {
+  margin-left: auto;
+  height: 18px;
+}
+
+.editorControls button {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #444;
+  border: none;
+  margin-right: 4px;
+  outline: none;
+}
+
+.editorControls button:hover,
+.editorControls button:focus {
+  background-color: #333;
+}
+
+.editorControls button:active {
+  background-color: #222;
+}
+
+.editorControls svg {
+  width: 12px;
+  height: 12px;
+  fill: white;
 }
 
 .editorBody {

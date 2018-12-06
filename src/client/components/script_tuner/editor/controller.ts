@@ -6,7 +6,7 @@ export class EditorController {
   raf = 0
 
   constructor(private viewModel: EditorViewModel) {
-    console.log('Constructor recreated')
+    // console.log('Constructor recreated')
     this.viewModel = viewModel
   }
 
@@ -47,12 +47,12 @@ export class EditorController {
     )
 
     if (this.viewModel.currentTime === this.endTime) {
-      console.log('ended')
+      // console.log('ended')
       this.raf = 0
       this.viewModel.isPlaying = false
     } else {
       this.raf = requestAnimationFrame(this.playNextFrame)
-      console.log(this.raf)
+      // console.log(this.raf)
     }
   }
 
@@ -69,7 +69,7 @@ export class EditorController {
 
   @action
   togglePlayback = () => {
-    console.log('Toggling playback', this.viewModel.isPlaying)
+    // console.log('Toggling playback', this.viewModel.isPlaying)
 
     if (this.viewModel.isPlaying) {
       this.pause()

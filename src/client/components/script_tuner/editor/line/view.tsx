@@ -46,7 +46,7 @@ export class LineEditor extends Component<LineEditorProps> {
         onMouseMove={(e) => this.onMouseMove(e, viewModel)}
         onDoubleClick={(e) => this.onDoubleClick(e.nativeEvent, viewModel)}
       >
-        // Horizontal grid lines
+        { /* Horizontal grid lines */ }
         <line x1='0' y1='25%' x2='100%' y2='25%' stroke='#CCC' strokeWidth='1'></line>
         <line x1='0' y1='50%' x2='100%' y2='50%' stroke='#888' strokeWidth='1'></line>
         <line x1='0' y1='75%' x2='100%' y2='75%' stroke='#CCC' strokeWidth='1'></line>
@@ -99,6 +99,7 @@ export class LineEditor extends Component<LineEditorProps> {
           })
         }
 
+      { /* The current play position indicator */ }
         <line
           stroke='#1565C0'
           strokeWidth='2'

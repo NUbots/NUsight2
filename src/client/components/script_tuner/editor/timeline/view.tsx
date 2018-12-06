@@ -63,7 +63,7 @@ export class Timeline extends React.Component<TimelineProps> {
             }
           </g>
 
-          // Play head. 26 is the natural height of the play head symbol, in pixels.
+          { /* Play head. 26 is the natural height of the play head symbol, in pixels. */ }
           <g transform={`translate(${viewModel.playHeadPosition}, 0) scale(${viewModel.height / 26})`}>
             <path
               d='M0.5 17V0.5H23.5V17L12 25.5L0.5 17Z'

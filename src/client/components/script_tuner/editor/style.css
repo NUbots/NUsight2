@@ -14,7 +14,7 @@
 }
 
 .editorBody {
-  padding: 4px;
+  padding: 0 4px;
   flex-grow: 1;
   overflow: auto;
 }

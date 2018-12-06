@@ -44,6 +44,11 @@ export class LineEditorViewModel {
   }
 
   @computed
+  get playPosition() {
+    return this.editorViewModel.currentTime * this.cellWidth
+  }
+
+  @computed
   get points() {
     return this.servo.frames
   }

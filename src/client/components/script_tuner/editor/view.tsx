@@ -6,6 +6,7 @@ import * as ReactDOM from 'react-dom'
 import { ScriptTunerController } from '../controller'
 import { ScriptTunerModel } from '../model'
 
+import { EditorController } from './controller'
 import { LineEditorController } from './line/controller'
 import { LineEditor } from './line/view'
 import * as style from './style.css'
@@ -32,17 +33,17 @@ export class Editor extends React.Component<EditorProps> {
   }
 
   render() {
-    const { className, controller, model } = this.props
+    const { className, model } = this.props
     const viewModel = EditorViewModel.of(model)
+    const controller = EditorController.of(viewModel)
 
     return <div className={classNames([className, style.editor])}>
       <div className={style.editorHeader}>Editor</div>
 
       <Timeline
         className={style.editorTimeline}
-        length={viewModel.timelineLength}
-        cellWidth={viewModel.cellWidth}
-        scaleX={viewModel.scaleX}
+        setCurrentTime={controller.setCurrentTime}
+        editorViewModel={viewModel}
         ref={this.timelineRef}
       />
 

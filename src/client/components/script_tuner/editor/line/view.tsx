@@ -46,13 +46,13 @@ export class LineEditor extends Component<LineEditorProps> {
         onMouseMove={(e) => this.onMouseMove(e, viewModel)}
         onDoubleClick={(e) => this.onDoubleClick(e.nativeEvent, viewModel)}
       >
-        // Vertical grid lines
+        // Horizontal grid lines
         <line x1='0' y1='25%' x2='100%' y2='25%' stroke='#CCC' strokeWidth='1'></line>
         <line x1='0' y1='50%' x2='100%' y2='50%' stroke='#888' strokeWidth='1'></line>
         <line x1='0' y1='75%' x2='100%' y2='75%' stroke='#CCC' strokeWidth='1'></line>
 
         {
-          // Horizontal grid lines
+          // Vertical grid lines
           new Array(viewModel.width).fill(0).map((_, index) => {
             const x = index * viewModel.cellWidth
             return <line key={index} x1={x} y1='0' x2={x} y2='100%' stroke='#CCC' strokeWidth='1' />
@@ -98,6 +98,15 @@ export class LineEditor extends Component<LineEditorProps> {
             </circle>
           })
         }
+
+        <line
+          stroke='#1565C0'
+          strokeWidth='2'
+          x1={viewModel.playPosition}
+          x2={viewModel.playPosition}
+          y1='0'
+          y2='100%'
+        />
       </svg>
     </div>
   }

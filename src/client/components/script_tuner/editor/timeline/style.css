@@ -5,10 +5,11 @@
   height: 21px;
   padding: 0 5px;
   line-height: 0;
-  background-color: #AAA;
+  background-color: #CCC;
   border-bottom: 1px solid #999;
   overflow-x: scroll;
   overflow-y: hidden;
+  user-select: none;
 }
 
 /* Hide the scrollbar, not using overflow:hidden so we can programmatically scroll the timeline */
@@ -24,5 +25,5 @@
 
 .timelineText {
   font-size: 10px;
-  fill: white;
+  fill: black;
 }

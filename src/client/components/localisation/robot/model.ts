@@ -6,39 +6,39 @@ import { Quaternion } from '../../../math/quaternion'
 import { Vector3 } from '../../../math/vector3'
 import { RobotModel } from '../../robot/model'
 
-class NugusMotor {
+class RobotMotor {
   @observable angle: number
 
-  constructor({ angle }: NugusMotor) {
+  constructor({ angle }: RobotMotor) {
     this.angle = angle
   }
 
   static of() {
-    return new NugusMotor({ angle: 0 })
+    return new RobotMotor({ angle: 0 })
   }
 }
 
-export class NugusMotorSet {
-  @observable rightShoulderPitch: NugusMotor
-  @observable leftShoulderPitch: NugusMotor
-  @observable rightShoulderRoll: NugusMotor
-  @observable leftShoulderRoll: NugusMotor
-  @observable rightElbow: NugusMotor
-  @observable leftElbow: NugusMotor
-  @observable rightHipYaw: NugusMotor
-  @observable leftHipYaw: NugusMotor
-  @observable rightHipRoll: NugusMotor
-  @observable leftHipRoll: NugusMotor
-  @observable rightHipPitch: NugusMotor
-  @observable leftHipPitch: NugusMotor
-  @observable rightKnee: NugusMotor
-  @observable leftKnee: NugusMotor
-  @observable rightAnklePitch: NugusMotor
-  @observable leftAnklePitch: NugusMotor
-  @observable rightAnkleRoll: NugusMotor
-  @observable leftAnkleRoll: NugusMotor
-  @observable headPan: NugusMotor
-  @observable headTilt: NugusMotor
+export class RobotMotorSet {
+  @observable rightShoulderPitch: RobotMotor
+  @observable leftShoulderPitch: RobotMotor
+  @observable rightShoulderRoll: RobotMotor
+  @observable leftShoulderRoll: RobotMotor
+  @observable rightElbow: RobotMotor
+  @observable leftElbow: RobotMotor
+  @observable rightHipYaw: RobotMotor
+  @observable leftHipYaw: RobotMotor
+  @observable rightHipRoll: RobotMotor
+  @observable leftHipRoll: RobotMotor
+  @observable rightHipPitch: RobotMotor
+  @observable leftHipPitch: RobotMotor
+  @observable rightKnee: RobotMotor
+  @observable leftKnee: RobotMotor
+  @observable rightAnklePitch: RobotMotor
+  @observable leftAnklePitch: RobotMotor
+  @observable rightAnkleRoll: RobotMotor
+  @observable leftAnkleRoll: RobotMotor
+  @observable headPan: RobotMotor
+  @observable headTilt: RobotMotor
 
   constructor({
     rightShoulderPitch,
@@ -61,7 +61,7 @@ export class NugusMotorSet {
     leftAnkleRoll,
     headPan,
     headTilt,
-  }: NugusMotorSet) {
+  }: RobotMotorSet) {
     this.rightShoulderPitch = rightShoulderPitch
     this.leftShoulderPitch = leftShoulderPitch
     this.rightShoulderRoll = rightShoulderRoll
@@ -85,27 +85,27 @@ export class NugusMotorSet {
   }
 
   static of() {
-    return new NugusMotorSet({
-      rightShoulderPitch: NugusMotor.of(),
-      leftShoulderPitch: NugusMotor.of(),
-      rightShoulderRoll: NugusMotor.of(),
-      leftShoulderRoll: NugusMotor.of(),
-      rightElbow: NugusMotor.of(),
-      leftElbow: NugusMotor.of(),
-      rightHipYaw: NugusMotor.of(),
-      leftHipYaw: NugusMotor.of(),
-      rightHipRoll: NugusMotor.of(),
-      leftHipRoll: NugusMotor.of(),
-      rightHipPitch: NugusMotor.of(),
-      leftHipPitch: NugusMotor.of(),
-      rightKnee: NugusMotor.of(),
-      leftKnee: NugusMotor.of(),
-      rightAnklePitch: NugusMotor.of(),
-      leftAnklePitch: NugusMotor.of(),
-      rightAnkleRoll: NugusMotor.of(),
-      leftAnkleRoll: NugusMotor.of(),
-      headPan: NugusMotor.of(),
-      headTilt: NugusMotor.of(),
+    return new RobotMotorSet({
+      rightShoulderPitch: RobotMotor.of(),
+      leftShoulderPitch: RobotMotor.of(),
+      rightShoulderRoll: RobotMotor.of(),
+      leftShoulderRoll: RobotMotor.of(),
+      rightElbow: RobotMotor.of(),
+      leftElbow: RobotMotor.of(),
+      rightHipYaw: RobotMotor.of(),
+      leftHipYaw: RobotMotor.of(),
+      rightHipRoll: RobotMotor.of(),
+      leftHipRoll: RobotMotor.of(),
+      rightHipPitch: RobotMotor.of(),
+      leftHipPitch: RobotMotor.of(),
+      rightKnee: RobotMotor.of(),
+      leftKnee: RobotMotor.of(),
+      rightAnklePitch: RobotMotor.of(),
+      leftAnklePitch: RobotMotor.of(),
+      rightAnkleRoll: RobotMotor.of(),
+      leftAnkleRoll: RobotMotor.of(),
+      headPan: RobotMotor.of(),
+      headTilt: RobotMotor.of(),
     })
   }
 }
@@ -116,7 +116,7 @@ export class LocalisationRobotModel {
   @observable color?: string
   @observable rWTt: Vector3 // Torso to world translation in torso space.
   @observable Rwt: Quaternion // Torso to world rotation.
-  @observable motors: NugusMotorSet
+  @observable motors: RobotMotorSet
 
   constructor({ model, name, color, rWTt, Rwt, motors }: {
     model: RobotModel,
@@ -124,7 +124,7 @@ export class LocalisationRobotModel {
     color?: string,
     rWTt: Vector3,
     Rwt: Quaternion,
-    motors: NugusMotorSet
+    motors: RobotMotorSet
   }) {
     this.model = model
     this.name = name
@@ -140,7 +140,7 @@ export class LocalisationRobotModel {
       name: model.name,
       rWTt: Vector3.of(),
       Rwt: Quaternion.of(),
-      motors: NugusMotorSet.of(),
+      motors: RobotMotorSet.of(),
     })
   })
 

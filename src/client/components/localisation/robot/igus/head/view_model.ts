@@ -3,8 +3,8 @@ import { createTransformer } from 'mobx-utils'
 import { Mesh } from 'three'
 import { Object3D } from 'three'
 
-import { geometryAndMaterial } from '../../utils'
-import { LocalisationRobotModel } from '../model'
+import { geometryAndMaterial } from '../../../utils'
+import { LocalisationRobotModel } from '../../model'
 
 import * as HeadConfig from './config/head.json'
 import * as HeadServoConfig from './config/head_servo.json'

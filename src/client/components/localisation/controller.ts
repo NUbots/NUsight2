@@ -9,7 +9,7 @@ import { Vector3 } from '../../math/vector3'
 import { KeyCode } from './keycodes'
 import { LocalisationModel } from './model'
 import { ViewMode } from './model'
-import { HIP_TO_FOOT } from './nugus_robot/view_model'
+import { HIP_TO_FOOT } from './robot/view_model'
 
 interface KeyModifiers {
   shiftKey: boolean

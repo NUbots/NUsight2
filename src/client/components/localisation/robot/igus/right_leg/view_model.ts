@@ -3,8 +3,8 @@ import { createTransformer } from 'mobx-utils'
 import { Mesh } from 'three'
 import { Object3D } from 'three'
 
-import { geometryAndMaterial } from '../../utils'
-import { LocalisationRobotModel } from '../model'
+import { geometryAndMaterial } from '../../../utils'
+import { LocalisationRobotModel } from '../../model'
 import * as ServoConfig from '../servo/config/servo_block.json'
 
 import * as RightLowerLegConfig from './config/lower_right_leg.json'

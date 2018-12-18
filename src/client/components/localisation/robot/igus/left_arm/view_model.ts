@@ -3,8 +3,8 @@ import { createTransformer } from 'mobx-utils'
 import { Mesh } from 'three'
 import { Object3D } from 'three'
 
-import { geometryAndMaterial } from '../../utils'
-import { LocalisationRobotModel } from '../model'
+import { geometryAndMaterial } from '../../../utils'
+import { LocalisationRobotModel } from '../../model'
 
 import * as LeftShoulderConfig from './config/left_shoulder.json'
 import * as LeftLowerArmConfig from './config/lower_left_arm.json'

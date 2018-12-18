@@ -2,22 +2,22 @@ import { computed } from 'mobx'
 import { createTransformer } from 'mobx-utils'
 import { Mesh } from 'three'
 
-import { geometryAndMaterial } from '../../utils'
+import { geometryAndMaterial } from '../../../utils'
+import { LocalisationRobotModel } from '../../model'
 import { HeadViewModel } from '../head/view_model'
 import { LeftArmViewModel } from '../left_arm/view_model'
 import { LeftLegViewModel } from '../left_leg/view_model'
-import { LocalisationRobotModel } from '../model'
 import { RightArmViewModel } from '../right_arm/view_model'
 import { RightLegViewModel } from '../right_leg/view_model'
 
 import * as BodyConfig from './config/torso.json'
 
-export class BodyViewModel {
+export class IgusBodyViewModel {
   constructor(private model: LocalisationRobotModel) {
   }
 
-  static of = createTransformer((model: LocalisationRobotModel): BodyViewModel => {
-    return new BodyViewModel(model)
+  static of = createTransformer((model: LocalisationRobotModel): IgusBodyViewModel => {
+    return new IgusBodyViewModel(model)
   })
 
   @computed

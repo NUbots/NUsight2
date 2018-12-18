@@ -10,7 +10,7 @@ import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
 
 import { LocalisationModel } from './model'
-import { LocalisationRobotModel } from './nugus_robot/model'
+import { LocalisationRobotModel } from './robot/model'
 import Sensors = message.input.Sensors
 
 export class LocalisationNetwork {

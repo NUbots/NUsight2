@@ -8,7 +8,7 @@ import { Object3D } from 'three'
 
 import { FieldViewModel } from './field/view_model'
 import { LocalisationModel } from './model'
-import { RobotViewModel } from './nugus_robot/view_model'
+import { RobotViewModel } from './robot/view_model'
 import { SkyboxViewModel } from './skybox/view_model'
 
 export class LocalisationViewModel {

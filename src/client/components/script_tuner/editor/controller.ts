@@ -1,90 +1,57 @@
 import { action, computed, observable } from 'mobx'
+import { createTransformer } from 'mobx-utils'
+
+import { ScriptTunerController } from '../controller'
 
 import { EditorViewModel } from './view_model'
 
+interface EditorControllerOpts {
+  viewModel: EditorViewModel,
+  controller: ScriptTunerController
+}
+
 export class EditorController {
-  raf = 0
+  viewModel: EditorViewModel
+  controller: ScriptTunerController
 
-  constructor(private viewModel: EditorViewModel) {
-    // console.log('Constructor recreated')
-    this.viewModel = viewModel
+  constructor(opts: EditorControllerOpts) {
+    this.viewModel = opts.viewModel
+    this.controller = opts.controller
   }
 
-  static of(viewModel: EditorViewModel) {
-    return new EditorController(viewModel)
+  static of = createTransformer((opts: EditorControllerOpts) => {
+    return new EditorController(opts)
+  })
+
+  setPlayTime = (time: number) => {
+    this.controller.setPlayTime(time)
   }
 
-  @computed
-  get startTime() {
-    return 0
-  }
-
-  @computed
-  get endTime() {
-    return this.viewModel.timelineLength - 1
-  }
-
-  @action
-  setCurrentTime = (time: number) => {
-    this.viewModel.currentTime = Math.min(Math.max(time, this.startTime), this.endTime)
-  }
-
-  @action
   play = () => {
     if (this.viewModel.isPlaying) {
       return
     }
 
-    this.raf = requestAnimationFrame(this.playNextFrame)
-    this.viewModel.isPlaying = true
+    this.controller.togglePlayback(true)
   }
 
-  @action
-  playNextFrame = () => {
-    this.viewModel.currentTime = Math.min(
-      this.viewModel.currentTime + (this.viewModel.cellWidth / this.viewModel.scaleX / 60),
-      this.endTime,
-    )
-
-    if (this.viewModel.currentTime === this.endTime) {
-      // console.log('ended')
-      this.raf = 0
-      this.viewModel.isPlaying = false
-    } else {
-      this.raf = requestAnimationFrame(this.playNextFrame)
-      // console.log(this.raf)
-    }
-  }
-
-  @action
   pause = () => {
     if (!this.viewModel.isPlaying) {
       return
     }
 
-    cancelAnimationFrame(this.raf!)
-    this.raf = 0
-    this.viewModel.isPlaying = false
+    this.controller.togglePlayback(false)
   }
 
-  @action
   togglePlayback = () => {
-    // console.log('Toggling playback', this.viewModel.isPlaying)
-
-    if (this.viewModel.isPlaying) {
-      this.pause()
-    } else {
-      this.play()
-    }
+    this.controller.togglePlayback()
   }
 
-  @action
   jumpToStart = () => {
-    this.viewModel.currentTime = 0
+    this.controller.setPlayTime(this.viewModel.startTime)
   }
 
-  @action
   jumpToEnd = () => {
-    this.viewModel.currentTime = this.viewModel.timelineLength - 1
+    this.controller.setPlayTime(this.viewModel.endTime)
   }
 }

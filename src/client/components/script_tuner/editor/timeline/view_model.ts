@@ -47,7 +47,7 @@ export class TimelineViewModel {
   @computed
   get playHeadPosition() {
     const playHeadWidth = 18
-    return this.timeToSvg(this.editorViewModel.currentTime) - (playHeadWidth / 2)
+    return this.timeToSvg(this.editorViewModel.playTime) - (playHeadWidth / 2)
   }
 
   timeToSvg(time: number) {

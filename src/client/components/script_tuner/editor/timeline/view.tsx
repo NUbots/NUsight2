@@ -9,7 +9,7 @@ import { TimelineViewModel } from './view_model'
 type TimelineProps = {
   className?: string,
   editorViewModel: EditorViewModel,
-  setCurrentTime(time: number): void
+  setPlayTime(time: number): void
 }
 
 @observer
@@ -87,7 +87,7 @@ export class Timeline extends React.Component<TimelineProps> {
 
     const { x } = reference.matrixTransform(svg.getScreenCTM()!.inverse())
 
-    this.props.setCurrentTime(viewModel.svgToTime(x))
+    this.props.setPlayTime(viewModel.svgToTime(x))
   }
 
   private startDrag() {
@@ -124,7 +124,7 @@ export class Timeline extends React.Component<TimelineProps> {
 
     const { x } = this.getMousePositionInSvgSpace(event)
 
-    this.props.setCurrentTime(
+    this.props.setPlayTime(
       this.clampToRange(viewModel.svgToTime(x), 0, viewModel.timelineLength),
     )
   }

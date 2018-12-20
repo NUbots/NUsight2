@@ -9,8 +9,6 @@ export class EditorViewModel {
   @observable cellWidth = 32
   @observable scaleX = 2
   @observable height = 200
-  @observable currentTime = 0
-  @observable isPlaying = false
 
   constructor(private model: ScriptTunerModel) {
   }
@@ -21,14 +19,26 @@ export class EditorViewModel {
 
   @computed
   get timelineLength() {
-    let maxLength = 0
+    return this.model.scriptsLength
+  }
 
-    this.model.servos.forEach(servo => {
-      if (servo.frames.length > maxLength) {
-        maxLength = servo.frames.length
-      }
-    })
+  @computed
+  get isPlaying() {
+    return this.model.isPlaying
+  }
 
-    return maxLength
+  @computed
+  get playTime() {
+    return this.model.playTime
+  }
+
+  @computed
+  get startTime() {
+    return this.model.startTime
+  }
+
+  @computed
+  get endTime() {
+    return this.model.endTime
   }
 }

@@ -45,7 +45,7 @@ export class LineEditorViewModel {
 
   @computed
   get playPosition() {
-    return this.editorViewModel.currentTime * this.cellWidth
+    return this.editorViewModel.playTime * this.cellWidth
   }
 
   @computed

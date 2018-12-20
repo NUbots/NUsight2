@@ -1,14 +1,49 @@
-import { action } from 'mobx'
+import { action, autorun, IReactionDisposer } from 'mobx'
 
+import { ScriptTunerModel } from './model'
 import { ScriptTunerNetwork } from './network'
 
-export class ScriptTunerController {
+interface ScriptTunerOpts {
+  network: ScriptTunerNetwork
+  model: ScriptTunerModel
+}
 
-  constructor(private network: ScriptTunerNetwork) {
+export class ScriptTunerController {
+  network: ScriptTunerNetwork
+  model: ScriptTunerModel
+  stopPlaytimeAutorun?: IReactionDisposer
+
+  constructor(opts: ScriptTunerOpts) {
+    this.network = opts.network
+    this.model = opts.model
+
+    this.stopPlaytimeAutorun = autorun(() => {
+      if (this.model.playTime >= this.model.endTime) {
+        this.togglePlayback(false)
+      }
+    })
+
     // TODO need to add an autorunner that if we are connected to the robot we need to send it update packets
   }
 
-  static of(network: ScriptTunerNetwork) {
-    return new ScriptTunerController(network)
+  static of(opts: ScriptTunerOpts) {
+    return new ScriptTunerController(opts)
+  }
+
+  @action
+  setPlayTime(time: number) {
+    this.model.currentTime = Math.min(Math.max(time, this.model.startTime), this.model.endTime)
+    this.model.playStart = Date.now()
+  }
+
+  @action
+  togglePlayback(isPlaying: boolean = !this.model.isPlaying) {
+    if (isPlaying) {
+      this.model.playStart = Date.now()
+    } else {
+      this.model.currentTime = this.model.playTime
+    }
+
+    this.model.isPlaying = isPlaying
   }
 }

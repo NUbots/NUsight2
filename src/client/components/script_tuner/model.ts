@@ -1,5 +1,6 @@
 import { computed } from 'mobx'
 import { observable } from 'mobx'
+import { now } from 'mobx-utils'
 
 import { RobotModel } from '../robot/model'
 
@@ -19,6 +20,9 @@ export interface Frame {
 export class ScriptTunerModel {
   @observable private robotModels: RobotModel[]
   @observable servos: Servo[]
+  @observable isPlaying = false
+  @observable currentTime = 0
+  @observable playStart = 0
 
   constructor(robotModels: RobotModel[]) {
     this.robotModels = robotModels
@@ -31,6 +35,38 @@ export class ScriptTunerModel {
 
   static of(robots: RobotModel[]): ScriptTunerModel {
     return new ScriptTunerModel(robots)
+  }
+
+  @computed
+  get startTime() {
+    return 0
+  }
+
+  @computed
+  get endTime() {
+    return this.scriptsLength - 1
+  }
+
+  @computed
+  get playTime() {
+    const time = this.isPlaying
+      ? this.currentTime + (now('frame') - this.playStart) / 1000
+      : this.currentTime
+
+    return time >= this.endTime ? this.endTime : time
+  }
+
+  @computed
+  get scriptsLength() {
+    let maxLength = 0
+
+    this.servos.forEach(servo => {
+      if (servo.frames.length > maxLength) {
+        maxLength = servo.frames.length
+      }
+    })
+
+    return maxLength
   }
 
   private makeSampleServo(length: number = 30): Servo {

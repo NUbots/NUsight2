@@ -35,7 +35,10 @@ export class Editor extends React.Component<EditorProps> {
   render() {
     const { className, model } = this.props
     const viewModel = EditorViewModel.of(model)
-    const controller = EditorController.of(viewModel)
+    const controller = EditorController.of({
+      viewModel,
+      controller: this.props.controller,
+    })
 
     return <div className={classNames([className, style.editor])}>
       <div className={style.editorHeader}>
@@ -49,7 +52,7 @@ export class Editor extends React.Component<EditorProps> {
           <button title='Pause' onClick={() => controller.togglePlayback() }>
             <svg width='24' height='24' viewBox='0 0 24 24'>
               {
-                viewModel.isPlaying
+                model.isPlaying
                   ? <path d='M6 19h4V5H6v14zm8-14v14h4V5h-4z'/>
                   : <path d='M8 5v14l11-7z'/>
               }
@@ -65,7 +68,7 @@ export class Editor extends React.Component<EditorProps> {
 
       <Timeline
         className={style.editorTimeline}
-        setCurrentTime={controller.setCurrentTime}
+        setPlayTime={controller.setPlayTime}
         editorViewModel={viewModel}
         ref={this.timelineRef}
       />

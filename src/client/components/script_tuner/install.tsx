@@ -25,7 +25,7 @@ export function installScriptTuner({ nav, appModel, nusightNetwork, menu }: {
     label: 'Scripts',
     Content: () => {
       const network = ScriptTunerNetwork.of(nusightNetwork)
-      const controller = ScriptTunerController.of(network)
+      const controller = ScriptTunerController.of({ network, model })
       return <ScriptTuner controller={controller} menu={menu} model={model} network={network} />
     },
   })

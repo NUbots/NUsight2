@@ -133,8 +133,5 @@
     "three": "^0.91.0",
     "worker-loader": "^2.0.0",
     "xxhashjs": "^0.2.2"
-  },
-  "resolutions": {
-    "@types/react": "16.7.18"
   }
 }

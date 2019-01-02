@@ -1,6 +1,5 @@
 import { computed } from 'mobx'
 import { observable } from 'mobx'
-import * as mobxUtils from 'mobx-utils'
 import { Vector3 } from 'three'
 import { Points } from 'three'
 import { BufferAttribute } from 'three'
@@ -26,15 +25,16 @@ import * as fragmentShader from './shaders/color_space_cube.frag'
 import * as vertexShader from './shaders/color_space_cube.vert'
 
 export class ColorSpaceVisualizerViewModel {
-  @observable.ref canvas: HTMLCanvasElement | null
+  @observable.ref canvas: HTMLCanvasElement | null = null
   @observable.ref mouseDown: boolean = false
-  @observable.ref startDrag: Vector2
+  @observable.ref startDrag: Vector2;
 
-  constructor(private model: ColorSpaceVisualizerModel) {
+  constructor(private model: ColorSpaceVisualizerModel, startDrag: Vector2) {
+    this.startDrag = startDrag;
   }
 
   static of = memoize((model: ColorSpaceVisualizerModel) => {
-    return new ColorSpaceVisualizerViewModel(model)
+    return new ColorSpaceVisualizerViewModel(model, Vector2.of())
   })
 
   @computed

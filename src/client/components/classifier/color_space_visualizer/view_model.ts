@@ -27,10 +27,10 @@ import * as vertexShader from './shaders/color_space_cube.vert'
 export class ColorSpaceVisualizerViewModel {
   @observable.ref canvas: HTMLCanvasElement | null = null
   @observable.ref mouseDown: boolean = false
-  @observable.ref startDrag: Vector2;
+  @observable.ref startDrag: Vector2
 
   constructor(private model: ColorSpaceVisualizerModel, startDrag: Vector2) {
-    this.startDrag = startDrag;
+    this.startDrag = startDrag
   }
 
   static of = memoize((model: ColorSpaceVisualizerModel) => {

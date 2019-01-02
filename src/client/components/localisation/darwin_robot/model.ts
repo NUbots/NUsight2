@@ -2,34 +2,19 @@ import { observable } from 'mobx'
 import { computed } from 'mobx'
 
 import { memoize } from '../../../base/memoize'
+import { Quaternion } from '../../../math/quaternion'
 import { Vector3 } from '../../../math/vector3'
 import { RobotModel } from '../../robot/model'
-import { Quaternion } from '../model'
 
-export class LocalisationRobotModel {
-  @observable private model: RobotModel
-  @observable name: string
-  @observable color?: string
-  @observable rWTt: Vector3 // Torso to world translation in torso space.
-  @observable Rwt: Quaternion // Torso to world rotation.
-  @observable motors: DarwinMotorSet
+class DarwinMotor {
+  @observable angle: number
 
-  constructor(model: RobotModel, opts: Partial<LocalisationRobotModel>) {
-    this.model = model
-    Object.assign(this, opts)
+  constructor({ angle }: DarwinMotor) {
+    this.angle = angle
   }
 
-  static of = memoize((model: RobotModel): LocalisationRobotModel => {
-    return new LocalisationRobotModel(model, {
-      name: model.name,
-      rWTt: Vector3.of(),
-      Rwt: Quaternion.of(),
-      motors: DarwinMotorSet.of(),
-    })
-  })
-
-  @computed get visible() {
-    return this.model.enabled
+  static of() {
+    return new DarwinMotor({ angle: 0 })
   }
 }
 
@@ -55,8 +40,48 @@ export class DarwinMotorSet {
   @observable headPan: DarwinMotor
   @observable headTilt: DarwinMotor
 
-  constructor(opts: DarwinMotorSet) {
-    Object.assign(this, opts)
+  constructor({
+    rightShoulderPitch,
+    leftShoulderPitch,
+    rightShoulderRoll,
+    leftShoulderRoll,
+    rightElbow,
+    leftElbow,
+    rightHipYaw,
+    leftHipYaw,
+    rightHipRoll,
+    leftHipRoll,
+    rightHipPitch,
+    leftHipPitch,
+    rightKnee,
+    leftKnee,
+    rightAnklePitch,
+    leftAnklePitch,
+    rightAnkleRoll,
+    leftAnkleRoll,
+    headPan,
+    headTilt,
+  }: DarwinMotorSet) {
+    this.rightShoulderPitch = rightShoulderPitch
+    this.leftShoulderPitch = leftShoulderPitch
+    this.rightShoulderRoll = rightShoulderRoll
+    this.leftShoulderRoll = leftShoulderRoll
+    this.rightElbow = rightElbow
+    this.leftElbow = leftElbow
+    this.rightHipYaw = rightHipYaw
+    this.leftHipYaw = leftHipYaw
+    this.rightHipRoll = rightHipRoll
+    this.leftHipRoll = leftHipRoll
+    this.rightHipPitch = rightHipPitch
+    this.leftHipPitch = leftHipPitch
+    this.rightKnee = rightKnee
+    this.leftKnee = leftKnee
+    this.rightAnklePitch = rightAnklePitch
+    this.leftAnklePitch = leftAnklePitch
+    this.rightAnkleRoll = rightAnkleRoll
+    this.leftAnkleRoll = leftAnkleRoll
+    this.headPan = headPan
+    this.headTilt = headTilt
   }
 
   static of() {
@@ -85,14 +110,41 @@ export class DarwinMotorSet {
   }
 }
 
-class DarwinMotor {
-  @observable angle: number
+export class LocalisationRobotModel {
+  @observable private model: RobotModel
+  @observable name: string
+  @observable color?: string
+  @observable rWTt: Vector3 // Torso to world translation in torso space.
+  @observable Rwt: Quaternion // Torso to world rotation.
+  @observable motors: DarwinMotorSet
 
-  constructor(opts: DarwinMotor) {
-    Object.assign(this, opts)
+  constructor({ model, name, color, rWTt, Rwt, motors }: {
+    model: RobotModel,
+    name: string,
+    color?: string,
+    rWTt: Vector3,
+    Rwt: Quaternion,
+    motors: DarwinMotorSet
+  }) {
+    this.model = model
+    this.name = name
+    this.color = color
+    this.rWTt = rWTt
+    this.Rwt = Rwt
+    this.motors = motors
   }
 
-  static of() {
-    return new DarwinMotor({ angle: 0 })
+  static of = memoize((model: RobotModel): LocalisationRobotModel => {
+    return new LocalisationRobotModel({
+      model,
+      name: model.name,
+      rWTt: Vector3.of(),
+      Rwt: Quaternion.of(),
+      motors: DarwinMotorSet.of(),
+    })
+  })
+
+  @computed get visible() {
+    return this.model.enabled
   }
 }

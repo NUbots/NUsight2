@@ -15,20 +15,22 @@ describe('NbsNUClearPlayback', () => {
     const frame1: NbsFrame = {
       timestampInMicroseconds: 0,
       hash: hashType('frame1'),
-      payload: new Buffer(8),
+      payload: Buffer.alloc(8),
     }
 
     const frame2: NbsFrame = {
       timestampInMicroseconds: 10e6, // 10 seconds
       hash: hashType('frame2'),
-      payload: new Buffer(8),
+      payload: Buffer.alloc(8),
     }
 
     const frame3: NbsFrame = {
       timestampInMicroseconds: 20e6, // 20 seconds
       hash: hashType('frame3'),
-      payload: new Buffer(8),
+      payload: Buffer.alloc(8),
     }
+
+    nuclearnetClient.connect({ name: 'Bob' })
 
     jest.spyOn(nuclearnetClient, 'send')
 

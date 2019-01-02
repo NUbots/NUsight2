@@ -3,41 +3,30 @@ import * as ExtractTextPlugin from 'extract-text-webpack-plugin'
 import * as HtmlWebpackPlugin from 'html-webpack-plugin'
 import * as path from 'path'
 import * as webpack from 'webpack'
-import Devtool = webpack.Options.Devtool
 
 const isProduction = process.argv.indexOf('-p') >= 0
+const isContinuousIntegration = process.argv.indexOf('--ci') >= 0
+const transpileOnly = process.argv.indexOf('-t') >= 0
 const sourcePath = path.join(__dirname, './src')
 const outPath = path.join(__dirname, './dist')
 
-const devtool: Devtool = isProduction ? 'source-map' : 'inline-source-map'
-
-export default [{
+const config: webpack.Configuration = {
+  mode: isProduction ? 'production' : 'development',
   context: sourcePath,
-  devtool,
+  devtool: isContinuousIntegration ? false : isProduction ? 'source-map' : 'eval-source-map',
   entry: {
     main: [
       './client/main.tsx',
-    ].concat(isProduction ? [] : [
-      'webpack-hot-middleware/client',
-    ]),
-    vendor: [
-      'classnames',
-      'mobx',
-      'mobx-react',
-      'react',
-      'react-dom',
-      'react-router',
-      'react-router-dom',
-      'socket.io-client',
-      'three',
+      ...(isProduction ? [] : ['webpack-hot-middleware/client?reload=true']),
     ],
   },
   output: {
     path: outPath,
-    filename: 'bundle.js',
+    filename: '[name].js',
     publicPath: '/',
+    globalObject: 'this',
   },
-  target: 'web' as 'web',
+  target: 'web',
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
     // Fix webpack's default behavior to not load packages with jsnext:main module
@@ -51,12 +40,19 @@ export default [{
       // .ts, .tsx
       {
         test: /\.tsx?$/,
-        use: isProduction
-          ? 'awesome-typescript-loader?module=es6'
-          : [
-            'react-hot-loader/webpack',
-            'awesome-typescript-loader',
-          ],
+        exclude: [
+          path.resolve(__dirname, 'node_modules'),
+        ],
+        use: [{
+          loader: 'awesome-typescript-loader',
+          options: {
+            useBabel: true,
+            useCache: true,
+            forceIsolatedModules: true,
+            transpileOnly,
+            babelCore: '@babel/core',
+          },
+        }],
       },
       // local css
       {
@@ -79,8 +75,9 @@ export default [{
             {
               loader: 'postcss-loader',
               options: {
-                plugins: (loader: webpack.loader.LoaderContext) => [
-                  require('postcss-import')({ root: loader.resourcePath }),
+                ident: 'postcss',
+                plugins: [
+                  require('postcss-import')({ addDependencyTo: webpack }),
                   require('postcss-url')(),
                   require('postcss-cssnext')(),
                   require('postcss-reporter')(),
@@ -105,12 +102,7 @@ export default [{
       {
         test: /\.svg$/,
         use: [
-          {
-            loader: 'babel-loader',
-            query: {
-              presets: ['env'],
-            },
-          },
+          'babel-loader',
           {
             loader: 'react-svg-loader',
             query: {
@@ -130,29 +122,43 @@ export default [{
       { test: /\.(vert|frag)$/, use: 'raw-loader' },
     ],
   },
+  optimization: {
+    splitChunks: {
+      name: true,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          chunks: 'all',
+          priority: -10,
+        },
+        proto: {
+          test: /src[\\/]shared[\\/]proto/,
+          chunks: 'all',
+          priority: -10,
+        },
+      },
+    },
+  },
   plugins: [
-    new webpack.NoEmitOnErrorsPlugin(),
     new CopyWebpackPlugin([{ from: 'assets/images', to: 'images' }]),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'vendor.bundle.js',
-      minChunks: Infinity,
-    }),
-    new webpack.optimize.AggressiveMergingPlugin(),
     new ExtractTextPlugin({
       filename: 'styles.css',
       disable: !isProduction,
     }),
     new HtmlWebpackPlugin({
       template: 'assets/index.html',
+      filename: 'index.html',
+      chunks: ['main'],
     }),
-  ].concat(isProduction ? [] : [
-    new webpack.HotModuleReplacementPlugin(),
-  ]),
+    ...(isProduction ? [] : [new webpack.HotModuleReplacementPlugin()]),
+  ] as any as webpack.Plugin[],
   node: {
     // workaround for webpack-dev-server issue
     // https://github.com/webpack/webpack-dev-server/issues/60#issuecomment-103411179
     fs: 'empty',
     net: 'empty',
   },
-}]
+}
+
+export default config
+

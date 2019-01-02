@@ -1,23 +1,21 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "target": "es5",
+    "target": "ES2017",
     "jsx": "react",
     "skipLibCheck": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "declaration": false,
-    "noImplicitAny": true,
-    "noImplicitReturns": false,
     "removeComments": true,
     "strict": true,
-    "downlevelIteration": true,
     "outDir": "build",
     "lib": [
-      "es6",
-      "es7",
+      "ES2015",
+      "ES2016",
+      "ES2017",
+      "ES2018",
       "dom",
       "webworker"
     ]
@@ -29,11 +27,5 @@
   "exclude": [
     "build",
     "node_modules"
-  ],
-  "awesomeTypescriptLoaderOptions": {
-    "useWebpackText": true,
-    "useTranspileModule": true,
-    "doTypeCheck": true,
-    "forkChecker": true
-  }
+  ]
 }

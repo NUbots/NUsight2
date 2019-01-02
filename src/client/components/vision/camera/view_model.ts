@@ -1,25 +1,30 @@
 import { observable } from 'mobx'
-import { computed } from 'mobx'
 import { autorun } from 'mobx'
+import { computed } from 'mobx'
 import { createTransformer } from 'mobx-utils'
+import { Float32BufferAttribute } from 'three'
+import { LineSegments } from 'three'
 import { BufferGeometry } from 'three'
+import { Object3D } from 'three'
 import { PlaneBufferGeometry } from 'three'
 import { MeshBasicMaterial } from 'three'
 import { Scene } from 'three'
-import { Mesh } from 'three'
+import { Vector2 } from 'three'
 import { WebGLRenderer } from 'three'
 import { OrthographicCamera } from 'three'
 import { Camera } from 'three'
 import { Vector4 } from 'three'
 import { RawShaderMaterial } from 'three'
 import { Vector3 } from 'three'
-import { Vector2 } from 'three'
+import { Mesh } from 'three'
 
 import { ImageDecoder } from '../../../image_decoder/image_decoder'
-import { Image } from '../../../image_decoder/image_decoder'
 import { Matrix4 as Matrix4Model } from '../../../math/matrix4'
 
 import { CameraModel } from './model'
+import { VisualMesh } from './model'
+import * as meshFragmentShader from './shaders/mesh.frag'
+import * as meshVertexShader from './shaders/mesh.vert'
 import * as worldLineFragmentShader from './shaders/world_line.frag'
 import * as worldLineVertexShader from './shaders/world_line.vert'
 
@@ -82,8 +87,11 @@ export class CameraViewModel {
     scene.remove(...scene.children)
     if (this.model.image) {
       scene.add(this.image)
-      scene.add(this.direction(this.model.image.Hcw))
+      scene.add(this.compass(this.model.image.Hcw))
       scene.add(this.horizon(this.model.image.Hcw))
+    }
+    if (this.model.visualmesh) {
+      scene.add(this.visualmesh(this.model.visualmesh))
     }
     return scene
   }
@@ -94,7 +102,7 @@ export class CameraViewModel {
   }
 
   @computed
-  get imageHeight(): number | undefined  {
+  get imageHeight(): number | undefined {
     return this.model.image && this.model.image.height
   }
 
@@ -108,6 +116,52 @@ export class CameraViewModel {
     mesh.scale.y = -1
     return mesh
   }
+
+  private meshGeometry = createTransformer((mesh: VisualMesh): BufferGeometry => {
+
+    const { neighbours, coordinates, classifications } = mesh
+
+    // Calculate our triangle indexes
+    const nElem = mesh.coordinates.length / 2
+    const triangles: number[] = []
+    for (let i = 0; i < nElem; ++i) {
+      const idx = i * 6
+      for (let j = 0; j < 6; ++j) {
+        const nIdx = idx + j
+        if (neighbours[nIdx] < nElem) {
+          triangles.push(i, neighbours[nIdx])
+        }
+      }
+    }
+
+    const geometry = new BufferGeometry()
+    geometry.setIndex(triangles)
+    geometry.addAttribute('position', new Float32BufferAttribute(coordinates, 2))
+    geometry.addAttribute('classification', new Float32BufferAttribute(classifications.values, classifications.dim))
+    return geometry
+  }, (geom?: BufferGeometry) => geom && geom.dispose())
+
+  @computed
+  private get meshMaterial() {
+    return new RawShaderMaterial({
+      vertexShader: String(meshVertexShader),
+      fragmentShader: String(meshFragmentShader),
+      depthTest: false,
+      depthWrite: false,
+      transparent: true,
+      uniforms: {
+        dimensions: { value: new Vector2() },
+      },
+    })
+  }
+
+  private visualmesh = createTransformer((mesh: VisualMesh) => {
+    const material = this.meshMaterial.clone()
+    material.uniforms.dimensions.value = new Vector2(this.model.image!.width, this.model.image!.height)
+    const lines = new LineSegments(this.meshGeometry(mesh), material)
+    lines.frustumCulled = false
+    return lines
+  })
 
   @computed
   private get quadGeometry(): BufferGeometry {
@@ -158,13 +212,18 @@ export class CameraViewModel {
     // This does not recompile the shader so we are fine
     const shader = this.worldLineShader.clone()
 
-    shader.uniforms.viewSize = { value: new Vector2(this.viewWidth, this.viewHeight) }
-    shader.uniforms.focalLength = { value: this.model.image!.lens.focalLength }
-    shader.uniforms.axis = { value: axis }
-    shader.uniforms.start = { value: start }
-    shader.uniforms.end = { value: end }
-    shader.uniforms.colour = { value: colour }
-    shader.uniforms.lineWidth = { value: lineWidth }
+    const { centre, focalLength, projection } = this.model.image!.lens
+    shader.uniforms = {
+      viewSize: { value: new Vector2(this.viewWidth, this.viewHeight) },
+      focalLength: { value: focalLength },
+      centre: { value: new Vector2(centre.x, centre.y) },
+      projection: { value: projection },
+      axis: { value: axis },
+      start: { value: start },
+      end: { value: end },
+      colour: { value: colour },
+      lineWidth: { value: lineWidth },
+    }
 
     return new Mesh(this.quadGeometry, shader)
   }
@@ -242,13 +301,39 @@ export class CameraViewModel {
     })
   })
 
-  private direction = createTransformer((m: Matrix4Model) => {
-    return this.makePlaneSegment({
+  private compass = createTransformer((m: Matrix4Model) => {
+
+    const o3d = new Object3D()
+
+    o3d.add(this.makePlaneSegment({
       start: new Vector3(m.x.x, m.x.y, m.x.z),
       end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
-      colour: new Vector4(0.7, 0.7, 0.7, 0.5),
+      colour: new Vector4(1, 0, 0, 0.5),
       lineWidth: 5,
-    })
+    }))
+
+    o3d.add(this.makePlaneSegment({
+      start: new Vector3(-m.x.x, -m.x.y, -m.x.z),
+      end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
+      colour: new Vector4(0, 1, 1, 0.5),
+      lineWidth: 5,
+    }))
+
+    o3d.add(this.makePlaneSegment({
+      start: new Vector3(m.y.x, m.y.y, m.y.z),
+      end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
+      colour: new Vector4(0, 1, 0, 0.5),
+      lineWidth: 5,
+    }))
+
+    o3d.add(this.makePlaneSegment({
+      start: new Vector3(-m.y.x, -m.y.y, -m.y.z),
+      end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
+      colour: new Vector4(1, 0, 1, 0.5),
+      lineWidth: 5,
+    }))
+
+    return o3d
   })
 
   @computed

@@ -6,6 +6,7 @@ type Item<K, V> = { key: K, values: V[] }
  * Optionally can limit the queue capacity per key, favouring the newest entries and dropping the oldest ones.
  */
 export class LruPriorityQueue<K, V> {
+  private size: number = 0
   private readonly capacityPerKey?: number
   private readonly queue: Array<Item<K, V>> = []
   private readonly map: Map<K, Item<K, V>> = new Map()
@@ -23,17 +24,23 @@ export class LruPriorityQueue<K, V> {
     }
     if (this.capacityPerKey && item.values.length >= this.capacityPerKey) {
       item.values.shift()
+      this.size--
     }
     item.values.push(value)
+    this.size++
   }
 
   pop(): V | undefined {
+    if (!this.size) {
+      return
+    }
     /* tslint:disable-next-line prefer-for-of */
     for (let i = 0; i < this.queue.length; i++) {
       const item = this.queue.shift()!
       this.queue.push(item)
       const value = item.values.shift()
       if (value) {
+        this.size--
         return value
       }
     }

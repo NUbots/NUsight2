@@ -106,9 +106,8 @@ export class CameraViewModel {
     const Hwc = new Matrix4().getInverse(toThreeMatrix4(m.Hcw))
     const imageHcw = this.model.image ? toThreeMatrix4(this.model.image.Hcw) : new Matrix4()
     const Hcc = imageHcw.multiply(Hwc)
-    const v = new Vector3(m.cone.axis.x, m.cone.axis.y, m.cone.axis.z)
     return this.makeCone({
-      axis: v.applyMatrix4(Hcc),
+      axis: toThreeVector3(m.cone.axis).applyMatrix4(Hcc),
       gradient: m.cone.gradient,
       colour: new Vector4(0, 0, 1, 0.7),
       lineWidth: 10,

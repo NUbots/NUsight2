@@ -3,6 +3,11 @@ type Item<K, V> = {
   values: V[]
 }
 
+/**
+ * A priority queue which favours values whose keys are the least recently used (LRU).
+ *
+ * Optionally can limit the queue length per key, favouring the newest entries and dropping old ones.
+ */
 export class LruPriorityQueue<K, V> {
   private readonly limitPerKey?: number
   private readonly queue: Array<Item<K, V>> = []

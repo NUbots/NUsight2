@@ -3,6 +3,7 @@ import { observable } from 'mobx'
 import { Image } from '../../../image_decoder/image_decoder'
 import { Matrix4 } from '../../../math/matrix4'
 import { Vector2 } from '../../../math/vector2'
+import { Vector3 } from '../../../math/vector3'
 import { VisionRobotModel } from '../model'
 
 export interface VisualMesh {
@@ -20,9 +21,24 @@ export interface VisionImage extends Image {
   }
 }
 
-type CameraModelOpts = {
-  id: number
-  name: string
+export interface Ball {
+  readonly timestamp: number
+  Hcw: Matrix4
+  cone: {
+    axis: Vector3
+    gradient: number
+  }
+}
+
+export interface Goal {
+  readonly timestamp: number
+  Hcw: Matrix4
+  frustum: {
+    tl: Vector3
+    tr: Vector3
+    bl: Vector3
+    br: Vector3
+  }
 }
 
 export class CameraModel {
@@ -30,14 +46,23 @@ export class CameraModel {
 
   @observable.shallow visualmesh?: VisualMesh
   @observable.shallow image?: VisionImage
+  @observable.shallow balls: Ball[]
+  @observable.shallow goals: Goal[]
   @observable name: string
 
-  constructor(private model: VisionRobotModel, { id, name }: CameraModelOpts) {
+  constructor(private model: VisionRobotModel, { id, name, balls, goals }: {
+    id: number
+    name: string
+    balls: Ball[]
+    goals: Goal[]
+  }) {
     this.id = id
     this.name = name
+    this.balls = balls
+    this.goals = goals
   }
 
-  static of(model: VisionRobotModel, { id, name }: CameraModelOpts) {
-    return new CameraModel(model, { id, name })
+  static of(model: VisionRobotModel, { id, name }: { id: number, name: string }) {
+    return new CameraModel(model, { id, name, balls: [], goals: [] })
   }
 }

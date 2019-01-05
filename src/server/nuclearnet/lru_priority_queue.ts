@@ -25,14 +25,14 @@ export class LruPriorityQueue<K, V> {
     item.values.push(value)
   }
 
-  next(): { key: K, value: V } | undefined {
+  pop(): V | undefined {
     /* tslint:disable-next-line prefer-for-of */
     for (let i = 0; i < this.queue.length; i++) {
       const item = this.queue.shift()!
       this.queue.push(item)
-      const nextValue = item.values.shift()
-      if (nextValue) {
-        return { key: item.key, value: nextValue }
+      const value = item.values.shift()
+      if (value) {
+        return value
       }
     }
   }

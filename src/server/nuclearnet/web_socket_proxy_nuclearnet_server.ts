@@ -155,9 +155,9 @@ class PacketProcessor {
 
   private maybeSendNextPacket() {
     if (this.outgoingPackets < this.outgoingLimit) {
-      const next = this.queue.next()
+      const next = this.queue.pop()
       if (next) {
-        const { value: { event, packet } } = next
+        const { event, packet } = next
         let isDone = false
         const done = () => {
           if (!isDone) {

@@ -2,11 +2,11 @@ import { LruPriorityQueue } from '../lru_priority_queue'
 
 describe('LruPriorityQueue', () => {
   /** Fetch all remaining items in the queue, in priority order.  */
-  function all<K, V>(queue: LruPriorityQueue<K, V>): Array<{ key: K, value: V }> {
-    const items: Array<{ key: K, value: V }> = []
-    let item: { key: K, value: V } | undefined
+  function all<K, V>(queue: LruPriorityQueue<K, V>): V[] {
+    const items: V[] = []
+    let item: V | undefined
     /* tslint:disable-next-line no-conditional-assignment */
-    while ((item = queue.next())) {
+    while ((item = queue.pop())) {
       items.push(item)
     }
     return items

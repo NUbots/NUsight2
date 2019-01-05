@@ -20,14 +20,7 @@ describe('LruPriorityQueue', () => {
     queue.add('bar', 'bar_2')
     queue.add('baz', 'baz_1')
     queue.add('baz', 'baz_2')
-    expect(all(queue)).toEqual([
-      { key: 'foo', value: 'foo_1' },
-      { key: 'bar', value: 'bar_1' },
-      { key: 'baz', value: 'baz_1' },
-      { key: 'foo', value: 'foo_2' },
-      { key: 'bar', value: 'bar_2' },
-      { key: 'baz', value: 'baz_2' },
-    ])
+    expect(all(queue)).toEqual(['foo_1', 'bar_1', 'baz_1', 'foo_2', 'bar_2', 'baz_2'])
   })
 
   it('drops items when over limit', () => {
@@ -39,11 +32,6 @@ describe('LruPriorityQueue', () => {
     queue.add('bar', 'bar_1')
     queue.add('bar', 'bar_2')
     queue.add('bar', 'bar_3')
-    expect(all(queue)).toEqual([
-      { key: 'foo', value: 'foo_3' },
-      { key: 'bar', value: 'bar_2' },
-      { key: 'foo', value: 'foo_4' },
-      { key: 'bar', value: 'bar_3' },
-    ])
+    expect(all(queue)).toEqual(['foo_3', 'bar_2', 'foo_4', 'bar_3'])
   })
 })

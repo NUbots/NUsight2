@@ -1,5 +1,5 @@
 type Item<K, V> = {
-  type: K,
+  key: K,
   values: V[]
 }
 
@@ -12,17 +12,17 @@ export class LruPriorityQueue<K, V> {
     this.limitPerKey = limitPerKey
   }
 
-  add(k: K, v: V) {
-    let item = this.map.get(k)
+  add(key: K, value: V) {
+    let item = this.map.get(key)
     if (!item) {
-      item = { type: k, values: [] }
-      this.map.set(k, item)
+      item = { key, values: [] }
+      this.map.set(key, item)
       this.queue.push(item)
     }
     if (this.limitPerKey && item.values.length >= this.limitPerKey) {
       item.values.shift()
     }
-    item.values.push(v)
+    item.values.push(value)
   }
 
   next(): { key: K, value: V } | undefined {
@@ -32,7 +32,7 @@ export class LruPriorityQueue<K, V> {
       this.queue.push(item)
       const nextValue = item.values.shift()
       if (nextValue) {
-        return { key: item.type, value: nextValue }
+        return { key: item.key, value: nextValue }
       }
     }
   }

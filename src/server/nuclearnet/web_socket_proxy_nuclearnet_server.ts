@@ -128,7 +128,7 @@ class PacketProcessor {
     return new PacketProcessor(
       socket,
       NodeSystemClock,
-      new LruPriorityQueue({ limitPerKey: 2 }),
+      new LruPriorityQueue({ capacityPerKey: 2 }),
       { outgoingLimit: 10, timeout: 5 },
     )
   }

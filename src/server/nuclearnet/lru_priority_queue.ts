@@ -1,20 +1,17 @@
-type Item<K, V> = {
-  key: K,
-  values: V[]
-}
+type Item<K, V> = { key: K, values: V[] }
 
 /**
  * A priority queue which favours values whose keys are the least recently used (LRU).
  *
- * Optionally can limit the queue length per key, favouring the newest entries and dropping old ones.
+ * Optionally can limit the queue capacity per key, favouring the newest entries and dropping the oldest ones.
  */
 export class LruPriorityQueue<K, V> {
-  private readonly limitPerKey?: number
+  private readonly capacityPerKey?: number
   private readonly queue: Array<Item<K, V>> = []
   private readonly map: Map<K, Item<K, V>> = new Map()
 
-  constructor({ limitPerKey }: { limitPerKey?: number } = {}) {
-    this.limitPerKey = limitPerKey
+  constructor({ capacityPerKey }: { capacityPerKey?: number } = {}) {
+    this.capacityPerKey = capacityPerKey
   }
 
   add(key: K, value: V) {
@@ -24,7 +21,7 @@ export class LruPriorityQueue<K, V> {
       this.map.set(key, item)
       this.queue.push(item)
     }
-    if (this.limitPerKey && item.values.length >= this.limitPerKey) {
+    if (this.capacityPerKey && item.values.length >= this.capacityPerKey) {
       item.values.shift()
     }
     item.values.push(value)

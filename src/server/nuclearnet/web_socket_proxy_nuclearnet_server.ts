@@ -135,22 +135,14 @@ class PacketProcessor {
 
   onPacket(event: string, packet: NUClearNetPacket) {
     if (packet.reliable) {
-      this.sendReliablePacket(event, packet)
+      // Always send reliable packets
+      this.socket.send(event, packet)
     } else {
-      this.sendUnreliablePacket(event, packet)
+      // Throttle unreliable packets so that we do not overwhelm the client with traffic.
+      const key = `${event}:${packet.peer.name}:${packet.peer.address}:${packet.peer.port}`
+      this.queue.add(key, { event, packet })
+      this.maybeSendNextPacket()
     }
-  }
-
-  private sendReliablePacket(event: string, packet: NUClearNetPacket) {
-    // Always send reliable packets
-    this.socket.send(event, packet)
-  }
-
-  private sendUnreliablePacket(event: string, packet: NUClearNetPacket) {
-    // Throttle unreliable packets so that we do not overwhelm the client with traffic.
-    const key = `${event}:${packet.peer.name}:${packet.peer.address}:${packet.peer.port}`
-    this.queue.add(key, { event, packet })
-    this.maybeSendNextPacket()
   }
 
   private maybeSendNextPacket() {

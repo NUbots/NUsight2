@@ -5,9 +5,8 @@ type Item<K, V> = {
 
 export class LruPriorityQueue<K, V> {
   private readonly limitPerKey?: number
-
-  queue: Array<Item<K, V>> = []
-  map: Map<K, Item<K, V>> = new Map()
+  private readonly queue: Array<Item<K, V>> = []
+  private readonly map: Map<K, Item<K, V>> = new Map()
 
   constructor({ limitPerKey }: { limitPerKey?: number } = {}) {
     this.limitPerKey = limitPerKey

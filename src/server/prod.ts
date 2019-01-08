@@ -10,6 +10,7 @@ import * as NUClearNetProxyParser from '../shared/nuclearnet/nuclearnet_proxy_pa
 import { ChartSimulator } from '../virtual_robots/simulators/chart_data_simulator'
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
 import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
+import { VisionSimulator } from '../virtual_robots/simulators/vision_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
 
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
@@ -23,7 +24,12 @@ const server = http.createServer(app)
 const sioNetwork = sio(server, { parser: NUClearNetProxyParser } as any)
 
 const root = `${__dirname}/../../dist`
-app.use(history())
+app.use(history({
+  rewrites: [
+    // Allows user to navigate to /storybook/ without needing to type /index.html
+    { from: /\/storybook\/$/, to: 'storybook/index.html' },
+  ],
+}))
 app.use(compression())
 app.use(express.static(root))
 app.use(favicon(`${__dirname}/../assets/favicon.ico`))
@@ -42,6 +48,7 @@ if (withVirtualRobots) {
       { frequency: 1, simulator: OverviewSimulator.of() },
       { frequency: 10, simulator: SensorDataSimulator.of() },
       { frequency: 10, simulator: ChartSimulator.of() },
+      { frequency: 5, simulator: VisionSimulator.of() },
     ],
   })
   virtualRobots.startSimulators()

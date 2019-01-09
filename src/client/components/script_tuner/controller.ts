@@ -33,13 +33,13 @@ export class ScriptTunerController {
   @action
   setPlayTime(time: number) {
     this.model.currentTime = Math.min(Math.max(time, this.model.startTime), this.model.endTime)
-    this.model.playStart = Date.now()
+    this.model.playStartedAt = Date.now()
   }
 
   @action
   togglePlayback(isPlaying: boolean = !this.model.isPlaying) {
     if (isPlaying) {
-      this.model.playStart = Date.now()
+      this.model.playStartedAt = Date.now()
     } else {
       this.model.currentTime = this.model.playTime
     }

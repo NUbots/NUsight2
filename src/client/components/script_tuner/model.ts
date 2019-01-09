@@ -22,7 +22,7 @@ export class ScriptTunerModel {
   @observable servos: Servo[]
   @observable isPlaying = false
   @observable currentTime = 0
-  @observable playStart = 0
+  @observable playStartedAt = 0
 
   constructor(robotModels: RobotModel[]) {
     this.robotModels = robotModels
@@ -50,7 +50,7 @@ export class ScriptTunerModel {
   @computed
   get playTime() {
     const time = this.isPlaying
-      ? this.currentTime + (now('frame') - this.playStart) / 1000
+      ? this.currentTime + (now('frame') - this.playStartedAt) / 1000
       : this.currentTime
 
     return time >= this.endTime ? this.endTime : time

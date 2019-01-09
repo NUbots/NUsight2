@@ -21,7 +21,7 @@ export type ScriptTunerProps = {
 export const ScriptTuner = observer(({ controller, menu, model, network }: ScriptTunerProps) => {
   return (
     <div className={style.container}>
-      <Viewer className={style.viewer} />
+      <Viewer className={style.viewer} model={model} />
       <Balance className={style.balance} />
       <Controls className={style.controls} />
       <Editor className={style.editor} controller={controller} model={model} />

@@ -2,6 +2,7 @@ import { computed } from 'mobx'
 import { observable } from 'mobx'
 import { now } from 'mobx-utils'
 
+import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
 
 export interface Servo {

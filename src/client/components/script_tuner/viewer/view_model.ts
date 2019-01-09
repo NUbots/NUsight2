@@ -21,6 +21,8 @@ export class ViewerViewModel {
 
       if (rightFrame === servo.frames.length) {
         return [time, servo.frames[rightFrame - 1].angle]
+      } else if (rightFrame === 0) {
+        return [time, servo.frames[0].angle]
       }
 
       const leftFrame = rightFrame - 1

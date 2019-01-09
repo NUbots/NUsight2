@@ -24,7 +24,7 @@ export const Viewer = observer(({ className, model }: ViewerProps) => {
       <div>Time: { model.currentTime }</div>
       <div>{ model.isPlaying ? 'Playing' : 'Paused' }</div>
       <ol>
-        { viewModel.servos.map(servo => <li>
+        { viewModel.servos.map((servo, index) => <li key={index}>
             { '[' + servo[0] + ', ' + servo[1] + ']' }
           </li>)
         }

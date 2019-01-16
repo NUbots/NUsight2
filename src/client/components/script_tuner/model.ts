@@ -3,9 +3,11 @@ import { observable } from 'mobx'
 import { now } from 'mobx-utils'
 
 import { AppModel } from '../app/model'
+import { LocalisationRobotModel } from '../localisation/darwin_robot/model'
 import { RobotModel } from '../robot/model'
 
 export interface Servo {
+  name: string
   frames: Frame[]
 }
 
@@ -20,18 +22,36 @@ export interface Frame {
 
 export class ScriptTunerModel {
   @observable private robotModels: RobotModel[]
+  @observable currentRobot: RobotModel
+  @observable currentRobotModel: LocalisationRobotModel
   @observable servos: Servo[]
   @observable isPlaying = false
   @observable currentTime = 0
   @observable playStartedAt = 0
 
   constructor(robotModels: RobotModel[]) {
-    this.robotModels = robotModels
-    this.servos = [
-      this.makeSampleServo(60),
-      this.makeSampleServo(60),
-      this.makeSampleServo(60),
+    // this.robotModels = robotModels
+    this.robotModels = [
+      RobotModel.of({
+        id: 'Darwin #1',
+        connected: true,
+        enabled: true,
+        name: 'Darwin #1',
+        address: '127.0.0.1',
+        port: 1234,
+      }),
     ]
+
+    this.currentRobot = this.robotModels[0]
+    this.currentRobotModel = LocalisationRobotModel.of(this.currentRobot)
+
+    this.servos = Object.keys(this.currentRobotModel.motors)
+      .map((key: string) => {
+        return {
+          name: key,
+          frames: this.makeSampleServo(60),
+        }
+      })
   }
 
   static of(robots: RobotModel[]): ScriptTunerModel {
@@ -70,7 +90,7 @@ export class ScriptTunerModel {
     return maxLength
   }
 
-  private makeSampleServo(length: number = 30): Servo {
+  private makeSampleServo(length: number = 30): Frame[] {
     const frames = []
     const period = 10
 
@@ -87,6 +107,6 @@ export class ScriptTunerModel {
       })
     }
 
-    return { frames }
+    return frames
   }
 }

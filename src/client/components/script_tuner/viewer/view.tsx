@@ -16,33 +16,28 @@ type ViewerProps = {
   model: ScriptTunerModel
 }
 
-export const Viewer = observer(({ className, model }: ViewerProps) => {
-  const viewModel = ViewerViewModel.of(model)
+@observer
+export class Viewer extends React.Component<ViewerProps> {
+  render() {
+    const { model, className } = this.props
+    const viewModel = ViewerViewModel.of(model)
 
-  const robotModel = RobotModel.of({
-    id: 'Darwin #1',
-    connected: true,
-    enabled: true,
-    name: 'Darwin #1',
-    address: '127.0.0.1',
-    port: 1234,
-  })
-  const darwinRobotModel = LocalisationRobotModel.of(robotModel)
-  const robotViewModel = RobotViewModel.of(darwinRobotModel)
+    // console.log('Robot Object3D', viewModel.robotViewModel.robot)
 
-  return <div className={classNames([className, style.viewer])}>
-    <div className={style.viewerHeader}>
-      <div className={style.viewerTitle}>Viewer</div>
-    </div>
+    return <div className={classNames([className, style.viewer])}>
+      <div className={style.viewerHeader}>
+        <div className={style.viewerTitle}>Viewer</div>
+      </div>
 
-    <div className={style.viewerBody}>
-      <ModelVisualiser model={robotViewModel.robot}/>
-      <div className={style.viewerHud}>
-        <div className={style.viewerHudItems}>
-          <span>{ model.isPlaying ? 'Playing' : 'Paused' }</span>
-          <span>Time: {(Math.round(model.playTime * 1000) / 1000).toFixed(3)}</span>
+      <div className={style.viewerBody}>
+        <ModelVisualiser model={viewModel.robotViewModel.robot}/>
+        <div className={style.viewerHud}>
+          <div className={style.viewerHudItems}>
+            <span>{ model.isPlaying ? 'Playing' : 'Paused' }</span>
+            <span>Time: {(Math.round(model.playTime * 1000) / 1000).toFixed(3)}</span>
+          </div>
         </div>
       </div>
     </div>
-   </div>
-})
+  }
+}

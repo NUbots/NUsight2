@@ -29,6 +29,11 @@ export class LineEditorViewModel {
   })
 
   @computed
+  get servoName() {
+    return this.servo.name
+  }
+
+  @computed
   get cellWidth() {
     return this.editorViewModel.cellWidth * this.editorViewModel.scaleX
   }

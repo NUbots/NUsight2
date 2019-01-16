@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction } from 'mobx'
+import { action, autorun, computed, observable } from 'mobx'
 import { Component } from 'react'
 import * as React from 'react'
 import ReactResizeDetector from 'react-resize-detector'
@@ -18,8 +18,6 @@ import { CircleGeometry } from 'three'
 import * as styles from './styles.css'
 
 export class ModelVisualiser extends Component<{ model: Object3D }> {
-  private dispose?: () => void
-
   @observable.ref
   private canvas: HTMLCanvasElement | null = null
 
@@ -29,18 +27,22 @@ export class ModelVisualiser extends Component<{ model: Object3D }> {
   @observable.ref
   private height?: number
 
+  private scene?: Scene
+  private renderer?: WebGLRenderer
+  private destroy?: () => void
+
   componentDidMount() {
-    const renderer = new WebGLRenderer({ canvas: this.canvas!, antialias: true })
-    renderer.setClearColor('white')
-    this.dispose = reaction(
-      () => ({ scene: this.scene, camera: this.camera, size: { width: this.width, height: this.height } }),
-      ({ scene, camera, size }) => this.renderScene(renderer, scene, camera, size),
-      { fireImmediately: true },
-    )
+    this.renderer = new WebGLRenderer({ canvas: this.canvas!, antialias: true })
+    this.renderer.setClearColor('white')
+    this.destroy = autorun(this.renderScene, { scheduler: requestAnimationFrame });
+
+    // A temporary global reference so we can call .renderScene manually
+    // Change the time and run `component.renderScene()` in the console to see.
+    (window as any).component = this
   }
 
   componentWillUnmount() {
-    this.dispose && this.dispose()
+    this.destroy && this.destroy()
   }
 
   render() {
@@ -57,14 +59,24 @@ export class ModelVisualiser extends Component<{ model: Object3D }> {
     this.height = height
   }
 
-  private renderScene(
-    renderer: WebGLRenderer,
-    scene: Scene,
-    camera: Camera,
-    size: { width?: number, height?: number },
-  ) {
-    size.width && size.height && renderer.setSize(size.width, size.height, false)
-    renderer.render(scene, camera)
+  private renderScene = () => {
+    // console.log('rendering', this.width, this.height, this.props.model)
+
+    if (this.renderer) {
+      this.width && this.height && this.renderer.setSize(this.width, this.height, false)
+      this.renderer.render(this.getScene(), this.camera)
+    }
+  }
+
+  getScene(): Scene {
+    const scene = this.scene || new Scene()
+    scene.remove(...scene.children)
+    scene.add(this.floor)
+    scene.add(this.props.model)
+    scene.add(this.helper)
+    scene.add(this.light)
+    scene.add(this.light2)
+    return scene
   }
 
   @computed
@@ -75,17 +87,6 @@ export class ModelVisualiser extends Component<{ model: Object3D }> {
     camera.up.set(0, 0, 1)
     camera.lookAt(0, 0, 0)
     return camera
-  }
-
-  @computed
-  private get scene() {
-    const scene = new Scene()
-    scene.add(this.floor)
-    scene.add(this.props.model)
-    scene.add(this.helper)
-    scene.add(this.light)
-    scene.add(this.light2)
-    return scene
   }
 
   @computed

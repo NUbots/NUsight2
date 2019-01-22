@@ -2,7 +2,6 @@ import { action, autorun, computed, observable } from 'mobx'
 import { Component } from 'react'
 import * as React from 'react'
 import ReactResizeDetector from 'react-resize-detector'
-import { Object3D } from 'three'
 import { AxesHelper } from 'three'
 import { Box3 } from 'three'
 import { Camera } from 'three'
@@ -15,9 +14,11 @@ import { Scene } from 'three'
 import { SpotLight } from 'three'
 import { CircleGeometry } from 'three'
 
+import { createRobot } from './darwin_robot/view_model'
+import { Robot3dViewModel } from './model'
 import * as styles from './styles.css'
 
-export class ModelVisualiser extends Component<{ model: Object3D }> {
+export class ModelVisualiser extends Component<{ viewModel: Robot3dViewModel }> {
   @observable.ref
   private canvas: HTMLCanvasElement | null = null
 
@@ -34,11 +35,7 @@ export class ModelVisualiser extends Component<{ model: Object3D }> {
   componentDidMount() {
     this.renderer = new WebGLRenderer({ canvas: this.canvas!, antialias: true })
     this.renderer.setClearColor('white')
-    this.destroy = autorun(this.renderScene, { scheduler: requestAnimationFrame });
-
-    // A temporary global reference so we can call .renderScene manually
-    // Change the time and run `component.renderScene()` in the console to see.
-    (window as any).component = this
+    this.destroy = autorun(this.renderScene, { scheduler: requestAnimationFrame })
   }
 
   componentWillUnmount() {
@@ -60,23 +57,26 @@ export class ModelVisualiser extends Component<{ model: Object3D }> {
   }
 
   private renderScene = () => {
-    // console.log('rendering', this.width, this.height, this.props.model)
-
     if (this.renderer) {
       this.width && this.height && this.renderer.setSize(this.width, this.height, false)
       this.renderer.render(this.getScene(), this.camera)
     }
   }
 
-  getScene(): Scene {
+  getScene() {
     const scene = this.scene || new Scene()
     scene.remove(...scene.children)
     scene.add(this.floor)
-    scene.add(this.props.model)
+    scene.add(this.robot)
     scene.add(this.helper)
     scene.add(this.light)
     scene.add(this.light2)
     return scene
+  }
+
+  @computed
+  get robot() {
+    return createRobot(this.props.viewModel)
   }
 
   @computed
@@ -96,12 +96,14 @@ export class ModelVisualiser extends Component<{ model: Object3D }> {
 
   @computed
   private get floor() {
-    const bbox = new Box3().setFromObject(this.props.model)
+    const bbox = new Box3().setFromObject(this.robot)
     const radius = Math.max(bbox.max.x - bbox.min.x, bbox.max.y - bbox.min.y)
-    const geom = new CircleGeometry(radius * 0.75, 80)
-    const mat = new MeshPhongMaterial({ color: '#888', specular: 1 })
-    const mesh = new Mesh(geom, mat)
+    const geometry = new CircleGeometry(radius * 0.75, 80)
+    const material = new MeshPhongMaterial({ color: '#888', specular: 1 })
+    const mesh = new Mesh(geometry, material)
+
     mesh.position.set(0, 0, bbox.min.z)
+
     return mesh
   }
 

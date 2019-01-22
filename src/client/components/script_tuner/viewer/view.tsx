@@ -2,14 +2,11 @@ import * as classNames from 'classnames'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 
-import { LocalisationRobotModel } from '../../localisation/darwin_robot/model'
-import { RobotViewModel } from '../../localisation/darwin_robot/view_model'
-import { RobotModel } from '../../robot/model'
 import { ScriptTunerModel } from '../model'
+import { ModelVisualiser } from '../model_visualiser/view'
 
-import { ModelVisualiser } from './model_visualiser/view'
 import * as style from './style.css'
-import { ViewerViewModel } from './view_model'
+import { ScriptRobot3dViewModel } from './view_model'
 
 type ViewerProps = {
   className?: string
@@ -20,9 +17,7 @@ type ViewerProps = {
 export class Viewer extends React.Component<ViewerProps> {
   render() {
     const { model, className } = this.props
-    const viewModel = ViewerViewModel.of(model)
-
-    // console.log('Robot Object3D', viewModel.robotViewModel.robot)
+    const viewModel = ScriptRobot3dViewModel.of(model)
 
     return <div className={classNames([className, style.viewer])}>
       <div className={style.viewerHeader}>
@@ -30,7 +25,7 @@ export class Viewer extends React.Component<ViewerProps> {
       </div>
 
       <div className={style.viewerBody}>
-        <ModelVisualiser model={viewModel.robotViewModel.robot}/>
+        <ModelVisualiser viewModel={viewModel}/>
         <div className={style.viewerHud}>
           <div className={style.viewerHudItems}>
             <span>{ model.isPlaying ? 'Playing' : 'Paused' }</span>

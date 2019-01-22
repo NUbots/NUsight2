@@ -3,7 +3,6 @@ import { observable } from 'mobx'
 import { now } from 'mobx-utils'
 
 import { AppModel } from '../app/model'
-import { LocalisationRobotModel } from '../localisation/darwin_robot/model'
 import { RobotModel } from '../robot/model'
 
 export interface Servo {
@@ -21,37 +20,24 @@ export interface Frame {
 }
 
 export class ScriptTunerModel {
-  @observable private robotModels: RobotModel[]
-  @observable currentRobot: RobotModel
-  @observable currentRobotModel: LocalisationRobotModel
+  @observable robot: RobotModel
   @observable servos: Servo[]
   @observable isPlaying = false
   @observable currentTime = 0
   @observable playStartedAt = 0
 
   constructor(robotModels: RobotModel[]) {
-    // this.robotModels = robotModels
-    this.robotModels = [
-      RobotModel.of({
-        id: 'Darwin #1',
-        connected: true,
-        enabled: true,
-        name: 'Darwin #1',
-        address: '127.0.0.1',
-        port: 1234,
-      }),
-    ]
+    this.robot = RobotModel.of({
+      id: 'Darwin #1',
+      connected: true,
+      enabled: true,
+      name: 'Darwin #1',
+      address: '127.0.0.1',
+      port: 1234,
+    })
 
-    this.currentRobot = this.robotModels[0]
-    this.currentRobotModel = LocalisationRobotModel.of(this.currentRobot)
-
-    this.servos = Object.keys(this.currentRobotModel.motors)
-      .map((key: string) => {
-        return {
-          name: key,
-          frames: this.makeSampleServo(60),
-        }
-      })
+    // These will come (perhaps over the network) from the selected robot
+    this.servos = this.makeSampleServos()
   }
 
   static of(robots: RobotModel[]): ScriptTunerModel {
@@ -90,7 +76,32 @@ export class ScriptTunerModel {
     return maxLength
   }
 
-  private makeSampleServo(length: number = 30): Frame[] {
+  private makeSampleServos(): Servo[] {
+    return [
+      'rightShoulderPitch',
+      'leftShoulderPitch',
+      'rightShoulderRoll',
+      'leftShoulderRoll',
+      'rightElbow',
+      'leftElbow',
+      'rightHipYaw',
+      'leftHipYaw',
+      'rightHipRoll',
+      'leftHipRoll',
+      'rightHipPitch',
+      'leftHipPitch',
+      'rightKnee',
+      'leftKnee',
+      'rightAnklePitch',
+      'leftAnklePitch',
+      'rightAnkleRoll',
+      'leftAnkleRoll',
+      'headPan',
+      'headTilt',
+    ].map(name => this.makeSampleServo(name, 60))
+  }
+
+  private makeSampleServo(name: string, length: number = 30): Servo {
     const frames = []
     const period = 10
 
@@ -107,6 +118,6 @@ export class ScriptTunerModel {
       })
     }
 
-    return frames
+    return { name, frames }
   }
 }

@@ -19,7 +19,7 @@ export interface Frame {
   torque: number,
 }
 
-import * as sampleScriptJson from './script_converter/converted.json'
+import * as sampleScriptJson from './sample-script.json'
 
 const sampleScript = sampleScriptJson as { [key: string]: Servo }
 

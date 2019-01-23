@@ -105,7 +105,7 @@ export class LineEditor extends Component<LineEditorProps> {
           })
         }
 
-      { /* The current play position indicator */ }
+        { /* The current play position indicator */ }
         <line
           stroke='#1565C0'
           strokeWidth='2'
@@ -152,7 +152,8 @@ export class LineEditor extends Component<LineEditorProps> {
   }
 
   private onMouseDown = ({ nativeEvent: event }: React.MouseEvent, viewModel: LineEditorViewModel) => {
-    if ((event.target as HTMLElement).dataset.draggable) {
+    const leftMouseButton = 0
+    if (event.button === leftMouseButton && (event.target as HTMLElement).dataset.draggable) {
       this.selectedElement = (event.target as HTMLElement)
     }
   }

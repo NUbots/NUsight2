@@ -19,6 +19,10 @@ export interface Frame {
   torque: number,
 }
 
+import * as sampleScriptJson from './script_converter/converted.json'
+
+const sampleScript = sampleScriptJson as { [key: string]: Servo }
+
 export class ScriptTunerModel {
   @observable robot: RobotModel
   @observable servos: Servo[]
@@ -98,10 +102,16 @@ export class ScriptTunerModel {
       'LEFT_ANKLE_ROLL',
       'HEAD_YAW',
       'HEAD_PITCH',
-    ].map(name => this.makeSampleServo(name, 60))
+    ].map(name => {
+      if (sampleScript[name]) {
+        return sampleScript[name]
+      }
+
+      return this.makeSampleServo(name, 5, 0)
+    })
   }
 
-  private makeSampleServo(name: string, length: number = 30): Servo {
+  private makeSampleServo(name: string, length: number = 30, angle?: number): Servo {
     const frames = []
     const period = 10
 
@@ -110,7 +120,7 @@ export class ScriptTunerModel {
 
       frames.push({
         time: i,
-        angle: 2 * Math.sin(theta),
+        angle: angle !== undefined ? angle : 2 * Math.sin(theta),
         pGain: 0,
         iGain: 0,
         dGain: 0,

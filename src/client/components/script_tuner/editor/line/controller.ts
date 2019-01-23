@@ -1,6 +1,7 @@
+import * as bounds from 'binary-search-bounds'
 import { action } from 'mobx'
 
-import { ScriptTunerModel, Servo } from '../../model'
+import { Frame, ScriptTunerModel, Servo } from '../../model'
 
 export class LineEditorController {
   constructor(private model: Servo) {
@@ -13,17 +14,22 @@ export class LineEditorController {
 
   @action
   addFrame = (data: { time: number, angle: number }) => {
-    this.model.frames.push({
+    const frame = {
       time: data.time,
       angle: data.angle,
       pGain: 0,
       iGain: 0,
       dGain: 0,
       torque: 0,
-    })
+    }
 
-    // Perserve the sorting by time. Array replaced as MobX's sort() is not in-place.
-    this.model.frames = this.model.frames.slice().sort((a, b) => a.time - b.time)
+    const index = findNextIndexForTime(data.time, this.model.frames)
+
+    if (index > 0) {
+      this.model.frames.splice(index, 0, frame)
+    } else {
+      this.model.frames.unshift(frame)
+    }
   }
 
   @action
@@ -36,4 +42,10 @@ export class LineEditorController {
   removeFrame = (frameIndex: number) => {
     this.model.frames.splice(frameIndex, 1)
   }
+}
+
+function findNextIndexForTime(time: number, frames: Frame[]) {
+  return bounds.gt(frames, frames[0], (frame: Frame) => {
+    return frame.time - time
+  })
 }

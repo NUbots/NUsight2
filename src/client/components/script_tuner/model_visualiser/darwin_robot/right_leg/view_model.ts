@@ -23,7 +23,7 @@ const createRightPelvisY = createTransformer((viewModel: Robot3dViewModel) => {
   const { geometry, materials } = geometryAndMaterial(RightPelvisYConfig, viewModel.color)
   const mesh = new Mesh(geometry, materials)
   mesh.position.set(-0.037, -0.1222, -0.005)
-  mesh.rotation.set(0, viewModel.rightHipYaw, 0)
+  mesh.rotation.set(0, viewModel.RIGHT_HIP_YAW, 0)
   mesh.add(createRightPelvis(viewModel))
   return mesh
 })
@@ -31,7 +31,7 @@ const createRightPelvisY = createTransformer((viewModel: Robot3dViewModel) => {
 const createRightPelvis = createTransformer((viewModel: Robot3dViewModel) => {
   const { geometry, materials } = geometryAndMaterial(RightPelvisConfig, viewModel.color)
   const mesh = new Mesh(geometry, materials)
-  mesh.rotation.set(0, 0, viewModel.rightHipRoll)
+  mesh.rotation.set(0, 0, viewModel.RIGHT_HIP_ROLL)
   mesh.add(createRightUpperLeg(viewModel))
   return mesh
 })
@@ -39,7 +39,7 @@ const createRightPelvis = createTransformer((viewModel: Robot3dViewModel) => {
 const createRightUpperLeg = createTransformer((viewModel: Robot3dViewModel) => {
   const { geometry, materials } = geometryAndMaterial(RightUpperLegConfig, viewModel.color)
   const mesh = new Mesh(geometry, materials)
-  mesh.rotation.set(viewModel.rightHipPitch, 0, 0)
+  mesh.rotation.set(viewModel.RIGHT_HIP_PITCH, 0, 0)
   mesh.add(createRightLowerLeg(viewModel))
   return mesh
 })
@@ -48,7 +48,7 @@ const createRightLowerLeg = createTransformer((viewModel: Robot3dViewModel) => {
   const { geometry, materials } = geometryAndMaterial(RightLowerLegConfig, viewModel.color)
   const mesh = new Mesh(geometry, materials)
   mesh.position.set(0, -0.093, 0)
-  mesh.rotation.set(viewModel.rightKnee, 0, 0)
+  mesh.rotation.set(viewModel.RIGHT_KNEE, 0, 0)
   mesh.add(createRightAnkle(viewModel))
   return mesh
 })
@@ -57,7 +57,7 @@ const createRightAnkle = createTransformer((viewModel: Robot3dViewModel) => {
   const { geometry, materials } = geometryAndMaterial(RightAnkleConfig, viewModel.color)
   const mesh = new Mesh(geometry, materials)
   mesh.position.set(0, -0.093, 0)
-  mesh.rotation.set(viewModel.rightAnklePitch, 0, 0)
+  mesh.rotation.set(viewModel.RIGHT_ANKLE_PITCH, 0, 0)
   mesh.add(createRightFoot(viewModel))
   return mesh
 })
@@ -65,6 +65,6 @@ const createRightAnkle = createTransformer((viewModel: Robot3dViewModel) => {
 const createRightFoot = createTransformer((viewModel: Robot3dViewModel) => {
   const { geometry, materials } = geometryAndMaterial(RightFootConfig, viewModel.color)
   const mesh = new Mesh(geometry, materials)
-  mesh.rotation.set(0, 0, viewModel.rightAnkleRoll)
+  mesh.rotation.set(0, 0, viewModel.RIGHT_ANKLE_ROLL)
   return mesh
 })

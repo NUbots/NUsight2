@@ -20,7 +20,7 @@ const createRightShoulder = createTransformer((viewModel: Robot3dViewModel) => {
   const { geometry, materials } = geometryAndMaterial(RightShoulderConfig, viewModel.color)
   const mesh = new Mesh(geometry, materials)
   mesh.position.set(-0.082, 0, 0)
-  mesh.rotation.set(viewModel.rightShoulderPitch - Math.PI / 2, 0, 0)
+  mesh.rotation.set(viewModel.RIGHT_SHOULDER_PITCH - Math.PI / 2, 0, 0)
   mesh.add(createRightUpperArm(viewModel))
   return mesh
 })
@@ -29,7 +29,7 @@ const createRightUpperArm = createTransformer((viewModel: Robot3dViewModel) => {
   const { geometry, materials } = geometryAndMaterial(RightUpperArmConfig, viewModel.color)
   const mesh = new Mesh(geometry, materials)
   mesh.position.set(0, -0.016, 0)
-  mesh.rotation.set(0, 0, viewModel.rightShoulderRoll)
+  mesh.rotation.set(0, 0, viewModel.RIGHT_SHOULDER_ROLL)
   mesh.add(createRightLowerArm(viewModel))
   return mesh
 })
@@ -38,6 +38,6 @@ const createRightLowerArm = createTransformer((viewModel: Robot3dViewModel) => {
   const { geometry, materials } = geometryAndMaterial(RightLowerArmConfig, viewModel.color)
   const mesh = new Mesh(geometry, materials)
   mesh.position.set(0, -0.06, 0.016)
-  mesh.rotation.set(viewModel.rightElbow, 0, 0)
+  mesh.rotation.set(viewModel.RIGHT_ELBOW, 0, 0)
   return mesh
 })

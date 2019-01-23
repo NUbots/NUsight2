@@ -40,7 +40,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get rightShoulderPitch() {
+  get RIGHT_SHOULDER_PITCH() {
     const servo = this.model.servos[0]
 
     if (servo.frames.length) {
@@ -51,7 +51,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get leftShoulderPitch() {
+  get LEFT_SHOULDER_PITCH() {
     const servo = this.model.servos[1]
 
     if (servo.frames.length) {
@@ -62,7 +62,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get rightShoulderRoll() {
+  get RIGHT_SHOULDER_ROLL() {
     const servo = this.model.servos[2]
 
     if (servo.frames.length) {
@@ -73,7 +73,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get leftShoulderRoll() {
+  get LEFT_SHOULDER_ROLL() {
     const servo = this.model.servos[3]
 
     if (servo.frames.length) {
@@ -84,7 +84,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get rightElbow() {
+  get RIGHT_ELBOW() {
     const servo = this.model.servos[4]
 
     if (servo.frames.length) {
@@ -95,7 +95,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get leftElbow() {
+  get LEFT_ELBOW() {
     const servo = this.model.servos[5]
 
     if (servo.frames.length) {
@@ -106,7 +106,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get rightHipYaw() {
+  get RIGHT_HIP_YAW() {
     const servo = this.model.servos[6]
 
     if (servo.frames.length) {
@@ -117,7 +117,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get leftHipYaw() {
+  get LEFT_HIP_YAW() {
     const servo = this.model.servos[7]
 
     if (servo.frames.length) {
@@ -128,7 +128,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get rightHipRoll() {
+  get RIGHT_HIP_ROLL() {
     const servo = this.model.servos[8]
 
     if (servo.frames.length) {
@@ -139,7 +139,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get leftHipRoll() {
+  get LEFT_HIP_ROLL() {
     const servo = this.model.servos[9]
 
     if (servo.frames.length) {
@@ -150,7 +150,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get rightHipPitch() {
+  get RIGHT_HIP_PITCH() {
     const servo = this.model.servos[10]
 
     if (servo.frames.length) {
@@ -161,7 +161,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get leftHipPitch() {
+  get LEFT_HIP_PITCH() {
     const servo = this.model.servos[11]
 
     if (servo.frames.length) {
@@ -172,7 +172,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get rightKnee() {
+  get RIGHT_KNEE() {
     const servo = this.model.servos[12]
 
     if (servo.frames.length) {
@@ -183,7 +183,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get leftKnee() {
+  get LEFT_KNEE() {
     const servo = this.model.servos[13]
 
     if (servo.frames.length) {
@@ -194,7 +194,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get rightAnklePitch() {
+  get RIGHT_ANKLE_PITCH() {
     const servo = this.model.servos[14]
 
     if (servo.frames.length) {
@@ -205,7 +205,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get leftAnklePitch() {
+  get LEFT_ANKLE_PITCH() {
     const servo = this.model.servos[15]
 
     if (servo.frames.length) {
@@ -216,7 +216,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get rightAnkleRoll() {
+  get RIGHT_ANKLE_ROLL() {
     const servo = this.model.servos[16]
 
     if (servo.frames.length) {
@@ -227,7 +227,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get leftAnkleRoll() {
+  get LEFT_ANKLE_ROLL() {
     const servo = this.model.servos[17]
 
     if (servo.frames.length) {
@@ -238,7 +238,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get headPan() {
+  get HEAD_YAW() {
     const servo = this.model.servos[18]
 
     if (servo.frames.length) {
@@ -249,7 +249,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
   }
 
   @computed
-  get headTilt() {
+  get HEAD_PITCH() {
     const servo = this.model.servos[19]
 
     if (servo.frames.length) {

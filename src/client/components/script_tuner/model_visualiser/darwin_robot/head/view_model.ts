@@ -22,7 +22,7 @@ const createNeck = createTransformer((viewModel: Robot3dViewModel) => {
   const mesh = new Mesh(geometry, materials)
 
   mesh.position.set(0, 0.051, 0)
-  mesh.rotation.set(0, viewModel.headPan, 0)
+  mesh.rotation.set(0, viewModel.HEAD_YAW, 0)
   mesh.add(createSkull(viewModel))
 
   return mesh
@@ -32,7 +32,7 @@ const createSkull = createTransformer((viewModel: Robot3dViewModel) => {
   const { geometry, materials } = geometryAndMaterial(HeadConfig, viewModel.color)
   const mesh = new Mesh(geometry, materials)
 
-  mesh.rotation.set(viewModel.headTilt, 0, 0)
+  mesh.rotation.set(viewModel.HEAD_PITCH, 0, 0)
   mesh.add(createHeadLED(viewModel.color))
   mesh.add(createEyeLED(viewModel.color))
   mesh.add(createCamera(viewModel.color))

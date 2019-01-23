@@ -41,222 +41,142 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
 
   @computed
   get RIGHT_SHOULDER_PITCH() {
-    const servo = this.model.servos[0]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[0].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[0].frames)
+      : 0
   }
 
   @computed
   get LEFT_SHOULDER_PITCH() {
-    const servo = this.model.servos[1]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[1].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[1].frames)
+      : 0
   }
 
   @computed
   get RIGHT_SHOULDER_ROLL() {
-    const servo = this.model.servos[2]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[2].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[2].frames)
+      : 0
   }
 
   @computed
   get LEFT_SHOULDER_ROLL() {
-    const servo = this.model.servos[3]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[3].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[3].frames)
+      : 0
   }
 
   @computed
   get RIGHT_ELBOW() {
-    const servo = this.model.servos[4]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[4].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[4].frames)
+      : 0
   }
 
   @computed
   get LEFT_ELBOW() {
-    const servo = this.model.servos[5]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[5].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[5].frames)
+      : 0
   }
 
   @computed
   get RIGHT_HIP_YAW() {
-    const servo = this.model.servos[6]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[6].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[6].frames)
+      : 0
   }
 
   @computed
   get LEFT_HIP_YAW() {
-    const servo = this.model.servos[7]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[7].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[7].frames)
+      : 0
   }
 
   @computed
   get RIGHT_HIP_ROLL() {
-    const servo = this.model.servos[8]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[8].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[8].frames)
+      : 0
   }
 
   @computed
   get LEFT_HIP_ROLL() {
-    const servo = this.model.servos[9]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[9].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[9].frames)
+      : 0
   }
 
   @computed
   get RIGHT_HIP_PITCH() {
-    const servo = this.model.servos[10]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[10].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[10].frames)
+      : 0
   }
 
   @computed
   get LEFT_HIP_PITCH() {
-    const servo = this.model.servos[11]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[11].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[11].frames)
+      : 0
   }
 
   @computed
   get RIGHT_KNEE() {
-    const servo = this.model.servos[12]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[12].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[12].frames)
+      : 0
   }
 
   @computed
   get LEFT_KNEE() {
-    const servo = this.model.servos[13]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[13].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[13].frames)
+      : 0
   }
 
   @computed
   get RIGHT_ANKLE_PITCH() {
-    const servo = this.model.servos[14]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[14].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[14].frames)
+      : 0
   }
 
   @computed
   get LEFT_ANKLE_PITCH() {
-    const servo = this.model.servos[15]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[15].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[15].frames)
+      : 0
   }
 
   @computed
   get RIGHT_ANKLE_ROLL() {
-    const servo = this.model.servos[16]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[16].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[16].frames)
+      : 0
   }
 
   @computed
   get LEFT_ANKLE_ROLL() {
-    const servo = this.model.servos[17]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[17].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[17].frames)
+      : 0
   }
 
   @computed
   get HEAD_YAW() {
-    const servo = this.model.servos[18]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[18].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[18].frames)
+      : 0
   }
 
   @computed
   get HEAD_PITCH() {
-    const servo = this.model.servos[19]
-
-    if (servo.frames.length) {
-      return getAngleAtCurrentTime(this.model.playTime, servo.frames)
-    }
-
-    return 0
+    return this.model.servos[19].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, this.model.servos[19].frames)
+      : 0
   }
 }
 

@@ -1,6 +1,6 @@
 {
   "LEFT_HIP_YAW": {
-    "name": "LEFT_HIP_YAW",
+    "id": "LEFT_HIP_YAW",
     "frames": [
       {
         "time": 1,
@@ -53,7 +53,7 @@
     ]
   },
   "LEFT_HIP_ROLL": {
-    "name": "LEFT_HIP_ROLL",
+    "id": "LEFT_HIP_ROLL",
     "frames": [
       {
         "time": 1,
@@ -106,7 +106,7 @@
     ]
   },
   "LEFT_HIP_PITCH": {
-    "name": "LEFT_HIP_PITCH",
+    "id": "LEFT_HIP_PITCH",
     "frames": [
       {
         "time": 1,
@@ -159,7 +159,7 @@
     ]
   },
   "LEFT_KNEE": {
-    "name": "LEFT_KNEE",
+    "id": "LEFT_KNEE",
     "frames": [
       {
         "time": 1,
@@ -212,7 +212,7 @@
     ]
   },
   "LEFT_ANKLE_PITCH": {
-    "name": "LEFT_ANKLE_PITCH",
+    "id": "LEFT_ANKLE_PITCH",
     "frames": [
       {
         "time": 1,
@@ -265,7 +265,7 @@
     ]
   },
   "LEFT_ANKLE_ROLL": {
-    "name": "LEFT_ANKLE_ROLL",
+    "id": "LEFT_ANKLE_ROLL",
     "frames": [
       {
         "time": 1,
@@ -318,7 +318,7 @@
     ]
   },
   "RIGHT_HIP_YAW": {
-    "name": "RIGHT_HIP_YAW",
+    "id": "RIGHT_HIP_YAW",
     "frames": [
       {
         "time": 1,
@@ -371,7 +371,7 @@
     ]
   },
   "RIGHT_HIP_ROLL": {
-    "name": "RIGHT_HIP_ROLL",
+    "id": "RIGHT_HIP_ROLL",
     "frames": [
       {
         "time": 1,
@@ -424,7 +424,7 @@
     ]
   },
   "RIGHT_HIP_PITCH": {
-    "name": "RIGHT_HIP_PITCH",
+    "id": "RIGHT_HIP_PITCH",
     "frames": [
       {
         "time": 1,
@@ -477,7 +477,7 @@
     ]
   },
   "RIGHT_KNEE": {
-    "name": "RIGHT_KNEE",
+    "id": "RIGHT_KNEE",
     "frames": [
       {
         "time": 1,
@@ -530,7 +530,7 @@
     ]
   },
   "RIGHT_ANKLE_PITCH": {
-    "name": "RIGHT_ANKLE_PITCH",
+    "id": "RIGHT_ANKLE_PITCH",
     "frames": [
       {
         "time": 1,
@@ -583,7 +583,7 @@
     ]
   },
   "RIGHT_ANKLE_ROLL": {
-    "name": "RIGHT_ANKLE_ROLL",
+    "id": "RIGHT_ANKLE_ROLL",
     "frames": [
       {
         "time": 1,
@@ -636,7 +636,7 @@
     ]
   },
   "RIGHT_SHOULDER_PITCH": {
-    "name": "RIGHT_SHOULDER_PITCH",
+    "id": "RIGHT_SHOULDER_PITCH",
     "frames": [
       {
         "time": 1,
@@ -689,7 +689,7 @@
     ]
   },
   "RIGHT_SHOULDER_ROLL": {
-    "name": "RIGHT_SHOULDER_ROLL",
+    "id": "RIGHT_SHOULDER_ROLL",
     "frames": [
       {
         "time": 1,
@@ -742,7 +742,7 @@
     ]
   },
   "RIGHT_ELBOW": {
-    "name": "RIGHT_ELBOW",
+    "id": "RIGHT_ELBOW",
     "frames": [
       {
         "time": 1,
@@ -795,7 +795,7 @@
     ]
   },
   "LEFT_SHOULDER_PITCH": {
-    "name": "LEFT_SHOULDER_PITCH",
+    "id": "LEFT_SHOULDER_PITCH",
     "frames": [
       {
         "time": 1,
@@ -848,7 +848,7 @@
     ]
   },
   "LEFT_SHOULDER_ROLL": {
-    "name": "LEFT_SHOULDER_ROLL",
+    "id": "LEFT_SHOULDER_ROLL",
     "frames": [
       {
         "time": 1,
@@ -901,7 +901,7 @@
     ]
   },
   "LEFT_ELBOW": {
-    "name": "LEFT_ELBOW",
+    "id": "LEFT_ELBOW",
     "frames": [
       {
         "time": 1,

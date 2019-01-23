@@ -29,8 +29,8 @@ export class LineEditorViewModel {
   })
 
   @computed
-  get servoName() {
-    return this.servo.name
+  get servoId() {
+    return this.servo.id
   }
 
   @computed

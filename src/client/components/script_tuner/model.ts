@@ -6,7 +6,7 @@ import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
 
 export interface Servo {
-  name: string
+  id: string
   frames: Frame[]
 }
 
@@ -102,16 +102,16 @@ export class ScriptTunerModel {
       'LEFT_ANKLE_ROLL',
       'HEAD_YAW',
       'HEAD_PITCH',
-    ].map(name => {
-      if (sampleScript[name]) {
-        return sampleScript[name]
+    ].map(id => {
+      if (sampleScript[id]) {
+        return sampleScript[id]
       }
 
-      return this.makeSampleServo(name, 5, 0)
+      return this.makeSampleServo(id, 5, 0)
     })
   }
 
-  private makeSampleServo(name: string, length: number = 30, angle?: number): Servo {
+  private makeSampleServo(id: string, length: number = 30, angle?: number): Servo {
     const frames = []
     const period = 10
 
@@ -128,6 +128,6 @@ export class ScriptTunerModel {
       })
     }
 
-    return { name, frames }
+    return { id, frames }
   }
 }

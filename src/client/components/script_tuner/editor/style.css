@@ -19,6 +19,7 @@
 .editorControls {
   margin-left: auto;
   height: 18px;
+  display: flex;
 }
 
 .editorControls button {
@@ -32,6 +33,8 @@
   border: none;
   margin-right: 4px;
   outline: none;
+  color: white;
+  line-height: 1;
 }
 
 .editorControls button:hover,

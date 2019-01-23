@@ -54,4 +54,14 @@ export class EditorController {
   jumpToEnd = () => {
     this.controller.setPlayTime(this.viewModel.endTime)
   }
+
+  @action
+  zoomIn = () => {
+    this.viewModel.scaleX = Math.min(this.viewModel.scaleX + 1, 10)
+  }
+
+  @action
+  zoomOut = () => {
+    this.viewModel.scaleX = Math.max(this.viewModel.scaleX - 1, 1)
+  }
 }

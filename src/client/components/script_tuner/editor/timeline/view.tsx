@@ -43,7 +43,7 @@ export class Timeline extends React.Component<TimelineProps> {
             {
               viewModel.cells.map((_, i) => {
                 const isPrimaryCell = i % viewModel.scaleX === 0
-                return <g key={i}>*
+                return <g key={i}>
                   <line
                     x1={i * viewModel.cellWidth}
                     x2={i * viewModel.cellWidth}

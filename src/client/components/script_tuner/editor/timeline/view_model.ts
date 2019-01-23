@@ -31,7 +31,7 @@ export class TimelineViewModel {
 
   @computed
   get height() {
-    return 20
+    return 24
   }
 
   @computed
@@ -46,7 +46,7 @@ export class TimelineViewModel {
 
   @computed
   get playHeadPosition() {
-    const playHeadWidth = 18
+    const playHeadWidth = 23 // The rendered width of the playhead SVG element, from devtools
     return this.timeToSvg(this.editorViewModel.playTime) - (playHeadWidth / 2)
   }
 

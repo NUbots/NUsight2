@@ -49,7 +49,7 @@ export class Editor extends React.Component<EditorProps> {
               <path d='M6 6h2v12H6zm3.5 6l8.5 6V6z'/><path d='M0 0h24v24H0z' fill='none'/>
             </svg>
           </button>
-          <button title='Pause' onClick={() => controller.togglePlayback() }>
+          <button title={model.isPlaying ? 'Pause' : 'Play'} onClick={() => controller.togglePlayback() }>
             <svg width='24' height='24' viewBox='0 0 24 24'>
               {
                 model.isPlaying
@@ -63,6 +63,8 @@ export class Editor extends React.Component<EditorProps> {
               <path d='M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z'/><path d='M0 0h24v24H0z' fill='none'/>
             </svg>
           </button>
+          <button title='Zoom in' onClick={() => controller.zoomIn() }>+</button>
+          <button title='Zoom out' onClick={() => controller.zoomOut() }>-</button>
         </div>
       </div>
 

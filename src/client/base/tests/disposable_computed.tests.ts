@@ -56,7 +56,7 @@ describe('disposableComputed', () => {
       expect(value.dispose).toHaveBeenCalled()
     })
 
-    it('disposes value after disposes observing reaction', () => {
+    it('disposes value after disposing observing reaction', () => {
       const value = expr.get()
       dispose()
       expect(value.dispose).toHaveBeenCalled()

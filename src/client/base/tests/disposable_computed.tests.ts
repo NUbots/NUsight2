@@ -27,6 +27,11 @@ describe('disposableComputed', () => {
       expect(countUnique(someValues)).toBe(5)
     })
 
+    it('does not dispose value after evaluation', () => {
+      const value = expr.get()
+      expect(value.dispose).not.toHaveBeenCalled()
+    })
+
     it('disposes stale values when repeatably evaluated', () => {
       const someValues = Array.from({ length: 5 }, () => expr.get())
       const allButLast = someValues.slice(0, -1)

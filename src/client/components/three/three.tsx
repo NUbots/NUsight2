@@ -24,7 +24,7 @@ export class Three extends Component<{ createStage(canvas: Canvas): IComputedVal
   componentDidMount() {
     this.renderer = new WebGLRenderer({ canvas: this.ref!, antialias: true })
     const stage = this.props.createStage(this.canvas)
-    disposeOnUnmount(this, autorun(() => this.renderStage(stage.get())))
+    disposeOnUnmount(this, autorun(() => this.renderStage(stage.get()), { scheduler: requestAnimationFrame }))
   }
 
   componentWillUnmount() {

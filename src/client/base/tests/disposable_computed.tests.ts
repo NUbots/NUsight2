@@ -45,18 +45,18 @@ describe('disposableComputed', () => {
       someValues.forEach(value => expect(value.dispose).not.toHaveBeenCalled())
     })
 
-    it('does not dispose value', () => {
+    it('does not dispose value after evaluation', () => {
       const value = expr.get()
       expect(value.dispose).not.toHaveBeenCalled()
     })
 
-    it('dispoes stale value after recomputation', () => {
+    it('disposes stale value after recomputation', () => {
       const value = expr.get()
       model.a++
       expect(value.dispose).toHaveBeenCalled()
     })
 
-    it('dispoes value after disposes observing reaction', () => {
+    it('disposes value after disposes observing reaction', () => {
       const value = expr.get()
       dispose()
       expect(value.dispose).toHaveBeenCalled()

@@ -13,6 +13,8 @@ describe('disposableComputed', () => {
     expr = disposableComputed(() => ({ sum: model.a + model.b, dispose: jest.fn<() => void>() }))
   })
 
+  const countUnique = <T extends unknown>(arr: T[]): number => new Set(arr).size
+
   it('returns value on evaluation', () => {
     const value = { foo: 'bar', dispose: jest.fn() }
     const expr = disposableComputed(() => value)
@@ -22,7 +24,7 @@ describe('disposableComputed', () => {
   describe('when unobserved', () => {
     it('creates new values when repeatably evaluated', () => {
       const someValues = Array.from({ length: 5 }, () => expr.get())
-      expect(new Set(someValues).size).toBe(5)
+      expect(countUnique(someValues)).toBe(5)
     })
 
     it('disposes stale values when repeatably evaluated', () => {
@@ -41,7 +43,7 @@ describe('disposableComputed', () => {
 
     it('caches value when repeatably evaluated', () => {
       const someValues = Array.from({ length: 5 }, () => expr.get())
-      expect(new Set(someValues).size).toBe(1)
+      expect(countUnique(someValues)).toBe(1)
       someValues.forEach(value => expect(value.dispose).not.toHaveBeenCalled())
     })
 
@@ -65,7 +67,7 @@ describe('disposableComputed', () => {
     it('creates new values when repeatably evaluated after disposing observing reaction', () => {
       dispose()
       const someValues = Array.from({ length: 5 }, () => expr.get())
-      expect(new Set(someValues).size).toBe(5)
+      expect(countUnique(someValues)).toBe(5)
     })
   })
 })

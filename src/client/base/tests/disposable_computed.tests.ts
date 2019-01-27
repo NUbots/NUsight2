@@ -49,7 +49,6 @@ describe('disposableComputed', () => {
     it('caches value when repeatably evaluated', () => {
       const someValues = Array.from({ length: 5 }, () => expr.get())
       expect(countUnique(someValues)).toBe(1)
-      someValues.forEach(value => expect(value.dispose).not.toHaveBeenCalled())
     })
 
     it('does not dispose value after evaluation', () => {

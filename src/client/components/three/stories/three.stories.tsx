@@ -24,6 +24,19 @@ import { Stage } from '../three'
 import { Canvas } from '../three'
 import { Three } from '../three'
 
+const fullscreen = { width: 'calc(100vw - 20px)', height: 'calc(100vh - 20px)' }
+storiesOf('component.three', module)
+  .add('renders static scene', () => {
+    return <div style={fullscreen}>
+      <BoxVisualiser/>
+    </div>
+  })
+  .add('renders animated scene', () => {
+    return <div style={fullscreen}>
+      <BoxVisualiser animate/>
+    </div>
+  })
+
 type Model = { boxes: BoxModel[] }
 type BoxModel = { color: string, size: number, position: Vector3, rotation: Vector3 }
 
@@ -62,7 +75,6 @@ class BoxVisualiser extends Component<{ animate?: boolean }> {
     })
   }
 }
-
 
 class ViewModel {
   constructor(private readonly canvas: Canvas, private readonly model: Model) {
@@ -129,16 +141,3 @@ class BoxViewModel {
     return new MeshPhongMaterial({ color: this.model.color })
   }
 }
-
-const fullscreen = { width: 'calc(100vw - 20px)', height: 'calc(100vh - 20px)' }
-storiesOf('component.three', module)
-  .add('renders static scene', () => {
-    return <div style={fullscreen}>
-      <BoxVisualiser/>
-    </div>
-  })
-  .add('renders animated scene', () => {
-    return <div style={fullscreen}>
-      <BoxVisualiser animate/>
-    </div>
-  })

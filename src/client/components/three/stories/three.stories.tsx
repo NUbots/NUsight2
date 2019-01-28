@@ -65,11 +65,7 @@ class BoxVisualiser extends Component<{ animate?: boolean }> {
 
 
 class ViewModel {
-  constructor(
-    private readonly canvas: Canvas,
-    private readonly model: Model,
-  ) {
-
+  constructor(private readonly canvas: Canvas, private readonly model: Model) {
   }
 
   @computed

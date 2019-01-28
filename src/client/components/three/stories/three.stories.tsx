@@ -1,17 +1,15 @@
 import { storiesOf } from '@storybook/react'
-import { reaction } from 'mobx'
 import { observable } from 'mobx'
 import { action } from 'mobx'
 import { computed } from 'mobx'
-import { IComputedValue } from 'mobx'
+import { reaction } from 'mobx'
 import { disposeOnUnmount } from 'mobx-react'
+import { createTransformer } from 'mobx-utils'
 import { now } from 'mobx-utils'
 import { Component } from 'react'
 import * as React from 'react'
-import { Scene } from 'three'
 import { Object3D } from 'three'
-import { Material } from 'three'
-import { Geometry } from 'three'
+import { Scene } from 'three'
 import { Camera } from 'three'
 import { PointLight } from 'three'
 import { MeshPhongMaterial } from 'three'
@@ -20,13 +18,13 @@ import { BoxGeometry } from 'three'
 import { PerspectiveCamera } from 'three'
 import { Light } from 'three'
 
-import { disposableComputed } from '../../../base/disposable_computed'
 import { Vector2 } from '../../../math/vector2'
 import { Vector3 } from '../../../math/vector3'
 import { Stage } from '../three'
 import { Canvas } from '../three'
 import { Three } from '../three'
 
+type Model = { boxes: BoxModel[] }
 type BoxModel = { color: string, size: number, position: Vector3, rotation: Vector3 }
 
 class BoxVisualiser extends Component<{ animate?: boolean }> {
@@ -59,51 +57,80 @@ class BoxVisualiser extends Component<{ animate?: boolean }> {
     return <Three createStage={this.createStage}/>
   }
 
-  private createStage = (canvas: Canvas): IComputedValue<Stage> => {
-    const geometry = disposableComputed(() => this.boxGeometry())
-    const box = (box: BoxModel) => {
-      const material = disposableComputed(() => this.boxMaterial(box))
-      return computed(() => this.box(box, geometry.get(), material.get()))
-    }
-    const camera = computed(() => this.camera(canvas))
-    const light = computed(() => this.light(camera.get()))
-    const boxes = computed(() => this.model.boxes.map(b => box(b).get()))
-    const scene = computed(() => this.scene([...boxes.get(), light.get()]))
-    return computed(() => ({ camera: camera.get(), scene: scene.get() }))
+  private createStage = (canvas: Canvas) => {
+    const viewModel = computed(() => new ViewModel(canvas, this.model))
+    return computed(() => viewModel.get().stage)
+  }
+}
+
+
+class ViewModel {
+  constructor(
+    private readonly canvas: Canvas,
+    private readonly model: Model,
+  ) {
+
   }
 
-  private light(camera: Camera): Light {
+  @computed
+  get stage(): Stage {
+    return { camera: this.camera, scene: this.scene }
+  }
+
+  @computed
+  private get light(): Light {
     const light = new PointLight()
-    light.position.copy(camera.position)
+    light.position.copy(this.camera.position)
     return light
   }
 
-  private camera(canvas: Canvas): Camera {
-    const camera = new PerspectiveCamera(60, canvas.width / canvas.height, 0.5, 10)
+  @computed
+  private get aspect() {
+    return this.canvas.width / this.canvas.height
+  }
+
+  @computed
+  private get camera(): Camera {
+    const camera = new PerspectiveCamera(60, this.aspect, 0.5, 10)
     camera.position.z = 4
     return camera
   }
 
-  private scene(children: Object3D[]): Scene {
+  @computed
+  private get scene(): Scene {
     const scene = new Scene()
-    scene.add(...children)
+    scene.add(...this.model.boxes.map(this.getBox))
+    scene.add(this.light)
     return scene
   }
 
-  private box(box: BoxModel, geometry: Geometry, material: Material): Mesh {
-    const mesh = new Mesh(geometry, material)
-    mesh.position.set(box.position.x, box.position.y, box.position.z)
-    mesh.rotation.set(box.rotation.x, box.rotation.y, box.rotation.z)
-    mesh.scale.setScalar(box.size)
+  private getBox = createTransformer((box: BoxModel): Object3D => {
+    return BoxViewModel.of(box).box
+  })
+}
+
+class BoxViewModel {
+  private static geometry = computed(() => new BoxGeometry(1, 1, 1))
+
+  constructor(private readonly model: BoxModel) {
+  }
+
+  static of(model: BoxModel): BoxViewModel {
+    return new BoxViewModel(model)
+  }
+
+  @computed
+  get box(): Mesh {
+    const mesh = new Mesh(BoxViewModel.geometry.get(), this.material)
+    mesh.position.set(this.model.position.x, this.model.position.y, this.model.position.z)
+    mesh.rotation.set(this.model.rotation.x, this.model.rotation.y, this.model.rotation.z)
+    mesh.scale.setScalar(this.model.size)
     return mesh
   }
 
-  private boxGeometry(): Geometry {
-    return new BoxGeometry(1, 1, 1)
-  }
-
-  private boxMaterial(box: BoxModel): Material {
-    return new MeshPhongMaterial({ color: box.color })
+  @computed
+  private get material() {
+    return new MeshPhongMaterial({ color: this.model.color })
   }
 }
 

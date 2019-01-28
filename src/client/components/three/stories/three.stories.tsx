@@ -58,8 +58,8 @@ class BoxVisualiser extends Component<{ animate?: boolean }> {
   }
 
   private createStage = (canvas: Canvas) => {
-    const viewModel = computed(() => new ViewModel(canvas, this.model))
-    return computed(() => viewModel.get().stage)
+    const viewModel = new ViewModel(canvas, this.model)
+    return computed(() => viewModel.stage)
   }
 }
 

@@ -10,7 +10,6 @@ import { Component } from 'react'
 import * as React from 'react'
 import { Geometry } from 'three'
 import { Material } from 'three'
-import { Object3D } from 'three'
 import { Scene } from 'three'
 import { Camera } from 'three'
 import { PointLight } from 'three'
@@ -109,18 +108,18 @@ class ViewModel {
   @computed
   private get scene(): Scene {
     const scene = new Scene()
-    scene.add(...this.boxes)
+    scene.add(...this.boxes.map(boxViewModel => boxViewModel.box))
     scene.add(this.light)
     return scene
   }
 
   @computed
   private get boxes() {
-    return this.model.boxes.map(this.getBox)
+    return this.model.boxes.map(ViewModel.getBox)
   }
 
-  private getBox = createTransformer((box: BoxModel): Object3D => {
-    return BoxViewModel.of(box).box
+  private static getBox = createTransformer((box: BoxModel): BoxViewModel => {
+    return BoxViewModel.of(box)
   })
 }
 

@@ -29,7 +29,7 @@ type BoxModel = { color: string, size: number, position: Vector3, rotation: Vect
 
 class BoxVisualiser extends Component<{ animate?: boolean }> {
   @observable
-  private model = {
+  private readonly model = {
     boxes: [
       { color: 'red', size: 1, position: Vector3.of(), rotation: Vector3.of() },
       { color: 'green', size: 1, position: Vector3.of(), rotation: Vector3.of() },
@@ -42,17 +42,6 @@ class BoxVisualiser extends Component<{ animate?: boolean }> {
     this.props.animate && disposeOnUnmount(this, reaction(() => now('frame'), this.update))
   }
 
-  @action.bound
-  update(now: number) {
-    const t = 2 * Math.PI * now / (20 * 1000)
-    const n = this.model.boxes.length
-    this.model.boxes.forEach((box, i) => {
-      const position = Vector2.fromPolar(1, i * 2 * Math.PI / n + t)
-      box.position.set(position.x, position.y, 0)
-      box.rotation.set(Math.cos(3 * t + i), Math.cos(5 * t + i), Math.cos(7 * t + i))
-    })
-  }
-
   render() {
     return <Three createStage={this.createStage}/>
   }
@@ -60,6 +49,17 @@ class BoxVisualiser extends Component<{ animate?: boolean }> {
   private createStage = (canvas: Canvas) => {
     const viewModel = new ViewModel(canvas, this.model)
     return computed(() => viewModel.stage)
+  }
+
+  @action.bound
+  private update(now: number) {
+    const t = 2 * Math.PI * now / (20 * 1000)
+    const n = this.model.boxes.length
+    this.model.boxes.forEach((box, i) => {
+      const position = Vector2.fromPolar(1, i * 2 * Math.PI / n + t)
+      box.position.set(position.x, position.y, 0)
+      box.rotation.set(Math.cos(3 * t + i), Math.cos(5 * t + i), Math.cos(7 * t + i))
+    })
   }
 }
 

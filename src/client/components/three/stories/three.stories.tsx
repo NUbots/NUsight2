@@ -8,6 +8,8 @@ import { createTransformer } from 'mobx-utils'
 import { now } from 'mobx-utils'
 import { Component } from 'react'
 import * as React from 'react'
+import { Geometry } from 'three'
+import { Material } from 'three'
 import { Object3D } from 'three'
 import { Scene } from 'three'
 import { Camera } from 'three'
@@ -118,7 +120,7 @@ class ViewModel {
 }
 
 class BoxViewModel {
-  private static geometry = computed(() => new BoxGeometry(1, 1, 1))
+  private static geometry = computed<Geometry>(() => new BoxGeometry(1, 1, 1))
 
   constructor(private readonly model: BoxModel) {
   }
@@ -137,7 +139,7 @@ class BoxViewModel {
   }
 
   @computed
-  private get material() {
+  private get material(): Material {
     return new MeshPhongMaterial({ color: this.model.color })
   }
 }

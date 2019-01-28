@@ -109,9 +109,14 @@ class ViewModel {
   @computed
   private get scene(): Scene {
     const scene = new Scene()
-    scene.add(...this.model.boxes.map(this.getBox))
+    scene.add(...this.boxes)
     scene.add(this.light)
     return scene
+  }
+
+  @computed
+  private get boxes() {
+    return this.model.boxes.map(this.getBox)
   }
 
   private getBox = createTransformer((box: BoxModel): Object3D => {

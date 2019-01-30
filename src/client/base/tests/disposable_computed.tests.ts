@@ -159,13 +159,10 @@ class TriangleFactory {
 }
 
 class Triangle {
-  disposed = false
-
   constructor(public color: string, private onDispose: () => void) {
   }
 
   dispose() {
-    this.disposed = true
     this.onDispose()
   }
 }

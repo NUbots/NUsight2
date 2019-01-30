@@ -39,7 +39,7 @@ const disposableComputedExpr = <T extends { dispose(): void; }>(fn: () => T): IC
 
 export const disposableComputed: DisposableComputed = function computed(arg1: any, arg2: any, arg3: any) {
   if (typeof arg2 === 'string') {
-    // Use as an annotation e.g. @disposableComputed
+    // Used as an annotation e.g. @disposableComputed
     return disposableComputedDecorator.apply(null, arguments as any)
   }
 

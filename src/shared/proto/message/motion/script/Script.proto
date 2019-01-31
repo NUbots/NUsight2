@@ -24,10 +24,10 @@ message Script {
   message Frame {
     double time = 1;
     double angle = 2;
-    int pGain = 3;
-    int iGain = 4;
-    int dGain = 5;
-    int torque = 6;
+    int32 pGain = 3;
+    int32 iGain = 4;
+    int32 dGain = 5;
+    int32 torque = 6;
   }
 
   message Servo {
@@ -36,5 +36,5 @@ message Script {
   }
 
   string path = 1;
-  Map<string, Servo> servos = 2;
+  map<string, Servo> servos = 2;
 }

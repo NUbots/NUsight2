@@ -6,6 +6,7 @@ import { Balance } from './balance/view'
 import { ScriptTunerController } from './controller'
 import { Controls } from './controls/view'
 import { Editor } from './editor/view'
+import { Explorer } from './explorer/view'
 import { ScriptTunerModel } from './model'
 import { ScriptTunerNetwork } from './network'
 import * as style from './style.css'
@@ -21,9 +22,12 @@ export type ScriptTunerProps = {
 export const ScriptTuner = observer(({ controller, menu, model, network }: ScriptTunerProps) => {
   return (
     <div className={style.container}>
-      <Preview className={style.viewer} model={model} />
-      <Balance className={style.balance} />
-      <Controls className={style.controls} />
+      <Explorer className={style.explorer} />
+      <Preview className={style.preview} model={model} />
+      <div className={style.balanceAndControls}>
+        <Balance className={style.balance} />
+        <Controls className={style.controls} />
+      </div>
       <Editor className={style.editor} controller={controller} model={model} />
     </div>
   )

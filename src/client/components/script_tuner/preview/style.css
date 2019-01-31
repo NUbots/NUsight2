@@ -3,7 +3,6 @@
   flex-direction: column;
   max-height: 100%;
   overflow: hidden;
-  border-right: 1px solid #777;
 }
 
 .previewHeader {
@@ -17,7 +16,6 @@
 }
 
 .previewBody {
-  padding: 0 4px;
   flex-grow: 1;
   overflow: hidden;
   position: relative;

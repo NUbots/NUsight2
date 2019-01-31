@@ -1,0 +1,23 @@
+.balance {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.balanceHeader {
+  background-color: #777;
+  padding: 0 4px;
+  color: white;
+  font-size: 14px;
+  display: flex;
+  min-height: 24px;
+  align-items: center;
+}
+
+.balanceBody {
+  padding: 0 4px;
+  flex-grow: 1;
+  overflow: hidden;
+  position: relative;
+}

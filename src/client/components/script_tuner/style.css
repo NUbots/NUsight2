@@ -1,16 +1,30 @@
 .container {
   display: grid;
-  grid-template-columns: 50% 30% 20%;
+  grid-template-columns: 25% 50% 25%;
   grid-template-rows: 50% 50%;
   width: 100%;
   height: 100vh;
 }
 
-.viewer {
+.explorer {
+  border-left: 1px solid #444;
+  border-right: 1px solid #444;
+}
 
+.preview {
+  border-right: 1px solid #444;
+}
+
+.balanceAndControls {
+  display: grid;
+  grid-template-rows: 50% 50%;
 }
 
 .balance {
+  border-bottom: 1px solid #444;
+}
+
+.controls {
 
 }
 
@@ -18,8 +32,5 @@
   grid-column-start: 1;
   grid-column-end: span 3;
   max-height: 100%;
-}
-
-.controls {
-
+  border-top: 1px solid #444;
 }

@@ -26,4 +26,8 @@ export class VirtualRobots {
   start() {
     this.robots.forEach(r => r.start())
   }
+
+  sendAll() {
+    this.robots.forEach(r => r.sendAll())
+  }
 }

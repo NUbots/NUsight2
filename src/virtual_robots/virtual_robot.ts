@@ -13,15 +13,19 @@ type Opts = {
 
 export class VirtualRobot {
 
-  private simulators?: Simulator[]
+  private simulators: Simulator[]
   private stops?: Array<() => void>
 
   network: NUClearNetClient
 
   constructor(private name: string,
               network: NUClearNetClient,
-              private simulatorFactories: Array<{ of(robot: VirtualRobot): Simulator}>) {
+              simulatorFactories: Array<{ of(robot: VirtualRobot): Simulator}>) {
     this.network = network
+    this.simulators = simulatorFactories.map(f => f.of(this))
+
+    // Connect to the network
+    this.stops = [this.network.connect({ name: this.name })]
   }
 
   static of(opts: Opts) {
@@ -29,10 +33,6 @@ export class VirtualRobot {
   }
 
   start() {
-    // Create all the simulators
-    this.simulators = this.simulatorFactories.map(f => f.of(this))
-    this.stops = [this.network.connect({ name: this.name })]
-
      // Make an autorunner for each of the packets
     this.simulators.forEach(s => {
       s.packets().forEach(p => {
@@ -45,6 +45,20 @@ export class VirtualRobot {
             reliable: packet.reliable,
           })
         }))
+      })
+    })
+  }
+
+  sendAll() {
+    this.simulators.forEach(s => {
+      s.packets().forEach(p => {
+        const packet = p.get()
+        this.network.send({
+          type: packet.messageType,
+          payload: Buffer.from(packet.buffer),
+          target: 'nusight',
+          reliable: packet.reliable,
+        })
       })
     })
   }

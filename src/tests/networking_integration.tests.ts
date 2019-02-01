@@ -7,13 +7,14 @@ import { FakeNUClearNetClient } from '../server/nuclearnet/fake_nuclearnet_clien
 import { FakeNUClearNetServer } from '../server/nuclearnet/fake_nuclearnet_server'
 import { NodeSystemClock } from '../server/time/node_clock'
 import { message } from '../shared/proto/messages'
-import Sensors = message.input.Sensors
-import Overview = message.support.nusight.Overview
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
-import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
+import { SensorsSimulator } from '../virtual_robots/simulators/sensors_simulator'
 import { VirtualRobot } from '../virtual_robots/virtual_robot'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
+
 import CompressedImage = message.output.CompressedImage
+import Overview = message.support.nusight.Overview
+import Sensors = message.input.Sensors
 
 describe('Networking Integration', () => {
   let nuclearnetServer: FakeNUClearNetServer
@@ -27,22 +28,9 @@ describe('Networking Integration', () => {
     disconnectNusightNetwork = nusightNetwork.connect({ name: 'nusight' })
 
     virtualRobots = new VirtualRobots({
-      robots: [
-        new VirtualRobot(
-          new FakeNUClearNetClient(nuclearnetServer),
-          NodeSystemClock,
-          {
-            name: 'Robot #1',
-            periodicSimulators: [
-              { frequency: 1, simulator: OverviewSimulator.of() },
-              { frequency: 60, simulator: SensorDataSimulator.of() },
-            ],
-            simulators: [],
-          },
-        ),
-      ],
+      fakeNetworking: true,
+      robots: [{ name: 'Robot #1', simulators: [OverviewSimulator, SensorsSimulator] }],
     })
-    virtualRobots.connect()
   })
 
   function createNUsightNetwork() {
@@ -65,7 +53,7 @@ describe('Networking Integration', () => {
       const onSensors = jest.fn()
       network.on(Sensors, onSensors)
 
-      virtualRobots.simulateAll()
+      virtualRobots.sendAll()
 
       expect(onSensors).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
       expect(onSensors).toHaveBeenCalledTimes(1)
@@ -79,7 +67,7 @@ describe('Networking Integration', () => {
 
       network.off()
 
-      virtualRobots.simulateAll()
+      virtualRobots.sendAll()
 
       expect(onSensors1).not.toHaveBeenCalled()
       expect(onSensors2).not.toHaveBeenCalled()
@@ -93,7 +81,7 @@ describe('Networking Integration', () => {
 
       off1()
 
-      virtualRobots.simulateAll()
+      virtualRobots.sendAll()
 
       expect(onSensors1).not.toHaveBeenCalled()
       expect(onSensors2).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
@@ -115,12 +103,12 @@ describe('Networking Integration', () => {
 
       nusightNetwork.connect({ name: 'nusight' })
 
-      virtualRobots.simulateAll()
+      virtualRobots.sendAll()
 
       expect(onSensors).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
     })
 
-    it('handles multiple sessions simutaneously', () => {
+    it('handles multiple sessions simultaneously', () => {
       const nusightNetwork2 = createNUsightNetwork()
       nusightNetwork2.connect({ name: 'nusight' })
       const network2 = new Network(nusightNetwork2)
@@ -131,7 +119,7 @@ describe('Networking Integration', () => {
       const onSensors2 = jest.fn()
       network2.on(Sensors, onSensors2)
 
-      virtualRobots.simulateAll()
+      virtualRobots.sendAll()
 
       expect(onSensors1).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
       expect(onSensors2).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
@@ -153,7 +141,7 @@ describe('Networking Integration', () => {
       const onSensors = jest.fn()
       localisationNetwork.on(Sensors, onSensors)
 
-      virtualRobots.simulateAll()
+      virtualRobots.sendAll()
 
       expect(onSensors).toHaveBeenCalledTimes(1)
 
@@ -162,7 +150,7 @@ describe('Networking Integration', () => {
       const onCompressedImage = jest.fn()
       visionNetwork.on(CompressedImage, onCompressedImage)
 
-      virtualRobots.simulateAll()
+      virtualRobots.sendAll()
 
       expect(onCompressedImage).toHaveBeenCalledTimes(0)
       expect(onSensors).toHaveBeenCalledTimes(1)

@@ -33,6 +33,7 @@ export class VirtualRobot {
   }
 
   start() {
+
      // Make an autorunner for each of the packets
     this.simulators.forEach(s => {
       s.packets().forEach(p => {

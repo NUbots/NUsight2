@@ -14,9 +14,9 @@ export class VirtualRobots {
   private robots: VirtualRobot[]
 
   constructor(opts: Opts) {
-    this.robots = opts.robots.map(r => {
-      VirtualRobot.of({ ...r, network: opts.fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of() })
-    })
+    this.robots = opts.robots.map(r =>
+      VirtualRobot.of({ ...r, network: opts.fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of() }),
+    )
   }
 
   static of(opts: Opts) {

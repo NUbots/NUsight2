@@ -4,16 +4,22 @@ import { Matrix4 } from 'three'
 import { Vector3 } from 'three'
 import { Quaternion } from 'three'
 
-import { VirtualRobot } from '../../old_virtual_robots/virtual_robot'
 import { message } from '../../shared/proto/messages'
+import { Imat4 } from '../../shared/proto/messages'
 import { Message, Simulator } from '../simulator'
+import { VirtualRobot } from '../virtual_robot'
+
 import Sensors = message.input.Sensors
 
 export const HIP_TO_FOOT = 0.2465
 
 export class SensorsSimulator implements Simulator {
 
+  private static numRobots: number = 0
+  private readonly robotIndex: number
+
   constructor(private robot: VirtualRobot) {
+    this.robotIndex = SensorsSimulator.numRobots++
   }
 
   static of(robot: VirtualRobot) {
@@ -32,10 +38,10 @@ export class SensorsSimulator implements Simulator {
     // TODO maybe move this rate somewhere else
     const time = now(1000 / 60) / 1000 // 60 times per second
 
-    const t = time * 5 + index
+    const t = time * 5 + this.robotIndex
 
-    const angle = index * (2 * Math.PI) / numRobots + time / 40
-    const distance = Math.cos(time + 4 * index) * 0.3 + 1
+    const angle = this.robotIndex * (2 * Math.PI) / SensorsSimulator.numRobots + time / 40
+    const distance = Math.cos(time + 4 * this.robotIndex) * 0.3 + 1
     const x = distance * Math.cos(angle)
     const y = distance * Math.sin(angle)
     const heading = angle + Math.PI

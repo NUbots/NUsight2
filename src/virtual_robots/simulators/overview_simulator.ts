@@ -20,9 +20,14 @@ import Phase = message.input.GameState.Data.Phase
 import Overview = message.support.nusight.Overview
 
 export class OverviewSimulator implements Simulator {
+
+  private static numRobots: number = 0
+  private readonly robotIndex: number
+
   constructor(private robot: VirtualRobot,
               private field: FieldDimensions,
               private random: SeededRandom) {
+    this.robotIndex = OverviewSimulator.numRobots++
   }
 
   static of(robot: VirtualRobot) {
@@ -43,7 +48,7 @@ export class OverviewSimulator implements Simulator {
 
     const messageType = 'message.support.nusight.Overview'
 
-    const t = time / 10 - index
+    const t = time / 10 - this.robotIndex
 
     const fieldLength = this.field.fieldLength
     const fieldWidth = this.field.fieldWidth
@@ -63,7 +68,7 @@ export class OverviewSimulator implements Simulator {
 
     const buffer = Overview.encode({
       timestamp: toTimestamp(time),
-      robotId: index + 1,
+      robotId: this.robotIndex + 1,
       roleName: 'Overview Simulator',
       battery: this.random.float(),
       voltage: this.randomFloat(10, 13),
@@ -87,9 +92,9 @@ export class OverviewSimulator implements Simulator {
       lastSeenBall: toTimestamp(this.randomSeconds(time, -30)),
       lastSeenGoal: toTimestamp(this.randomSeconds(time, -30)),
       walkCommand: {
-        x: Math.cos(time / 3 + index),
-        y: Math.cos(time / 5 + index),
-        z: Math.cos(time / 7 + index),
+        x: Math.cos(time / 3 + this.robotIndex),
+        y: Math.cos(time / 5 + this.robotIndex),
+        z: Math.cos(time / 7 + this.robotIndex),
       },
       walkPathPlan: [
         robotPosition,

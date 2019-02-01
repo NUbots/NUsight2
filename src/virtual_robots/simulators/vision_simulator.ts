@@ -36,8 +36,8 @@ export class VisionSimulator implements Simulator {
   packets(): Array<IComputedValue<Message>> {
     return [
       computed(() => this.image),
-      computed(() => this.goal),
-      computed(() => this.ball),
+      computed(() => this.goals),
+      computed(() => this.balls),
     ]
   }
 
@@ -45,7 +45,7 @@ export class VisionSimulator implements Simulator {
 
     const time = now(1000 / 10) / 1000
 
-    const t = time / 10 - index
+    const t = time / 10
     const numImages = this.images.length
     const imageIndex = Math.floor((Math.cos(2 * Math.PI * t) + 1) / 2 * numImages) % numImages
     const data = this.images[imageIndex]
@@ -71,7 +71,7 @@ export class VisionSimulator implements Simulator {
 
   private get balls(): Message {
     const time = now(1000 / 10) / 1000
-    const t = time / 10 - index
+    const t = time / 10
     const Hcw = new Matrix4().makeRotationZ(2 * Math.PI * t)
     const axis = new Vector3(10, 1, 0).normalize().applyMatrix4(new Matrix4().makeRotationX(2 * Math.PI * t))
     return {
@@ -93,7 +93,7 @@ export class VisionSimulator implements Simulator {
 
   private get goals(): Message {
     const time = now(1000 / 10) / 1000
-    const t = time / 10 - index
+    const t = time / 10
     const Hcw = new Matrix4().makeRotationZ(2 * Math.PI * t)
     return {
       messageType: 'message.vision.Goals',

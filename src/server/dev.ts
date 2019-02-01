@@ -13,8 +13,7 @@ import webpackConfig from '../../webpack.config'
 import * as NUClearNetProxyParser from '../shared/nuclearnet/nuclearnet_proxy_parser'
 import { ChartSimulator } from '../virtual_robots/simulators/chart_data_simulator'
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
-import { ScriptDataSimulator } from '../virtual_robots/simulators/script_data_simulator'
-import { SensorDataSimulator } from '../virtual_robots/simulators/sensor_data_simulator'
+import { SensorsSimulator } from '../virtual_robots/simulators/sensors_simulator'
 import { VisionSimulator } from '../virtual_robots/simulators/vision_simulator'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
 
@@ -68,16 +67,23 @@ function init() {
   if (withVirtualRobots) {
     const virtualRobots = VirtualRobots.of({
       fakeNetworking: true,
-      numRobots: 3,
-      periodicSimulators: [
-        { frequency: 1, simulator: OverviewSimulator.of() },
-        { frequency: 60, simulator: SensorDataSimulator.of() },
-        { frequency: 60, simulator: ChartSimulator.of() },
-        { frequency: 5, simulator: VisionSimulator.of() },
+      robots: [
+        {
+          name: 'Virtual Robot 1',
+          simulators: [OverviewSimulator, SensorsSimulator, ChartSimulator, VisionSimulator],
+        },
+        {
+          name: 'Virtual Robot 2',
+          simulators: [OverviewSimulator, SensorsSimulator, ChartSimulator, VisionSimulator] ,
+        },
+        {
+          name: 'Virtual Robot 3',
+          simulators: [OverviewSimulator, SensorsSimulator, ChartSimulator, VisionSimulator] ,
+        },
       ],
-      simulators: [ScriptDataSimulator.of()],
     })
-    virtualRobots.startSimulators()
+
+    virtualRobots.start()
   }
 
   if (nbsFile) {

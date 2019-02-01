@@ -1,4 +1,7 @@
 import * as fs from 'fs'
+import { IComputedValue } from 'mobx'
+import { computed } from 'mobx'
+import { now } from 'mobx-utils'
 import * as path from 'path'
 import { Vector3 } from 'three'
 import { Matrix4 } from 'three'
@@ -8,7 +11,9 @@ import { Imat4 } from '../../shared/proto/messages'
 import { message } from '../../shared/proto/messages'
 import { toTimestamp } from '../../shared/time/timestamp'
 import { Message } from '../simulator'
-import { PeriodicSimulator } from '../simulator'
+import { Simulator } from '../simulator'
+import { VirtualRobot } from '../virtual_robot'
+
 import CompressedImage = message.output.CompressedImage
 import Projection = message.output.CompressedImage.Lens.Projection
 import Balls = message.vision.Balls
@@ -16,26 +21,30 @@ import Side = message.vision.Goal.Side
 import Team = message.vision.Goal.Team
 import Goals = message.vision.Goals
 
-export class VisionSimulator implements PeriodicSimulator {
-  constructor(private images: Uint8Array[]) {
+export class VisionSimulator implements Simulator {
+  constructor(private robot: VirtualRobot, private images: Uint8Array[]) {
   }
 
-  static of(): VisionSimulator {
+  static of(robot: VirtualRobot): VisionSimulator {
     const images = Array.from(
       { length: 11 },
       (_, i) => toUint8Array(fs.readFileSync(path.join(__dirname, `images/${i}.jpg`))),
     )
-    return new VisionSimulator(images)
+    return new VisionSimulator(robot, images)
   }
 
-  simulate(time: number, index: number, numRobots: number): Message[] {
-    const image = this.simulateImage(time, index)
-    const balls = this.simulateBalls(time, index)
-    const goals = this.simulateGoals(time, index)
-    return [image, balls, goals]
+  packets(): Array<IComputedValue<Message>> {
+    return [
+      computed(() => this.image),
+      computed(() => this.goal),
+      computed(() => this.ball),
+    ]
   }
 
-  private simulateImage(time: number, index: number): Message {
+  private get image(): Message {
+
+    const time = now(1000 / 10) / 1000
+
     const t = time / 10 - index
     const numImages = this.images.length
     const imageIndex = Math.floor((Math.cos(2 * Math.PI * t) + 1) / 2 * numImages) % numImages
@@ -60,7 +69,8 @@ export class VisionSimulator implements PeriodicSimulator {
     }
   }
 
-  private simulateBalls(time: number, index: number): Message {
+  private get balls(): Message {
+    const time = now(1000 / 10) / 1000
     const t = time / 10 - index
     const Hcw = new Matrix4().makeRotationZ(2 * Math.PI * t)
     const axis = new Vector3(10, 1, 0).normalize().applyMatrix4(new Matrix4().makeRotationX(2 * Math.PI * t))
@@ -81,7 +91,8 @@ export class VisionSimulator implements PeriodicSimulator {
     }
   }
 
-  private simulateGoals(time: number, index: number): Message {
+  private get goals(): Message {
+    const time = now(1000 / 10) / 1000
     const t = time / 10 - index
     const Hcw = new Matrix4().makeRotationZ(2 * Math.PI * t)
     return {

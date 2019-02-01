@@ -1,19 +1,32 @@
+import { IComputedValue } from 'mobx'
+import { computed } from 'mobx'
+import { now } from 'mobx-utils'
+
 import { message } from '../../shared/proto/messages'
 import { toTimestamp } from '../../shared/time/timestamp'
-import { PeriodicSimulator } from '../simulator'
+import { Simulator } from '../simulator'
 import { Message } from '../simulator'
+import { VirtualRobot } from '../virtual_robot'
 
 import DataPoint = message.support.nusight.DataPoint
 
-export class ChartSimulator implements PeriodicSimulator {
-  static of(): ChartSimulator {
-    return new ChartSimulator()
+export class ChartSimulator implements Simulator {
+
+  constructor(private robot: VirtualRobot) {
   }
 
-  simulate(time: number, index: number, numRobots: number): Message[] {
+  static of(robot: VirtualRobot): ChartSimulator {
+    return new ChartSimulator(robot)
+  }
+
+  packets(): Array<IComputedValue<Message>> {
+    return [computed(() => this.chartData)]
+  }
+
+  get chartData(): Message {
 
     // Offset our time to test the adaptive window
-    time = time - 3
+    const time = now(1000 / 20) / 1000 - 3
 
     const messageType = 'message.support.nusight.DataPoint'
     const period = 10
@@ -29,7 +42,7 @@ export class ChartSimulator implements PeriodicSimulator {
 
     const message = { messageType, buffer }
 
-    return [message]
+    return message
   }
 }
 

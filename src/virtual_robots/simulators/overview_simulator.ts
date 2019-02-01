@@ -1,3 +1,7 @@
+import { IComputedValue } from 'mobx'
+import { computed } from 'mobx'
+import { now } from 'mobx-utils'
+
 import { Vector2 } from '../../client/math/vector2'
 import { Vector3 } from '../../client/math/vector3'
 import { SeededRandom } from '../../shared/base/random/seeded_random'
@@ -5,27 +9,38 @@ import { FieldDimensions } from '../../shared/field/dimensions'
 import { message } from '../../shared/proto/messages'
 import { Ivec2 } from '../../shared/proto/messages'
 import { toTimestamp } from '../../shared/time/timestamp'
-import { PeriodicSimulator } from '../simulator'
+import { Simulator } from '../simulator'
 import { Message } from '../simulator'
+import { VirtualRobot } from '../virtual_robot'
+
 import State = message.behaviour.Behaviour.State
 import Mode = message.input.GameState.Data.Mode
 import PenaltyReason = message.input.GameState.Data.PenaltyReason
 import Phase = message.input.GameState.Data.Phase
 import Overview = message.support.nusight.Overview
 
-export class OverviewSimulator implements PeriodicSimulator {
-  constructor(private field: FieldDimensions,
+export class OverviewSimulator implements Simulator {
+  constructor(private robot: VirtualRobot,
+              private field: FieldDimensions,
               private random: SeededRandom) {
   }
 
-  static of() {
+  static of(robot: VirtualRobot) {
     return new OverviewSimulator(
+      robot,
       FieldDimensions.postYear2017(),
       SeededRandom.of('overview_simulator'),
     )
   }
 
-  simulate(time: number, index: number, numRobots: number): Message[] {
+  packets(): Array<IComputedValue<Message>> {
+    return [computed(() => this.overview)]
+  }
+
+  get overview(): Message {
+
+    const time = now(1000 / 2) / 1000
+
     const messageType = 'message.support.nusight.Overview'
 
     const t = time / 10 - index
@@ -87,7 +102,7 @@ export class OverviewSimulator implements PeriodicSimulator {
 
     const message = { messageType, buffer }
 
-    return [message]
+    return message
   }
 
   private randomFieldPosition(): Ivec2 {

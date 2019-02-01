@@ -1,24 +1,37 @@
+import { computed, IComputedValue } from 'mobx'
+import { now } from 'mobx-utils'
 import { Matrix4 } from 'three'
 import { Vector3 } from 'three'
 import { Quaternion } from 'three'
 
+import { VirtualRobot } from '../../old_virtual_robots/virtual_robot'
 import { message } from '../../shared/proto/messages'
-import { Imat4 } from '../../shared/proto/messages'
-import { PeriodicSimulator } from '../simulator'
-import { Message } from '../simulator'
+import { Message, Simulator } from '../simulator'
 import Sensors = message.input.Sensors
 
 export const HIP_TO_FOOT = 0.2465
 
-export class SensorDataSimulator implements PeriodicSimulator {
-  static of() {
-    return new SensorDataSimulator()
+export class SensorsSimulator implements Simulator {
+
+  constructor(private robot: VirtualRobot) {
   }
 
-  simulate(time: number, index: number, numRobots: number): Message[] {
+  static of(robot: VirtualRobot) {
+    return new SensorsSimulator(robot)
+  }
+
+  packets(): Array<IComputedValue<Message>> {
+    return [computed(() => this.sensors)]
+  }
+
+  get sensors(): Message {
+
     const messageType = 'message.input.Sensors'
 
     // Simulate a walk
+    // TODO maybe move this rate somewhere else
+    const time = now(1000 / 60) / 1000 // 60 times per second
+
     const t = time * 5 + index
 
     const angle = index * (2 * Math.PI) / numRobots + time / 40
@@ -60,7 +73,7 @@ export class SensorDataSimulator implements PeriodicSimulator {
 
     const message = { messageType, buffer }
 
-    return [message]
+    return message
   }
 }
 

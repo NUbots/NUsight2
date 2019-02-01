@@ -1,6 +1,5 @@
 import { IComputedValue } from 'mobx'
 import { computed } from 'mobx'
-import { now } from 'mobx-utils'
 
 import { Vector2 } from '../../client/math/vector2'
 import { Vector3 } from '../../client/math/vector3'
@@ -12,6 +11,8 @@ import { toTimestamp } from '../../shared/time/timestamp'
 import { Simulator } from '../simulator'
 import { Message } from '../simulator'
 import { VirtualRobot } from '../virtual_robot'
+
+import { periodic } from './periodic'
 
 import State = message.behaviour.Behaviour.State
 import Mode = message.input.GameState.Data.Mode
@@ -44,7 +45,7 @@ export class OverviewSimulator implements Simulator {
 
   get overview(): Message {
 
-    const time = now(1000 / 2) / 1000
+    const time = periodic(2)
 
     const messageType = 'message.support.nusight.Overview'
 

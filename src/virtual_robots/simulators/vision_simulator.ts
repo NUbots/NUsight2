@@ -1,7 +1,6 @@
 import * as fs from 'fs'
 import { IComputedValue } from 'mobx'
 import { computed } from 'mobx'
-import { now } from 'mobx-utils'
 import * as path from 'path'
 import { Vector3 } from 'three'
 import { Matrix4 } from 'three'
@@ -13,6 +12,8 @@ import { toTimestamp } from '../../shared/time/timestamp'
 import { Message } from '../simulator'
 import { Simulator } from '../simulator'
 import { VirtualRobot } from '../virtual_robot'
+
+import { periodic } from './periodic'
 
 import CompressedImage = message.output.CompressedImage
 import Projection = message.output.CompressedImage.Lens.Projection
@@ -42,9 +43,7 @@ export class VisionSimulator implements Simulator {
   }
 
   private get image(): Message {
-
-    const time = now(1000 / 10) / 1000
-
+    const time = periodic(10)
     const t = time / 10
     const numImages = this.images.length
     const imageIndex = Math.floor((Math.cos(2 * Math.PI * t) + 1) / 2 * numImages) % numImages
@@ -70,7 +69,7 @@ export class VisionSimulator implements Simulator {
   }
 
   private get balls(): Message {
-    const time = now(1000 / 10) / 1000
+    const time = periodic(10)
     const t = time / 10
     const Hcw = new Matrix4().makeRotationZ(2 * Math.PI * t)
     const axis = new Vector3(10, 1, 0).normalize().applyMatrix4(new Matrix4().makeRotationX(2 * Math.PI * t))
@@ -92,7 +91,7 @@ export class VisionSimulator implements Simulator {
   }
 
   private get goals(): Message {
-    const time = now(1000 / 10) / 1000
+    const time = periodic(10)
     const t = time / 10
     const Hcw = new Matrix4().makeRotationZ(2 * Math.PI * t)
     return {

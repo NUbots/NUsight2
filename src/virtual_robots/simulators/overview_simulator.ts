@@ -24,14 +24,14 @@ export class OverviewSimulator extends Simulator {
   private static numRobots: number = 0
   private readonly robotIndex: number
 
-  constructor(network: NUClearNetClient, private field: FieldDimensions, private random: SeededRandom) {
-    super(network)
+  constructor(nuclearnetClient: NUClearNetClient, private field: FieldDimensions, private random: SeededRandom) {
+    super(nuclearnetClient)
     this.robotIndex = OverviewSimulator.numRobots++
   }
 
-  static of(network: NUClearNetClient) {
+  static of(nuclearnetClient: NUClearNetClient) {
     return new OverviewSimulator(
-      network,
+      nuclearnetClient,
       FieldDimensions.postYear2017(),
       SeededRandom.of('overview_simulator'),
     )

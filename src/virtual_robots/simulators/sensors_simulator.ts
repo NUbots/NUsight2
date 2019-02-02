@@ -18,13 +18,13 @@ export class SensorsSimulator extends Simulator {
   private static numRobots: number = 0
   private readonly robotIndex: number
 
-  constructor(network: NUClearNetClient) {
-    super(network)
+  constructor(nuclearnetClient: NUClearNetClient) {
+    super(nuclearnetClient)
     this.robotIndex = SensorsSimulator.numRobots++
   }
 
-  static of(network: NUClearNetClient) {
-    return new SensorsSimulator(network)
+  static of(nuclearnetClient: NUClearNetClient) {
+    return new SensorsSimulator(nuclearnetClient)
   }
 
   start() {

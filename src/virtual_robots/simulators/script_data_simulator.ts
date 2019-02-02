@@ -5,13 +5,13 @@ import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { Simulator } from '../simulator'
 
 export class ScriptDataSimulator extends Simulator {
-  constructor(network: NUClearNetClient) {
-    super(network)
-    this.network.on('message.input.Sensors', this.onSensors)
+  constructor(nuclearnetClient: NUClearNetClient) {
+    super(nuclearnetClient)
+    this.nuclearnetClient.on('message.input.Sensors', this.onSensors)
   }
 
-  static of(network: NUClearNetClient) {
-    return new ScriptDataSimulator(network)
+  static of(nuclearnetClient: NUClearNetClient) {
+    return new ScriptDataSimulator(nuclearnetClient)
   }
 
   start() {

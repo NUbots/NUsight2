@@ -19,7 +19,7 @@ function main() {
       const network = DirectNUClearNetClient.of()
       return VirtualRobot.of({
         name: `Virtual Robot ${i + 1}`,
-        network,
+        network: nuclearnetClient,
         simulators: getSimulators(args, network),
       })
     }),

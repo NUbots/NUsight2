@@ -21,8 +21,8 @@ import Team = message.vision.Goal.Team
 import Goals = message.vision.Goals
 
 export class VisionSimulator extends Simulator {
-  constructor(network: NUClearNetClient, private images: Uint8Array[]) {
-    super(network)
+  constructor(nuclearnetClient: NUClearNetClient, private images: Uint8Array[]) {
+    super(nuclearnetClient)
   }
 
   start() {
@@ -34,12 +34,12 @@ export class VisionSimulator extends Simulator {
     return () => stops.forEach(stop => stop())
   }
 
-  static of(network: NUClearNetClient): VisionSimulator {
+  static of(nuclearnetClient: NUClearNetClient): VisionSimulator {
     const images = Array.from(
       { length: 11 },
       (_, i) => toUint8Array(fs.readFileSync(path.join(__dirname, `images/${i}.jpg`))),
     )
-    return new VisionSimulator(network, images)
+    return new VisionSimulator(nuclearnetClient, images)
   }
 
   private get image(): Message {

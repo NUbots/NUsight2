@@ -7,11 +7,11 @@ export interface Message {
 }
 
 export abstract class Simulator {
-  constructor(protected readonly network: NUClearNetClient) {
+  constructor(protected readonly nuclearnetClient: NUClearNetClient) {
   }
 
   protected send(message: Message) {
-    this.network.send({
+    this.nuclearnetClient.send({
       type: message.messageType,
       payload: Buffer.from(message.buffer),
       target: 'nusight',

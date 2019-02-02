@@ -5,18 +5,18 @@ import { Simulator } from './simulator'
 export class VirtualRobot {
   constructor(
     private readonly name: string,
-    private readonly network: NUClearNetClient,
+    private readonly nuclearnetClient: NUClearNetClient,
     private readonly simulators: Simulator[],
   ) {
-    this.network.connect({ name: this.name })
+    this.nuclearnetClient.connect({ name: this.name })
   }
 
-  static of({ name, network, simulators }: {
+  static of({ name, nuclearnetClient, simulators }: {
     name: string,
     simulators: Simulator[],
-    network: NUClearNetClient
+    nuclearnetClient: NUClearNetClient
   }) {
-    return new VirtualRobot(name, network, simulators)
+    return new VirtualRobot(name, nuclearnetClient, simulators)
   }
 
   start(): () => void {

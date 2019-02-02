@@ -96,7 +96,7 @@ export class VisualizerViewModel {
         bitsY: { value: this.model.lut.size.y },
         bitsZ: { value: this.model.lut.size.z },
         scale: { value: 1 },
-        size: { value: 2 * this.canvas.height / this.lutSize },
+        size: { value: this.canvas.height / this.model.lut.size.z / 7 },
       },
     })
   }

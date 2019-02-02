@@ -11,38 +11,20 @@ import { VisualizerModel } from './model'
 import * as styles from './styles.css'
 import { VisualizerViewModel } from './view_model'
 
-export type VisualiserProps = {
-  onMouseDown?(x: number, y: number): void
-  onMouseMove?(x: number, y: number): void
-  onMouseUp?(x: number, y: number): void
-  onWheel?(deltaY: number, preventDefault: () => void): void
-}
-
 @observer
-export class VisualizerView extends Component<VisualiserProps & {
+export class VisualizerView extends Component<{
+  controller: VisualizerController,
   model: VisualizerModel
 }> {
-  static of(model: VisualizerModel) {
-    const controller = VisualizerController.of(model)
-    return (props: VisualiserProps) => <VisualizerView
-      {...props}
-      model={model}
-      onMouseDown={controller.onMouseDown}
-      onMouseMove={controller.onMouseMove}
-      onMouseUp={controller.onMouseUp}
-      onWheel={controller.onWheel}
-    />
-  }
-
   render() {
     return (
       <div className={styles.visualiser}>
         <Three
           stage={this.stage}
-          onMouseDown={this.props.onMouseDown}
-          onMouseMove={this.props.onMouseMove}
-          onMouseUp={this.props.onMouseUp}
-          onWheel={this.props.onWheel}
+          onMouseDown={this.props.controller.onMouseDown}
+          onMouseMove={this.props.controller.onMouseMove}
+          onMouseUp={this.props.controller.onMouseUp}
+          onWheel={this.props.controller.onWheel}
         />
       </div>
     )

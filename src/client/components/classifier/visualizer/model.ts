@@ -1,40 +1,30 @@
 import { observable } from 'mobx'
 
-import { Vector2 } from '../../../math/vector2'
 import { Lut } from '../lut'
 
-export class VisualizerModel {
-  @observable.ref width: number
-  @observable.ref height: number
-  @observable.shallow camera: { distance: number, elevation: number, azimuth: number }
-  @observable.ref mouseDown: boolean
-  @observable.ref startDrag: Vector2
+import { Dragger } from './controller'
 
-  constructor(readonly lut: Lut, { width, height, camera, mouseDown, startDrag }: {
-    width: number,
-    height: number
+export class VisualizerModel {
+  @observable.ref lut: Lut
+  @observable.shallow camera: { distance: number, elevation: number, azimuth: number }
+  @observable.ref dragger?: Dragger
+
+  constructor({ lut, camera }: {
+    lut: Lut,
     camera: { distance: number, elevation: number, azimuth: number }
-    mouseDown: boolean,
-    startDrag: Vector2
   }) {
-    this.width = width
-    this.height = height
+    this.lut = lut
     this.camera = camera
-    this.mouseDown = mouseDown
-    this.startDrag = startDrag
   }
 
   static of(lut: Lut): VisualizerModel {
-    return new VisualizerModel(lut, {
-      width: 512,
-      height: 512,
+    return new VisualizerModel({
+      lut,
       camera: {
-        distance: 3,
+        distance: 4,
         elevation: 0,
         azimuth: 0,
       },
-      mouseDown: false,
-      startDrag: Vector2.of(),
     })
   }
 }

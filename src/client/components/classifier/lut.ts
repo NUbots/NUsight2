@@ -19,11 +19,11 @@ export class Lut {
     this.size = size
   }
 
-  static of() {
+  static of(size: number) {
     return new Lut({
       atom: createAtom('Lut'),
-      data: new Uint8Array(2 ** (6 + 6 + 6)).fill(Classification.Unclassified),
-      size: { x: 6, y: 6, z: 6 },
+      data: new Uint8Array(2 ** (3 * size)).fill(Classification.Unclassified),
+      size: { x: size, y: size, z: size },
     })
   }
 

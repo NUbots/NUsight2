@@ -3,15 +3,14 @@ import { action } from 'mobx'
 import { reaction } from 'mobx'
 import { disposeOnUnmount } from 'mobx-react'
 import { now } from 'mobx-utils'
-import { ComponentType } from 'react'
 import * as React from 'react'
 
 import { SeededRandom } from '../../../../../shared/base/random/seeded_random'
 import { range } from '../../../../../shared/base/range'
 import { Classification } from '../../classifications'
 import { Lut } from '../../lut'
+import { VisualizerController } from '../controller'
 import { VisualizerModel } from '../model'
-import { VisualiserProps } from '../view'
 import { VisualizerView } from '../view'
 
 const classifications = Object.freeze([
@@ -23,50 +22,55 @@ const classifications = Object.freeze([
   Classification.Magenta,
 ])
 
-function generateLut(percentageFull = 0.2) {
-  const random = SeededRandom.of('classifier')
-  return Lut.generate({ x: 4, y: 4, z: 4 }, () => {
-    return (random.float() <= percentageFull) ? random.choice(classifications) : Classification.Unclassified
-  })
-}
-
+const fullscreen = { width: 'calc(100vw - 20px)', height: 'calc(100vh - 20px)' }
 storiesOf('classifier.visualizer', module)
   .add('renders statically', () => {
-    const model = VisualizerModel.of(generateLut())
-    const Visualizer = VisualizerView.of(model)
-    return <div style={{ width: 'calc(100vw - 20px)', height: 'calc(100vh - 20px)' }}>
-      <Visualizer/>
+    const random = SeededRandom.of('classifier')
+    const model = VisualizerModel.of(generateLut(random))
+    const controller = VisualizerController.of(model)
+    return <div style={fullscreen}>
+      <VisualizerView model={model} controller={controller}/>
     </div>
   })
   .add('renders animated', () => {
     const random = SeededRandom.of('classifier')
-    const model = VisualizerModel.of(generateLut())
-    return <div style={{ width: 'calc(100vw - 20px)', height: 'calc(100vh - 20px)' }}>
-      <AnimatedVisualizer model={model} Visualizer={VisualizerView.of(model)} random={random}/>
+    const model = VisualizerModel.of(generateLut(random))
+    const controller = VisualizerController.of(model)
+    return <div style={fullscreen}>
+      <AnimatedVisualizer model={model} random={random}>
+        <VisualizerView model={model} controller={controller}/>
+      </AnimatedVisualizer>
     </div>
   })
 
 class AnimatedVisualizer extends React.Component<{
   model: VisualizerModel,
-  Visualizer: ComponentType<VisualiserProps>,
-  random: SeededRandom
+  random: SeededRandom,
+  children: any
 }> {
   componentDidMount() {
     disposeOnUnmount(this, reaction(() => now('frame'), this.update))
   }
 
   render() {
-    return <this.props.Visualizer/>
+    return this.props.children
   }
 
   @action.bound
   private update() {
+    const percentageFull = 0.4
     range(100).forEach(() => {
-      const index = this.props.random.integer(0, this.props.model.lut.data.length)
-      const percentageFull = 0.2
-      const classification = (this.props.random.float() <= percentageFull)
-        ? this.props.random.choice(classifications) : Classification.Unclassified
-      this.props.model.lut.set(index, classification)
+      const { random, model: { lut } } = this.props
+      const randomIndex = random.integer(0, lut.data.length)
+      const randomClassification = random.float() <= percentageFull
+        ? random.choice(classifications) : Classification.Unclassified
+      lut.set(randomIndex, randomClassification)
     })
   }
+}
+
+function generateLut(random: SeededRandom, percentageFull = 0.4) {
+  return Lut.generate({ x: 4, y: 4, z: 4 }, () => {
+    return random.float() <= percentageFull ? random.choice(classifications) : Classification.Unclassified
+  })
 }

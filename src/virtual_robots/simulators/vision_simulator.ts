@@ -34,7 +34,7 @@ export class VisionSimulator extends Simulator {
     return () => stops.forEach(stop => stop())
   }
 
-  static of(nuclearnetClient: NUClearNetClient): VisionSimulator {
+  static of({ nuclearnetClient }: { nuclearnetClient: NUClearNetClient }): VisionSimulator {
     const images = Array.from(
       { length: 11 },
       (_, i) => toUint8Array(fs.readFileSync(path.join(__dirname, `images/${i}.jpg`))),

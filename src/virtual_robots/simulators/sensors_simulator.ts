@@ -14,17 +14,20 @@ import Sensors = message.input.Sensors
 export const HIP_TO_FOOT = 0.2465
 
 export class SensorsSimulator extends Simulator {
-
-  private static numRobots: number = 0
-  private readonly robotIndex: number
-
-  constructor(nuclearnetClient: NUClearNetClient) {
+  constructor(
+    nuclearnetClient: NUClearNetClient,
+    private readonly robotIndex: number,
+    private readonly numRobots: number,
+  ) {
     super(nuclearnetClient)
-    this.robotIndex = SensorsSimulator.numRobots++
   }
 
-  static of(nuclearnetClient: NUClearNetClient) {
-    return new SensorsSimulator(nuclearnetClient)
+  static of({ nuclearnetClient, robotIndex, numRobots }: {
+    nuclearnetClient: NUClearNetClient,
+    robotIndex: number,
+    numRobots: number,
+  }) {
+    return new SensorsSimulator(nuclearnetClient, robotIndex, numRobots)
   }
 
   start() {
@@ -41,7 +44,7 @@ export class SensorsSimulator extends Simulator {
 
     const t = time * 5 + this.robotIndex
 
-    const angle = this.robotIndex * (2 * Math.PI) / SensorsSimulator.numRobots + time / 40
+    const angle = this.robotIndex * (2 * Math.PI) / this.numRobots + time / 40
     const distance = Math.cos(time + 4 * this.robotIndex) * 0.3 + 1
     const x = distance * Math.cos(angle)
     const y = distance * Math.sin(angle)

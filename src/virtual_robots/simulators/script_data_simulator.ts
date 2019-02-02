@@ -10,7 +10,7 @@ export class ScriptDataSimulator extends Simulator {
     this.nuclearnetClient.on('message.input.Sensors', this.onSensors)
   }
 
-  static of(nuclearnetClient: NUClearNetClient) {
+  static of({ nuclearnetClient }: { nuclearnetClient: NUClearNetClient }) {
     return new ScriptDataSimulator(nuclearnetClient)
   }
 

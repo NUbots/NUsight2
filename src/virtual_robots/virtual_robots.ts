@@ -22,11 +22,11 @@ export class VirtualRobots {
         name: `Virtual Robot ${i + 1}`,
         nuclearnetClient,
         simulators: [
-          OverviewSimulator.of(nuclearnetClient),
-          SensorsSimulator.of(nuclearnetClient),
-          ChartSimulator.of(nuclearnetClient),
-          VisionSimulator.of(nuclearnetClient),
-          ScriptDataSimulator.of(nuclearnetClient),
+          OverviewSimulator.of({ nuclearnetClient, robotIndex: i, numRobots }),
+          SensorsSimulator.of({ nuclearnetClient, robotIndex: i, numRobots }),
+          ChartSimulator.of({ nuclearnetClient }),
+          VisionSimulator.of({ nuclearnetClient }),
+          ScriptDataSimulator.of({ nuclearnetClient }),
         ],
       })
     })

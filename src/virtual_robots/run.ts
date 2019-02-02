@@ -14,37 +14,43 @@ import { VirtualRobots } from './virtual_robots'
 function main() {
   const args = minimist(process.argv.slice(2))
 
+  const numRobots = 6
   const virtualRobots = new VirtualRobots({
-    robots: Array.from({ length: 6 }, (_, i) => {
-      const network = DirectNUClearNetClient.of()
+    robots: Array.from({ length: numRobots }, (_, i) => {
+      const nuclearnetClient = DirectNUClearNetClient.of()
       return VirtualRobot.of({
         name: `Virtual Robot ${i + 1}`,
-        network: nuclearnetClient,
-        simulators: getSimulators(args, network),
+        nuclearnetClient,
+        simulators: getSimulators(args, nuclearnetClient, i, numRobots),
       })
     }),
   })
   virtualRobots.start()
 }
 
-function getSimulators(args: minimist.ParsedArgs, network: NUClearNetClient): Simulator[] {
+function getSimulators(
+  args: minimist.ParsedArgs,
+  nuclearnetClient: NUClearNetClient,
+  robotIndex: number,
+  numRobots: number,
+): Simulator[] {
   const simulators = []
 
   if (args.overview || args.all) {
-    simulators.push(OverviewSimulator.of(network))
+    simulators.push(OverviewSimulator.of({ nuclearnetClient, robotIndex, numRobots }))
   }
   if (args.sensors || args.all) {
-    simulators.push(SensorsSimulator.of(network))
+    simulators.push(SensorsSimulator.of({ nuclearnetClient, robotIndex, numRobots }))
   }
   if (args.chart || args.all) {
-    simulators.push(ChartSimulator.of(network))
+    simulators.push(ChartSimulator.of({ nuclearnetClient }))
   }
   if (args.scripts || args.all) {
-    simulators.push(ScriptDataSimulator.of(network))
+    simulators.push(ScriptDataSimulator.of({ nuclearnetClient }))
   }
   if (simulators.length === 0) {
     // If no simulators given, enable them all.
-    return getSimulators({ ...args, all: true }, network)
+    return getSimulators({ ...args, all: true }, nuclearnetClient, robotIndex, numRobots)
   }
   return simulators
 }

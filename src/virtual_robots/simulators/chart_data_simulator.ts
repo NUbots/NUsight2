@@ -10,7 +10,7 @@ import { periodic } from './periodic'
 import DataPoint = message.support.nusight.DataPoint
 
 export class ChartSimulator extends Simulator {
-  static of(nuclearnetClient: NUClearNetClient): ChartSimulator {
+  static of({ nuclearnetClient }: { nuclearnetClient: NUClearNetClient }): ChartSimulator {
     return new ChartSimulator(nuclearnetClient)
   }
 

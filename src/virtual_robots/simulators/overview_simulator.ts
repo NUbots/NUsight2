@@ -19,21 +19,25 @@ import Phase = message.input.GameState.Data.Phase
 import Overview = message.support.nusight.Overview
 
 export class OverviewSimulator extends Simulator {
-  private static numRobots: number = 0
-  private readonly robotIndex: number
-
   constructor(
     nuclearnetClient: NUClearNetClient,
+    private readonly robotIndex: number,
+    private readonly numRobots: number,
     private readonly field: FieldDimensions,
     private readonly random: SeededRandom,
   ) {
     super(nuclearnetClient)
-    this.robotIndex = OverviewSimulator.numRobots++
   }
 
-  static of(nuclearnetClient: NUClearNetClient) {
+  static of({ nuclearnetClient, robotIndex, numRobots }: {
+    nuclearnetClient: NUClearNetClient,
+    robotIndex: number,
+    numRobots: number,
+  }) {
     return new OverviewSimulator(
       nuclearnetClient,
+      robotIndex,
+      numRobots,
       FieldDimensions.postYear2017(),
       SeededRandom.of('overview_simulator'),
     )

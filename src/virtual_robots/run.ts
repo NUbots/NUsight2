@@ -1,6 +1,7 @@
 import * as minimist from 'minimist'
 
 import { DirectNUClearNetClient } from '../server/nuclearnet/direct_nuclearnet_client'
+import { NUClearNetClient } from '../shared/nuclearnet/nuclearnet_client'
 
 import { Simulator } from './simulator'
 import { ChartSimulator } from './simulators/chart_data_simulator'
@@ -13,8 +14,8 @@ import { VirtualRobots } from './virtual_robots'
 function main() {
   const args = minimist(process.argv.slice(2))
 
-  const simulators = getSimulators(args)
   const network = DirectNUClearNetClient.of()
+  const simulators = getSimulators(args, network)
   const virtualRobots = new VirtualRobots({
     robots: Array.from({ length: 6 }, (_, i) => VirtualRobot.of({
       name: `Virtual Robot ${i + 1}`,
@@ -25,7 +26,7 @@ function main() {
   virtualRobots.start()
 }
 
-function getSimulators(args: minimist.ParsedArgs): Simulator[] {
+function getSimulators(args: minimist.ParsedArgs, network: NUClearNetClient): Simulator[] {
   const simulators = []
 
   if (args.overview || args.all) {
@@ -38,11 +39,11 @@ function getSimulators(args: minimist.ParsedArgs): Simulator[] {
     simulators.push(ChartSimulator.of())
   }
   if (args.scripts || args.all) {
-    simulators.push(ScriptDataSimulator.of())
+    simulators.push(ScriptDataSimulator.of(network))
   }
   if (simulators.length === 0) {
     // If no simulators given, enable them all.
-    return getSimulators({ ...args, all: true })
+    return getSimulators({ ...args, all: true }, network)
   }
   return simulators
 }

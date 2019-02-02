@@ -17,15 +17,16 @@ export class VirtualRobots {
 
   static of({ fakeNetworking, numRobots }: { fakeNetworking: boolean, numRobots: number }) {
     const robots = Array.from({ length: numRobots }, (_, i) => {
+      const network = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
       return VirtualRobot.of({
         name: `Virtual Robot ${i + 1}`,
-        network: fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of(),
+        network,
         simulators: [
           OverviewSimulator.of(),
           SensorsSimulator.of(),
           ChartSimulator.of(),
           VisionSimulator.of(),
-          ScriptDataSimulator.of(),
+          ScriptDataSimulator.of(network),
         ],
       })
     })

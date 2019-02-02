@@ -10,7 +10,7 @@ export abstract class Simulator {
   constructor(protected readonly nuclearnetClient: NUClearNetClient) {
   }
 
-  protected send(message: Message) {
+  protected send(message: Message): void {
     this.nuclearnetClient.send({
       type: message.messageType,
       payload: Buffer.from(message.buffer),

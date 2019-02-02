@@ -25,7 +25,7 @@ export class SensorsSimulator extends Simulator {
   static of({ nuclearnetClient, robotIndex, numRobots }: {
     nuclearnetClient: NUClearNetClient,
     robotIndex: number,
-    numRobots: number,
+    numRobots: number
   }) {
     return new SensorsSimulator(nuclearnetClient, robotIndex, numRobots)
   }

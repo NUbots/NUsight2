@@ -32,7 +32,7 @@ export class OverviewSimulator extends Simulator {
   static of({ nuclearnetClient, robotIndex, numRobots }: {
     nuclearnetClient: NUClearNetClient,
     robotIndex: number,
-    numRobots: number,
+    numRobots: number
   }) {
     return new OverviewSimulator(
       nuclearnetClient,

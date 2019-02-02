@@ -14,14 +14,15 @@ import { VirtualRobots } from './virtual_robots'
 function main() {
   const args = minimist(process.argv.slice(2))
 
-  const network = DirectNUClearNetClient.of()
-  const simulators = getSimulators(args, network)
   const virtualRobots = new VirtualRobots({
-    robots: Array.from({ length: 6 }, (_, i) => VirtualRobot.of({
-      name: `Virtual Robot ${i + 1}`,
-      network,
-      simulators,
-    })),
+    robots: Array.from({ length: 6 }, (_, i) => {
+      const network = DirectNUClearNetClient.of()
+      return VirtualRobot.of({
+        name: `Virtual Robot ${i + 1}`,
+        network,
+        simulators: getSimulators(args, network),
+      })
+    }),
   })
   virtualRobots.start()
 }

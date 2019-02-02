@@ -1,3 +1,4 @@
+import { autorun } from 'mobx'
 import { IComputedValue } from 'mobx'
 import { computed } from 'mobx'
 
@@ -5,6 +6,7 @@ import { Vector2 } from '../../client/math/vector2'
 import { Vector3 } from '../../client/math/vector3'
 import { SeededRandom } from '../../shared/base/random/seeded_random'
 import { FieldDimensions } from '../../shared/field/dimensions'
+import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { message } from '../../shared/proto/messages'
 import { Ivec2 } from '../../shared/proto/messages'
 import { toTimestamp } from '../../shared/time/timestamp'
@@ -18,24 +20,25 @@ import PenaltyReason = message.input.GameState.Data.PenaltyReason
 import Phase = message.input.GameState.Data.Phase
 import Overview = message.support.nusight.Overview
 
-export class OverviewSimulator implements Simulator {
-
+export class OverviewSimulator extends Simulator {
   private static numRobots: number = 0
   private readonly robotIndex: number
 
-  constructor(private field: FieldDimensions, private random: SeededRandom) {
+  constructor(network: NUClearNetClient, private field: FieldDimensions, private random: SeededRandom) {
+    super(network)
     this.robotIndex = OverviewSimulator.numRobots++
   }
 
-  static of() {
+  static of(network: NUClearNetClient) {
     return new OverviewSimulator(
+      network,
       FieldDimensions.postYear2017(),
       SeededRandom.of('overview_simulator'),
     )
   }
 
-  packets(): Array<IComputedValue<Message>> {
-    return [computed(() => this.overview)]
+  start() {
+    return autorun(() => this.send(this.overview))
   }
 
   get overview(): Message {

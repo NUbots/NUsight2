@@ -1,4 +1,4 @@
-import { IComputedValue } from 'mobx'
+import { NUClearNetClient } from '../shared/nuclearnet/nuclearnet_client'
 
 export interface Message {
   messageType: string
@@ -6,7 +6,18 @@ export interface Message {
   reliable?: boolean
 }
 
-export interface Simulator {
-  packets(): Array<IComputedValue<Message>>
-}
+export abstract class Simulator {
+  constructor(protected readonly network: NUClearNetClient) {
+  }
 
+  protected send(message: Message) {
+    this.network.send({
+      type: message.messageType,
+      payload: Buffer.from(message.buffer),
+      target: 'nusight',
+      reliable: message.reliable,
+    })
+  }
+
+  abstract start(): () => void
+}

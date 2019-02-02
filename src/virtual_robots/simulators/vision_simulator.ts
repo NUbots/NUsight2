@@ -1,16 +1,16 @@
 import * as fs from 'fs'
-import { IComputedValue } from 'mobx'
-import { computed } from 'mobx'
+import { autorun } from 'mobx'
 import * as path from 'path'
 import { Vector3 } from 'three'
 import { Matrix4 } from 'three'
 
 import { fourcc } from '../../client/image_decoder/fourcc'
+import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { Imat4 } from '../../shared/proto/messages'
 import { message } from '../../shared/proto/messages'
 import { toTimestamp } from '../../shared/time/timestamp'
-import { Message } from '../simulator'
 import { Simulator } from '../simulator'
+import { Message } from '../simulator'
 
 import { periodic } from './periodic'
 import CompressedImage = message.output.CompressedImage
@@ -20,24 +20,25 @@ import Side = message.vision.Goal.Side
 import Team = message.vision.Goal.Team
 import Goals = message.vision.Goals
 
-export class VisionSimulator implements Simulator {
-  constructor(private images: Uint8Array[]) {
+export class VisionSimulator extends Simulator {
+  constructor(network: NUClearNetClient, private images: Uint8Array[]) {
+    super(network)
   }
 
-  static of(): VisionSimulator {
+  start() {
+    return autorun(() => {
+      this.send(this.image)
+      this.send(this.goals)
+      this.send(this.balls)
+    })
+  }
+
+  static of(network: NUClearNetClient): VisionSimulator {
     const images = Array.from(
       { length: 11 },
       (_, i) => toUint8Array(fs.readFileSync(path.join(__dirname, `images/${i}.jpg`))),
     )
-    return new VisionSimulator(images)
-  }
-
-  packets(): Array<IComputedValue<Message>> {
-    return [
-      computed(() => this.image),
-      computed(() => this.goals),
-      computed(() => this.balls),
-    ]
+    return new VisionSimulator(network, images)
   }
 
   private get image(): Message {

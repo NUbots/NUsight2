@@ -1,6 +1,6 @@
-import { IComputedValue } from 'mobx'
-import { computed } from 'mobx'
+import { autorun } from 'mobx'
 
+import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { message } from '../../shared/proto/messages'
 import { toTimestamp } from '../../shared/time/timestamp'
 import { Simulator } from '../simulator'
@@ -9,18 +9,16 @@ import { Message } from '../simulator'
 import { periodic } from './periodic'
 import DataPoint = message.support.nusight.DataPoint
 
-export class ChartSimulator implements Simulator {
-
-  static of(): ChartSimulator {
-    return new ChartSimulator()
+export class ChartSimulator extends Simulator {
+  static of(network: NUClearNetClient): ChartSimulator {
+    return new ChartSimulator(network)
   }
 
-  packets(): Array<IComputedValue<Message>> {
-    return [computed(() => this.chartData)]
+  start() {
+    return autorun(() => this.send(this.chartData))
   }
 
   get chartData(): Message {
-
     // Offset our time to test the adaptive window
     const time = periodic(60) - 3
 
@@ -37,7 +35,6 @@ export class ChartSimulator implements Simulator {
     }).finish()
 
     const message = { messageType, buffer }
-
     return message
   }
 }

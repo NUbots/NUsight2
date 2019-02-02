@@ -30,13 +30,13 @@ function getSimulators(args: minimist.ParsedArgs, network: NUClearNetClient): Si
   const simulators = []
 
   if (args.overview || args.all) {
-    simulators.push(OverviewSimulator.of())
+    simulators.push(OverviewSimulator.of(network))
   }
   if (args.sensors || args.all) {
-    simulators.push(SensorsSimulator.of())
+    simulators.push(SensorsSimulator.of(network))
   }
   if (args.chart || args.all) {
-    simulators.push(ChartSimulator.of())
+    simulators.push(ChartSimulator.of(network))
   }
   if (args.scripts || args.all) {
     simulators.push(ScriptDataSimulator.of(network))

@@ -22,10 +22,10 @@ export class VirtualRobots {
         name: `Virtual Robot ${i + 1}`,
         network,
         simulators: [
-          OverviewSimulator.of(),
-          SensorsSimulator.of(),
-          ChartSimulator.of(),
-          VisionSimulator.of(),
+          OverviewSimulator.of(network),
+          SensorsSimulator.of(network),
+          ChartSimulator.of(network),
+          VisionSimulator.of(network),
           ScriptDataSimulator.of(network),
         ],
       })
@@ -33,7 +33,8 @@ export class VirtualRobots {
     return new VirtualRobots({ robots })
   }
 
-  start() {
-    this.robots.forEach(r => r.start())
+  start(): () => void {
+    const stops = this.robots.map(robot => robot.start())
+    return () => stops.forEach(stop => stop())
   }
 }

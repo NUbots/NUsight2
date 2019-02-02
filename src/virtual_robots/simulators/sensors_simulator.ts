@@ -1,8 +1,9 @@
-import { computed, IComputedValue } from 'mobx'
+import { autorun } from 'mobx'
 import { Matrix4 } from 'three'
 import { Vector3 } from 'three'
 import { Quaternion } from 'three'
 
+import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { message } from '../../shared/proto/messages'
 import { Imat4 } from '../../shared/proto/messages'
 import { Message, Simulator } from '../simulator'
@@ -12,21 +13,22 @@ import Sensors = message.input.Sensors
 
 export const HIP_TO_FOOT = 0.2465
 
-export class SensorsSimulator implements Simulator {
+export class SensorsSimulator extends Simulator {
 
   private static numRobots: number = 0
   private readonly robotIndex: number
 
-  constructor() {
+  constructor(network: NUClearNetClient) {
+    super(network)
     this.robotIndex = SensorsSimulator.numRobots++
   }
 
-  static of() {
-    return new SensorsSimulator()
+  static of(network: NUClearNetClient) {
+    return new SensorsSimulator(network)
   }
 
-  packets(): Array<IComputedValue<Message>> {
-    return [computed(() => this.sensors)]
+  start() {
+    return autorun(() => this.send(this.sensors))
   }
 
   get sensors(): Message {

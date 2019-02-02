@@ -6,9 +6,6 @@ import { NUsightNetwork } from '../client/network/nusight_network'
 import { FakeNUClearNetClient } from '../server/nuclearnet/fake_nuclearnet_client'
 import { FakeNUClearNetServer } from '../server/nuclearnet/fake_nuclearnet_server'
 import { message } from '../shared/proto/messages'
-import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
-import { SensorsSimulator } from '../virtual_robots/simulators/sensors_simulator'
-import { VirtualRobot } from '../virtual_robots/virtual_robot'
 import Sensors = message.input.Sensors
 
 import CompressedImage = message.output.CompressedImage
@@ -17,19 +14,19 @@ import Overview = message.support.nusight.Overview
 describe('Networking Integration', () => {
   let nuclearnetServer: FakeNUClearNetServer
   let nusightNetwork: NUsightNetwork
-  let virtualRobot: VirtualRobot
   let disconnectNusightNetwork: () => void
+  let sendMessages: () => void
 
   beforeEach(() => {
     nuclearnetServer = new FakeNUClearNetServer()
     nusightNetwork = createNUsightNetwork()
     disconnectNusightNetwork = nusightNetwork.connect({ name: 'nusight' })
-
-    virtualRobot = new VirtualRobot(
-      'Robot #1',
-      new FakeNUClearNetClient(nuclearnetServer),
-      [OverviewSimulator.of(), SensorsSimulator.of()],
-    )
+    const network = new FakeNUClearNetClient(nuclearnetServer)
+    network.connect({ name: 'Robot #1' })
+    sendMessages = () => {
+      network.send({ type: 'message.input.Sensors', payload: new Buffer(0) })
+      network.send({ type: 'message.support.nusight.Overview', payload: new Buffer(0) })
+    }
   })
 
   function createNUsightNetwork() {
@@ -52,7 +49,7 @@ describe('Networking Integration', () => {
       const onSensors = jest.fn()
       network.on(Sensors, onSensors)
 
-      virtualRobot.sendAll()
+      sendMessages()
 
       expect(onSensors).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
       expect(onSensors).toHaveBeenCalledTimes(1)
@@ -66,13 +63,13 @@ describe('Networking Integration', () => {
 
       network.off()
 
-      virtualRobot.sendAll()
+      sendMessages()
 
       expect(onSensors1).not.toHaveBeenCalled()
       expect(onSensors2).not.toHaveBeenCalled()
     })
 
-    it('does not receive message on specific unsubscribed callback', () => {
+    it('does not receive message on specific unsubscribed callback', async () => {
       const onSensors1 = jest.fn()
       const onSensors2 = jest.fn()
       const off1 = network.on(Sensors, onSensors1)
@@ -80,7 +77,7 @@ describe('Networking Integration', () => {
 
       off1()
 
-      virtualRobot.sendAll()
+      sendMessages()
 
       expect(onSensors1).not.toHaveBeenCalled()
       expect(onSensors2).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
@@ -102,7 +99,7 @@ describe('Networking Integration', () => {
 
       nusightNetwork.connect({ name: 'nusight' })
 
-      virtualRobot.sendAll()
+      sendMessages()
 
       expect(onSensors).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
     })
@@ -118,7 +115,7 @@ describe('Networking Integration', () => {
       const onSensors2 = jest.fn()
       network2.on(Sensors, onSensors2)
 
-      virtualRobot.sendAll()
+      sendMessages()
 
       expect(onSensors1).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
       expect(onSensors2).toHaveBeenCalledWith(expect.objectContaining({ name: 'Robot #1' }), expect.any(Sensors))
@@ -140,7 +137,7 @@ describe('Networking Integration', () => {
       const onSensors = jest.fn()
       localisationNetwork.on(Sensors, onSensors)
 
-      virtualRobot.sendAll()
+      sendMessages()
 
       expect(onSensors).toHaveBeenCalledTimes(1)
 
@@ -149,7 +146,7 @@ describe('Networking Integration', () => {
       const onCompressedImage = jest.fn()
       visionNetwork.on(CompressedImage, onCompressedImage)
 
-      virtualRobot.sendAll()
+      sendMessages()
 
       expect(onCompressedImage).toHaveBeenCalledTimes(0)
       expect(onSensors).toHaveBeenCalledTimes(1)

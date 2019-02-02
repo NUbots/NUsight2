@@ -1,14 +1,12 @@
 import { action } from 'mobx'
-import { IComputedValue } from 'mobx'
 import { NUClearNetPacket } from 'nuclearnet.js'
 
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { Simulator } from '../simulator'
-import { Message } from '../simulator'
 
-export class ScriptDataSimulator implements Simulator {
-
-  constructor(private readonly network: NUClearNetClient) {
+export class ScriptDataSimulator extends Simulator {
+  constructor(network: NUClearNetClient) {
+    super(network)
     this.network.on('message.input.Sensors', this.onSensors)
   }
 
@@ -16,8 +14,9 @@ export class ScriptDataSimulator implements Simulator {
     return new ScriptDataSimulator(network)
   }
 
-  packets(): Array<IComputedValue<Message>> {
-    return []
+  start() {
+    // TODO
+    return () => 0
   }
 
   @action.bound

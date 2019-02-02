@@ -11,7 +11,7 @@ import { WebGLRenderer } from 'three'
 import { Scene } from 'three'
 import { Camera } from 'three'
 
-import { reconcile } from './reconciler'
+import { reconcile } from './reconcile'
 import * as styles from './styles.css'
 
 export type Stage = { scene: Scene, camera: Camera }

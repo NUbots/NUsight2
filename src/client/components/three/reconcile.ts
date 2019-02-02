@@ -3,6 +3,16 @@ import { Texture } from 'three'
 
 import { Stage } from './three'
 
+/**
+ * This function deeply copies all values from `source` into `target`.
+ *
+ * It implements a three.js specific reconciliation algorithm between two stage objects. Where possible, it will prefer
+ * to update objects rather than replacing them, thus maintain reference identity for most objects.
+ *
+ * Note: Assumes that any object reference that is in both `source` and `target` are deeply equal to save computation.
+ *
+ * Ref: https://reactjs.org/docs/reconciliation.html
+ */
 export function reconcile(source: Stage, target: Stage) {
   fixObjectAdd()
   if (source.camera.type === target.camera.type) {

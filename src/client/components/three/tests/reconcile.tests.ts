@@ -15,11 +15,11 @@ import { Scene } from 'three'
 import { Object3D } from 'three'
 import { PerspectiveCamera } from 'three'
 
-import { objectAdd } from '../reconciler'
-import { fixObjectAdd } from '../reconciler'
-import { reconcileArrays } from '../reconciler'
-import { reconcileObjects } from '../reconciler'
-import { reconcile } from '../reconciler'
+import { objectAdd } from '../reconcile'
+import { fixObjectAdd } from '../reconcile'
+import { reconcileArrays } from '../reconcile'
+import { reconcileObjects } from '../reconcile'
+import { reconcile } from '../reconcile'
 
 describe('reconcile', () => {
   it('reconciles a stage', () => {

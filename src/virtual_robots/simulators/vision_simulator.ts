@@ -26,11 +26,12 @@ export class VisionSimulator extends Simulator {
   }
 
   start() {
-    return autorun(() => {
-      this.send(this.image)
-      this.send(this.goals)
-      this.send(this.balls)
-    })
+    const stops = [
+      autorun(() => this.send(this.image)),
+      autorun(() => this.send(this.goals)),
+      autorun(() => this.send(this.balls)),
+    ]
+    return () => stops.forEach(stop => stop())
   }
 
   static of(network: NUClearNetClient): VisionSimulator {

@@ -14,6 +14,9 @@ export function reconcile(source: Stage, target: Stage) {
 }
 
 export function reconcileObjects(source: any, target: any, visited = new Set()): void {
+  if (target === source) {
+    return
+  }
   if (visited.has(source)) {
     throw new Error('cycle detected')
   }
@@ -53,6 +56,9 @@ export function reconcileObjects(source: any, target: any, visited = new Set()):
 }
 
 export function reconcileArrays(source: any[], target: any[], visited = new Set()): void {
+  if (target === source) {
+    return
+  }
   if (target.length !== source.length) {
     target.length = source.length
   }
@@ -61,6 +67,9 @@ export function reconcileArrays(source: any[], target: any[], visited = new Set(
       const targetChild: any = target[index]
       if (targetChild == null) {
         target[index] = sourceChild
+      } else if (targetChild === sourceChild) {
+        // nothing changed, move on
+        continue
       } else if (Array.isArray(sourceChild)) {
         reconcileArrays(sourceChild, targetChild, visited)
       } else if (typeof targetChild === 'object') {

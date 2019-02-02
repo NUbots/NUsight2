@@ -1,6 +1,4 @@
 import { autorun } from 'mobx'
-import { IComputedValue } from 'mobx'
-import { computed } from 'mobx'
 
 import { Vector2 } from '../../client/math/vector2'
 import { Vector3 } from '../../client/math/vector3'
@@ -24,7 +22,11 @@ export class OverviewSimulator extends Simulator {
   private static numRobots: number = 0
   private readonly robotIndex: number
 
-  constructor(nuclearnetClient: NUClearNetClient, private field: FieldDimensions, private random: SeededRandom) {
+  constructor(
+    nuclearnetClient: NUClearNetClient,
+    private readonly field: FieldDimensions,
+    private readonly random: SeededRandom,
+  ) {
     super(nuclearnetClient)
     this.robotIndex = OverviewSimulator.numRobots++
   }

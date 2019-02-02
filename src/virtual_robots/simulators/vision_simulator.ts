@@ -21,7 +21,7 @@ import Team = message.vision.Goal.Team
 import Goals = message.vision.Goals
 
 export class VisionSimulator extends Simulator {
-  constructor(nuclearnetClient: NUClearNetClient, private images: Uint8Array[]) {
+  constructor(nuclearnetClient: NUClearNetClient, private readonly images: Uint8Array[]) {
     super(nuclearnetClient)
   }
 

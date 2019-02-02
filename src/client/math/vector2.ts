@@ -4,8 +4,8 @@ import { observable } from 'mobx'
 import { Transform } from './transform'
 
 export class Vector2 {
-  @observable.ref x: number
-  @observable.ref y: number
+  @observable x: number
+  @observable y: number
 
   constructor(x: number, y: number) {
     this.x = x
@@ -112,9 +112,5 @@ export class Vector2 {
     this.x -= v.x
     this.y -= v.y
     return this
-  }
-
-  toString() {
-    return `{ x: ${this.x}, y: ${this.y} }`
   }
 }

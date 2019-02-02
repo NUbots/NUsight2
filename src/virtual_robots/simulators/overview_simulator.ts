@@ -10,10 +10,8 @@ import { Ivec2 } from '../../shared/proto/messages'
 import { toTimestamp } from '../../shared/time/timestamp'
 import { Simulator } from '../simulator'
 import { Message } from '../simulator'
-import { VirtualRobot } from '../virtual_robot'
 
 import { periodic } from './periodic'
-
 import State = message.behaviour.Behaviour.State
 import Mode = message.input.GameState.Data.Mode
 import PenaltyReason = message.input.GameState.Data.PenaltyReason
@@ -25,15 +23,12 @@ export class OverviewSimulator implements Simulator {
   private static numRobots: number = 0
   private readonly robotIndex: number
 
-  constructor(private robot: VirtualRobot,
-              private field: FieldDimensions,
-              private random: SeededRandom) {
+  constructor(private field: FieldDimensions, private random: SeededRandom) {
     this.robotIndex = OverviewSimulator.numRobots++
   }
 
-  static of(robot: VirtualRobot) {
+  static of() {
     return new OverviewSimulator(
-      robot,
       FieldDimensions.postYear2017(),
       SeededRandom.of('overview_simulator'),
     )

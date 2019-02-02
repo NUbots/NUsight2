@@ -5,15 +5,14 @@ import { Network } from '../client/network/network'
 import { NUsightNetwork } from '../client/network/nusight_network'
 import { FakeNUClearNetClient } from '../server/nuclearnet/fake_nuclearnet_client'
 import { FakeNUClearNetServer } from '../server/nuclearnet/fake_nuclearnet_server'
-import { NodeSystemClock } from '../server/time/node_clock'
 import { message } from '../shared/proto/messages'
 import { OverviewSimulator } from '../virtual_robots/simulators/overview_simulator'
 import { SensorsSimulator } from '../virtual_robots/simulators/sensors_simulator'
 import { VirtualRobot } from '../virtual_robots/virtual_robot'
+import Sensors = message.input.Sensors
 
 import CompressedImage = message.output.CompressedImage
 import Overview = message.support.nusight.Overview
-import Sensors = message.input.Sensors
 
 describe('Networking Integration', () => {
   let nuclearnetServer: FakeNUClearNetServer
@@ -29,7 +28,7 @@ describe('Networking Integration', () => {
     virtualRobot = new VirtualRobot(
       'Robot #1',
       new FakeNUClearNetClient(nuclearnetServer),
-      [OverviewSimulator, SensorsSimulator],
+      [OverviewSimulator.of(), SensorsSimulator.of()],
     )
   })
 

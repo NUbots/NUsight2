@@ -1,5 +1,4 @@
 import { autorun } from 'mobx'
-import { relative } from 'path'
 
 import { NUClearNetClient } from '../shared/nuclearnet/nuclearnet_client'
 
@@ -7,23 +6,17 @@ import { Simulator } from './simulator'
 
 type Opts = {
   name: string,
-  simulators: Array<{ of(robot: VirtualRobot): Simulator }>,
+  simulators: Simulator[],
   network: NUClearNetClient
 }
 
 export class VirtualRobot {
-
-  private simulators: Simulator[]
   private stops?: Array<() => void>
 
-  network: NUClearNetClient
-
-  constructor(private name: string,
-              network: NUClearNetClient,
-              simulatorFactories: Array<{ of(robot: VirtualRobot): Simulator}>) {
-    this.network = network
-    this.simulators = simulatorFactories.map(f => f.of(this))
-
+  constructor(private readonly name: string,
+              private readonly network: NUClearNetClient,
+              private readonly simulators: Simulator[],
+  ) {
     // Connect to the network
     this.stops = [this.network.connect({ name: this.name })]
   }
@@ -34,7 +27,7 @@ export class VirtualRobot {
 
   start() {
 
-     // Make an autorunner for each of the packets
+    // Make an autorunner for each of the packets
     this.simulators.forEach(s => {
       s.packets().forEach(p => {
         this.stops!.push(autorun(() => {

@@ -6,10 +6,8 @@ import { Quaternion } from 'three'
 import { message } from '../../shared/proto/messages'
 import { Imat4 } from '../../shared/proto/messages'
 import { Message, Simulator } from '../simulator'
-import { VirtualRobot } from '../virtual_robot'
 
 import { periodic } from './periodic'
-
 import Sensors = message.input.Sensors
 
 export const HIP_TO_FOOT = 0.2465
@@ -19,12 +17,12 @@ export class SensorsSimulator implements Simulator {
   private static numRobots: number = 0
   private readonly robotIndex: number
 
-  constructor(private robot: VirtualRobot) {
+  constructor() {
     this.robotIndex = SensorsSimulator.numRobots++
   }
 
-  static of(robot: VirtualRobot) {
-    return new SensorsSimulator(robot)
+  static of() {
+    return new SensorsSimulator()
   }
 
   packets(): Array<IComputedValue<Message>> {

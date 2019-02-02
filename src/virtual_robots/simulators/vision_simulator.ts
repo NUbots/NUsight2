@@ -11,10 +11,8 @@ import { message } from '../../shared/proto/messages'
 import { toTimestamp } from '../../shared/time/timestamp'
 import { Message } from '../simulator'
 import { Simulator } from '../simulator'
-import { VirtualRobot } from '../virtual_robot'
 
 import { periodic } from './periodic'
-
 import CompressedImage = message.output.CompressedImage
 import Projection = message.output.CompressedImage.Lens.Projection
 import Balls = message.vision.Balls
@@ -23,15 +21,15 @@ import Team = message.vision.Goal.Team
 import Goals = message.vision.Goals
 
 export class VisionSimulator implements Simulator {
-  constructor(private robot: VirtualRobot, private images: Uint8Array[]) {
+  constructor(private images: Uint8Array[]) {
   }
 
-  static of(robot: VirtualRobot): VisionSimulator {
+  static of(): VisionSimulator {
     const images = Array.from(
       { length: 11 },
       (_, i) => toUint8Array(fs.readFileSync(path.join(__dirname, `images/${i}.jpg`))),
     )
-    return new VisionSimulator(robot, images)
+    return new VisionSimulator(images)
   }
 
   packets(): Array<IComputedValue<Message>> {

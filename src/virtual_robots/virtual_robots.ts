@@ -1,26 +1,35 @@
 import { DirectNUClearNetClient } from '../server/nuclearnet/direct_nuclearnet_client'
 import { FakeNUClearNetClient } from '../server/nuclearnet/fake_nuclearnet_client'
 
-import { Simulator } from './simulator'
+import { ChartSimulator } from './simulators/chart_data_simulator'
+import { OverviewSimulator } from './simulators/overview_simulator'
+import { ScriptDataSimulator } from './simulators/script_data_simulator'
+import { SensorsSimulator } from './simulators/sensors_simulator'
+import { VisionSimulator } from './simulators/vision_simulator'
 import { VirtualRobot } from './virtual_robot'
 
-type Opts = {
-  fakeNetworking: boolean
-  robots: Array<{name: string, simulators: Array<{ of(robot: VirtualRobot): Simulator }>}>
-}
-
 export class VirtualRobots {
-
   private robots: VirtualRobot[]
 
-  constructor(opts: Opts) {
-    this.robots = opts.robots.map(r =>
-      VirtualRobot.of({ ...r, network: opts.fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of() }),
-    )
+  constructor({ robots }: { robots: VirtualRobot[] }) {
+    this.robots = robots
   }
 
-  static of(opts: Opts) {
-    return new VirtualRobots(opts)
+  static of({ fakeNetworking, numRobots }: { fakeNetworking: boolean, numRobots: number }) {
+    const robots = Array.from({ length: numRobots }, (_, i) => {
+      return VirtualRobot.of({
+        name: `Virtual Robot ${i + 1}`,
+        network: fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of(),
+        simulators: [
+          OverviewSimulator.of(),
+          SensorsSimulator.of(),
+          ChartSimulator.of(),
+          VisionSimulator.of(),
+          ScriptDataSimulator.of(),
+        ],
+      })
+    })
+    return new VirtualRobots({ robots })
   }
 
   start() {

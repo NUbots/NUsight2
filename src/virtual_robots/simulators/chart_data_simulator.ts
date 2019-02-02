@@ -5,19 +5,14 @@ import { message } from '../../shared/proto/messages'
 import { toTimestamp } from '../../shared/time/timestamp'
 import { Simulator } from '../simulator'
 import { Message } from '../simulator'
-import { VirtualRobot } from '../virtual_robot'
 
 import { periodic } from './periodic'
-
 import DataPoint = message.support.nusight.DataPoint
 
 export class ChartSimulator implements Simulator {
 
-  constructor(private robot: VirtualRobot) {
-  }
-
-  static of(robot: VirtualRobot): ChartSimulator {
-    return new ChartSimulator(robot)
+  static of(): ChartSimulator {
+    return new ChartSimulator()
   }
 
   packets(): Array<IComputedValue<Message>> {

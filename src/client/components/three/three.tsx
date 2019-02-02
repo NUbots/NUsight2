@@ -21,6 +21,11 @@ export class Three extends Component<{ stage(canvas: Canvas): IComputedValue<Sta
   @observable private canvas: Canvas = { width: 0, height: 0 }
   private ref: HTMLCanvasElement | null = null
   private renderer?: WebGLRenderer
+  /**
+   * Internally, three.js keeps various mappings between objects and webgl resources, e.g. [1].
+   * So instead we maintain our own permanent stage object and copy any updated values into it every render.
+   * [1]: https://goo.gl/81PqNi
+   */
   private stage: Stage = { camera: new PerspectiveCamera(), scene: new Scene() }
 
   componentDidMount() {

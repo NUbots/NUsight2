@@ -9,8 +9,8 @@ import { Editor } from './editor/view'
 import { Explorer } from './explorer/view'
 import { ScriptTunerModel } from './model'
 import { ScriptTunerNetwork } from './network'
-import * as style from './style.css'
 import { Preview } from './preview/view'
+import * as style from './style.css'
 
 export type ScriptTunerProps = {
   controller: ScriptTunerController

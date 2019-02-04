@@ -8,17 +8,18 @@ import * as style from './style.css'
 
 export interface DropdownProps {
   children: ReactNode
+  className?: string
   dropdownMenuClassName?: string
   dropdownToggle: ReactNode
   isOpen: boolean
-  onRef(dropdown: HTMLDivElement): void
+  onRef?(dropdown: HTMLDivElement): void
   onToggleClick?(event: MouseEvent<HTMLSpanElement>): void
 }
 
 export const Dropdown: StatelessComponent<DropdownProps> = (props: DropdownProps) => {
   const dropdownMenuClassName = classNames(style.dropdownMenu, props.dropdownMenuClassName)
   return (
-    <div className={style.dropdown} ref={props.onRef}>
+    <div className={classNames([style.dropdown, props.className])} ref={props.onRef}>
       <span className={style.dropdownToggle}
             onClick={props.onToggleClick}>
         {props.dropdownToggle}

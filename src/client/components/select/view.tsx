@@ -17,11 +17,11 @@ export interface SelectOption {
 }
 
 export type SelectProps = {
+  className?: string
+  dropdownMenuClassName?: string
   placeholder: string
   options: SelectOption[]
   selectedOption?: SelectOption
-  className?: string
-  dropdownMenuClassName?: string
   icon?: ReactNode
   empty?: ReactNode
   onChange(option: SelectOption): void

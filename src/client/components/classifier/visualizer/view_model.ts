@@ -90,7 +90,7 @@ export class VisualizerViewModel {
     return geometry
   }
 
-  readonly planeMaterial = shaderMaterial(() => ({
+  private readonly planeMaterial = shaderMaterial(() => ({
     vertexShader: String(vertexShader),
     fragmentShader: String(fragmentShader),
     uniforms: {
@@ -109,7 +109,7 @@ export class VisualizerViewModel {
     return Math.ceil(Math.sqrt(this.model.lut.data.length))
   }
 
-  readonly lutTexture = dataTexture(() => ({
+  private readonly lutTexture = dataTexture(() => ({
     data: this.model.lut.data,
     width: this.lutSize,
     height: this.lutSize,

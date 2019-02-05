@@ -91,8 +91,8 @@ describe('updatableComputed', () => {
   })
 
   it('disposes when no longer observed', () => {
-    const triangle = viewModel.triangle.get()
     const dispose = observe(viewModel.triangle, onChange)
+    const triangle = viewModel.triangle.get()
     dispose()
     expect(triangle.disposed).toBe(true)
   })

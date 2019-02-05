@@ -63,31 +63,29 @@ export class Select extends React.Component<SelectProps> {
       </button>
     )
 
-    return (
-      <OutsideClickHandler onOutsideClick={this.close}>
-        <Dropdown
-          className={className}
-          dropdownMenuClassName={classNames([style.dropdown, dropdownMenuClassName])}
-          dropdownToggle={button}
-          isOpen={this.isOpen}
-          onToggleClick={this.onToggleClick}
-        >
-          { options.length === 0 && <div className={style.empty}>{ empty || 'No options' }</div> }
-          { options.length > 0 && <div className={style.options}>{
-              options.map(option => {
-                const isSelected = Boolean(selectedOption && selectedOption.id === option.id)
-                return <SelectOption
-                  key={option.id}
-                  option={option}
-                  isSelected={isSelected}
-                  onSelect={this.onSelect}
-                />
-              })
-            }</div>
-          }
-        </Dropdown>
-      </OutsideClickHandler>
-    )
+    return <OutsideClickHandler onOutsideClick={this.close}>
+      <Dropdown
+        className={className}
+        dropdownMenuClassName={classNames([style.dropdown, dropdownMenuClassName])}
+        dropdownToggle={button}
+        isOpen={this.isOpen}
+        onToggleClick={this.onToggleClick}
+      >
+        { options.length === 0 && <div className={style.empty}>{ empty || 'No options' }</div> }
+        { options.length > 0 && <div className={style.options}>{
+            options.map(option => {
+              const isSelected = Boolean(selectedOption && selectedOption.id === option.id)
+              return <SelectOption
+                key={option.id}
+                option={option}
+                isSelected={isSelected}
+                onSelect={this.onSelect}
+              />
+            })
+          }</div>
+        }
+      </Dropdown>
+    </OutsideClickHandler>
   }
 
   private readonly onDocumentKeydown = (event: KeyboardEvent) => {

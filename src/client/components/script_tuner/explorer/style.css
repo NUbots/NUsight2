@@ -15,9 +15,36 @@
   align-items: center;
 }
 
-.explorerBody {
+.explorerRobotSelector {
+  padding: 4px;
+  border-bottom: 1px solid #DDD;
+}
+
+.explorerBody,
+.explorerLoading {
   padding: 0 4px;
   flex-grow: 1;
   overflow: hidden;
   position: relative;
+  border-bottom: 1px solid #DDD;
+}
+
+.explorerLoading {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.explorerLoadingIcon {
+  margin-top: -32px;
+  margin-bottom: 8px;
+}
+
+.explorerEmpty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

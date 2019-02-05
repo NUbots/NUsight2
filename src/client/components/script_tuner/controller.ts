@@ -1,5 +1,7 @@
 import { action, autorun, IReactionDisposer } from 'mobx'
 
+import { RobotModel } from '../robot/model'
+
 import { ScriptTunerModel } from './model'
 import { ScriptTunerNetwork } from './network'
 
@@ -28,6 +30,16 @@ export class ScriptTunerController {
 
   static of(opts: ScriptTunerOpts) {
     return new ScriptTunerController(opts)
+  }
+
+  @action
+  selectRobot(robot: RobotModel) {
+    const isInitialSelect = this.model.selectedRobot === undefined
+    this.model.selectedRobot = robot
+
+    if (isInitialSelect) {
+      this.network.requestScripts(robot)
+    }
   }
 
   @action

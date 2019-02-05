@@ -68,7 +68,6 @@ describe('updatableComputed', () => {
     const dispose = observe(viewModel.triangle, onChange)
 
     const firstTriangle = viewModel.triangle.get()
-    expect(firstTriangle.color).toBe('red')
     model.color = 'green'
     expect(firstTriangle.color).toBe('green')
 

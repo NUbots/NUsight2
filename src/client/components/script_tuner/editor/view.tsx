@@ -42,52 +42,59 @@ export class Editor extends React.Component<EditorProps> {
 
     return <div className={classNames([className, style.editor])}>
       <div className={style.editorHeader}>
-        <div className={style.editorTitle}>Editor</div>
-        <div className={style.editorControls}>
-          <button title='Jump to start' onClick={() => controller.jumpToStart() }>
-            <svg width='24' height='24' viewBox='0 0 24 24'>
-              <path d='M6 6h2v12H6zm3.5 6l8.5 6V6z'/><path d='M0 0h24v24H0z' fill='none'/>
-            </svg>
-          </button>
-          <button title={model.isPlaying ? 'Pause' : 'Play'} onClick={() => controller.togglePlayback() }>
-            <svg width='24' height='24' viewBox='0 0 24 24'>
-              {
-                model.isPlaying
-                  ? <path d='M6 19h4V5H6v14zm8-14v14h4V5h-4z'/>
-                  : <path d='M8 5v14l11-7z'/>
-              }
-            </svg>
-          </button>
-          <button title='Jump to end' onClick={() => controller.jumpToEnd() }>
-            <svg width='24' height='24' viewBox='0 0 24 24'>
-              <path d='M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z'/><path d='M0 0h24v24H0z' fill='none'/>
-            </svg>
-          </button>
-          <button title='Zoom in' onClick={() => controller.zoomIn() }>+</button>
-          <button title='Zoom out' onClick={() => controller.zoomOut() }>-</button>
-        </div>
-      </div>
-
-      <Timeline
-        className={style.editorTimeline}
-        setPlayTime={controller.setPlayTime}
-        editorViewModel={viewModel}
-        ref={this.timelineRef}
-      />
-
-      <div className={style.editorBody} ref={this.bodyRef}>
-        {
-          model.servos.map((servo, index) => {
-            const controller = LineEditorController.of(servo)
-            return <LineEditor
-              controller={controller}
-              servo={servo}
-              editorViewModel={viewModel}
-              key={index}
-            />
-          })
+        <div className={style.editorTitle}>{ model.selectedScript ? `Edit ${model.selectedScript.path}` : 'Editor' }</div>
+        { model.selectedScript && <div className={style.editorControls}>
+            <button title='Jump to start' onClick={() => controller.jumpToStart() }>
+              <svg width='24' height='24' viewBox='0 0 24 24'>
+                <path d='M6 6h2v12H6zm3.5 6l8.5 6V6z'/><path d='M0 0h24v24H0z' fill='none'/>
+              </svg>
+            </button>
+            <button title={model.isPlaying ? 'Pause' : 'Play'} onClick={() => controller.togglePlayback() }>
+              <svg width='24' height='24' viewBox='0 0 24 24'>
+                {
+                  model.isPlaying
+                    ? <path d='M6 19h4V5H6v14zm8-14v14h4V5h-4z'/>
+                    : <path d='M8 5v14l11-7z'/>
+                }
+              </svg>
+            </button>
+            <button title='Jump to end' onClick={() => controller.jumpToEnd() }>
+              <svg width='24' height='24' viewBox='0 0 24 24'>
+                <path d='M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z'/><path d='M0 0h24v24H0z' fill='none'/>
+              </svg>
+            </button>
+            <button title='Zoom in' onClick={() => controller.zoomIn() }>+</button>
+            <button title='Zoom out' onClick={() => controller.zoomOut() }>-</button>
+          </div>
         }
       </div>
+
+      { model.selectedScript === undefined &&
+        <div className={style.editorEmpty}>Select a script to edit</div>
+      }
+
+      { model.selectedScript && <Timeline
+          className={style.editorTimeline}
+          setPlayTime={controller.setPlayTime}
+          editorViewModel={viewModel}
+          ref={this.timelineRef}
+        />
+      }
+
+      { model.selectedScript && <div className={style.editorBody} ref={this.bodyRef}>
+          {
+            model.selectedScript.servos.map((servo, index) => {
+              const controller = LineEditorController.of(servo)
+              return <LineEditor
+                controller={controller}
+                servo={servo}
+                editorViewModel={viewModel}
+                key={index}
+              />
+            })
+          }
+        </div>
+      }
     </div>
   }
 
@@ -95,16 +102,20 @@ export class Editor extends React.Component<EditorProps> {
     const timelineElement = ReactDOM.findDOMNode(this.timelineRef.current!) as HTMLDivElement
     const bodyElement = this.bodyRef.current!
 
-    timelineElement.addEventListener('scroll', this.onTimelineScroll, { passive: true })
-    bodyElement.addEventListener('scroll', this.onBodyScroll, { passive: true })
+    if (timelineElement && bodyElement) {
+      timelineElement.addEventListener('scroll', this.onTimelineScroll, { passive: true })
+      bodyElement.addEventListener('scroll', this.onBodyScroll, { passive: true })
+    }
   }
 
   componentWillUnmount() {
     const timelineElement = ReactDOM.findDOMNode(this.timelineRef.current!) as HTMLDivElement
     const bodyElement = this.bodyRef.current!
 
-    timelineElement.removeEventListener('scroll', this.onTimelineScroll)
-    bodyElement.removeEventListener('scroll', this.onBodyScroll)
+    if (timelineElement && bodyElement) {
+      timelineElement.removeEventListener('scroll', this.onTimelineScroll)
+      bodyElement.removeEventListener('scroll', this.onBodyScroll)
+    }
   }
 
   onTimelineScroll = (event: UIEvent) => {

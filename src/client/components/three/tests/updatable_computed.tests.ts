@@ -73,9 +73,9 @@ describe('updatableComputed', () => {
 
     const secondTriangle = viewModel.triangle.get()
     model.color = 'blue'
-    expect(firstTriangle.color).toBe('blue')
+    expect(secondTriangle.color).toBe('blue')
 
-    expect(firstTriangle).toBe(secondTriangle)
+    expect(secondTriangle).toBe(firstTriangle)
     expect(onChange).toBeCalledTimes(2)
     dispose()
   })

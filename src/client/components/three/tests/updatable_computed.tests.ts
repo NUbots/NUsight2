@@ -1,7 +1,7 @@
 import { observe } from 'mobx'
 import { observable } from 'mobx'
 
-import { updatableComputed } from '../computed'
+import { updatableComputed } from '../updatable_computed'
 
 describe('updatableComputed', () => {
   let model: Model

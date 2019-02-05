@@ -9,9 +9,10 @@ import OutsideClickHandler from 'react-outside-click-handler'
 import { Dropdown } from '../dropdown/view'
 
 import DropdownIcon from './dropdown.svg'
+import { SelectOption } from './option'
 import * as style from './style.css'
 
-export interface SelectOption {
+export interface Option {
   id: string | number
   label: string
 }
@@ -20,11 +21,11 @@ export type SelectProps = {
   className?: string
   dropdownMenuClassName?: string
   placeholder: string
-  options: SelectOption[]
-  selectedOption?: SelectOption
+  options: Option[]
+  selectedOption?: Option
   icon?: ReactNode
   empty?: ReactNode
-  onChange(option: SelectOption): void
+  onChange(option: Option): void
 }
 
 enum KeyCode {
@@ -38,11 +39,10 @@ export class Select extends React.Component<SelectProps> {
   private removeListeners?: () => void
 
   componentDidMount() {
-    const onKeydown = (event: KeyboardEvent) => this.onDocumentKeydown(event)
-    document.addEventListener('keydown', onKeydown)
+    document.addEventListener('keydown', this.onDocumentKeydown)
 
     this.removeListeners = () => {
-      document.removeEventListener('keydown', onKeydown)
+      document.removeEventListener('keydown', this.onDocumentKeydown)
     }
   }
 
@@ -64,7 +64,7 @@ export class Select extends React.Component<SelectProps> {
     )
 
     return (
-      <OutsideClickHandler onOutsideClick={() => this.close()}>
+      <OutsideClickHandler onOutsideClick={this.close}>
         <Dropdown
           className={className}
           dropdownMenuClassName={classNames([style.dropdown, dropdownMenuClassName])}
@@ -75,12 +75,13 @@ export class Select extends React.Component<SelectProps> {
           { options.length === 0 && <div className={style.empty}>{ empty || 'No options' }</div> }
           { options.length > 0 && <div className={style.options}>{
               options.map(option => {
-                const optionClassName = selectedOption && selectedOption.id === option.id ? style.optionSelected : ''
-                return <div
-                  className={classNames([style.option, optionClassName])}
+                const isSelected = Boolean(selectedOption && selectedOption.id === option.id)
+                return <SelectOption
                   key={option.id}
-                  onClick={() => this.onSelect(option)}
-                >{ option.label }</div>
+                  option={option}
+                  isSelected={isSelected}
+                  onSelect={this.onSelect}
+                />
               })
             }</div>
           }
@@ -89,36 +90,38 @@ export class Select extends React.Component<SelectProps> {
     )
   }
 
-  private onToggleClick = () => {
-    this.toggle()
-  }
-
-  private onSelect = (option: SelectOption) => {
-    this.props.onChange && this.props.onChange(option)
-    this.close()
-  }
-
-  private onDocumentKeydown(event: KeyboardEvent) {
+  private readonly onDocumentKeydown = (event: KeyboardEvent) => {
     if (this.isOpen && event.keyCode === KeyCode.Escape) {
       this.close()
     }
   }
 
-  @action
+  @action.bound
+  private onToggleClick() {
+    this.toggle()
+  }
+
+  @action.bound
+  private onSelect(option: Option) {
+    this.props.onChange && this.props.onChange(option)
+    this.close()
+  }
+
+  @action.bound
   private open() {
     if (!this.isOpen) {
       this.isOpen = true
     }
   }
 
-  @action
+  @action.bound
   private close() {
     if (this.isOpen) {
       this.isOpen = false
     }
   }
 
-  @action
+  @action.bound
   private toggle() {
     this.isOpen = !this.isOpen
   }

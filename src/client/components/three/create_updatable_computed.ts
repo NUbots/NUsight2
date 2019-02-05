@@ -2,7 +2,7 @@ import { onBecomeUnobserved } from 'mobx'
 import { computed } from 'mobx'
 import { IComputedValue } from 'mobx'
 
-export const updatableComputed = <T, O>(
+export const createUpdatableComputed = <T, O>(
   create: (opts: O) => T,
   update: (instance: T, opts: O) => void,
   dispose?: (instance: T) => void,

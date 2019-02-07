@@ -2,6 +2,12 @@ import { NUsightNetwork } from './nusight_network'
 import { MessageType } from './nusight_network'
 import { MessageCallback } from './nusight_network'
 
+export interface Message {
+  messageType: string
+  buffer: Uint8Array
+  reliable?: boolean
+}
+
 /**
  * A convenience helper class to be used at the component-level.
  *
@@ -43,5 +49,17 @@ export class Network {
       offNUClearMessage()
     }
     this.offNUClearMessages.clear()
+  }
+
+  /**
+   * Send the given message on the network
+   */
+  send(message: Message, target?: string): void {
+    this.nusightNetwork.send({
+      type: message.messageType,
+      payload: Buffer.from(message.buffer),
+      reliable: message.reliable,
+      target,
+    })
   }
 }

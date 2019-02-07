@@ -1,7 +1,6 @@
 import * as Emitter from 'component-emitter'
 import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
-import * as XXH from 'xxhashjs'
 
 import { Packet } from './nuclearnet_proxy_parser_socketio'
 import { TYPES } from './nuclearnet_proxy_parser_socketio'
@@ -40,7 +39,6 @@ export class Encoder {
             const { id, data: [key, { target, type, payload, reliable }] } = packet
             return callback([
               JSON.stringify({ id, nsp, key, header: { target, type, reliable } }),
-              hashType(type),
               payload,
             ])
           }
@@ -120,14 +118,4 @@ export class Decoder extends Emitter {
   destroy() {
     this.nuclearPacket = undefined
   }
-}
-
-export function hashType(type: string): Buffer {
-  // Matches hashing implementation from NUClearNet
-  // See https://goo.gl/6NDPo2
-  let hashString: string = XXH.h64(type, 0x4e55436c).toString(16)
-  // The hash string may truncate if it's smaller than 16 characters so we pad it with 0s
-  hashString = ('0'.repeat(16) + hashString).slice(-16)
-
-  return Buffer.from((hashString.match(/../g) as string[]).reverse().join(''), 'hex')
 }

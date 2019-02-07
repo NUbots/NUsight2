@@ -8,12 +8,10 @@ import { MouseEvent } from 'react'
 import * as React from 'react'
 import { Component } from 'react'
 import ReactResizeDetector from 'react-resize-detector'
-import { PerspectiveCamera } from 'three'
 import { WebGLRenderer } from 'three'
 import { Scene } from 'three'
 import { Camera } from 'three'
 
-import { reconcile } from './reconcile'
 import * as styles from './styles.css'
 
 export type Stage = { scene: Scene, camera: Camera }
@@ -21,6 +19,7 @@ export type Canvas = { width: number, height: number }
 
 export class Three extends Component<{
   stage(canvas: Canvas): IComputedValue<Stage>,
+  onClick?({ button }: { button: number }): void
   onMouseDown?(x: number, y: number): void
   onMouseMove?(x: number, y: number): void
   onMouseUp?(x: number, y: number): void
@@ -29,12 +28,6 @@ export class Three extends Component<{
   @observable private canvas: Canvas = { width: 0, height: 0 }
   private ref: HTMLCanvasElement | null = null
   private renderer?: WebGLRenderer
-  /**
-   * Internally, three.js keeps various mappings between objects and webgl resources, e.g. [1].
-   * So instead we maintain our own permanent stage object and copy any updated values into it every render.
-   * [1]: https://goo.gl/81PqNi
-   */
-  private stage: Stage = { camera: new PerspectiveCamera(), scene: new Scene() }
 
   componentDidMount() {
     this.renderer = new WebGLRenderer({ canvas: this.ref!, antialias: true })
@@ -52,6 +45,7 @@ export class Three extends Component<{
         <canvas
           ref={this.setRef}
           className={styles.canvas}
+          onClick={this.props.onClick}
           onMouseDown={this.onMouseDown}
           onMouseMove={this.onMouseMove}
           onMouseUp={this.onMouseUp}
@@ -61,10 +55,17 @@ export class Three extends Component<{
     </ReactResizeDetector>
   }
 
+  requestPointerLock() {
+    this.ref!.requestPointerLock()
+  }
+
+  isPointerLocked() {
+    return document.pointerLockElement === this.ref!
+  }
+
   private renderStage(stage: Stage) {
-    reconcile(stage, this.stage)
     this.renderer!.setSize(this.canvas.width, this.canvas.height, false)
-    this.renderer!.render(this.stage.scene, this.stage.camera)
+    this.renderer!.render(stage.scene, stage.camera)
   }
 
   @action.bound

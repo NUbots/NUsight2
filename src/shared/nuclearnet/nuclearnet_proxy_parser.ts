@@ -97,14 +97,14 @@ export class Decoder extends Emitter {
       switch (this.state) {
         // State 1 means we are getting a payload or hash
         case 1:
-          // 'packet' messages are sent using NUClearNetSend which doesn't have a hash
           if (this.nuclearPacket!.data[0] === 'packet') {
+            // 'packet' messages are sent using NUClearNetSend which doesn't have a hash,
+            // so here we get the payload and emit
             this.nuclearPacket!.data[1].payload = obj
             this.emit('decoded', this.nuclearPacket)
             this.state = 0
-          }
-          // For NUClearNetPackets we get a hash in state 1 and move to state 2 for the payload
-          else {
+          } else {
+            // For NUClearNetPackets we get a hash in state 1 and move to state 2 for the payload
             (this.nuclearPacket!.data[1] as NUClearNetPacket).hash = obj
             this.state = 2
           }

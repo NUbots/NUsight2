@@ -19,17 +19,12 @@ export interface Option {
 
 export type SelectProps = {
   className?: string
-  dropdownMenuClassName?: string
   placeholder: string
   options: Option[]
   selectedOption?: Option
   icon?: ReactNode
   empty?: ReactNode
   onChange(option: Option): void
-}
-
-enum KeyCode {
-  Escape = 27,
 }
 
 @observer
@@ -53,7 +48,7 @@ export class Select extends React.Component<SelectProps> {
   }
 
   render(): JSX.Element {
-    const { className, dropdownMenuClassName, icon, placeholder, empty, options, selectedOption } = this.props
+    const { className, icon, placeholder, empty, options, selectedOption } = this.props
 
     const button = (
       <button className={style.button}>
@@ -66,30 +61,32 @@ export class Select extends React.Component<SelectProps> {
     return <OutsideClickHandler onOutsideClick={this.close}>
       <Dropdown
         className={className}
-        dropdownMenuClassName={classNames([style.dropdown, dropdownMenuClassName])}
         dropdownToggle={button}
         isOpen={this.isOpen}
+        isFullwidth={true}
         onToggleClick={this.onToggleClick}
       >
-        { options.length === 0 && <div className={style.empty}>{ empty || 'No options' }</div> }
-        { options.length > 0 && <div className={style.options}>{
-            options.map(option => {
-              const isSelected = Boolean(selectedOption && selectedOption.id === option.id)
-              return <SelectOption
-                key={option.id}
-                option={option}
-                isSelected={isSelected}
-                onSelect={this.onSelect}
-              />
-            })
-          }</div>
-        }
+        <div className={style.dropdown}>
+          { options.length === 0 && <div className={style.empty}>{ empty || 'No options' }</div> }
+          { options.length > 0 && <div className={style.options}>{
+              options.map(option => {
+                const isSelected = Boolean(selectedOption && selectedOption.id === option.id)
+                return <SelectOption
+                  key={option.id}
+                  option={option}
+                  isSelected={isSelected}
+                  onSelect={this.onSelect}
+                />
+              })
+            }</div>
+          }
+        </div>
       </Dropdown>
     </OutsideClickHandler>
   }
 
   private readonly onDocumentKeydown = (event: KeyboardEvent) => {
-    if (this.isOpen && event.keyCode === KeyCode.Escape) {
+    if (this.isOpen && event.key === 'Escape') {
       this.close()
     }
   }

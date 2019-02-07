@@ -1,6 +1,7 @@
 import * as Emitter from 'component-emitter'
 import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearNetPeer } from 'nuclearnet.js'
+import { NUClearNetSend } from 'nuclearnet.js'
 
 import { Packet } from './nuclearnet_proxy_parser_socketio'
 import { TYPES } from './nuclearnet_proxy_parser_socketio'
@@ -67,7 +68,7 @@ export class Decoder extends Emitter {
   private nuclearPacket?: {
     nsp: string,
     type: TYPES.EVENT,
-    data: [string, Partial<NUClearNetPacket>],
+    data: [string, Partial<NUClearNetPacket> | Partial<NUClearNetSend>],
     id: number
   }
 
@@ -94,10 +95,19 @@ export class Decoder extends Emitter {
       }
     } else {
       switch (this.state) {
-        // State 1 means we are getting a hash
+        // State 1 means we are getting a payload or hash
         case 1:
-          this.nuclearPacket!.data[1].hash = obj
-          this.state = 2
+          // 'packet' messages are sent using NUClearNetSend which doesn't have a hash
+          if (this.nuclearPacket!.data[0] === 'packet') {
+            this.nuclearPacket!.data[1].payload = obj
+            this.emit('decoded', this.nuclearPacket)
+            this.state = 0
+          }
+          // For NUClearNetPackets we get a hash in state 1 and move to state 2 for the payload
+          else {
+            (this.nuclearPacket!.data[1] as NUClearNetPacket).hash = obj
+            this.state = 2
+          }
           break
 
         // State 2 means we are getting a packet

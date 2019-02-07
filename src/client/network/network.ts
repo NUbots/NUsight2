@@ -1,12 +1,8 @@
+import { NUClearNetSend } from 'nuclearnet.js'
+
 import { NUsightNetwork } from './nusight_network'
 import { MessageType } from './nusight_network'
 import { MessageCallback } from './nusight_network'
-
-export interface Message {
-  messageType: string
-  buffer: Uint8Array
-  reliable?: boolean
-}
 
 /**
  * A convenience helper class to be used at the component-level.
@@ -54,12 +50,7 @@ export class Network {
   /**
    * Send the given message on the network
    */
-  send(message: Message, target?: string): void {
-    this.nusightNetwork.send({
-      type: message.messageType,
-      payload: Buffer.from(message.buffer),
-      reliable: message.reliable,
-      target,
-    })
+  send(opts: NUClearNetSend): void {
+    this.nusightNetwork.send(opts)
   }
 }

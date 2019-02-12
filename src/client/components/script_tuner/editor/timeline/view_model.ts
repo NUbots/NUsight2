@@ -26,7 +26,7 @@ export class TimelineViewModel {
 
   @computed
   get width() {
-    return this.editorViewModel.timelineLength * this.cellWidth * this.scaleX
+    return this.timeToSvg(this.editorViewModel.timelineLength)
   }
 
   @computed
@@ -41,7 +41,8 @@ export class TimelineViewModel {
 
   @computed
   get cells() {
-    return new Array(Math.ceil(this.editorViewModel.timelineLength * this.scaleX)).fill(0)
+    const timelineLengthSeconds = this.editorViewModel.timelineLength / 1000
+    return new Array(Math.ceil(timelineLengthSeconds * this.scaleX)).fill(0)
   }
 
   @computed
@@ -51,10 +52,10 @@ export class TimelineViewModel {
   }
 
   timeToSvg(time: number) {
-    return time * this.cellWidth * this.scaleX
+    return (time / 1000) * this.cellWidth * this.scaleX
   }
 
   svgToTime(coordinate: number) {
-    return coordinate / this.cellWidth / this.scaleX
+    return (coordinate * 1000) / this.cellWidth / this.scaleX
   }
 }

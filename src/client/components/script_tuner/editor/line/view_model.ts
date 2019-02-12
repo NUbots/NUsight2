@@ -40,7 +40,7 @@ export class LineEditorViewModel {
 
   @computed
   get width() {
-    return this.editorViewModel.timelineLength * this.cellWidth
+    return Math.ceil(this.timeToSvg(this.editorViewModel.timelineLength))
   }
 
   @computed
@@ -50,7 +50,7 @@ export class LineEditorViewModel {
 
   @computed
   get playPosition() {
-    return this.editorViewModel.playTime * this.cellWidth
+    return this.timeToSvg(this.editorViewModel.playTime)
   }
 
   @computed
@@ -88,11 +88,11 @@ export class LineEditorViewModel {
   }
 
   timeToSvg(time: number) {
-    return time * this.cellWidth
+    return (time / 1000) * this.cellWidth
   }
 
   svgToTime(coordinate: number) {
-    return coordinate / this.cellWidth
+    return (coordinate * 1000) / this.cellWidth
   }
 
   angleToSVG(angle: number) {

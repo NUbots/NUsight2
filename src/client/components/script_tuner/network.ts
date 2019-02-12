@@ -27,20 +27,17 @@ export class ScriptTunerNetwork {
   @action
   requestScripts(robot: RobotModel) {
     this.startLoader(`Loading scripts from ${robot.name}...`)
-    const send = {
+    this.network.send({
       target: robot.name,
       type: 'message.tools.script_tuner.LoadScriptsCommand',
       payload: Buffer.from(LoadScriptsCommand.encode({}).finish()),
-    }
-    console.log('sending message', send)
-    this.network.send(send)
+    })
   }
 
   @action
   private onScripts = (robotModel: RobotModel, scripts: Scripts) => {
     console.log('scripts received', robotModel, scripts)
     this.model.scripts = Scripts.toObject(scripts).scripts as Script[]
-    console.log(this.model.scripts)
     this.stopLoader()
   }
 

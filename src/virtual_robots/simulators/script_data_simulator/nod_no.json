@@ -1,0 +1,76 @@
+{
+    "HEAD_PITCH": {
+        "id": "HEAD_PITCH",
+        "frames": [
+            {
+                "time": 190,
+                "angle": 0,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 380,
+                "angle": 0,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 570,
+                "angle": 0,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 660,
+                "angle": 0,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "HEAD_YAW": {
+        "id": "HEAD_YAW",
+        "frames": [
+            {
+                "time": 190,
+                "angle": -0.5,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 380,
+                "angle": 0.5,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 570,
+                "angle": -0.5,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 660,
+                "angle": 0,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    }
+}

@@ -34,6 +34,7 @@ export class ScriptTunerModel {
   @observable isPlaying = false
   @observable currentTime = 0
   @observable playStartedAt = 0
+  previousTimelineLength = 0
 
   constructor(robotModels: RobotModel[]) {
     this.robots = robotModels
@@ -51,13 +52,13 @@ export class ScriptTunerModel {
 
   @computed
   get endTime() {
-    return Math.max(this.scriptsLength - 1, 0)
+    return Math.max(this.timelineLength - 1, 0)
   }
 
   @computed
   get playTime() {
     const time = this.isPlaying
-      ? this.currentTime + (now('frame') - this.playStartedAt) / 1000
+      ? this.currentTime + (now('frame') - this.playStartedAt)
       : this.currentTime
 
     return time >= this.endTime ? this.endTime : time
@@ -72,19 +73,29 @@ export class ScriptTunerModel {
   }
 
   @computed
-  get scriptsLength() {
+  get timelineLength() {
     if (this.selectedScript) {
       let maxLength = 0
 
       this.selectedScriptServos.forEach(servo => {
-        if (servo.frames.length > maxLength) {
-          maxLength = servo.frames.length
+        const max = Math.max(...servo.frames.map((frame: Frame) => frame.time))
+
+        if (max > maxLength) {
+          maxLength = roundUpTo(1000 + max, 1000)
         }
       })
 
-      return maxLength
+      if (maxLength > this.previousTimelineLength) {
+        this.previousTimelineLength = maxLength
+      }
+
+      return this.previousTimelineLength
     }
 
     return 0
   }
+}
+
+function roundUpTo(value: number, nearest: number) {
+  return Math.ceil(value / nearest) * nearest
 }

@@ -1,0 +1,1388 @@
+{
+    "RIGHT_KNEE": {
+        "id": "RIGHT_KNEE",
+        "frames": [
+            {
+                "time": 1000,
+                "angle": 0.5,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 2000,
+                "angle": 0.5,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 3000,
+                "angle": 1.4,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4500,
+                "angle": 1.798265,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": 0.613742,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": 0.613742,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": 0.613742,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": 0.613742,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": 2.066777,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": 2.066777,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "RIGHT_HIP_PITCH": {
+        "id": "RIGHT_HIP_PITCH",
+        "frames": [
+            {
+                "time": 1000,
+                "angle": -0.35,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 2000,
+                "angle": -0.45,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 3000,
+                "angle": -0.8,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4500,
+                "angle": -1.132354,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": -1.508271,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": -1.508271,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": -1.508271,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": -1.508271,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": -0.9160101,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": -0.9160101,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "LEFT_HIP_PITCH": {
+        "id": "LEFT_HIP_PITCH",
+        "frames": [
+            {
+                "time": 1000,
+                "angle": -0.35,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 2000,
+                "angle": -0.45,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 3000,
+                "angle": -0.45,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4500,
+                "angle": -0.928285,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": -0.2746496,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": -0.2746496,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": -0.2746496,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": -0.2746496,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": -0.9635752,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": -0.9635752,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "LEFT_KNEE": {
+        "id": "LEFT_KNEE",
+        "frames": [
+            {
+                "time": 1000,
+                "angle": 0.5,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 2000,
+                "angle": 0.5,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 3000,
+                "angle": 0.5,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4500,
+                "angle": 0.512475,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": 1.502134,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": 1.2014,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": 1.2014,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": 1.2014,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": 2.128151,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": 2.128151,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "LEFT_ANKLE_PITCH": {
+        "id": "LEFT_ANKLE_PITCH",
+        "frames": [
+            {
+                "time": 1000,
+                "angle": -0.25,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 2000,
+                "angle": -0.25,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 3000,
+                "angle": -0.25,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4500,
+                "angle": -0.194863,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": -0.9865905,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": -1.305736,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": -1.305736,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": -1.305736,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": -1.143095,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": -1.143095,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "LEFT_ANKLE_ROLL": {
+        "id": "LEFT_ANKLE_ROLL",
+        "frames": [
+            {
+                "time": 1000,
+                "angle": 0,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 2000,
+                "angle": 0.27,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 3000,
+                "angle": 0.32,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4500,
+                "angle": 0.28539,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": 0.28539,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": -0.02608404,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": -0.02608404,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": -0.02608404,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": 0.2777183,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": 0.04142759,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "RIGHT_ANKLE_PITCH": {
+        "id": "RIGHT_ANKLE_PITCH",
+        "frames": [
+            {
+                "time": 1000,
+                "angle": -0.25,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 2000,
+                "angle": -0.25,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 3000,
+                "angle": -0.8,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4500,
+                "angle": -0.8423611,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": 0.328352,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": 0.5937955,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": 0.5937955,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": 0.5937955,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": -1.063308,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": -1.063308,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "RIGHT_ANKLE_ROLL": {
+        "id": "RIGHT_ANKLE_ROLL",
+        "frames": [
+            {
+                "time": 1000,
+                "angle": 0,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 2000,
+                "angle": 0.27,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 3000,
+                "angle": 0.42,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4500,
+                "angle": 0.018412,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": 0.3743827,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": 0.05983986,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": 0.05983986,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": 0.05983986,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": 0.2715809,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": -0.01687791,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "LEFT_HIP_YAW": {
+        "id": "LEFT_HIP_YAW",
+        "frames": [
+            {
+                "time": 1000,
+                "angle": 0,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 2000,
+                "angle": 0,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 3000,
+                "angle": 0,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4500,
+                "angle": 0.030687,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": 0.030687,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": 0.030687,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": 0.030687,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": 0.030687,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": 0.030687,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": 0.030687,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "RIGHT_HIP_YAW": {
+        "id": "RIGHT_HIP_YAW",
+        "frames": [
+            {
+                "time": 1000,
+                "angle": 0,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 2000,
+                "angle": 0,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 3000,
+                "angle": 0,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4500,
+                "angle": -0.019947,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": -0.019947,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": -0.019947,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": -0.019947,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": -0.019947,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": -0.019947,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": -0.019947,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "LEFT_HIP_ROLL": {
+        "id": "LEFT_HIP_ROLL",
+        "frames": [
+            {
+                "time": 1000,
+                "angle": 0,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 2000,
+                "angle": -0.27,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 3000,
+                "angle": -0.32,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4500,
+                "angle": -0.141161,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": -0.141161,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": -0.2393594,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": -0.2393594,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": -0.2393594,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": -0.141161,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": 0.03222146,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "RIGHT_HIP_ROLL": {
+        "id": "RIGHT_HIP_ROLL",
+        "frames": [
+            {
+                "time": 1000,
+                "angle": 0,
+                "pGain": 50,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 2000,
+                "angle": -0.27,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 3000,
+                "angle": -0.42,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4500,
+                "angle": -0.217878,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": -0.217878,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": -0.2301533,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": -0.2301533,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": -0.2301533,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": -0.217878,
+                "pGain": 30,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": 0.05370244,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "RIGHT_ELBOW": {
+        "id": "RIGHT_ELBOW",
+        "frames": [
+            {
+                "time": 4500,
+                "angle": -1.389742,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": -1.389742,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": -1.184139,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": -1.184139,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": -1.184139,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": -1.389742,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": -1.389742,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "LEFT_ELBOW": {
+        "id": "LEFT_ELBOW",
+        "frames": [
+            {
+                "time": 4500,
+                "angle": -1.144246,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": -1.144246,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": -1.196414,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": -1.196414,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": -1.196414,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": -1.144246,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": -1.144246,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "RIGHT_SHOULDER_ROLL": {
+        "id": "RIGHT_SHOULDER_ROLL",
+        "frames": [
+            {
+                "time": 4500,
+                "angle": -0.524558,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": -0.524558,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": -1.49427,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": -1.49427,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": -1.49427,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": -0.524558,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": -0.524558,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "LEFT_SHOULDER_ROLL": {
+        "id": "LEFT_SHOULDER_ROLL",
+        "frames": [
+            {
+                "time": 4500,
+                "angle": 0.619688,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": 0.619688,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": 1.121422,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": 1.121422,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": 1.121422,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": 0.619688,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": 0.619688,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "RIGHT_SHOULDER_PITCH": {
+        "id": "RIGHT_SHOULDER_PITCH",
+        "frames": [
+            {
+                "time": 4500,
+                "angle": 1.633705,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": 1.633705,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": 1.480269,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": 1.480269,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": 1.480269,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": 1.633705,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": 1.633705,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    },
+    "LEFT_SHOULDER_PITCH": {
+        "id": "LEFT_SHOULDER_PITCH",
+        "frames": [
+            {
+                "time": 4500,
+                "angle": 1.65672,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 4700,
+                "angle": 1.65672,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 5200,
+                "angle": 1.527834,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 6200,
+                "angle": 1.527834,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 7200,
+                "angle": 1.527834,
+                "pGain": 80,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8200,
+                "angle": 1.65672,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            },
+            {
+                "time": 8398,
+                "angle": 1.65672,
+                "pGain": 20,
+                "iGain": 0,
+                "dGain": 0,
+                "torque": 100
+            }
+        ]
+    }
+}

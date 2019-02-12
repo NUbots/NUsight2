@@ -29,7 +29,7 @@ export class Preview extends React.Component<PreviewProps> {
         <div className={style.previewHud}>
           <div className={style.previewHudItems}>
             <span>{ model.isPlaying ? 'Playing' : 'Paused' }</span>
-            <span>Time: {(Math.round(model.playTime * 1000) / 1000).toFixed(3)}</span>
+            <span>Time: {(model.playTime / 1000).toFixed(3)}</span>
           </div>
         </div>
       </div>

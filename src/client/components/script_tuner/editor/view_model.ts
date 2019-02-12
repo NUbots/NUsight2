@@ -19,7 +19,7 @@ export class EditorViewModel {
 
   @computed
   get timelineLength() {
-    return this.model.scriptsLength
+    return this.model.timelineLength
   }
 
   @computed

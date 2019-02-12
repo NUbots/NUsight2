@@ -171,14 +171,14 @@ export class LineEditor extends Component<LineEditorProps> {
     const index = Number(this.selectedElement.dataset.index!)
     const mouse = this.getMousePositionInSvgSpace(event)
 
-    const minFrameSeparation = 0.05
+    const minFrameSeparation = 50
 
     const previousFrameTime = index === 0
       ? 0 - minFrameSeparation
       : viewModel.points[index - 1].time
 
     const nextFrameTime = index === viewModel.points.length - 1
-      ? viewModel.points.length + minFrameSeparation
+      ? viewModel.svgToTime(viewModel.width) // this is the width of the timeline
       : viewModel.points[index + 1].time
 
     // The drag needs to be constrained between the points's neighbours

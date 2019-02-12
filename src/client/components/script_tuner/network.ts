@@ -36,7 +36,7 @@ export class ScriptTunerNetwork {
 
   @action
   private onScripts = (robotModel: RobotModel, scripts: Scripts) => {
-    console.log('scripts received', robotModel, scripts)
+    // console.log('scripts received', robotModel, scripts)
     this.model.scripts = Scripts.toObject(scripts).scripts as Script[]
     this.stopLoader()
   }

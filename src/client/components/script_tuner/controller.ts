@@ -44,6 +44,12 @@ export class ScriptTunerController {
 
   @action
   selectScript(script: Script) {
+    // Reset the editor state
+    this.model.isPlaying = false
+    this.model.currentTime = 0
+    this.model.previousTimelineLength = 0
+
+    // Select the script
     this.model.selectedScript = script
   }
 

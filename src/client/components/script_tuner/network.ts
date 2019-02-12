@@ -4,9 +4,9 @@ import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
 
-import { Frame, Servo, Script, ScriptTunerModel } from './model'
-
+import { Frame, Script, ScriptTunerModel, Servo } from './model'
 import * as sampleScriptJson from './sample-script.json'
+
 const sampleScript = sampleScriptJson as { [key: string]: Servo }
 
 export class ScriptTunerNetwork {
@@ -36,8 +36,8 @@ export class ScriptTunerNetwork {
     this.model.scripts = [
       {
         path: 'Salute.yaml',
-        servos: makeSampleServos()
-      }
+        servos: makeSampleServos(),
+      },
     ]
     this.model.isLoading = false
     this.model.loadingMessage = ''

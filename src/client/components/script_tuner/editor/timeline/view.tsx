@@ -17,6 +17,7 @@ export class Timeline extends React.Component<TimelineProps> {
   readyToDrag: boolean = false
   isDragging: boolean = false
   svgRef: React.RefObject<SVGSVGElement>
+  viewModel?: TimelineViewModel
 
   constructor(props: TimelineProps) {
     super(props)
@@ -25,6 +26,7 @@ export class Timeline extends React.Component<TimelineProps> {
 
   render() {
     const viewModel = TimelineViewModel.of(this.props.editorViewModel)
+    this.viewModel = viewModel
 
     return <div className={style.timeline}>
       <svg
@@ -33,9 +35,9 @@ export class Timeline extends React.Component<TimelineProps> {
         width={viewModel.width + 'px'}
         ref={this.svgRef}
 
-        onMouseDown={(e) => this.onMouseDown(e, viewModel)}
-        onMouseMove={(e) => this.onMouseMove(e, viewModel)}
-        onClick={(e) => this.onClick(e.nativeEvent, viewModel)}
+        onMouseDown={this.onMouseDown}
+        onMouseMove={this.onMouseMove}
+        onClick={this.onClick}
       >
         <g transform='translate(0, 0)'>
           <rect width={viewModel.width} height={viewModel.height} fill='#CCC' />
@@ -78,7 +80,13 @@ export class Timeline extends React.Component<TimelineProps> {
     </div>
   }
 
-  private onClick(event: MouseEvent, viewModel: TimelineViewModel) {
+  private onClick({ nativeEvent: event }: React.MouseEvent) {
+    const viewModel = this.viewModel
+
+    if (!viewModel) {
+      return
+    }
+
     const svg = this.svgRef.current!
     const reference = svg.createSVGPoint()
 
@@ -103,14 +111,17 @@ export class Timeline extends React.Component<TimelineProps> {
     this.readyToDrag = false
   }
 
-  private onMouseDown = ({ nativeEvent: event }: React.MouseEvent, viewModel: TimelineViewModel) => {
-    if ((event.target as HTMLElement).dataset.draggable) {
+  private onMouseDown = ({ nativeEvent: event }: React.MouseEvent) => {
+    const viewModel = this.viewModel
+    if (viewModel && (event.target as HTMLElement).dataset.draggable) {
       this.readyToDrag = true
     }
   }
 
-  private onMouseMove = ({ nativeEvent: event }: React.MouseEvent, viewModel: TimelineViewModel) => {
-    if (!this.readyToDrag) {
+  private onMouseMove = ({ nativeEvent: event }: React.MouseEvent) => {
+    const viewModel = this.viewModel
+
+    if (!viewModel || !this.readyToDrag) {
       return
     }
 

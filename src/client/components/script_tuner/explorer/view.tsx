@@ -6,9 +6,9 @@ import { RobotModel } from '../../robot/model'
 import { ScriptTunerController } from '../controller'
 import { ScriptTunerModel } from '../model'
 
+import { ExplorerController } from './controller'
 import { LoadingIcon } from './loading_icon/view'
 import { RobotSelector } from './robot_selector/view'
-import { ExplorerController } from './controller'
 import * as style from './style.css'
 
 type ExplorerProps = {

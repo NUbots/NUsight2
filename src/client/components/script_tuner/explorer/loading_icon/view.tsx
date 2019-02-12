@@ -17,14 +17,14 @@ export class LoadingIcon extends React.Component<LoadingIconProps> {
       className={classNames([style.loading, className])}
       style={{ width: size + 'px', height: size + 'px' }}
     >
-      <svg role="progressbar" viewBox="25 25 50 50">
+      <svg role='progressbar' viewBox='25 25 50 50'>
         <circle
-          cx="50"
-          cy="50"
-          fill="none"
-          r="20"
-          strokeMiterlimit="10"
-          strokeWidth="4"
+          cx='50'
+          cy='50'
+          fill='none'
+          r='20'
+          strokeMiterlimit='10'
+          strokeWidth='4'
         ></circle>
       </svg>
     </div>

@@ -24,6 +24,7 @@ export class Editor extends React.Component<EditorProps> {
   props: EditorProps
   timelineRef: React.RefObject<Timeline>
   bodyRef: React.RefObject<HTMLDivElement>
+  controller?: EditorController
 
   constructor(props: EditorProps) {
     super(props)
@@ -35,21 +36,23 @@ export class Editor extends React.Component<EditorProps> {
   render() {
     const { className, model } = this.props
     const viewModel = EditorViewModel.of(model)
-    const controller = EditorController.of({
+    this.controller = EditorController.of({
       viewModel,
       controller: this.props.controller,
     })
 
     return <div className={classNames([className, style.editor])}>
       <div className={style.editorHeader}>
-        <div className={style.editorTitle}>{ model.selectedScript ? `Edit ${model.selectedScript.path}` : 'Editor' }</div>
+        <div className={style.editorTitle}>
+          { model.selectedScript ? `Edit ${model.selectedScript.path}` : 'Editor' }
+        </div>
         { model.selectedScript && <div className={style.editorControls}>
-            <button title='Jump to start' onClick={() => controller.jumpToStart() }>
+            <button title='Jump to start' onClick={this.jumpToStart}>
               <svg width='24' height='24' viewBox='0 0 24 24'>
                 <path d='M6 6h2v12H6zm3.5 6l8.5 6V6z'/><path d='M0 0h24v24H0z' fill='none'/>
               </svg>
             </button>
-            <button title={model.isPlaying ? 'Pause' : 'Play'} onClick={() => controller.togglePlayback() }>
+            <button title={model.isPlaying ? 'Pause' : 'Play'} onClick={this.togglePlayback}>
               <svg width='24' height='24' viewBox='0 0 24 24'>
                 {
                   model.isPlaying
@@ -58,13 +61,13 @@ export class Editor extends React.Component<EditorProps> {
                 }
               </svg>
             </button>
-            <button title='Jump to end' onClick={() => controller.jumpToEnd() }>
+            <button title='Jump to end' onClick={this.jumpToEnd}>
               <svg width='24' height='24' viewBox='0 0 24 24'>
                 <path d='M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z'/><path d='M0 0h24v24H0z' fill='none'/>
               </svg>
             </button>
-            <button title='Zoom in' onClick={() => controller.zoomIn() }>+</button>
-            <button title='Zoom out' onClick={() => controller.zoomOut() }>-</button>
+            <button title='Zoom in' onClick={this.zoomIn}>+</button>
+            <button title='Zoom out' onClick={this.zoomOut}>-</button>
           </div>
         }
       </div>
@@ -75,7 +78,7 @@ export class Editor extends React.Component<EditorProps> {
 
       { model.selectedScript && <Timeline
           className={style.editorTimeline}
-          setPlayTime={controller.setPlayTime}
+          setPlayTime={this.controller.setPlayTime}
           editorViewModel={viewModel}
           ref={this.timelineRef}
         />
@@ -125,5 +128,35 @@ export class Editor extends React.Component<EditorProps> {
   onBodyScroll = (event: UIEvent) => {
     const timelineElement = ReactDOM.findDOMNode(this.timelineRef.current!) as HTMLDivElement
     timelineElement.scrollLeft = (event.currentTarget as HTMLDivElement).scrollLeft
+  }
+
+  private jumpToStart = () => {
+    if (this.controller) {
+      this.controller.jumpToStart()
+    }
+  }
+
+  private togglePlayback = () => {
+    if (this.controller) {
+      this.controller.togglePlayback()
+    }
+  }
+
+  private jumpToEnd = () => {
+    if (this.controller) {
+      this.controller.jumpToEnd()
+    }
+  }
+
+  private zoomIn = () => {
+    if (this.controller) {
+      this.controller.zoomIn()
+    }
+  }
+
+  private zoomOut = () => {
+    if (this.controller) {
+      this.controller.zoomOut()
+    }
   }
 }

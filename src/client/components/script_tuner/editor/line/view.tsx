@@ -20,8 +20,9 @@ type LineEditorProps = {
 @observer
 export class LineEditor extends Component<LineEditorProps> {
   isDragging: boolean = false
-  selectedElement: HTMLElement | undefined
   svgRef: React.RefObject<SVGSVGElement>
+  selectedElement?: HTMLElement
+  viewModel?: LineEditorViewModel
 
   constructor(props: LineEditorProps) {
     super(props)
@@ -34,6 +35,8 @@ export class LineEditor extends Component<LineEditorProps> {
       editorViewModel: this.props.editorViewModel,
     })
 
+    this.viewModel = viewModel
+
     return <div className={style.lineEditor}>
       <svg
         className={style.lineEditorSvg}
@@ -42,9 +45,9 @@ export class LineEditor extends Component<LineEditorProps> {
         width={viewModel.width + 'px'}
         ref={this.svgRef}
 
-        onMouseDown={(e) => this.onMouseDown(e, viewModel)}
-        onMouseMove={(e) => this.onMouseMove(e, viewModel)}
-        onDoubleClick={(e) => this.onDoubleClick(e.nativeEvent, viewModel)}
+        onMouseDown={this.onMouseDown}
+        onMouseMove={this.onMouseMove}
+        onDoubleClick={this.onDoubleClick}
       >
         <text
           className={style.lineEditorTitle}
@@ -98,7 +101,7 @@ export class LineEditor extends Component<LineEditorProps> {
               stroke='black'
               strokeWidth='1'
 
-              onContextMenu={(e) => this.onRightClick(e, index)}
+              onContextMenu={this.onRightClick}
             >
               <title>{ point.label }</title>
             </circle>
@@ -118,7 +121,13 @@ export class LineEditor extends Component<LineEditorProps> {
     </div>
   }
 
-  private onDoubleClick(event: MouseEvent, viewModel: LineEditorViewModel) {
+  private onDoubleClick({ nativeEvent: event }: React.MouseEvent) {
+    const viewModel = this.viewModel
+
+    if (!viewModel) {
+      return
+    }
+
     const svg = this.svgRef.current!
     const reference = svg.createSVGPoint()
 
@@ -133,8 +142,9 @@ export class LineEditor extends Component<LineEditorProps> {
     })
   }
 
-  private onRightClick = ({ nativeEvent: event }: React.MouseEvent, pointIndex: number) => {
+  private onRightClick = ({ nativeEvent: event }: React.MouseEvent) => {
     event.preventDefault()
+    const pointIndex = Number((event.target as HTMLElement).dataset.index)
     this.props.controller.removeFrame(pointIndex)
   }
 
@@ -151,15 +161,17 @@ export class LineEditor extends Component<LineEditorProps> {
     this.selectedElement = undefined
   }
 
-  private onMouseDown = ({ nativeEvent: event }: React.MouseEvent, viewModel: LineEditorViewModel) => {
+  private onMouseDown = ({ nativeEvent: event }: React.MouseEvent) => {
     const leftMouseButton = 0
     if (event.button === leftMouseButton && (event.target as HTMLElement).dataset.draggable) {
       this.selectedElement = (event.target as HTMLElement)
     }
   }
 
-  private onMouseMove = ({ nativeEvent: event }: React.MouseEvent, viewModel: LineEditorViewModel) => {
-    if (!this.selectedElement) {
+  private onMouseMove = ({ nativeEvent: event }: React.MouseEvent) => {
+    const viewModel = this.viewModel
+
+    if (!this.selectedElement || !viewModel) {
       return
     }
 

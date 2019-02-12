@@ -56,6 +56,11 @@ export class ScriptTunerController {
   @action
   togglePlayback(isPlaying: boolean = !this.model.isPlaying) {
     if (isPlaying) {
+      // Reset to start if we want to play but are at the end of the time
+      if (this.model.playTime >= this.model.endTime) {
+        this.model.currentTime = 0
+      }
+
       this.model.playStartedAt = Date.now()
     } else {
       this.model.currentTime = this.model.playTime

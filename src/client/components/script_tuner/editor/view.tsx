@@ -44,7 +44,7 @@ export class Editor extends React.Component<EditorProps> {
     return <div className={classNames([className, style.editor])}>
       <div className={style.editorHeader}>
         <div className={style.editorTitle}>
-          { model.selectedScript ? `Edit ${model.selectedScript.path}` : 'Editor' }
+          { model.selectedScript ? `${model.selectedScript.path} – Editor` : 'Editor' }
         </div>
         { model.selectedScript && <div className={style.editorControls}>
             <button title='Jump to start' onClick={this.jumpToStart}>

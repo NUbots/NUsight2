@@ -63,10 +63,6 @@
   cursor: pointer;
 }
 
-.explorerScript:last-child {
-  border-bottom: 0;
-}
-
 .explorerScript:hover {
   background-color: #eee;
 }

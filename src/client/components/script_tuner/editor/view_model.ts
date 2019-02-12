@@ -6,7 +6,7 @@ import { createTransformer } from 'mobx-utils'
 import { ScriptTunerModel } from '../model'
 
 export class EditorViewModel {
-  @observable cellWidth = 32
+  @observable cellWidth = 40
   @observable scaleX = 2
   @observable height = 200
 

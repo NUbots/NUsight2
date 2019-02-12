@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { RobotModel } from '../../robot/model'
 import { ScriptTunerController } from '../controller'
-import { ScriptTunerModel } from '../model'
+import { Script, ScriptTunerModel } from '../model'
 
 import { ExplorerController } from './controller'
 import { LoadingIcon } from './loading_icon/view'
@@ -50,10 +50,39 @@ export class Explorer extends React.Component<ExplorerProps> {
             <div className={style.explorerEmpty}>No scripts for selected robot</div>
           }
           { model.selectedRobot && model.scripts.length > 0 &&
-            <div className={style.explorerEmpty}>List of robot scripts</div>
+            <div className={style.explorerScripts}>{
+              model.scripts.map(script => {
+                const isSelected = Boolean(model.selectedScript &&  model.selectedScript.path === script.path)
+                return <ScriptListItem
+                  key={script.path}
+                  script={script}
+                  isSelected={isSelected}
+                  onSelect={controller.selectScript}
+                />
+              })
+            }</div>
           }
         </div>
       }
     </div>
+  }
+}
+
+@observer
+export class ScriptListItem extends React.Component<{
+  script: Script,
+  isSelected: boolean,
+  onSelect(script: Script): void
+}> {
+  render() {
+    const { script, isSelected } = this.props
+    return <div
+      className={classNames([style.explorerScript, isSelected ? style.explorerScriptSelected : ''])}
+      onClick={this.onClick}
+    >{ script.path }</div>
+  }
+
+  private onClick = () => {
+    this.props.onSelect(this.props.script)
   }
 }

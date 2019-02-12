@@ -3,7 +3,7 @@ import { FakeNUClearNetClient } from '../server/nuclearnet/fake_nuclearnet_clien
 
 import { ChartSimulator } from './simulators/chart_data_simulator'
 import { OverviewSimulator } from './simulators/overview_simulator'
-import { ScriptDataSimulator } from './simulators/script_data_simulator'
+import { ScriptDataSimulator } from './simulators/script_data_simulator/script_data_simulator'
 import { SensorsSimulator } from './simulators/sensors_simulator'
 import { VisionSimulator } from './simulators/vision_simulator'
 import { VirtualRobot } from './virtual_robot'

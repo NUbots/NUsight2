@@ -86,7 +86,7 @@ export class Editor extends React.Component<EditorProps> {
 
       { model.selectedScript && <div className={style.editorBody} ref={this.bodyRef}>
           {
-            model.selectedScript.servos.map((servo, index) => {
+            model.selectedScriptServos.map((servo, index) => {
               const controller = LineEditorController.of(servo)
               return <LineEditor
                 controller={controller}

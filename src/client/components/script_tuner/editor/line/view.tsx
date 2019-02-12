@@ -30,19 +30,17 @@ export class LineEditor extends Component<LineEditorProps> {
   }
 
   render() {
-    const viewModel = LineEditorViewModel.of({
+    this.viewModel = LineEditorViewModel.of({
       servo: this.props.servo,
       editorViewModel: this.props.editorViewModel,
     })
-
-    this.viewModel = viewModel
 
     return <div className={style.lineEditor}>
       <svg
         className={style.lineEditorSvg}
         vectorEffect='non-scaling-stroke'
-        height={viewModel.height + 'px'}
-        width={viewModel.width + 'px'}
+        height={this.viewModel.height + 'px'}
+        width={this.viewModel.width + 'px'}
         ref={this.svgRef}
 
         onMouseDown={this.onMouseDown}
@@ -53,7 +51,7 @@ export class LineEditor extends Component<LineEditorProps> {
           className={style.lineEditorTitle}
           x={4}
           y={16}
-        >{ viewModel.servoId }</text>
+        >{ this.viewModel.servoId }</text>
 
         { /* Horizontal grid lines */ }
         <line x1='0' y1='25%' x2='100%' y2='25%' stroke='#CCC' strokeWidth='1'></line>
@@ -62,15 +60,15 @@ export class LineEditor extends Component<LineEditorProps> {
 
         {
           // Vertical grid lines
-          new Array(viewModel.width).fill(0).map((_, index) => {
-            const x = index * viewModel.cellWidth
+          new Array(this.viewModel.width).fill(0).map((_, index) => {
+            const x = index * this.viewModel!.cellWidth
             return <line key={index} x1={x} y1='0' x2={x} y2='100%' stroke='#CCC' strokeWidth='1' />
           })
         }
 
         {
           // The main plot line
-          viewModel.svgLineSegments.map((segment, index) => {
+          this.viewModel.svgLineSegments.map((segment, index) => {
             return <line
               key={index}
               x1={segment.x1}
@@ -86,7 +84,7 @@ export class LineEditor extends Component<LineEditorProps> {
 
         {
           // Points on the main plot line
-          viewModel.svgPoints.map((point, index) => {
+          this.viewModel.svgPoints.map((point, index) => {
             return <circle
               key={index}
               className={style.lineEditorDraggable}
@@ -112,8 +110,8 @@ export class LineEditor extends Component<LineEditorProps> {
         <line
           stroke='#1565C0'
           strokeWidth='2'
-          x1={viewModel.playPosition}
-          x2={viewModel.playPosition}
+          x1={this.viewModel.playPosition}
+          x2={this.viewModel.playPosition}
           y1='0'
           y2='100%'
         />
@@ -121,7 +119,7 @@ export class LineEditor extends Component<LineEditorProps> {
     </div>
   }
 
-  private onDoubleClick({ nativeEvent: event }: React.MouseEvent) {
+  private onDoubleClick = ({ nativeEvent: event }: React.MouseEvent) => {
     const viewModel = this.viewModel
 
     if (!viewModel) {
@@ -146,19 +144,6 @@ export class LineEditor extends Component<LineEditorProps> {
     event.preventDefault()
     const pointIndex = Number((event.target as HTMLElement).dataset.index)
     this.props.controller.removeFrame(pointIndex)
-  }
-
-  private startDrag() {
-    this.isDragging = true
-
-    document.addEventListener('mouseup', (event: MouseEvent) => {
-      this.endDrag()
-    }, { once: true })
-  }
-
-  private endDrag() {
-    this.isDragging = false
-    this.selectedElement = undefined
   }
 
   private onMouseDown = ({ nativeEvent: event }: React.MouseEvent) => {
@@ -206,6 +191,19 @@ export class LineEditor extends Component<LineEditorProps> {
     const angle = viewModel.svgToAngle(mouse.y)
 
     this.props.controller.updateFrame(index, { time, angle })
+  }
+
+  private startDrag() {
+    this.isDragging = true
+
+    document.addEventListener('mouseup', (event: MouseEvent) => {
+      this.endDrag()
+    }, { once: true })
+  }
+
+  private endDrag() {
+    this.isDragging = false
+    this.selectedElement = undefined
   }
 
   private getMousePositionInSvgSpace(event: MouseEvent) {

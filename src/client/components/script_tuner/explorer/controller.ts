@@ -3,6 +3,7 @@ import { createTransformer } from 'mobx-utils'
 
 import { RobotModel } from '../../robot/model'
 import { ScriptTunerController } from '../controller'
+import { Script } from '../model'
 
 interface ExplorerControllerOpts {
   controller: ScriptTunerController
@@ -21,5 +22,9 @@ export class ExplorerController {
 
   selectRobot = (robot: RobotModel) => {
     this.controller.selectRobot(robot)
+  }
+
+  selectScript = (script: Script) => {
+    this.controller.selectScript(script)
   }
 }

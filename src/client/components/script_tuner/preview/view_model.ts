@@ -39,164 +39,111 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
     return this.model.selectedRobot ? this.model.selectedRobot.name : undefined
   }
 
+  private getServoAngle(servoId: string) {
+    const script = this.model.selectedScript
+    return script && script.servos[servoId] && script.servos[servoId].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, script.servos[servoId].frames)
+      : 0
+  }
+
   @computed
   get RIGHT_SHOULDER_PITCH() {
-    const script = this.model.selectedScript
-    return script && script.servos[0].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[0].frames)
-      : 0
+    return this.getServoAngle('RIGHT_SHOULDER_PITCH')
   }
 
   @computed
   get LEFT_SHOULDER_PITCH() {
-    const script = this.model.selectedScript
-    return script && script.servos[1].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[1].frames)
-      : 0
+    return this.getServoAngle('LEFT_SHOULDER_PITCH')
   }
 
   @computed
   get RIGHT_SHOULDER_ROLL() {
-    const script = this.model.selectedScript
-    return script && script.servos[2].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[2].frames)
-      : 0
+    return this.getServoAngle('RIGHT_SHOULDER_ROLL')
   }
 
   @computed
   get LEFT_SHOULDER_ROLL() {
-    const script = this.model.selectedScript
-    return script && script.servos[3].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[3].frames)
-      : 0
+    return this.getServoAngle('LEFT_SHOULDER_ROLL')
   }
 
   @computed
   get RIGHT_ELBOW() {
-    const script = this.model.selectedScript
-    return script && script.servos[4].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[4].frames)
-      : 0
+    return this.getServoAngle('RIGHT_ELBOW')
   }
 
   @computed
   get LEFT_ELBOW() {
-    const script = this.model.selectedScript
-    return script && script.servos[5].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[5].frames)
-      : 0
+    return this.getServoAngle('LEFT_ELBOW')
   }
 
   @computed
   get RIGHT_HIP_YAW() {
-    const script = this.model.selectedScript
-    return script && script.servos[6].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[6].frames)
-      : 0
+    return this.getServoAngle('RIGHT_HIP_YAW')
   }
 
   @computed
   get LEFT_HIP_YAW() {
-    const script = this.model.selectedScript
-    return script && script.servos[7].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[7].frames)
-      : 0
+    return this.getServoAngle('LEFT_HIP_YAW')
   }
 
   @computed
   get RIGHT_HIP_ROLL() {
-    const script = this.model.selectedScript
-    return script && script.servos[8].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[8].frames)
-      : 0
+    return this.getServoAngle('RIGHT_HIP_ROLL')
   }
 
   @computed
   get LEFT_HIP_ROLL() {
-    const script = this.model.selectedScript
-    return script && script.servos[9].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[9].frames)
-      : 0
+    return this.getServoAngle('LEFT_HIP_ROLL')
   }
 
   @computed
   get RIGHT_HIP_PITCH() {
-    const script = this.model.selectedScript
-    return script && script.servos[10].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[10].frames)
-      : 0
+    return this.getServoAngle('RIGHT_HIP_PITCH')
   }
 
   @computed
   get LEFT_HIP_PITCH() {
-    const script = this.model.selectedScript
-    return script && script.servos[11].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[11].frames)
-      : 0
+    return this.getServoAngle('LEFT_HIP_PITCH')
   }
 
   @computed
   get RIGHT_KNEE() {
-    const script = this.model.selectedScript
-    return script && script.servos[12].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[12].frames)
-      : 0
+    return this.getServoAngle('RIGHT_KNEE')
   }
 
   @computed
   get LEFT_KNEE() {
-    const script = this.model.selectedScript
-    return script && script.servos[13].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[13].frames)
-      : 0
+    return this.getServoAngle('LEFT_KNEE')
   }
 
   @computed
   get RIGHT_ANKLE_PITCH() {
-    const script = this.model.selectedScript
-    return script && script.servos[14].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[14].frames)
-      : 0
+    return this.getServoAngle('RIGHT_ANKLE_PITCH')
   }
 
   @computed
   get LEFT_ANKLE_PITCH() {
-    const script = this.model.selectedScript
-    return script && script.servos[15].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[15].frames)
-      : 0
+    return this.getServoAngle('LEFT_ANKLE_PITCH')
   }
 
   @computed
   get RIGHT_ANKLE_ROLL() {
-    const script = this.model.selectedScript
-    return script && script.servos[16].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[16].frames)
-      : 0
+    return this.getServoAngle('RIGHT_ANKLE_ROLL')
   }
 
   @computed
   get LEFT_ANKLE_ROLL() {
-    const script = this.model.selectedScript
-    return script && script.servos[17].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[17].frames)
-      : 0
+    return this.getServoAngle('LEFT_ANKLE_ROLL')
   }
 
   @computed
   get HEAD_YAW() {
-    const script = this.model.selectedScript
-    return script && script.servos[18].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[18].frames)
-      : 0
+    return this.getServoAngle('HEAD_YAW')
   }
 
   @computed
   get HEAD_PITCH() {
-    const script = this.model.selectedScript
-    return script && script.servos[19].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[19].frames)
-      : 0
+    return this.getServoAngle('HEAD_PITCH')
   }
 }
 

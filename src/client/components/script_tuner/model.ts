@@ -1,19 +1,9 @@
-import { computed } from 'mobx'
+import { computed, values } from 'mobx'
 import { observable } from 'mobx'
 import { now } from 'mobx-utils'
 
 import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
-
-export interface Script {
-  path: string
-  servos: Servo[]
-}
-
-export interface Servo {
-  id: string
-  frames: Frame[]
-}
 
 export interface Frame {
   time: number,
@@ -22,6 +12,16 @@ export interface Frame {
   iGain: number,
   dGain: number,
   torque: number,
+}
+
+export interface Servo {
+  id: string
+  frames: Frame[]
+}
+
+export interface Script {
+  path: string
+  servos: {[key: string]: Servo}
 }
 
 export class ScriptTunerModel {
@@ -37,7 +37,6 @@ export class ScriptTunerModel {
 
   constructor(robotModels: RobotModel[]) {
     this.robots = robotModels
-    this.selectedRobot = undefined
     this.scripts = []
   }
 
@@ -52,7 +51,7 @@ export class ScriptTunerModel {
 
   @computed
   get endTime() {
-    return this.scriptsLength - 1
+    return Math.max(this.scriptsLength - 1, 0)
   }
 
   @computed
@@ -65,11 +64,19 @@ export class ScriptTunerModel {
   }
 
   @computed
+  get selectedScriptServos() {
+    if (this.selectedScript) {
+      return values(this.selectedScript.servos)
+    }
+    return []
+  }
+
+  @computed
   get scriptsLength() {
     if (this.selectedScript) {
       let maxLength = 0
 
-      this.selectedScript.servos.forEach(servo => {
+      this.selectedScriptServos.forEach(servo => {
         if (servo.frames.length > maxLength) {
           maxLength = servo.frames.length
         }

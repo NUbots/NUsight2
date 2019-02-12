@@ -80,7 +80,7 @@ export class Timeline extends React.Component<TimelineProps> {
     </div>
   }
 
-  private onClick({ nativeEvent: event }: React.MouseEvent) {
+  private onClick = ({ nativeEvent: event }: React.MouseEvent) => {
     const viewModel = this.viewModel
 
     if (!viewModel) {
@@ -96,19 +96,6 @@ export class Timeline extends React.Component<TimelineProps> {
     const { x } = reference.matrixTransform(svg.getScreenCTM()!.inverse())
 
     this.props.setPlayTime(viewModel.svgToTime(x))
-  }
-
-  private startDrag() {
-    this.isDragging = true
-
-    document.addEventListener('mouseup', (event: MouseEvent) => {
-      this.endDrag()
-    }, { once: true })
-  }
-
-  private endDrag() {
-    this.isDragging = false
-    this.readyToDrag = false
   }
 
   private onMouseDown = ({ nativeEvent: event }: React.MouseEvent) => {
@@ -138,6 +125,19 @@ export class Timeline extends React.Component<TimelineProps> {
     this.props.setPlayTime(
       this.clampToRange(viewModel.svgToTime(x), 0, viewModel.timelineLength),
     )
+  }
+
+  private startDrag() {
+    this.isDragging = true
+
+    document.addEventListener('mouseup', (event: MouseEvent) => {
+      this.endDrag()
+    }, { once: true })
+  }
+
+  private endDrag() {
+    this.isDragging = false
+    this.readyToDrag = false
   }
 
   private getMousePositionInSvgSpace(event: MouseEvent) {

@@ -31,6 +31,20 @@ export class Editor extends React.Component<EditorProps> {
     this.props = props
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.onDocumentKeydown)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onDocumentKeydown)
+  }
+
+  onDocumentKeydown = (event: KeyboardEvent) => {
+    if (event.code === 'Space' && this.props.model.selectedScript) {
+      this.props.controller.togglePlayback()
+    }
+  }
+
   render() {
     const { className, model } = this.props
     const viewModel = EditorViewModel.of(model)

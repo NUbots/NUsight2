@@ -22,15 +22,13 @@ type EditorProps = {
 @observer
 export class Editor extends React.Component<EditorProps> {
   props: EditorProps
-  timelineRef: React.RefObject<Timeline>
-  bodyRef: React.RefObject<HTMLDivElement>
+  timelineElement?: HTMLDivElement
+  bodyElement?: HTMLDivElement
   controller?: EditorController
 
   constructor(props: EditorProps) {
     super(props)
     this.props = props
-    this.timelineRef = React.createRef()
-    this.bodyRef = React.createRef()
   }
 
   render() {
@@ -80,11 +78,11 @@ export class Editor extends React.Component<EditorProps> {
           className={style.editorTimeline}
           setPlayTime={this.controller.setPlayTime}
           editorViewModel={viewModel}
-          ref={this.timelineRef}
+          ref={this.onTimelineRef}
         />
       }
 
-      { model.selectedScript && <div className={style.editorBody} ref={this.bodyRef}>
+      { model.selectedScript && <div className={style.editorBody} ref={this.onBodyRef}>
           {
             model.selectedScriptServos.map((servo, index) => {
               const controller = LineEditorController.of(servo)
@@ -101,33 +99,38 @@ export class Editor extends React.Component<EditorProps> {
     </div>
   }
 
-  componentDidMount() {
-    const timelineElement = ReactDOM.findDOMNode(this.timelineRef.current!) as HTMLDivElement
-    const bodyElement = this.bodyRef.current!
+  onTimelineRef = (timelineComponent: Timeline | null) => {
+    if (timelineComponent) {
+      const timelineElement = ReactDOM.findDOMNode(timelineComponent) as HTMLDivElement
 
-    if (timelineElement && bodyElement) {
-      timelineElement.addEventListener('scroll', this.onTimelineScroll, { passive: true })
-      bodyElement.addEventListener('scroll', this.onBodyScroll, { passive: true })
+      if (timelineElement) {
+        timelineElement.addEventListener('scroll', this.onBodyScroll, { passive: true })
+        this.timelineElement = timelineElement
+      }
+    } else {
+      this.timelineElement = undefined
     }
   }
 
-  componentWillUnmount() {
-    const timelineElement = ReactDOM.findDOMNode(this.timelineRef.current!) as HTMLDivElement
-    const bodyElement = this.bodyRef.current!
-
-    if (timelineElement && bodyElement) {
-      timelineElement.removeEventListener('scroll', this.onTimelineScroll)
-      bodyElement.removeEventListener('scroll', this.onBodyScroll)
+  onBodyRef = (bodyElement: HTMLDivElement | null) => {
+    if (bodyElement) {
+      bodyElement.addEventListener('scroll', this.onBodyScroll, { passive: true })
+      this.bodyElement = bodyElement
+    } else {
+      this.bodyElement = undefined
     }
   }
 
   onTimelineScroll = (event: UIEvent) => {
-    this.bodyRef.current!.scrollLeft = (event.currentTarget as HTMLDivElement).scrollLeft
+    if (this.bodyElement) {
+      this.bodyElement.scrollLeft = (event.currentTarget as HTMLDivElement).scrollLeft
+    }
   }
 
   onBodyScroll = (event: UIEvent) => {
-    const timelineElement = ReactDOM.findDOMNode(this.timelineRef.current!) as HTMLDivElement
-    timelineElement.scrollLeft = (event.currentTarget as HTMLDivElement).scrollLeft
+    if (this.timelineElement) {
+      this.timelineElement.scrollLeft = (event.currentTarget as HTMLDivElement).scrollLeft
+    }
   }
 
   private jumpToStart = () => {

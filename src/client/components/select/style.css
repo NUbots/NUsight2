@@ -1,7 +1,6 @@
 .button {
   background-color: transparent;
   border: none;
-  cursor: pointer;
   display: flex;
   height: 32px;
   background-color: #eee;
@@ -15,8 +14,13 @@
   outline: none;
 }
 
-.button:hover {
+.button:hover:not([disabled]) {
   border: 1px solid #1197d3;
+  cursor: pointer;
+}
+
+.button:active:not([disabled]) {
+  background-color: #DDD;
 }
 
 .buttonIcon svg {

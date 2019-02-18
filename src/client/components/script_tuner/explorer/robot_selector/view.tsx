@@ -14,13 +14,14 @@ export type RobotSelectorProps = {
   className?: string
   robots: RobotModel[]
   selected?: RobotModel
+  dropDirection?: 'up' | 'down'
   onSelect(robot: RobotModel): void
 }
 
 @observer
 export class RobotSelector extends React.Component<RobotSelectorProps> {
   render() {
-    const { className, robots, selected } = this.props
+    const { className, robots, selected, dropDirection } = this.props
     const viewModel = RobotSelectorViewModel.of({
       robots,
       selected,
@@ -43,6 +44,7 @@ export class RobotSelector extends React.Component<RobotSelectorProps> {
           placeholder='Select a robot...'
           empty={empty}
           icon={<RobotIcon />}
+          dropDirection={dropDirection}
         />
       </div>
     )

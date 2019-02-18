@@ -34,13 +34,21 @@ export class ScriptTunerController {
   }
 
   @action
-  selectRobot(robot: RobotModel) {
-    const isInitialSelect = this.model.selectedRobot === undefined
-    this.model.selectedRobot = robot
+  selectSourceRobot(robot: RobotModel) {
+    const isInitialSelect = this.model.sourceRobot === undefined
+    this.model.sourceRobot = robot
 
     if (isInitialSelect) {
       this.network.requestScripts(robot)
     }
+
+    // Select the robot as target too
+    this.selectTargetRobot(robot)
+  }
+
+  @action
+  selectTargetRobot(robot: RobotModel) {
+    this.model.targetRobot = robot
   }
 
   @action
@@ -68,6 +76,13 @@ export class ScriptTunerController {
 
     // Select the script
     this.model.selectedScript = createViewModel(script)
+  }
+
+  @action
+  saveScript() {
+    if (this.model.selectedScript && this.model.targetRobot) {
+      this.network.saveScript(this.model.targetRobot)
+    }
   }
 
   @action

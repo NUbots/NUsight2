@@ -28,7 +28,8 @@ export interface Script {
 
 export class ScriptTunerModel {
   @observable robots: RobotModel[]
-  @observable selectedRobot?: RobotModel
+  @observable sourceRobot?: RobotModel
+  @observable targetRobot?: RobotModel
   @observable scripts: Script[] = []
   @observable selectedScript?: DataViewModel<Script>
   @observable isLoading = false

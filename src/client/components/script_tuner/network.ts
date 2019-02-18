@@ -9,6 +9,7 @@ import { Frame, Script, ScriptTunerModel, Servo } from './model'
 
 import LoadScriptsCommand = message.tools.script_tuner.LoadScriptsCommand
 import Scripts = message.tools.script_tuner.Scripts
+import SaveScriptCommand = message.tools.script_tuner.SaveScriptCommand
 
 export class ScriptTunerNetwork {
   constructor(private network: Network, private model: ScriptTunerModel) {
@@ -35,13 +36,30 @@ export class ScriptTunerNetwork {
   }
 
   @action
-  saveScript(script: Script) {
-    // console.log('send script to robot', this.model.selectedRobot, script)
+  saveScript(robot: RobotModel) {
+    const script = this.model.selectedScript
+
+    if (!script) {
+      return
+    }
+
+    const message = SaveScriptCommand.encode({
+      path: script.data.path,
+      script: script.data,
+    }).finish()
+
+    this.network.send({
+      target: robot.name,
+      type: 'message.tools.script_tuner.SaveScriptCommand',
+      payload: Buffer.from(message),
+    })
+
+    // Commit the changes to update script in list of scripts
+    script.submit()
   }
 
   @action
   private onScripts = (robotModel: RobotModel, scripts: Scripts) => {
-    // console.log('scripts received', robotModel, scripts)
     this.model.scripts = Scripts.toObject(scripts).scripts as Script[]
     this.stopLoader()
   }

@@ -72,3 +72,57 @@
   color: white;
   background-color: #1197d3;
 }
+
+.explorerFooter {
+  padding: 4px;
+  display: flex;
+}
+
+.explorerButton {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  height: 32px;
+  background-color: #eee;
+  border: 1px solid #CCC;
+  padding: 0 8px;
+  align-items: center;
+  font-family: inherit;
+  border-radius: 4px;
+  line-height: 1;
+  width: 100%;
+  outline: none;
+  min-width: 64px;
+  justify-content: center;
+}
+
+.explorerButton:hover:not([disabled]) {
+  border: 1px solid #1197d3;
+  cursor: pointer;
+}
+
+.explorerButton:active:not([disabled]) {
+  background-color: #DDD;
+}
+
+.explorerFooterGroup {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-left: 4px;
+}
+
+.explorerFooterGroup:first-child {
+  padding-left: 0;
+  flex-grow: 1;
+}
+
+.explorerFooterGroupLabel {
+  font-size: 12px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.explorerFooterGroup button {
+  align-self: flex-end;
+}

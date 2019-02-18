@@ -36,7 +36,7 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
 
   @computed
   get name() {
-    return this.model.selectedRobot ? this.model.selectedRobot.name : undefined
+    return this.model.sourceRobot ? this.model.sourceRobot.name : undefined
   }
 
   private getServoAngle(servoId: string) {

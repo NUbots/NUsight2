@@ -20,11 +20,19 @@ export class ExplorerController {
     return new ExplorerController(opts)
   })
 
-  selectRobot = (robot: RobotModel) => {
-    this.controller.selectRobot(robot)
+  selectSourceRobot = (robot: RobotModel) => {
+    this.controller.selectSourceRobot(robot)
+  }
+
+  selectTargetRobot = (robot: RobotModel) => {
+    this.controller.selectTargetRobot(robot)
   }
 
   selectScript = (script: Script) => {
     this.controller.selectScript(script)
+  }
+
+  saveScript = () => {
+    this.controller.saveScript()
   }
 }

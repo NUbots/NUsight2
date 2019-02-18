@@ -32,8 +32,8 @@ export class Explorer extends React.Component<ExplorerProps> {
       <RobotSelector
         className={style.explorerRobotSelector}
         robots={model.robots}
-        selected={model.selectedRobot}
-        onSelect={controller.selectRobot}
+        selected={model.sourceRobot}
+        onSelect={controller.selectSourceRobot}
       />
       { model.isLoading &&
         <div className={style.explorerLoading}>
@@ -43,13 +43,13 @@ export class Explorer extends React.Component<ExplorerProps> {
       }
       { !model.isLoading &&
         <div className={style.explorerBody}>
-          { model.selectedRobot === undefined &&
+          { model.sourceRobot === undefined &&
             <div className={style.explorerEmpty}>Select a robot to view scripts</div>
           }
-          { model.selectedRobot && model.scripts.length === 0 &&
+          { model.sourceRobot && model.scripts.length === 0 &&
             <div className={style.explorerEmpty}>No scripts for selected robot</div>
           }
-          { model.selectedRobot && model.scripts.length > 0 &&
+          { model.sourceRobot && model.scripts.length > 0 &&
             <div className={style.explorerScripts}>{
               model.scripts.map(script => {
                 const isSelected = Boolean(model.selectedScript &&  model.selectedScript.data.path === script.path)
@@ -62,6 +62,26 @@ export class Explorer extends React.Component<ExplorerProps> {
               })
             }</div>
           }
+        </div>
+      }
+      { model.selectedScript &&
+        <div className={style.explorerFooter}>
+          <div className={style.explorerFooterGroup}>
+            <span className={style.explorerFooterGroupLabel}>Target robot</span>
+            <RobotSelector
+              robots={model.robots}
+              selected={model.targetRobot}
+              onSelect={controller.selectTargetRobot}
+              dropDirection='up'
+            />
+          </div>
+          <div className={style.explorerFooterGroup}>
+            <button
+              className={style.explorerButton}
+              disabled={!model.selectedScript.isDirty}
+              onClick={controller.saveScript}
+            >Save</button>
+          </div>
         </div>
       }
     </div>

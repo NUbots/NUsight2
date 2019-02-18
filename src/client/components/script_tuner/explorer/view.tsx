@@ -52,7 +52,7 @@ export class Explorer extends React.Component<ExplorerProps> {
           { model.selectedRobot && model.scripts.length > 0 &&
             <div className={style.explorerScripts}>{
               model.scripts.map(script => {
-                const isSelected = Boolean(model.selectedScript &&  model.selectedScript.path === script.path)
+                const isSelected = Boolean(model.selectedScript &&  model.selectedScript.data.path === script.path)
                 return <ScriptListItem
                   key={script.path}
                   script={script}

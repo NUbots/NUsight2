@@ -1,4 +1,6 @@
+import { action, observable, toJS } from 'mobx'
 import { createTransformer } from 'mobx-utils'
+import { deepObserve } from 'mobx-utils'
 import { MeshLambertMaterial } from 'three'
 import { Color } from 'three'
 import { JSONLoader } from 'three'
@@ -78,4 +80,45 @@ function computeVertexNormals(geometry: Geometry, maxSmoothAngle: number) {
       face.vertexNormals[fv] = vertexNormal
     }
   }
+}
+
+export interface DataViewModel<T> {
+  model: T,
+  data: T,
+  isDirty: boolean,
+  submit(): void,
+  reset(): void,
+}
+
+export function createViewModel<T>(model: T): DataViewModel<T> {
+  const viewModel: DataViewModel<T> = observable({
+    model,
+    data: toJS(model),
+    isDirty: false,
+    reset() {},
+    submit() {},
+  })
+
+  viewModel.reset = action(() => {
+    viewModel.data = toJS(model)
+    viewModel.isDirty = false
+    setupDirtyWatcher(viewModel)
+  })
+
+  viewModel.submit = action(() => {
+    Object.assign(model, toJS(viewModel.data))
+    viewModel.isDirty = false
+    setupDirtyWatcher(viewModel)
+  })
+
+  setupDirtyWatcher(viewModel)
+
+  return viewModel
+}
+
+function setupDirtyWatcher<T>(viewModel: DataViewModel<T>) {
+  const dispose = deepObserve(viewModel, (change, path) => {
+    viewModel.isDirty = true
+    dispose()
+  })
 }

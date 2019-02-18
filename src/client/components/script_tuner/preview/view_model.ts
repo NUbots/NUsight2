@@ -41,8 +41,8 @@ export class ScriptRobot3dViewModel implements Robot3dViewModel {
 
   private getServoAngle(servoId: string) {
     const script = this.model.selectedScript
-    return script && script.servos[servoId] && script.servos[servoId].frames.length
-      ? getAngleAtCurrentTime(this.model.playTime, script.servos[servoId].frames)
+    return script && script.data.servos[servoId] && script.data.servos[servoId].frames.length
+      ? getAngleAtCurrentTime(this.model.playTime, script.data.servos[servoId].frames)
       : 0
   }
 

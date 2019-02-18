@@ -5,6 +5,8 @@ import { IViewModel, now } from 'mobx-utils'
 import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
 
+import { DataViewModel } from './utils'
+
 export interface Frame {
   time: number,
   angle: number,
@@ -28,7 +30,7 @@ export class ScriptTunerModel {
   @observable robots: RobotModel[]
   @observable selectedRobot?: RobotModel
   @observable scripts: Script[] = []
-  @observable selectedScript?: IViewModel<Script> & Script
+  @observable selectedScript?: DataViewModel<Script>
   @observable isLoading = false
   @observable loadingMessage?: string
   @observable isPlaying = false
@@ -66,7 +68,7 @@ export class ScriptTunerModel {
   @computed
   get selectedScriptServos() {
     if (this.selectedScript) {
-      return values(this.selectedScript.servos)
+      return values(this.selectedScript.data.servos)
     }
     return []
   }

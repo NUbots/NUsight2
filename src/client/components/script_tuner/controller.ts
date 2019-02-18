@@ -1,10 +1,10 @@
 import { action, autorun, IReactionDisposer } from 'mobx'
-import { createViewModel, deepObserve } from 'mobx-utils'
 
 import { RobotModel } from '../robot/model'
 
 import { Script, ScriptTunerModel } from './model'
 import { ScriptTunerNetwork } from './network'
+import { createViewModel } from './utils'
 
 interface ScriptTunerOpts {
   network: ScriptTunerNetwork
@@ -45,22 +45,26 @@ export class ScriptTunerController {
 
   @action
   selectScript(script: Script) {
+    // Do nothing if the script is already selected
+    if (this.model.selectedScript && this.model.selectedScript.model === script) {
+      return
+    }
+
+    // Prompt to confirm switch if the current script has unsaved changes
+    if (this.model.selectedScript && this.model.selectedScript.isDirty) {
+      const discardChanges = confirm(`${this.model.selectedScript.data.path} has unsaved changes. Discard?`)
+
+      if (discardChanges) {
+        this.model.selectedScript.reset()
+      } else {
+        return
+      }
+    }
+
     // Reset the editor state
     this.model.isPlaying = false
     this.model.currentTime = 0
     this.model.previousTimelineLength = 0
-
-    // Prompt to save or reset the current script if there are changes
-    if (this.model.selectedScript && this.model.selectedScript.isDirty) {
-      const save = confirm(`Save changes to ${this.model.selectedScript.path}?`)
-
-      if (save) {
-        this.model.selectedScript.submit()
-        this.network.saveScript(this.model.selectedScript.model)
-      } else {
-        this.model.selectedScript.reset()
-      }
-    }
 
     // Select the script
     this.model.selectedScript = createViewModel(script)

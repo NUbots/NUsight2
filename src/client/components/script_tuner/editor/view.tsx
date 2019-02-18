@@ -57,7 +57,7 @@ export class Editor extends React.Component<EditorProps> {
       <div className={style.editorHeader}>
         <div className={style.editorTitle}>
           { model.selectedScript
-              ? `Editor – ${model.selectedScript.path} ${model.selectedScript.isDirty ? ' * ' : ''}`
+              ? `Editor – ${model.selectedScript.data.path} ${model.selectedScript.isDirty ? ' * ' : ''}`
               : 'Editor'
           }
         </div>

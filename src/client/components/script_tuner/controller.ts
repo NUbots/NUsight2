@@ -1,4 +1,5 @@
 import { action, autorun, IReactionDisposer } from 'mobx'
+import { createViewModel, deepObserve } from 'mobx-utils'
 
 import { RobotModel } from '../robot/model'
 
@@ -49,8 +50,20 @@ export class ScriptTunerController {
     this.model.currentTime = 0
     this.model.previousTimelineLength = 0
 
+    // Prompt to save or reset the current script if there are changes
+    if (this.model.selectedScript && this.model.selectedScript.isDirty) {
+      const save = confirm(`Save changes to ${this.model.selectedScript.path}?`)
+
+      if (save) {
+        this.model.selectedScript.submit()
+        this.network.saveScript(this.model.selectedScript.model)
+      } else {
+        this.model.selectedScript.reset()
+      }
+    }
+
     // Select the script
-    this.model.selectedScript = script
+    this.model.selectedScript = createViewModel(script)
   }
 
   @action

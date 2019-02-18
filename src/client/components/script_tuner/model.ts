@@ -1,6 +1,6 @@
 import { computed, values } from 'mobx'
 import { observable } from 'mobx'
-import { now } from 'mobx-utils'
+import { IViewModel, now } from 'mobx-utils'
 
 import { AppModel } from '../app/model'
 import { RobotModel } from '../robot/model'
@@ -27,8 +27,8 @@ export interface Script {
 export class ScriptTunerModel {
   @observable robots: RobotModel[]
   @observable selectedRobot?: RobotModel
-  @observable scripts: Script[]
-  @observable selectedScript?: Script
+  @observable scripts: Script[] = []
+  @observable selectedScript?: IViewModel<Script> & Script
   @observable isLoading = false
   @observable loadingMessage?: string
   @observable isPlaying = false
@@ -38,7 +38,6 @@ export class ScriptTunerModel {
 
   constructor(robotModels: RobotModel[]) {
     this.robots = robotModels
-    this.scripts = []
   }
 
   static of(robots: RobotModel[]): ScriptTunerModel {
@@ -81,6 +80,7 @@ export class ScriptTunerModel {
         const max = Math.max(...servo.frames.map((frame: Frame) => frame.time))
 
         if (max > maxLength) {
+          // Add 1000ms to the last frame time and round up to the nearest second
           maxLength = roundUpTo(1000 + max, 1000)
         }
       })

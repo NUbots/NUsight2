@@ -35,6 +35,11 @@ export class ScriptTunerNetwork {
   }
 
   @action
+  saveScript(script: Script) {
+    // console.log('send script to robot', this.model.selectedRobot, script)
+  }
+
+  @action
   private onScripts = (robotModel: RobotModel, scripts: Scripts) => {
     // console.log('scripts received', robotModel, scripts)
     this.model.scripts = Scripts.toObject(scripts).scripts as Script[]

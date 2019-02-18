@@ -1,0 +1,30 @@
+.timeline {
+  box-sizing: border-box;
+  display: block;
+  flex-shrink: 0;
+  height: 25px; /* Timeline height + 1 for bottom border */
+  padding: 0 5px;
+  line-height: 0;
+  background-color: #CCC;
+  border-bottom: 1px solid #999;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  user-select: none;
+}
+
+/* Hide the scrollbar, not using overflow:hidden because
+ * we need to programmatically scroll the timeline */
+.timeline::-webkit-scrollbar {
+  height: 0;
+  background: transparent;
+}
+
+.timelineSvg {
+  box-sizing: border-box;
+  height: 24px; /* Timeline height */
+}
+
+.timelineText {
+  font-size: 12px;
+  fill: black;
+}

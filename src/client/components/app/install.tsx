@@ -4,6 +4,7 @@ import { installChart } from '../chart/install'
 import { installDashboard } from '../dashboard/install'
 import { installLocalisation } from '../localisation/install'
 import { withRobotSelectorMenuBar } from '../menu_bar/view'
+import { installScriptTuner } from '../script_tuner/install'
 import { installVision } from '../vision/install'
 import { installVisualMesh } from '../visual_mesh/install'
 
@@ -23,6 +24,7 @@ export function installNav() {
 
   installDashboard({ nav, appModel, nusightNetwork, menu })
   installLocalisation({ nav, appModel, nusightNetwork, menu })
+  installScriptTuner({ nav, appModel, nusightNetwork, menu })
   installChart({ nav, appModel, nusightNetwork, menu })
   installVision({ nav, appModel, nusightNetwork, Menu: menu })
   installVisualMesh({ nav, appModel, nusightNetwork, Menu: menu })

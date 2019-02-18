@@ -1,0 +1,128 @@
+.explorer {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.explorerHeader {
+  background-color: #777;
+  padding: 0 4px;
+  color: white;
+  font-size: 14px;
+  display: flex;
+  min-height: 24px;
+  align-items: center;
+}
+
+.explorerRobotSelector {
+  padding: 4px;
+  border-bottom: 1px solid #DDD;
+}
+
+.explorerBody,
+.explorerLoading {
+  flex-grow: 1;
+  overflow: hidden;
+  position: relative;
+  border-bottom: 1px solid #DDD;
+}
+
+.explorerLoading {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding: 0 4px;
+}
+
+.explorerLoadingIcon {
+  margin-top: -32px;
+  margin-bottom: 8px;
+}
+
+.explorerEmpty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.explorerScripts {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.explorerScript {
+  padding: 6px 8px;
+  line-height: 1;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.explorerScript:hover {
+  background-color: #eee;
+}
+
+.explorerScriptSelected,
+.explorerScriptSelected:hover {
+  color: white;
+  background-color: #1197d3;
+}
+
+.explorerFooter {
+  padding: 4px;
+  display: flex;
+}
+
+.explorerButton {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  height: 32px;
+  background-color: #eee;
+  border: 1px solid #CCC;
+  padding: 0 8px;
+  align-items: center;
+  font-family: inherit;
+  border-radius: 4px;
+  line-height: 1;
+  width: 100%;
+  outline: none;
+  min-width: 64px;
+  justify-content: center;
+}
+
+.explorerButton:hover:not([disabled]) {
+  border: 1px solid #1197d3;
+  cursor: pointer;
+}
+
+.explorerButton:active:not([disabled]) {
+  background-color: #DDD;
+}
+
+.explorerFooterGroup {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-left: 4px;
+}
+
+.explorerFooterGroup:first-child {
+  padding-left: 0;
+  flex-grow: 1;
+}
+
+.explorerFooterGroupLabel {
+  font-size: 12px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.explorerFooterGroup button {
+  align-self: flex-end;
+}

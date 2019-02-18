@@ -1,0 +1,15 @@
+.lineEditor {
+    line-height: 0;
+}
+
+.lineEditorSvg {
+  font-family: monospace;
+  user-select: none;
+  border: 1px solid #888;
+  background-color: white;
+  cursor: crosshair;
+}
+
+.lineEditorDraggable {
+  cursor: move;
+}

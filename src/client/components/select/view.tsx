@@ -6,6 +6,7 @@ import * as React from 'react'
 import { ReactNode } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
 
+import { Button } from '../button/view'
 import { Dropdown } from '../dropdown/view'
 
 import DropdownIcon from './dropdown.svg'
@@ -51,11 +52,13 @@ export class Select extends React.Component<SelectProps> {
     const { className, icon, placeholder, empty, options, selectedOption } = this.props
 
     const button = (
-      <button className={style.button}>
-        { icon && <span className={style.buttonIcon}>{ icon }</span> }
-        { selectedOption ? selectedOption.label : placeholder }
-        <DropdownIcon className={style.dropdownIcon}/>
-      </button>
+      <Button
+        iconBefore={icon}
+        iconAfter={<DropdownIcon />}
+        textAlign='left'
+        iconAfterAlignedRight
+        fullwidth
+      >{ selectedOption ? selectedOption.label : placeholder }</Button>
     )
 
     return <OutsideClickHandler onOutsideClick={this.close}>

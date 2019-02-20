@@ -4,7 +4,6 @@ import { action as mobxAction, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 
-import { createContainerDecorator } from '../../storybook/container'
 import { Option, Select } from '../view'
 
 import Icon from './icon.svg'
@@ -13,10 +12,8 @@ const actions = {
   onChange: action('onChange'),
 }
 
-const container = createContainerDecorator({ maxWidth: '350px' })
-
 storiesOf('components.select', module)
-  .addDecorator(container)
+  .addDecorator(story => <div style={{ maxWidth: '350px' }}>{story()}</div>)
   .add('renders basic', () => {
     return <Select
       options={[]}

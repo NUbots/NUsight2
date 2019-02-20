@@ -1,0 +1,29 @@
+.loading {
+  position: relative;
+}
+
+.loading svg {
+  animation: loading-rotate 0.7s linear infinite;
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform-origin: center center;
+  width: 100%;
+}
+
+.loading circle {
+  stroke-dasharray: 89, 200;
+  stroke-dashoffset: -35px;
+  stroke-linecap: round;
+  stroke: #1197d3;
+}
+
+@keyframes loading-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}

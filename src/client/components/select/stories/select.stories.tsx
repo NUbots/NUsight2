@@ -4,6 +4,7 @@ import { action as mobxAction, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 
+import { createContainerDecorator } from '../../storybook/container'
 import { Option, Select } from '../view'
 
 import Icon from './icon.svg'
@@ -12,21 +13,16 @@ const actions = {
   onChange: action('onChange'),
 }
 
-const Container = ({ children }: { children: any }) => {
-  return <div style={{ maxWidth: '320px', fontFamily: 'Arial, sans-serif' }}>
-    {children}
-  </div>
-}
+const container = createContainerDecorator({ maxWidth: '350px' })
 
 storiesOf('components.select', module)
+  .addDecorator(container)
   .add('renders basic', () => {
-    return <Container>
-      <Select
-        options={[]}
-        onChange={actions.onChange}
-        placeholder='Select...'
-      />
-    </Container>
+    return <Select
+      options={[]}
+      onChange={actions.onChange}
+      placeholder='Select...'
+    />
   })
   .add('renders empty', () => {
     const empty = (
@@ -35,47 +31,39 @@ storiesOf('components.select', module)
         <p>Add options to see them here</p>
       </div>
     )
-    return <Container>
-      <Select
-        options={[]}
-        onChange={actions.onChange}
-        placeholder='Select...'
-        empty={empty}
-      />
-    </Container>
+    return <Select
+      options={[]}
+      onChange={actions.onChange}
+      placeholder='Select...'
+      empty={empty}
+    />
   })
   .add('renders with options', () => {
     const options = getOptions()
-    return <Container>
-      <Select
-        options={options}
-        onChange={actions.onChange}
-        placeholder='Select a color...'
-      />
-    </Container>
+    return <Select
+      options={options}
+      onChange={actions.onChange}
+      placeholder='Select a color...'
+    />
   })
   .add('renders with selection', () => {
     const options = getOptions()
     const selected = options[1]
-    return <Container>
-      <Select
-        options={options}
-        selectedOption={selected}
-        onChange={actions.onChange}
-        placeholder='Select a color...'
-      />
-    </Container>
+    return <Select
+      options={options}
+      selectedOption={selected}
+      onChange={actions.onChange}
+      placeholder='Select a color...'
+    />
   })
   .add('renders with icon', () => {
     const options = getOptions()
-    return <Container>
-      <Select
-        options={options}
-        onChange={actions.onChange}
-        placeholder='Select a color...'
-        icon={<Icon />}
-      />
-    </Container>
+    return <Select
+      options={options}
+      onChange={actions.onChange}
+      placeholder='Select a color...'
+      icon={<Icon />}
+    />
   })
   .add('interactive', () => {
     const options = getOptions()
@@ -92,7 +80,7 @@ storiesOf('components.select', module)
       icon={<Icon />}
     />)
 
-    return <Container><Component /></Container>
+    return <Component />
   })
 
 function getOptions(): Option[] {

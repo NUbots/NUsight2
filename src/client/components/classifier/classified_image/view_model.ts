@@ -58,8 +58,8 @@ export class ClassifiedImageViewModel {
   })
 
   private readonly material = shaderMaterial(() => ({
-    vertexShader: String(vertexShader),
-    fragmentShader: String(fragmentShader),
+    vertexShader,
+    fragmentShader,
     uniforms: {
       image: { value: this.texture.get() },
       lut: { value: this.lutTexture.get() },

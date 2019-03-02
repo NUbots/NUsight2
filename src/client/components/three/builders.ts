@@ -206,6 +206,9 @@ type ImageTextureOpts = {
 }
 
 export const imageTexture = createUpdatableComputed(
+  // Unlike other builders in this file, `image` is optional.
+  // This is because images need to be loaded, so it is often the case the data will not exist immediately.
+  // Making it optional turns out to be very convenient as uniform values (such as textures) can be set asynchronously.
   (opts: ImageTextureOpts) => opts.image && new Texture(),
   (texture, opts) => {
     if (texture) {

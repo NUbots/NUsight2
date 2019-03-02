@@ -1,32 +1,20 @@
-import * as classNames from 'classnames'
-import { observer } from 'mobx-react'
 import * as React from 'react'
 
-import * as style from './style.css'
+import * as styles from './styles.css'
 
-export interface LoadingIconProps {
-  className?: string
-  size?: number
-}
-
-@observer
-export class LoadingIcon extends React.Component<LoadingIconProps> {
+export class LoadingIcon extends React.PureComponent<{ size?: number }> {
   render() {
-    const { className, size = 32 } = this.props
-    return <div
-      className={classNames([style.loading, className])}
-      style={{ width: `${size}px`, height: `${size}px` }}
-    >
-      <svg role='progressbar' viewBox='25 25 50 50'>
-        <circle
-          cx='50'
-          cy='50'
-          fill='none'
-          r='20'
-          strokeMiterlimit='10'
-          strokeWidth='4'
-        ></circle>
-      </svg>
-    </div>
+    const { size = 32 } = this.props
+    return <svg width={size} height={size} className={styles.loading} role='progressbar' viewBox='25 25 50 50'>
+      <circle
+        className={styles.circle}
+        cx='50'
+        cy='50'
+        fill='none'
+        r='20'
+        strokeMiterlimit='10'
+        strokeWidth='4'
+      />
+    </svg>
   }
 }

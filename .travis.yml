@@ -12,6 +12,12 @@ cache:
     - node_modules
     - .awcache
 
+env:
+  - YARN_COMMAND=build:ci
+  - YARN_COMMAND=tslint
+  - YARN_COMMAND=test:ci
+  - YARN_COMMAND=protobuf
+
 # Only build the master branch, PRs will build also due to settings in the web ui
 branches:
   only:

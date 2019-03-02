@@ -61,7 +61,7 @@ export class ClassifiedImageViewModel {
     vertexShader,
     fragmentShader,
     uniforms: {
-      image: { value: this.texture.get() },
+      image: { value: this.imageTexture.get() },
       lut: { value: this.lutTexture.get() },
       lutSize: { value: this.lutSize },
       bitsX: { value: this.model.lut.size.x },
@@ -70,8 +70,8 @@ export class ClassifiedImageViewModel {
     },
   }))
 
-  private readonly texture = imageTexture(() => ({
-    image: this.imageEl,
+  private readonly imageTexture = imageTexture(() => ({
+    image: this.imageElement,
     format: RGBAFormat,
     type: UnsignedByteType,
     mapping: Texture.DEFAULT_MAPPING,
@@ -83,7 +83,7 @@ export class ClassifiedImageViewModel {
   }))
 
   @computed
-  private get imageEl() {
+  private get imageElement(): HTMLImageElement | undefined {
     const image = this.model.image
     return image && image.type === 'image' ? image.image : undefined
   }
@@ -103,7 +103,7 @@ export class ClassifiedImageViewModel {
   }))
 
   @computed
-  get lutSize() {
+  get lutSize(): number {
     return Math.ceil(Math.sqrt(this.model.lut.data.length))
   }
 }

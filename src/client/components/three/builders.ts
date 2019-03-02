@@ -108,15 +108,13 @@ export const mesh = createUpdatableComputed(
 )
 
 type MeshBasicMaterialOpts = {
-  color?: Color
-  map?: Texture
+  color: Color
 }
 
 export const meshBasicMaterial = createUpdatableComputed(
   (opts: MeshBasicMaterialOpts) => new MeshBasicMaterial(),
   (mesh, opts) => {
-    mesh.color = opts.color!
-    mesh.map = opts.map!
+    mesh.color = opts.color
     mesh.needsUpdate = true
   },
   mesh => mesh.dispose(),

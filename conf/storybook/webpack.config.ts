@@ -12,8 +12,10 @@ export default (storybookConfig: webpack.Configuration) => {
     },
     plugins: [
       ...storybookConfig.plugins || [],
-      ...(config.plugins || []).filter(
-        p => !(p instanceof HtmlWebpackPlugin || p instanceof webpack.HotModuleReplacementPlugin),
+      ...(config.plugins || []).filter(p => !(
+          p instanceof HtmlWebpackPlugin // Storybook handles page generation.
+          || p instanceof webpack.HotModuleReplacementPlugin // Already included in the default storybook plugins.
+        ),
       ),
     ],
     resolve: {

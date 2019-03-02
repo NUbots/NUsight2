@@ -1,4 +1,3 @@
-import * as classNames from 'classnames'
 import { action } from 'mobx'
 import { observable } from 'mobx'
 import { observer } from 'mobx-react'
@@ -54,11 +53,11 @@ export class Select extends React.Component<SelectProps> {
     const button = (
       <Button
         iconBefore={icon}
-        iconAfter={<DropdownIcon />}
+        iconAfter={<DropdownIcon/>}
         textAlign='left'
         iconAfterAlignedRight
         fullwidth
-      >{ selectedOption ? selectedOption.label : placeholder }</Button>
+      >{selectedOption ? selectedOption.label : placeholder}</Button>
     )
 
     return <OutsideClickHandler onOutsideClick={this.close}>
@@ -70,18 +69,18 @@ export class Select extends React.Component<SelectProps> {
         onToggleClick={this.onToggleClick}
       >
         <div className={style.dropdown}>
-          { options.length === 0 && <div className={style.empty}>{ empty || 'No options' }</div> }
-          { options.length > 0 && <div className={style.options}>{
-              options.map(option => {
-                const isSelected = Boolean(selectedOption && selectedOption.id === option.id)
-                return <SelectOption
-                  key={option.id}
-                  option={option}
-                  isSelected={isSelected}
-                  onSelect={this.onSelect}
-                />
-              })
-            }</div>
+          {options.length === 0 && <div className={style.empty}>{empty || 'No options'}</div>}
+          {options.length > 0 && <div className={style.options}>{
+            options.map(option => {
+              const isSelected = Boolean(selectedOption && selectedOption.id === option.id)
+              return <SelectOption
+                key={option.id}
+                option={option}
+                isSelected={isSelected}
+                onSelect={this.onSelect}
+              />
+            })
+          }</div>
           }
         </div>
       </Dropdown>

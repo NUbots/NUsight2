@@ -1,0 +1,109 @@
+import { computed } from 'mobx'
+import { LuminanceFormat } from 'three'
+import { LinearFilter } from 'three'
+import { ClampToEdgeWrapping } from 'three'
+import { Texture } from 'three'
+import { UnsignedByteType } from 'three'
+import { RGBAFormat } from 'three'
+import { Matrix4 } from 'three'
+import { PlaneGeometry } from 'three'
+
+import { disposableComputed } from '../../../base/disposable_computed'
+import { dataTexture } from '../../three/builders'
+import { shaderMaterial } from '../../three/builders'
+import { imageTexture } from '../../three/builders'
+import { mesh } from '../../three/builders'
+import { scene } from '../../three/builders'
+import { orthographicCamera } from '../../three/builders'
+import { Stage } from '../../three/three'
+
+import { ClassifiedImageModel } from './model'
+import * as fragmentShader from './shaders/classify.frag'
+import * as vertexShader from './shaders/classify.vert'
+
+export class ClassifiedImageViewModel {
+  constructor(private readonly model: ClassifiedImageModel) {
+  }
+
+  static of(model: ClassifiedImageModel) {
+    return new ClassifiedImageViewModel(model)
+  }
+
+  get stage(): Stage {
+    return { camera: this.camera.get(), scene: this.scene.get() }
+  }
+
+  private readonly camera = orthographicCamera(() => ({
+    left: 0,
+    right: 1,
+    top: 1,
+    bottom: 0,
+    near: 0,
+    far: 1,
+  }))
+
+  private readonly scene = scene(() => ({
+    children: [this.image.get()],
+  }))
+
+  private readonly image = mesh(() => ({
+    geometry: ClassifiedImageViewModel.geometry.get(),
+    material: this.material.get(),
+  }))
+
+  private static geometry = disposableComputed(() => {
+    const geometry = new PlaneGeometry(1, 1)
+    geometry.applyMatrix(new Matrix4().makeTranslation(0.5, 0.5, 0))
+    return geometry
+  })
+
+  private readonly material = shaderMaterial(() => ({
+    vertexShader: String(vertexShader),
+    fragmentShader: String(fragmentShader),
+    uniforms: {
+      image: { value: this.texture.get() },
+      lut: { value: this.lutTexture.get() },
+      lutSize: { value: this.lutSize },
+      bitsX: { value: this.model.lut.size.x },
+      bitsY: { value: this.model.lut.size.y },
+      bitsZ: { value: this.model.lut.size.z },
+    },
+  }))
+
+  private readonly texture = imageTexture(() => ({
+    image: this.imageEl,
+    format: RGBAFormat,
+    type: UnsignedByteType,
+    mapping: Texture.DEFAULT_MAPPING,
+    wrapS: ClampToEdgeWrapping,
+    wrapT: ClampToEdgeWrapping,
+    magFilter: LinearFilter,
+    minFilter: LinearFilter,
+    flipY: true,
+  }))
+
+  @computed
+  private get imageEl() {
+    const image = this.model.image
+    return image && image.type === 'image' ? image.image : undefined
+  }
+
+  private readonly lutTexture = dataTexture(() => ({
+    data: this.model.lut.data,
+    width: this.lutSize,
+    height: this.lutSize,
+    format: LuminanceFormat,
+    type: UnsignedByteType,
+    mapping: Texture.DEFAULT_MAPPING,
+    wrapS: ClampToEdgeWrapping,
+    wrapT: ClampToEdgeWrapping,
+    magFilter: LinearFilter,
+    minFilter: LinearFilter,
+    flipY: false,
+  }))
+
+  @computed
+  get lutSize() {
+    return Math.ceil(Math.sqrt(this.model.lut.data.length))
+  }
+}

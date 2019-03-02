@@ -12,7 +12,9 @@ export default (storybookConfig: webpack.Configuration) => {
     },
     plugins: [
       ...storybookConfig.plugins || [],
-      ...(config.plugins || []).filter(p => !(p instanceof HtmlWebpackPlugin)),
+      ...(config.plugins || []).filter(
+        p => !(p instanceof HtmlWebpackPlugin || p instanceof webpack.HotModuleReplacementPlugin),
+      ),
     ],
     resolve: {
       ...storybookConfig.resolve,

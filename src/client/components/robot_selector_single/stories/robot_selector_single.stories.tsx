@@ -4,9 +4,8 @@ import { action as mobxAction, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 
-import { RobotModel } from '../robot/model'
-
-import { RobotSelectorSingle } from './view'
+import { RobotModel } from '../../robot/model'
+import { RobotSelectorSingle } from '../view'
 
 const actions = {
   onSelect: action('onSelect'),
@@ -48,7 +47,7 @@ storiesOf('components.robot_selector_single', module)
       selected={model.selected}
       onSelect={onSelect}
     />)
-    return <Component />
+    return <Component/>
   })
 
 function getRobots(): RobotModel[] {

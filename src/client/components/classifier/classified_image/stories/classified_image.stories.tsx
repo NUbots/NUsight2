@@ -41,7 +41,7 @@ class ClassifiedImageViewHarness extends Component<{
 }> {
   async componentDidMount() {
     const image = await loadImage(imageUrl)
-    runInAction(() => this.props.model.image = { type: 'image', image })
+    runInAction(() => this.props.model.rawImage = { type: 'image', image })
     disposeOnUnmount(this, reaction(() => this.props.animate && now('frame'), this.update))
   }
 

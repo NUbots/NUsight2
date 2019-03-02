@@ -84,8 +84,8 @@ export class ClassifiedImageViewModel {
 
   @computed
   private get imageElement(): HTMLImageElement | undefined {
-    const image = this.model.image
-    return image && image.type === 'image' ? image.image : undefined
+    const rawImage = this.model.rawImage
+    return rawImage && rawImage.type === 'image' ? rawImage.image : undefined
   }
 
   private readonly lutTexture = dataTexture(() => ({

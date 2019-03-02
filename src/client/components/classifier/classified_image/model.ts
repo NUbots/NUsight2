@@ -5,7 +5,7 @@ import { Lut } from '../lut'
 export type RawImage = { readonly type: 'image', readonly image: HTMLImageElement }
 
 export class ClassifiedImageModel {
-  @observable.ref image?: RawImage
+  @observable.ref rawImage?: RawImage
   @observable.ref lut: Lut
 
   constructor({ lut }: { lut: Lut }) {

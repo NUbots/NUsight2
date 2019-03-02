@@ -1,4 +1,3 @@
-import * as classNames from 'classnames'
 import { computed } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
@@ -11,7 +10,6 @@ import RobotIcon from './robot.svg'
 import * as style from './style.css'
 
 export type RobotSelectorSingleProps = {
-  className?: string
   robots: RobotModel[]
   selected?: RobotModel
   dropDirection?: 'up' | 'down'
@@ -21,8 +19,8 @@ export type RobotSelectorSingleProps = {
 @observer
 export class RobotSelectorSingle extends React.Component<RobotSelectorSingleProps> {
   render() {
-    const { className, dropDirection } = this.props
-    return <div className={classNames([style.robotSelector, className])}>
+    const { dropDirection } = this.props
+    return <div className={style.robotSelector}>
       <Select
         options={this.options}
         selectedOption={this.selectedOption}

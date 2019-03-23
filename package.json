@@ -73,7 +73,7 @@
     "@types/socket.io-client": "^1.4.29",
     "@types/storybook__addon-actions": "^3.4.2",
     "@types/storybook__react": "^4.0.1",
-    "@types/three": "^0.91.0",
+    "@types/three": "^0.93.28",
     "@types/webpack": "^4.4.25",
     "@types/webpack-dev-middleware": "^2.0.2",
     "@types/webpack-hot-middleware": "^2.16.5",

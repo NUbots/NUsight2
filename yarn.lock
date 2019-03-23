@@ -1964,12 +1964,10 @@
   resolved "https://registry.yarnpkg.com/@types/tapable/-/tapable-1.0.2.tgz#e13182e1b69871a422d7863e11a4a6f5b814a4bd"
   integrity sha512-42zEJkBpNfMEAvWR5WlwtTH22oDzcMjFsL9gDGExwF8X8WvAiw7Vwop7hPw03QT8TKfec83LwbHj6SvpqM4ELQ==
 
-"@types/three@^0.91.0":
-  version "0.91.14"
-  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.91.14.tgz#9c3c006c880997933d217ccfe1419c605912fb45"
-  integrity sha512-xwhFFjUsSIPL9SnXy7eJdzP1DeJ8lmRQk1LwYoye3ud/IC9k8UKqQzyu/xxcURT3sgib9GbXpa2jBFFD8F9uLQ==
-  dependencies:
-    "@types/webvr-api" "*"
+"@types/three@^0.93.28":
+  version "0.93.28"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.93.28.tgz#ea7241b7fbcb7872d954cab6974ed3fe4f2b81fb"
+  integrity sha512-by65PS1Ziy6JL7f6a/kSXapmm5HMXQpzKAdg4MGk/RDhbwIClzCJezLRdYKPo4QJp8WwtgRSFuQO9XBHil+auw==
 
 "@types/uglify-js@*":
   version "2.6.30"
@@ -2042,11 +2040,6 @@
     "@types/tapable" "*"
     "@types/uglify-js" "*"
     source-map "^0.6.0"
-
-"@types/webvr-api@*":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@types/webvr-api/-/webvr-api-0.0.31.tgz#f6061fe88a035d34a8b6a0c55f8758901ec8a08e"
-  integrity sha1-9gYf6IoDXTSotqDFX4dYkB7IoI4=
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"

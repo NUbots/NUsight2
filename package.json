@@ -46,7 +46,7 @@
     "@babel/plugin-syntax-typescript": "^7.3.3",
     "@emotion/core": "^10.0.7",
     "@emotion/styled": "^10.0.7",
-    "@storybook/addon-actions": "^5.0.1",
+    "@storybook/addon-actions": "^5.0.3",
     "@storybook/react": "^5.0.1",
     "@types/classnames": "^2.2.7",
     "@types/component-emitter": "^1.2.8",

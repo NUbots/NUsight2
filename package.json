@@ -99,7 +99,7 @@
     "postcss-reporter": "6.0.1",
     "postcss-url": "^8.0.0",
     "raw-loader": "^1.0.0",
-    "react-hot-loader": "4.7.1",
+    "react-hot-loader": "4.8.0",
     "react-svg-loader": "2.1.0",
     "rimraf": "^2.6.1",
     "seedrandom": "^2.4.4",

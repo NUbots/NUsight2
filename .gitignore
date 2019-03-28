@@ -28,3 +28,7 @@ yarn-error.log*
 
 # NBS recordings
 recordings
+
+# Some vim junk
+tags
+Session.vim

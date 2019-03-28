@@ -2109,9 +2109,9 @@
     source-map "^0.6.0"
 
 "@types/webvr-api@*":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@types/webvr-api/-/webvr-api-0.0.31.tgz#f6061fe88a035d34a8b6a0c55f8758901ec8a08e"
-  integrity sha1-9gYf6IoDXTSotqDFX4dYkB7IoI4=
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@types/webvr-api/-/webvr-api-0.0.35.tgz#13b3cf1cd90544524d932ed36e6b109a2ec73d22"
+  integrity sha512-jdpJqweU5v7hYwUlHKQU6wzjQvUfBfmTz4WBwVd/5PVGYalKm6YbEnM/3T+M+QzRYf2R/ojBGnrWpjHBZFR3Og==
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
@@ -12952,6 +12952,11 @@ text-table@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
+
+three-gltf-loader@^1.102.0:
+  version "1.102.0"
+  resolved "https://registry.yarnpkg.com/three-gltf-loader/-/three-gltf-loader-1.102.0.tgz#c06cc576e8541586e7d6566dbe28a92da943ece6"
+  integrity sha512-FhsY9BfH3pxdXydC4H6/ShUOpkia+xe4QaaxcZeMfHlirY7NNBUahzQbTh52e1cKXnXYBsXlUo93hPP9AdZvRA==
 
 three@^0.91.0:
   version "0.91.0"

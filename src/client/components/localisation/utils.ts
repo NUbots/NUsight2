@@ -1,9 +1,11 @@
 import { createTransformer } from 'mobx-utils'
+import { fromResource } from 'mobx-utils'
 import { MeshLambertMaterial } from 'three'
 import { Color } from 'three'
 import { JSONLoader } from 'three'
 import { Geometry } from 'three'
 import { Material } from 'three'
+import GLTFLoader from 'three-gltf-loader'
 
 export function geometryAndMaterial(config: any, color?: string) {
   const geometryAndMaterial = parseConfig(config)
@@ -37,6 +39,15 @@ const parseConfig = createTransformer((config: any) => {
   // Compute vertex normals with a crease angle of 0.52
   computeVertexNormals(geometry, 0.52)
   return { geometry, materials }
+})
+
+const loadConfig = createTransformer((configfile: string) => {
+  const loader = new GLTFLoader()
+  let object3d = null
+  loader.load(configfile, (gltf) => {
+    object3d = gltf.scene.children[0]
+  })
+  return object3d
 })
 
 /**

@@ -41,6 +41,25 @@ const parseConfig = createTransformer((config: any) => {
   return { geometry, materials }
 })
 
+const loadObjectObservable = createTransformer((configfile: string) => {
+  return loadObjectFromResource(loadConfig(configfile))
+})
+
+const loadObjectFromResource = createTransformer((object3d: any) => {
+  let currentSubscription: any
+  return fromResource(
+    (sink) => {
+      sink(object3d)
+      currentSubscription = object3d.onUpdated(() => {
+        sink(object3d)
+      })
+    },
+    () => {
+      object3d.unsubscribe(currentSubscription)
+    },
+  )
+})
+
 const loadConfig = createTransformer((configfile: string) => {
   const loader = new GLTFLoader()
   let object3d = null

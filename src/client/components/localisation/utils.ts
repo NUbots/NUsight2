@@ -5,7 +5,7 @@ import { Color } from 'three'
 import { JSONLoader } from 'three'
 import { Geometry } from 'three'
 import { Material } from 'three'
-import GLTFLoader from 'three-gltf-loader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 export function geometryAndMaterial(config: any, color?: string) {
   const geometryAndMaterial = parseConfig(config)

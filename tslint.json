@@ -55,6 +55,11 @@
     "no-shadowed-variable": false,
     "no-string-literal": true,
     "no-string-throw": true,
+    "no-submodule-imports": {
+      "options": [
+        "three/examples/jsm/loaders/GLTFLoader"
+      ]
+    },
     "no-trailing-whitespace": true,
     "no-unsafe-finally": true,
     "no-unused-expression": [true, "allow-fast-null-checks"],

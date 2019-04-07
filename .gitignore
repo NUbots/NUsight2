@@ -31,4 +31,5 @@ recordings
 
 # Some vim junk
 tags
+tags.*
 Session.vim

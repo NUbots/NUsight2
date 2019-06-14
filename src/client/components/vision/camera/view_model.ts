@@ -385,10 +385,10 @@ export class CameraViewModel {
 
 function toThreeMatrix4(mat4: Matrix4Model): Matrix4 {
   return new Matrix4().set(
-    mat4.x.x, mat4.y.x, mat4.z.x, mat4.t.x,
-    mat4.x.y, mat4.y.y, mat4.z.y, mat4.t.y,
-    mat4.x.z, mat4.y.z, mat4.z.z, mat4.t.z,
-    mat4.x.t, mat4.y.t, mat4.z.t, mat4.t.t,
+    mat4.x.x, mat4.x.y, mat4.x.z, mat4.x.t,
+    mat4.y.x, mat4.y.y, mat4.y.z, mat4.y.t,
+    mat4.z.x, mat4.z.y, mat4.z.z, mat4.z.t,
+    mat4.t.x, mat4.t.y, mat4.t.z, mat4.t.t,
   )
 }
 

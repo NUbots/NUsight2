@@ -330,7 +330,7 @@ export class CameraViewModel {
 
   private horizon = createTransformer((m: Matrix4Model) => {
     return this.makePlane({
-      axis: new Vector3(m.z.x, m.z.y, m.z.z),
+      axis: new Vector3(m.x.z, m.y.z, m.z.z),
       colour: new Vector4(0, 0, 1, 0.7),
       lineWidth: 10,
     })
@@ -341,29 +341,29 @@ export class CameraViewModel {
     const o3d = new Object3D()
 
     o3d.add(this.makePlaneSegment({
-      start: new Vector3(m.x.x, m.x.y, m.x.z),
-      end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
+      start: new Vector3(m.x.x, m.y.x, m.z.x),
+      end: new Vector3(-m.x.z, -m.y.z, -m.z.z),
       colour: new Vector4(1, 0, 0, 0.5),
       lineWidth: 5,
     }))
 
     o3d.add(this.makePlaneSegment({
-      start: new Vector3(-m.x.x, -m.x.y, -m.x.z),
-      end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
+      start: new Vector3(-m.x.x, -m.y.x, -m.z.x),
+      end: new Vector3(-m.x.z, -m.y.z, -m.z.z),
       colour: new Vector4(0, 1, 1, 0.5),
       lineWidth: 5,
     }))
 
     o3d.add(this.makePlaneSegment({
-      start: new Vector3(m.y.x, m.y.y, m.y.z),
-      end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
+      start: new Vector3(m.x.y, m.y.y, m.z.y),
+      end: new Vector3(-m.x.z, -m.y.z, -m.z.z),
       colour: new Vector4(0, 1, 0, 0.5),
       lineWidth: 5,
     }))
 
     o3d.add(this.makePlaneSegment({
-      start: new Vector3(-m.y.x, -m.y.y, -m.y.z),
-      end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
+      start: new Vector3(-m.x.y, -m.y.y, -m.z.y),
+      end: new Vector3(-m.x.z, -m.y.z, -m.z.z),
       colour: new Vector4(1, 0, 1, 0.5),
       lineWidth: 5,
     }))

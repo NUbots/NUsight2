@@ -1,14 +1,14 @@
 import { observable } from 'mobx'
-import { computed } from 'mobx'
 import { autorun } from 'mobx'
+import { computed } from 'mobx'
 import { createTransformer } from 'mobx-utils'
-import { Matrix4, InterleavedBufferAttribute, InterleavedBuffer } from 'three'
+import { InterleavedBuffer, InterleavedBufferAttribute, Matrix4 } from 'three'
 import { Float32BufferAttribute } from 'three'
 import { LineSegments } from 'three'
 import { BufferGeometry } from 'three'
 import { Object3D } from 'three'
 import { PlaneBufferGeometry } from 'three'
-import { Mesh } from 'three'
+import { MeshBasicMaterial } from 'three'
 import { Scene } from 'three'
 import { Vector2 } from 'three'
 import { WebGLRenderer } from 'three'
@@ -17,7 +17,7 @@ import { Camera } from 'three'
 import { Vector4 } from 'three'
 import { RawShaderMaterial } from 'three'
 import { Vector3 } from 'three'
-import { MeshBasicMaterial } from 'three'
+import { Mesh } from 'three'
 
 import { ImageDecoder } from '../../../image_decoder/image_decoder'
 import { Matrix4 as Matrix4Model } from '../../../math/matrix4'
@@ -187,7 +187,10 @@ export class CameraViewModel {
     geometry.addAttribute('position', new Float32BufferAttribute(coordinates, 2))
 
     // Read each class into a separate attribute
-    const buffer = new InterleavedBuffer(new Float32Array(classifications.values.slice(0, -classifications.dim)), classifications.dim)
+    const buffer = new InterleavedBuffer(
+      new Float32Array(classifications.values.slice(0, -classifications.dim)),
+      classifications.dim,
+    )
     for (let i = 0; i < classifications.dim; ++i) {
       geometry.addAttribute(`class${i}`, new InterleavedBufferAttribute(buffer, 1, i))
     }

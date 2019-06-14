@@ -2,7 +2,7 @@ import { observable } from 'mobx'
 import { computed } from 'mobx'
 import { autorun } from 'mobx'
 import { createTransformer } from 'mobx-utils'
-import { Matrix4 } from 'three'
+import { Matrix4, InterleavedBufferAttribute, InterleavedBuffer } from 'three'
 import { Float32BufferAttribute } from 'three'
 import { LineSegments } from 'three'
 import { BufferGeometry } from 'three'
@@ -158,13 +158,26 @@ export class CameraViewModel {
 
     // Calculate our triangle indexes
     const nElem = mesh.coordinates.length / 2
-    const triangles: number[] = []
-    for (let i = 0; i < nElem; ++i) {
-      const idx = i * 6
-      for (let j = 0; j < 6; ++j) {
-        const nIdx = idx + j
-        if (neighbours[nIdx] < nElem) {
-          triangles.push(i, neighbours[nIdx])
+    // const triangles: number[] = []
+    // for (let i = 0; i < nElem; ++i) {
+    //   const idx = i * 6
+    //   for (let j = 0; j < 6; ++j) {
+    //     const nIdx = idx + j
+    //     if (neighbours[nIdx] < nElem) {
+    //       triangles.push(i, neighbours[nIdx])
+    //     }
+    //   }
+    // }
+    // Calculate our triangle indexes
+    const triangles = []
+    for (let i = 0; i < nElem; i++) {
+      const ni = i * 6
+      if (neighbours[ni + 0] < nElem) {
+        if (neighbours[ni + 2] < nElem) {
+          triangles.push(i, neighbours[ni + 0], neighbours[ni + 2])
+        }
+        if (neighbours[ni + 1] < nElem) {
+          triangles.push(i, neighbours[ni + 1], neighbours[ni + 0])
         }
       }
     }
@@ -172,7 +185,13 @@ export class CameraViewModel {
     const geometry = new BufferGeometry()
     geometry.setIndex(triangles)
     geometry.addAttribute('position', new Float32BufferAttribute(coordinates, 2))
-    geometry.addAttribute('classification', new Float32BufferAttribute(classifications.values, classifications.dim))
+
+    // Read each class into a separate attribute
+    const buffer = new InterleavedBuffer(new Float32Array(classifications.values.slice(0, -classifications.dim)), classifications.dim)
+    for (let i = 0; i < classifications.dim; ++i) {
+      geometry.addAttribute(`class${i}`, new InterleavedBufferAttribute(buffer, 1, i))
+    }
+
     return geometry
   }, (geom?: BufferGeometry) => geom && geom.dispose())
 
@@ -193,7 +212,7 @@ export class CameraViewModel {
   private visualmesh = createTransformer((mesh: VisualMesh) => {
     const material = this.meshMaterial.clone()
     material.uniforms.dimensions.value = new Vector2(this.model.image!.width, this.model.image!.height)
-    const lines = new LineSegments(this.meshGeometry(mesh), material)
+    const lines = new Mesh(this.meshGeometry(mesh), material)
     lines.frustumCulled = false
     return lines
   })

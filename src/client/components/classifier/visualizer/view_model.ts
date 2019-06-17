@@ -18,8 +18,8 @@ import { Stage } from '../../three/three'
 import { Canvas } from '../../three/three'
 
 import { VisualizerModel } from './model'
-import * as fragmentShader from './shaders/visualizer.frag'
-import * as vertexShader from './shaders/visualizer.vert'
+import fragmentShader from './shaders/visualizer.frag'
+import vertexShader from './shaders/visualizer.vert'
 
 export class VisualizerViewModel {
   constructor(private readonly canvas: Canvas, private readonly model: VisualizerModel) {

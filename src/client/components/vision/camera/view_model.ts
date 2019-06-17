@@ -27,10 +27,10 @@ import { Goal } from './model'
 import { Ball } from './model'
 import { CameraModel } from './model'
 import { VisualMesh } from './model'
-import * as meshFragmentShader from './shaders/mesh.frag'
-import * as meshVertexShader from './shaders/mesh.vert'
-import * as worldLineFragmentShader from './shaders/world_line.frag'
-import * as worldLineVertexShader from './shaders/world_line.vert'
+import meshFragmentShader from './shaders/mesh.frag'
+import meshVertexShader from './shaders/mesh.vert'
+import worldLineFragmentShader from './shaders/world_line.frag'
+import worldLineVertexShader from './shaders/world_line.vert'
 
 
 export class CameraViewModel {

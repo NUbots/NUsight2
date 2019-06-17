@@ -22,8 +22,8 @@ import { Camera } from 'three'
 
 import { fourccToString } from './fourcc'
 import { fourcc } from './fourcc'
-import * as bayerFragmentShader from './shaders/bayer.frag'
-import * as bayerVertexShader from './shaders/bayer.vert'
+import bayerFragmentShader from './shaders/bayer.frag'
+import bayerVertexShader from './shaders/bayer.vert'
 
 export interface Image {
   readonly width: number

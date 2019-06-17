@@ -2,7 +2,7 @@ import * as HtmlWebpackPlugin from 'html-webpack-plugin'
 import * as webpack from 'webpack'
 import config from '../../webpack.config'
 
-export default (storybookConfig: webpack.Configuration) => {
+export default ({ config: storybookConfig }: { config: webpack.Configuration }) => {
   return {
     ...config,
     ...storybookConfig,
@@ -12,7 +12,11 @@ export default (storybookConfig: webpack.Configuration) => {
     },
     plugins: [
       ...storybookConfig.plugins || [],
-      ...(config.plugins || []).filter(p => !(p instanceof HtmlWebpackPlugin)),
+      ...(config.plugins || []).filter(p => !(
+          p instanceof HtmlWebpackPlugin // Storybook handles page generation.
+          || p instanceof webpack.HotModuleReplacementPlugin // Already included in the default storybook plugins.
+        ),
+      ),
     ],
     resolve: {
       ...storybookConfig.resolve,

@@ -98,8 +98,8 @@ export class CameraViewModel {
   @computed
   get meshMaterial(): RawShaderMaterial {
     return new RawShaderMaterial({
-      vertexShader: String(meshVertexShader),
-      fragmentShader: String(meshFragmentShader),
+      vertexShader: meshVertexShader,
+      fragmentShader: meshFragmentShader,
       uniforms: {
         image: { type: 't' },
         dimensions: { value: new Vector2() },

@@ -91,8 +91,8 @@ export class VisualizerViewModel {
   }
 
   private readonly planeMaterial = shaderMaterial(() => ({
-    vertexShader: String(vertexShader),
-    fragmentShader: String(fragmentShader),
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
     uniforms: {
       lut: { value: this.lutTexture.get() },
       lutSize: { value: this.lutSize },

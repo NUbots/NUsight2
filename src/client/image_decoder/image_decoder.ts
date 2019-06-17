@@ -109,8 +109,8 @@ export class ImageDecoder {
       camera: new OrthographicCamera(-1, 1, 1, -1, 0, 1),
       geometry: new PlaneBufferGeometry(2, 2),
       shader: new RawShaderMaterial({
-        vertexShader: String(bayerVertexShader),
-        fragmentShader: String(bayerFragmentShader),
+        vertexShader: bayerVertexShader,
+        fragmentShader: bayerFragmentShader,
         depthTest: false,
         depthWrite: false,
       }),

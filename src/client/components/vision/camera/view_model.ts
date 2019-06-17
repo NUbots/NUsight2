@@ -201,8 +201,8 @@ export class CameraViewModel {
   @computed
   private get meshMaterial() {
     return new RawShaderMaterial({
-      vertexShader: String(meshVertexShader),
-      fragmentShader: String(meshFragmentShader),
+      vertexShader: meshVertexShader,
+      fragmentShader: meshFragmentShader,
       depthTest: false,
       depthWrite: false,
       transparent: true,
@@ -396,8 +396,8 @@ export class CameraViewModel {
   @computed
   private get worldLineShader() {
     return new RawShaderMaterial({
-      vertexShader: String(worldLineVertexShader),
-      fragmentShader: String(worldLineFragmentShader),
+      vertexShader: worldLineVertexShader,
+      fragmentShader: worldLineFragmentShader,
       depthTest: false,
       depthWrite: false,
       transparent: true,

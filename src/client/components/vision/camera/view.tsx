@@ -1,5 +1,5 @@
 import { autorun } from 'mobx'
-import { action, observable } from 'mobx'
+import { action } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import { Component } from 'react'
@@ -31,7 +31,7 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
 
     const aspectRatio = imageWidth / imageHeight
     const percentage = 60
-    const toggleOption = action((option: SwitchesMenuOption) => option!.toggle())
+    const toggleOption = action((option: SwitchesMenuOption) => option.enabled = !option.enabled)
 
     return (
       <div
@@ -48,11 +48,10 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
           <SwitchesMenu
             dropdownMenuPosition='right'
             options={Object.entries(this.props.viewModel.draw).map(([key, value]) => {
-              return observable({
+              return {
                 label: key,
                 enabled: value,
-                toggle: action(() => this.props.viewModel.draw[key] = !this.props.viewModel.draw[key])
-              })
+              }
             })}
             toggleOption={toggleOption}
           />

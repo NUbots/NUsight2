@@ -63,8 +63,6 @@ export class CameraViewModel {
     this.destroy = autorun(() => {
       this.canvas && this.decoder.update(this.model.image!)
     })
-
-    console.log(this.model)
   }
 
   static of = createTransformer((model: CameraModel) => {
@@ -77,7 +75,6 @@ export class CameraViewModel {
 
   @computed
   get id(): number {
-    console.log(this, this.model)
     return this.model.id
   }
 

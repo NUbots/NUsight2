@@ -10,23 +10,21 @@ import * as style from './style.css'
 export type SwitchesMenuOption = {
   label: string
   enabled: boolean
-  toggle?(): void
+  toggle(): void
 }
 
 export type SwitchesMenuProps = {
   dropdownMenuPosition?: 'left' | 'right'
   options: SwitchesMenuOption[]
-  toggleOption(option: SwitchesMenuOption): void
 }
 
 export const SwitchesMenu = observer((props: SwitchesMenuProps) => {
-  const { options, toggleOption } = props
+  const { options } = props
   const dropdownToggle = (
     <button className={style.button}>
       <MenuIcon />
     </button>
   )
-  const onChange = (option: SwitchesMenuOption) => () => toggleOption(option)
   return (
     <div className={style.switchesMenu}>
       <EnhancedDropdown dropdownToggle={dropdownToggle} dropdownPosition={props.dropdownMenuPosition}>
@@ -40,7 +38,7 @@ export const SwitchesMenu = observer((props: SwitchesMenuProps) => {
             return (
               <label key={option.label} className={style.option}>
                 <span className={style.optionLabel}>{option.label}</span>
-                <Switch on={option.enabled} onChange={onChange(option)} />
+                <Switch on={option.enabled} onChange={option.toggle} />
               </label>
             )
           })}

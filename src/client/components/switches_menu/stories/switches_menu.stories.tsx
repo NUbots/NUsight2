@@ -7,53 +7,47 @@ import * as React from 'react'
 import { SwitchesMenu, SwitchesMenuOption } from '../view'
 
 const actions = {
-  onToggleOption: action('onToggleOption'),
+  toggle: action('toggle'),
 }
 
 storiesOf('components.switches_menu', module)
   .addDecorator(story => <div style={{ maxWidth: '350px' }}>{story()}</div>)
   .add('renders empty', () => {
-    return <SwitchesMenu
-      options={[]}
-      toggleOption={actions.onToggleOption}
-    />
+    return <SwitchesMenu options={[]} />
   })
   .add('renders with options', () => {
-    const options = getOptions()
-    return <SwitchesMenu
-      options={options}
-      toggleOption={actions.onToggleOption}
-    />
+    return <SwitchesMenu options={getOptions()} />
   })
   .add('dropdown right', () => {
-    const options = getOptions()
     const style = { backgroundColor: '#eee', display: 'flex', justifyContent: 'flex-end' }
     return <div style={style}>
       <SwitchesMenu
-        options={options}
+        options={getOptions()}
         dropdownMenuPosition='right'
-        toggleOption={actions.onToggleOption}
       />
     </div>
   })
   .add('interactive', () => {
-    const options = getOptions()
     const model = observable({
-      options,
+      options: getOptions().map(({ label, enabled }: SwitchesMenuOption, i) => {
+        return {
+          label,
+          enabled,
+          toggle: mobxAction(() => {
+            model.options[i].enabled = !model.options[i].enabled
+          }),
+        }
+      }),
     })
-    const onChange = mobxAction((option: SwitchesMenuOption) => option.enabled = !option.enabled)
-    const Component = observer(() => <SwitchesMenu
-      options={model.options}
-      toggleOption={onChange}
-    />)
+    const Component = observer(() => <SwitchesMenu options={model.options} />)
 
     return <Component />
   })
 
 function getOptions(): SwitchesMenuOption[] {
   return [
-    { label: 'Lines', enabled: true },
-    { label: 'Balls', enabled: true },
-    { label: 'Goals', enabled: false },
+    { label: 'Lines', enabled: true, toggle: actions.toggle },
+    { label: 'Balls', enabled: true, toggle: actions.toggle },
+    { label: 'Goals', enabled: false, toggle: actions.toggle },
   ]
 }

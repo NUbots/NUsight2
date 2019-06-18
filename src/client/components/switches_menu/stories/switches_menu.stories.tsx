@@ -4,7 +4,7 @@ import { action as mobxAction, observable } from 'mobx'
 import { observer } from 'mobx-react'
 import * as React from 'react'
 
-import { SwitchesMenuOption, SwitchesMenu } from '../view'
+import { SwitchesMenu, SwitchesMenuOption } from '../view'
 
 const actions = {
   onToggleOption: action('onToggleOption'),

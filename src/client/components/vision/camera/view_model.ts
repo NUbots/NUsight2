@@ -37,14 +37,6 @@ export class CameraViewModel {
   @observable.ref canvas: HTMLCanvasElement | null = null
   @observable viewWidth?: number
   @observable viewHeight?: number
-  @observable draw = {
-    image: true,
-    compass: true,
-    horizon: true,
-    visualmesh: true,
-    balls: true,
-    goals: true,
-  }
 
   readonly camera: Camera
   readonly destroy: () => void
@@ -84,6 +76,11 @@ export class CameraViewModel {
   }
 
   @computed
+  get drawOptions() {
+    return this.model.drawOptions
+  }
+
+  @computed
   private get decoder() {
     return ImageDecoder.of(this.renderer(this.canvas)!)
   }
@@ -98,15 +95,15 @@ export class CameraViewModel {
     const scene = this.scene
     scene.remove(...scene.children)
     if (this.model.image) {
-      this.draw.image && scene.add(this.image)
-      this.draw.compass && scene.add(this.compass(this.model.image.Hcw))
-      this.draw.horizon && scene.add(this.horizon(this.model.image.Hcw))
+      this.model.draw.image && scene.add(this.image)
+      this.model.draw.compass && scene.add(this.compass(this.model.image.Hcw))
+      this.model.draw.horizon && scene.add(this.horizon(this.model.image.Hcw))
     }
-    if (this.model.visualmesh && this.draw.visualmesh) {
+    if (this.model.visualmesh && this.model.draw.visualmesh) {
       scene.add(this.visualmesh(this.model.visualmesh))
     }
-    this.draw.balls && this.model.balls.forEach(ball => scene.add(this.ball(ball)))
-    this.draw.goals && this.model.goals.forEach(goal => scene.add(this.goal(goal)))
+    this.model.draw.balls && this.model.balls.forEach(ball => scene.add(this.ball(ball)))
+    this.model.draw.goals && this.model.goals.forEach(goal => scene.add(this.goal(goal)))
     return scene
   }
 

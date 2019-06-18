@@ -24,7 +24,7 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
   }
 
   render() {
-    const { imageWidth, imageHeight } = this.props.viewModel
+    const { imageWidth, imageHeight, drawOptions } = this.props.viewModel
 
     if (!imageWidth || !imageHeight) {
       return null
@@ -32,7 +32,6 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
 
     const aspectRatio = imageWidth / imageHeight
     const percentage = 60
-    const toggleOption = action((option: SwitchesMenuOption) => option.enabled = !option.enabled)
 
     return (
       <div
@@ -48,13 +47,7 @@ export class CameraView extends Component<{ viewModel: CameraViewModel }> {
         <div style={{ position: 'absolute', top: '0', right: '0' }}>
           <SwitchesMenu
             dropdownMenuPosition='right'
-            options={Object.entries(this.props.viewModel.draw).map(([key, value]) => {
-              return {
-                label: key,
-                enabled: value,
-              }
-            })}
-            toggleOption={toggleOption}
+            options={drawOptions}
           />
         </div>
       </div>

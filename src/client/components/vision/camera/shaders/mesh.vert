@@ -6,6 +6,7 @@ uniform mat4 modelViewMatrix;
 uniform vec2 dimensions;
 
 attribute vec2 position;
+
 attribute float ball;
 attribute float goal;
 attribute float field;

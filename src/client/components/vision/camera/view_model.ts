@@ -103,7 +103,7 @@ export class CameraViewModel {
     if (this.model.visualmesh && this.model.draw.visualmesh) {
       scene.add(this.visualmesh(this.model.visualmesh))
     }
-    if (this.model.greenhorizon) {
+    if (this.model.greenhorizon && this.model.draw.greenhorizon) {
       scene.add(this.greenhorizon(this.model.greenhorizon))
     }
     this.model.balls.forEach(ball => scene.add(this.ball(ball)))
@@ -142,7 +142,7 @@ export class CameraViewModel {
 
   private greenhorizon = createTransformer((m: GreenHorizon) => {
     const greenhorizon = new Object3D()
-    const Hcw = this.model.image ? toThreeMatrix4(this.model.image.Hcw) : new Matrix4()
+    const Hcw = this.model.image ? new Matrix4().extractRotation(toThreeMatrix4(this.model.image.Hcw)) : new Matrix4()
     const rays = m.horizon.map(v => toThreeVector3(v).applyMatrix4(Hcw))
 
     const colour = new Vector4(0, 0.8, 0, 0.8)

@@ -62,6 +62,7 @@ export class CameraModel {
     compass: true,
     horizon: true,
     visualmesh: true,
+    greenhorizon: true,
     balls: true,
     goals: true,
   }
@@ -88,6 +89,11 @@ export class CameraModel {
         label: 'Visual Mesh',
         enabled: this.draw.visualmesh,
         toggle: action(() => this.draw.visualmesh = !this.draw.visualmesh),
+      },
+      {
+        label: 'Green Horizon',
+        enabled: this.draw.greenhorizon,
+        toggle: action(() => this.draw.greenhorizon = !this.draw.greenhorizon),
       },
       {
         label: 'Balls',

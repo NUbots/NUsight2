@@ -6,6 +6,11 @@ import { Vector2 } from '../../../math/vector2'
 import { Vector3 } from '../../../math/vector3'
 import { VisionRobotModel } from '../model'
 
+export interface GreenHorizon {
+  readonly horizon: Vector3[]
+  readonly Hcw: Matrix4
+}
+
 export interface VisualMesh {
   readonly neighbours: number[]
   readonly coordinates: number[]
@@ -44,6 +49,7 @@ export interface Goal {
 export class CameraModel {
   readonly id: number
 
+  @observable.ref greenhorizon?: GreenHorizon
   @observable.ref visualmesh?: VisualMesh
   @observable.ref image?: VisionImage
   @observable.ref balls: Ball[]

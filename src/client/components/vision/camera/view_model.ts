@@ -77,6 +77,11 @@ export class CameraViewModel {
   }
 
   @computed
+  get drawOptions() {
+    return this.model.drawOptions
+  }
+
+  @computed
   private get decoder() {
     return ImageDecoder.of(this.renderer(this.canvas)!)
   }
@@ -91,11 +96,11 @@ export class CameraViewModel {
     const scene = this.scene
     scene.remove(...scene.children)
     if (this.model.image) {
-      scene.add(this.image)
-      scene.add(this.compass(this.model.image.Hcw))
-      scene.add(this.horizon(this.model.image.Hcw))
+      this.model.draw.image && scene.add(this.image)
+      this.model.draw.compass && scene.add(this.compass(this.model.image.Hcw))
+      this.model.draw.horizon && scene.add(this.horizon(this.model.image.Hcw))
     }
-    if (this.model.visualmesh) {
+    if (this.model.visualmesh && this.model.draw.visualmesh) {
       scene.add(this.visualmesh(this.model.visualmesh))
     }
     if (this.model.greenhorizon) {

@@ -106,8 +106,8 @@ export class CameraViewModel {
     if (this.model.greenhorizon && this.model.draw.greenhorizon) {
       scene.add(this.greenhorizon(this.model.greenhorizon))
     }
-    this.model.balls.forEach(ball => scene.add(this.ball(ball)))
-    this.model.goals.forEach(goal => scene.add(this.goal(goal)))
+    this.model.draw.balls && this.model.balls.forEach(ball => scene.add(this.ball(ball)))
+    this.model.draw.goals && this.model.goals.forEach(goal => scene.add(this.goal(goal)))
     return scene
   }
 

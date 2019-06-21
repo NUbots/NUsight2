@@ -45,6 +45,9 @@ export class NUsightNetwork {
         return robot.name === peer.name && robot.address === peer.address && robot.port === peer.port
       })
       if (robotModel) {
+        robotModel.dataRates.packets.update(1)
+        robotModel.dataRates.bytes.update(buffer.length)
+
         cb(robotModel, message)
       }
     })

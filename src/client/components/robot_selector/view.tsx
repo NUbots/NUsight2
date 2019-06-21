@@ -51,6 +51,9 @@ export const RobotSelector = observer((props: RobotSelectorProps) => {
               <label key={robot.id} className={style.robot}>
                 <span className={indicatorClassName} title={robot.connected ? 'Connected' : 'Disconnected'}></span>
                 <span className={style.robotLabel}>{robot.name}</span>
+                <span className={style.robotDataRate} title={robot.dataRates.bytes.rate.toFixed(2) + 'bps'}>
+                  { robot.dataRates.packets.rate.toFixed(2) }pps
+                </span>
                 <Switch on={robot.enabled} onChange={onChange(robot)} />
               </label>
             )

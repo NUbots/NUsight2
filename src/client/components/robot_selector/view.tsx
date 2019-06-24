@@ -8,6 +8,7 @@ import { Switch } from '../switch/view'
 
 import PlugIcon from './plug.svg'
 import RobotIcon from './robot.svg'
+import { StatusIndicator } from './status_indicator/view'
 import * as style from './style.css'
 
 export type RobotSelectorProps = {
@@ -49,11 +50,12 @@ export const RobotSelector = observer((props: RobotSelectorProps) => {
             })
             return (
               <label key={robot.id} className={style.robot}>
-                <span className={indicatorClassName} title={robot.connected ? 'Connected' : 'Disconnected'}></span>
+                <StatusIndicator
+                  className={style.robotStatusIndicator}
+                  connected={robot.connected}
+                  flash={robot.packetReceived}
+                />
                 <span className={style.robotLabel}>{robot.name}</span>
-                <span className={style.robotDataRate} title={robot.dataRates.bytes.rate.toFixed(2) + 'bps'}>
-                  { robot.dataRates.packets.rate.toFixed(2) }pps
-                </span>
                 <Switch on={robot.enabled} onChange={onChange(robot)} />
               </label>
             )

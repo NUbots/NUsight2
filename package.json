@@ -88,7 +88,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "23.6.0",
     "jest-css-modules": "^1.1.0",
-    "nodemon": "^1.18.9",
+    "nodemon": "^1.19.1",
     "postcss": "^7.0.14",
     "postcss-browser-reporter": "^0.5.0",
     "postcss-cssnext": "3.1.0",

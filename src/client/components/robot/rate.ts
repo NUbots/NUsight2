@@ -23,13 +23,13 @@ export class Rate {
     if (this.lastUpdateTime) {
       this.currentRate =
         this.currentRate * this.smoothing +
-        newCount / (Date.now() - this.lastUpdateTime) *
+        newCount / (performance.now() - this.lastUpdateTime) *
         (1.0 - this.smoothing)
 
       this.commit(this.currentRate)
     }
 
-    this.lastUpdateTime = Date.now()
+    this.lastUpdateTime = performance.now()
   }
 
   private commit = throttle(1000, (rate: number) => {

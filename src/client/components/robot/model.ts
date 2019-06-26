@@ -19,7 +19,6 @@ export class RobotModel {
   @observable name: string
   @observable address: string
   @observable port: number
-  @observable packetReceived = false
   @observable stats = {
     packets: 0,
     packetsPerSecond: new Rate({ smoothing: 0.9, unitTime: 1000 }),

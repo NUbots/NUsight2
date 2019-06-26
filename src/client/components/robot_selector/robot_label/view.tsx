@@ -37,7 +37,6 @@ export const RobotLabel = observer((props: RobotLabelProps) => {
       <StatusIndicator
         className={style.robotStatusIndicator}
         connected={robot.connected}
-        flash={robot.packetReceived}
       />
       <span className={style.robotLabel}>{robot.name}</span>
       <span className={style.robotSwitch}>

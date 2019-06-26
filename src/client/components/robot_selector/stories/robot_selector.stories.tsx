@@ -26,13 +26,6 @@ storiesOf('components.robot_selector', module)
       selectRobot={actions.selectRobot}
     />
   })
-  .add('flashing indicator', () => {
-    const robots = getRobots()
-    const model = observable({
-      robots,
-    })
-    return <FlashingIndicatorStory robots={model.robots} />
-  })
   .add('interactive', () => {
     const robots = getRobots()
     const model = observable({
@@ -73,49 +66,4 @@ function getRobots(): RobotModel[] {
       port: 0,
     }),
   ]
-}
-
-@observer
-export class FlashingIndicatorStory extends React.Component<{ robots: RobotModel[] }> {
-  flashInterval = 0
-  flashTimeout = 0
-
-  render() {
-    const { robots } = this.props
-
-    return <RobotSelector
-      robots={robots}
-      selectRobot={actions.selectRobot}
-    />
-  }
-
-  @mobxAction
-  flash = () => {
-    if (this.flashTimeout) {
-      clearInterval(this.flashTimeout)
-      this.flashTimeout = 0
-    }
-
-    const { robots } = this.props
-    robots[0].packetReceived = true
-
-    this.flashTimeout = setTimeout(() => {
-      robots[0].packetReceived = false
-      this.flashTimeout = 0
-    }, 150)
-  }
-
-  componentDidMount() {
-    this.flashInterval = setInterval(this.flash, 300)
-  }
-
-  componentWillUnmount() {
-    if (this.flashTimeout) {
-      clearTimeout(this.flashTimeout)
-    }
-
-    if (this.flashInterval) {
-      clearInterval(this.flashInterval)
-    }
-  }
 }

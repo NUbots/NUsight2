@@ -8,13 +8,6 @@
 .statusConnected {
   background-color: #00de46;
   box-shadow: 0 0 8px #00de46;
-  transition-property: background-color border-color;
-  transition-duration: 0.1s;
-}
-
-.statusConnected.flash {
-  background-color: transparent;
-  box-shadow: 0 0 8px transparent;
 }
 
 .statusDisconnected {

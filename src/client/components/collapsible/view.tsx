@@ -11,7 +11,7 @@ export type CollapsibleProps = {
   header?: React.ReactNode
   children?: React.ReactNode
   animate?: boolean
-  onToggle(): void
+  onToggle?(): void
 }
 
 export const Collapsible = observer((props: CollapsibleProps) => {

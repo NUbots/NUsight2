@@ -1,4 +1,4 @@
-import throttle = require('lodash.throttle')
+import { throttle } from 'throttle-debounce'
 import { observable } from 'mobx'
 import { runInAction } from 'mobx'
 
@@ -68,9 +68,9 @@ class Rate {
     this.lastUpdateTime = Date.now()
   }
 
-  private commit = throttle((rate: number) => {
+  private commit = throttle(1000, (rate: number) => {
     runInAction(() => {
       this.rate = rate * this.unitTime
     })
-  }, 1000)
+  })
 }

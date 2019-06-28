@@ -127,12 +127,12 @@ export class CameraViewModel {
     const Hwc = new Matrix4().getInverse(toThreeMatrix4(m.Hcw))
     const imageHcw = this.model.image ? toThreeMatrix4(this.model.image.Hcw) : new Matrix4()
     const Hcc = imageHcw.multiply(Hwc)
-    let colour: Vector4 = new Vector4(1.0, 0.0, 0.0, 0.5)
+    let colour: Vector4 = new Vector4(1.0, 0.0, 1.0, 1.0)
     if (m.side === 'left') {
-      colour = new Vector4(0.8, 0.8, 0, 0.5)
+      colour = new Vector4(1.0, 1.0, 0, 1.0)
     }
     if (m.side === 'right') {
-      colour = new Vector4(0.0, 0.8, 0.8, 0.5)
+      colour = new Vector4(0.0, 1.0, 1.0, 1.0)
     }
     return this.makePlaneSegment({
       start: toThreeVector3(m.post.bottom).applyMatrix4(Hcc),

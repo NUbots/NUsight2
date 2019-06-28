@@ -24,7 +24,6 @@ package message.vision;
 import "google/protobuf/timestamp.proto";
 import "Neutron.proto";
 import "Vector.proto";
-import "message/Geometry.proto";
 import "Matrix.proto";
 
 message Goal {
@@ -44,8 +43,9 @@ message Goal {
         fmat3 covariance = 3;
     }
     message Post {
-        fvec3 top    = 1;
-        fvec3 bottom = 2;
+        fvec3 top      = 1;
+        fvec3 bottom   = 2;
+        float distance = 3;
     }
     Side     side                       = 1;
     Post     post                       = 3;

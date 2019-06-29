@@ -15,7 +15,7 @@ import { WebSocket } from './web_socket_server'
 
 type Opts = {
   fakeNetworking: boolean
-  networkMask: string
+  broadcastAddress: string
 }
 
 /**
@@ -24,20 +24,20 @@ type Opts = {
  * improved to have more intelligent multiplexing.
  */
 export class WebSocketProxyNUClearNetServer {
-  private networkMask: string
+  private broadcastAddress: string
 
-  constructor(private server: WebSocketServer, private nuclearnetClient: NUClearNetClient, private netMask: string) {
+  constructor(private server: WebSocketServer, private nuclearnetClient: NUClearNetClient, private address: string) {
     server.onConnection(this.onClientConnection)
-    this.networkMask = netMask
+    this.broadcastAddress = address
   }
 
-  static of(server: WebSocketServer, { fakeNetworking, networkMask }: Opts): WebSocketProxyNUClearNetServer {
+  static of(server: WebSocketServer, { fakeNetworking, broadcastAddress }: Opts): WebSocketProxyNUClearNetServer {
     const nuclearnetClient: NUClearNetClient = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
-    return new WebSocketProxyNUClearNetServer(server, nuclearnetClient, networkMask)
+    return new WebSocketProxyNUClearNetServer(server, nuclearnetClient, broadcastAddress)
   }
 
   private onClientConnection = (socket: WebSocket) => {
-    WebSocketServerClient.of(this.nuclearnetClient, socket, this.networkMask)
+    WebSocketServerClient.of(this.nuclearnetClient, socket, this.broadcastAddress)
   }
 }
 
@@ -46,19 +46,19 @@ class WebSocketServerClient {
   private offJoin: () => void
   private offLeave: () => void
   private offListenMap: Map<string, () => void>
-  private networkMask: string
+  private broadcastAddress: string
 
   constructor(
     private nuclearnetClient: NUClearNetClient,
     private socket: WebSocket,
     private processor: PacketProcessor,
-    private netMask: string,
+    private address: string,
   ) {
     this.connected = false
     this.offJoin = this.nuclearnetClient.onJoin(this.onJoin)
     this.offLeave = this.nuclearnetClient.onLeave(this.onLeave)
     this.offListenMap = new Map()
-    this.networkMask = this.netMask
+    this.broadcastAddress = this.address
 
     this.socket.on('packet', this.onClientPacket)
     this.socket.on('listen', this.onListen)
@@ -67,8 +67,8 @@ class WebSocketServerClient {
     this.socket.on('disconnect', this.onDisconnect)
   }
 
-  static of(nuclearnetClient: NUClearNetClient, socket: WebSocket, networkMask: string) {
-    return new WebSocketServerClient(nuclearnetClient, socket, PacketProcessor.of(socket), networkMask)
+  static of(nuclearnetClient: NUClearNetClient, socket: WebSocket, broadcastAddress: string) {
+    return new WebSocketServerClient(nuclearnetClient, socket, PacketProcessor.of(socket), broadcastAddress)
   }
 
   private onJoin = (peer: NUClearNetPeer) => {
@@ -84,7 +84,7 @@ class WebSocketServerClient {
     // Currently only listens to the first connection request and ignores subsequent requests.
     // Smarter multiplexing of the shared connection would be ideal.
     if (!this.connected) {
-      options.address = this.networkMask
+      options.address = this.broadcastAddress
       const disconnect = this.nuclearnetClient.connect(options)
       this.connected = true
       this.socket.on('nuclear_disconnect', () => {

@@ -26,3 +26,7 @@
 
 ## Testing
 `yarn test`
+
+## Running with a custom broadcast address
+`yarn start --address 192.168.1.255`
+`yarn prod --address 192.168.1.255`

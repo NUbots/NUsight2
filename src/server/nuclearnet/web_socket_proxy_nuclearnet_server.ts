@@ -15,6 +15,7 @@ import { WebSocket } from './web_socket_server'
 
 type Opts = {
   fakeNetworking: boolean
+  networkMask: string
 }
 
 /**
@@ -23,17 +24,20 @@ type Opts = {
  * improved to have more intelligent multiplexing.
  */
 export class WebSocketProxyNUClearNetServer {
-  constructor(private server: WebSocketServer, private nuclearnetClient: NUClearNetClient) {
+  private networkMask: string
+
+  constructor(private server: WebSocketServer, private nuclearnetClient: NUClearNetClient, private netMask: string) {
     server.onConnection(this.onClientConnection)
+    this.networkMask = netMask
   }
 
-  static of(server: WebSocketServer, { fakeNetworking }: Opts): WebSocketProxyNUClearNetServer {
+  static of(server: WebSocketServer, { fakeNetworking, networkMask }: Opts): WebSocketProxyNUClearNetServer {
     const nuclearnetClient: NUClearNetClient = fakeNetworking ? FakeNUClearNetClient.of() : DirectNUClearNetClient.of()
-    return new WebSocketProxyNUClearNetServer(server, nuclearnetClient)
+    return new WebSocketProxyNUClearNetServer(server, nuclearnetClient, networkMask)
   }
 
   private onClientConnection = (socket: WebSocket) => {
-    WebSocketServerClient.of(this.nuclearnetClient, socket)
+    WebSocketServerClient.of(this.nuclearnetClient, socket, this.networkMask)
   }
 }
 
@@ -42,16 +46,19 @@ class WebSocketServerClient {
   private offJoin: () => void
   private offLeave: () => void
   private offListenMap: Map<string, () => void>
+  private networkMask: string
 
   constructor(
     private nuclearnetClient: NUClearNetClient,
     private socket: WebSocket,
     private processor: PacketProcessor,
+    private netMask: string,
   ) {
     this.connected = false
     this.offJoin = this.nuclearnetClient.onJoin(this.onJoin)
     this.offLeave = this.nuclearnetClient.onLeave(this.onLeave)
     this.offListenMap = new Map()
+    this.networkMask = this.netMask
 
     this.socket.on('packet', this.onClientPacket)
     this.socket.on('listen', this.onListen)
@@ -60,8 +67,8 @@ class WebSocketServerClient {
     this.socket.on('disconnect', this.onDisconnect)
   }
 
-  static of(nuclearnetClient: NUClearNetClient, socket: WebSocket) {
-    return new WebSocketServerClient(nuclearnetClient, socket, PacketProcessor.of(socket))
+  static of(nuclearnetClient: NUClearNetClient, socket: WebSocket, networkMask: string) {
+    return new WebSocketServerClient(nuclearnetClient, socket, PacketProcessor.of(socket), networkMask)
   }
 
   private onJoin = (peer: NUClearNetPeer) => {
@@ -77,6 +84,7 @@ class WebSocketServerClient {
     // Currently only listens to the first connection request and ignores subsequent requests.
     // Smarter multiplexing of the shared connection would be ideal.
     if (!this.connected) {
+      options.address = this.networkMask
       const disconnect = this.nuclearnetClient.connect(options)
       this.connected = true
       this.socket.on('nuclear_disconnect', () => {

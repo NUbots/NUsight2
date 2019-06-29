@@ -34,7 +34,6 @@ export interface Ball {
   readonly Hcw: Matrix4
   readonly cone: {
     readonly axis: Vector3
-    readonly gradient: number
     readonly radius: number
   }
   readonly colour: Vector4

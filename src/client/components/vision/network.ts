@@ -98,7 +98,6 @@ export class VisionNetwork {
       Hcw: Matrix4.from(Hcw),
       cone: {
         axis: Vector3.from(ball.cone!.axis),
-        gradient: ball.cone!.gradient!,
         radius: ball.cone!.radius!,
       },
       colour: Vector4.from(ball.colour),

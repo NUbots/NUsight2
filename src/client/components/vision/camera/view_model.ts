@@ -403,14 +403,14 @@ export class CameraViewModel {
     }))
 
     o3d.add(this.makePlaneSegment({
-      start: new Vector3(m.y.x, m.y.y, m.z.y),
+      start: new Vector3(m.y.x, m.y.y, m.y.z),
       end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
       colour: new Vector4(0, 1, 0, 0.5),
       lineWidth: 5,
     }))
 
     o3d.add(this.makePlaneSegment({
-      start: new Vector3(-m.y.x, -m.y.y, -m.z.y),
+      start: new Vector3(-m.y.x, -m.y.y, -m.y.z),
       end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
       colour: new Vector4(1, 0, 1, 0.5),
       lineWidth: 5,

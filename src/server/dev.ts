@@ -25,7 +25,7 @@ const compiler = webpack(webpackConfig)
 const args = minimist(process.argv.slice(2))
 const withVirtualRobots = args['virtual-robots'] || false
 const nbsFile = args.play
-const broadcastAddress = args['broadcast-address'] || '10.1.255.255'
+const broadcastAddress = args['address'] || '10.1.255.255'
 
 const app = express()
 const server = http.createServer(app)

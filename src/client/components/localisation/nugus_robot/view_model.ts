@@ -73,7 +73,7 @@ export class NUgusViewModel {
       // TODO (Annable): Baking this rotation into the model geometry would be ideal.
       findMesh(gltf.scene, 'Head').geometry.applyMatrix(new Matrix4().makeRotationY(-Math.PI / 2))
       sink(findMesh(gltf.scene, 'Torso'))
-    }, undefined)
+    })
   })
 
   @computed

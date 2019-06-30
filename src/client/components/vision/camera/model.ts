@@ -6,6 +6,7 @@ import { Image } from '../../../image_decoder/image_decoder'
 import { Matrix4 } from '../../../math/matrix4'
 import { Vector2 } from '../../../math/vector2'
 import { Vector3 } from '../../../math/vector3'
+import { Vector4 } from '../../../math/vector4'
 import { VisionRobotModel } from '../model'
 
 export interface GreenHorizon {
@@ -33,18 +34,18 @@ export interface Ball {
   readonly Hcw: Matrix4
   readonly cone: {
     readonly axis: Vector3
-    readonly gradient: number
+    readonly radius: number
   }
+  readonly colour: Vector4
 }
 
 export interface Goal {
   readonly timestamp: number
   readonly Hcw: Matrix4
-  readonly frustum: {
-    readonly tl: Vector3
-    readonly tr: Vector3
-    readonly bl: Vector3
-    readonly br: Vector3
+  readonly side: 'left' | 'right' | 'unknown'
+  readonly post: {
+    readonly top: Vector3
+    readonly bottom: Vector3
   }
 }
 

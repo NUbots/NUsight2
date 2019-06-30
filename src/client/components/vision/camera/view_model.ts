@@ -22,6 +22,7 @@ import { Mesh } from 'three'
 import { ImageDecoder } from '../../../image_decoder/image_decoder'
 import { Matrix4 as Matrix4Model } from '../../../math/matrix4'
 import { Vector3 as Vector3Model } from '../../../math/vector3'
+import { Vector4 as Vector4Model } from '../../../math/vector4'
 
 import { Goal } from './model'
 import { Ball } from './model'
@@ -117,27 +118,29 @@ export class CameraViewModel {
     const Hcc = imageHcw.multiply(Hwc)
     return this.makeCone({
       axis: toThreeVector3(m.cone.axis).applyMatrix4(Hcc),
-      gradient: m.cone.gradient,
-      colour: new Vector4(0, 0, 1, 0.7),
+      gradient: m.cone.radius,
+      colour: toThreeVector4(m.colour),
       lineWidth: 10,
     })
   })
 
   private goal = createTransformer((m: Goal) => {
-    const goal = new Object3D()
     const Hwc = new Matrix4().getInverse(toThreeMatrix4(m.Hcw))
     const imageHcw = this.model.image ? toThreeMatrix4(this.model.image.Hcw) : new Matrix4()
     const Hcc = imageHcw.multiply(Hwc)
-    const tl = toThreeVector3(m.frustum.tl).applyMatrix4(Hcc)
-    const tr = toThreeVector3(m.frustum.tr).applyMatrix4(Hcc)
-    const bl = toThreeVector3(m.frustum.bl).applyMatrix4(Hcc)
-    const br = toThreeVector3(m.frustum.br).applyMatrix4(Hcc)
-    const colour = new Vector4(0.8, 0.8, 0, 0.5)
-    goal.add(this.makePlaneSegment({ start: tl, end: bl, colour, lineWidth: 10 }))
-    goal.add(this.makePlaneSegment({ start: bl, end: br, colour, lineWidth: 10 }))
-    goal.add(this.makePlaneSegment({ start: br, end: tr, colour, lineWidth: 10 }))
-    goal.add(this.makePlaneSegment({ start: tr, end: tl, colour, lineWidth: 10 }))
-    return goal
+    let colour: Vector4 = new Vector4(1.0, 0.0, 1.0, 1.0)
+    if (m.side === 'left') {
+      colour = new Vector4(1.0, 1.0, 0, 1.0)
+    }
+    if (m.side === 'right') {
+      colour = new Vector4(0.0, 1.0, 1.0, 1.0)
+    }
+    return this.makePlaneSegment({
+      start: toThreeVector3(m.post.bottom).applyMatrix4(Hcc),
+      end: toThreeVector3(m.post.top).applyMatrix4(Hcc),
+      colour,
+      lineWidth: 10,
+    })
   })
 
   private greenhorizon = createTransformer((m: GreenHorizon) => {
@@ -442,4 +445,8 @@ function toThreeMatrix4(mat4: Matrix4Model): Matrix4 {
 
 function toThreeVector3(vec3: Vector3Model): Vector3 {
   return new Vector3(vec3.x, vec3.y, vec3.z)
+}
+
+function toThreeVector4(vec4: Vector4Model): Vector4 {
+  return new Vector4(vec4.x, vec4.y, vec4.z, vec4.t)
 }

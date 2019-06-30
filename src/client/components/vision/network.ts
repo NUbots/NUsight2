@@ -5,6 +5,7 @@ import { toSeconds } from '../../../shared/time/timestamp'
 import { Matrix4 } from '../../math/matrix4'
 import { Vector2 } from '../../math/vector2'
 import { Vector3 } from '../../math/vector3'
+import { Vector4 } from '../../math/vector4'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
@@ -80,7 +81,7 @@ export class VisionNetwork {
     camera.visualmesh = {
       neighbours: neighbourhood!.v!,
       coordinates: coordinates!.v!,
-      classifications: { dim: classifications!.cols!, values: classifications!.v! },
+      classifications: { dim: classifications!.rows!, values: classifications!.v! },
     }
   }
 
@@ -98,8 +99,9 @@ export class VisionNetwork {
       Hcw: Matrix4.from(Hcw),
       cone: {
         axis: Vector3.from(ball.cone!.axis),
-        gradient: ball.cone!.gradient!,
+        radius: ball.cone!.radius!,
       },
+      colour: Vector4.from(ball.colour),
     }))
   }
 

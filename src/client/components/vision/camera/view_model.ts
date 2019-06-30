@@ -22,6 +22,7 @@ import { Mesh } from 'three'
 import { ImageDecoder } from '../../../image_decoder/image_decoder'
 import { Matrix4 as Matrix4Model } from '../../../math/matrix4'
 import { Vector3 as Vector3Model } from '../../../math/vector3'
+import { Vector4 as Vector4Model } from '../../../math/vector4'
 
 import { Goal } from './model'
 import { Ball } from './model'
@@ -117,8 +118,8 @@ export class CameraViewModel {
     const Hcc = imageHcw.multiply(Hwc)
     return this.makeCone({
       axis: toThreeVector3(m.cone.axis).applyMatrix4(Hcc),
-      gradient: m.cone.gradient,
-      colour: new Vector4(0, 0, 1, 0.7),
+      gradient: m.cone.radius,
+      colour: toThreeVector4(m.colour),
       lineWidth: 10,
     })
   })
@@ -380,7 +381,7 @@ export class CameraViewModel {
 
   private horizon = createTransformer((m: Matrix4Model) => {
     return this.makePlane({
-      axis: new Vector3(m.x.z, m.y.z, m.z.z),
+      axis: new Vector3(m.z.x, m.z.y, m.z.z),
       colour: new Vector4(0, 0, 1, 0.7),
       lineWidth: 10,
     })
@@ -391,29 +392,29 @@ export class CameraViewModel {
     const o3d = new Object3D()
 
     o3d.add(this.makePlaneSegment({
-      start: new Vector3(m.x.x, m.y.x, m.z.x),
-      end: new Vector3(-m.x.z, -m.y.z, -m.z.z),
+      start: new Vector3(m.x.x, m.x.y, m.x.z),
+      end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
       colour: new Vector4(1, 0, 0, 0.5),
       lineWidth: 5,
     }))
 
     o3d.add(this.makePlaneSegment({
-      start: new Vector3(-m.x.x, -m.y.x, -m.z.x),
-      end: new Vector3(-m.x.z, -m.y.z, -m.z.z),
+      start: new Vector3(-m.x.x, -m.x.y, -m.x.z),
+      end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
       colour: new Vector4(0, 1, 1, 0.5),
       lineWidth: 5,
     }))
 
     o3d.add(this.makePlaneSegment({
-      start: new Vector3(m.x.y, m.y.y, m.z.y),
-      end: new Vector3(-m.x.z, -m.y.z, -m.z.z),
+      start: new Vector3(m.y.x, m.y.y, m.y.z),
+      end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
       colour: new Vector4(0, 1, 0, 0.5),
       lineWidth: 5,
     }))
 
     o3d.add(this.makePlaneSegment({
-      start: new Vector3(-m.x.y, -m.y.y, -m.z.y),
-      end: new Vector3(-m.x.z, -m.y.z, -m.z.z),
+      start: new Vector3(-m.y.x, -m.y.y, -m.y.z),
+      end: new Vector3(-m.z.x, -m.z.y, -m.z.z),
       colour: new Vector4(1, 0, 1, 0.5),
       lineWidth: 5,
     }))
@@ -435,13 +436,17 @@ export class CameraViewModel {
 
 function toThreeMatrix4(mat4: Matrix4Model): Matrix4 {
   return new Matrix4().set(
-    mat4.x.x, mat4.x.y, mat4.x.z, mat4.x.t,
-    mat4.y.x, mat4.y.y, mat4.y.z, mat4.y.t,
-    mat4.z.x, mat4.z.y, mat4.z.z, mat4.z.t,
-    mat4.t.x, mat4.t.y, mat4.t.z, mat4.t.t,
+    mat4.x.x, mat4.y.x, mat4.z.x, mat4.t.x,
+    mat4.x.y, mat4.y.y, mat4.z.y, mat4.t.y,
+    mat4.x.z, mat4.y.z, mat4.z.z, mat4.t.z,
+    mat4.x.t, mat4.y.t, mat4.z.t, mat4.t.t,
   )
 }
 
 function toThreeVector3(vec3: Vector3Model): Vector3 {
   return new Vector3(vec3.x, vec3.y, vec3.z)
+}
+
+function toThreeVector4(vec4: Vector4Model): Vector4 {
+  return new Vector4(vec4.x, vec4.y, vec4.z, vec4.t)
 }

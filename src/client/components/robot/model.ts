@@ -21,9 +21,9 @@ export class RobotModel {
   @observable port: number
   @observable stats = {
     packets: 0,
-    packetsPerSecond: new Rate({ smoothing: 0.9, unitTime: 1000 }),
+    packetsPerSecond: Rate.of({ smoothing: 0.9, unitTime: 1000 }),
     bytes: 0,
-    bytesPerSecond: new Rate({ smoothing: 0.9, unitTime: 1000 }),
+    bytesPerSecond: Rate.of({ smoothing: 0.9, unitTime: 1000 }),
   }
 
   constructor({ id, connected, enabled, name, address, port }: RobotModelOpts) {

@@ -52,29 +52,29 @@ storiesOf('components.robot_selector_single', module)
 
 function getRobots(): RobotModel[] {
   return [
-    RobotModel.of({
+    {
       id: '1',
       name: 'Virtual Robot 1',
       connected: true,
       enabled: true,
       address: '',
       port: 0,
-    }),
-    RobotModel.of({
+    },
+    {
       id: '2',
       name: 'Virtual Robot 2',
       connected: true,
       enabled: true,
       address: '',
       port: 0,
-    }),
-    RobotModel.of({
+    },
+    {
       id: '3',
       name: 'Virtual Robot 3',
       connected: true,
       enabled: true,
       address: '',
       port: 0,
-    }),
+    },
   ]
 }

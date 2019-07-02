@@ -1,16 +1,4 @@
-import { action } from 'mobx'
 import { observable } from 'mobx'
-
-import { Rate } from './rate'
-
-type RobotModelOpts = {
-  id: string
-  connected: boolean
-  enabled: boolean
-  name: string
-  address: string
-  port: number
-}
 
 export class RobotModel {
   @observable id: string
@@ -19,14 +7,8 @@ export class RobotModel {
   @observable name: string
   @observable address: string
   @observable port: number
-  @observable stats = {
-    packets: 0,
-    packetsPerSecond: Rate.of({ smoothing: 0.9 }),
-    bytes: 0,
-    bytesPerSecond: Rate.of({ smoothing: 0.9 }),
-  }
 
-  constructor({ id, connected, enabled, name, address, port }: RobotModelOpts) {
+  constructor({ id, connected, enabled, name, address, port }: RobotModel) {
     this.id = id
     this.connected = connected
     this.enabled = enabled
@@ -35,15 +17,7 @@ export class RobotModel {
     this.port = port
   }
 
-  static of(opts: RobotModelOpts) {
+  static of(opts: RobotModel) {
     return new RobotModel(opts)
-  }
-
-  @action
-  updateStats({ packets, bytes }: { packets: number, bytes: number }) {
-    this.stats.packets += packets
-    this.stats.packetsPerSecond.update(packets)
-    this.stats.bytes += bytes
-    this.stats.bytesPerSecond.update(bytes)
   }
 }

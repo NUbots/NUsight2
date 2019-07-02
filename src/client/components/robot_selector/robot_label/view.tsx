@@ -50,25 +50,25 @@ export const RobotLabel = observer((props: RobotLabelProps) => {
       <div className={style.dataCell}>
         <div className={style.dataLabel}>Packets</div>
         <div className={style.dataValue}>{
-          formatSI(robot.stats.packets)
+          formatSI(viewModel.stats.packets)
         }</div>
       </div>
       <div className={style.dataCell}>
         <div className={style.dataLabel}>Packets/s</div>
         <div className={style.dataValue}>{
-          formatSI(robot.stats.packetsPerSecond.rate)
+          formatSI(viewModel.stats.packetsPerSecond.rate)
         }</div>
       </div>
       <div className={style.dataCell}>
         <div className={style.dataLabel}>Bytes</div>
         <div className={style.dataValue}>{
-          formatSI(robot.stats.bytes)
+          formatSI(viewModel.stats.bytes)
         }</div>
       </div>
       <div className={style.dataCell}>
         <div className={style.dataLabel}>Bytes/s</div>
         <div className={style.dataValue}>{
-          formatSI(robot.stats.bytesPerSecond.rate)
+          formatSI(viewModel.stats.bytesPerSecond.rate)
         }</div>
       </div>
     </Collapsible>

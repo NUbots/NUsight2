@@ -8,10 +8,7 @@ describe('Rate', () => {
 
   beforeEach(() => {
     clock = FakeClock.of()
-    rate = new Rate({
-      smoothing: 0.9,
-      unitTime: 1000,
-    }, clock)
+    rate = new Rate({ smoothing: 0.9 }, clock)
   })
 
   it('works with updates in the same ms', () => {

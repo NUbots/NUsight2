@@ -2,8 +2,8 @@ import { action } from 'mobx'
 import { observable } from 'mobx'
 import { throttle } from 'throttle-debounce'
 
-import { BrowserSystemClock } from '../../time/browser_clock'
 import { Clock } from '../../../shared/time/clock'
+import { BrowserSystemClock } from '../../time/browser_clock'
 
 type RateOpts = {
   smoothing: number

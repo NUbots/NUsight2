@@ -36,7 +36,8 @@ export class ConfidenceEllipseViewModel {
 
   @computed
   get ellipsePosition() {
-    const rWTw = toThreeVector3(this.robot.rTWw).applyQuaternion(toThreeQuaternion(this.robot.Rwt))
+    // debugger
+    const rWTw = toThreeVector3(this.robot.rTWw);//.applyQuaternion(toThreeQuaternion(this.robot.Rwt))
     // rWTw.multiplyScalar(-1)
     const rTFf = rWTw.applyMatrix4(toThreeMatrix4(this.robot.Hfw))
     return new Vector3(rTFf.x, rTFf.y, 0)

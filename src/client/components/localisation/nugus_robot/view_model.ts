@@ -1,16 +1,16 @@
 import { computed } from 'mobx'
-import * as THREE from 'three'
 import { lazyObservable } from 'mobx-utils'
 import { createTransformer } from 'mobx-utils'
+import * as THREE from 'three'
 import { Euler } from 'three'
 import { Quaternion } from 'three'
 import { Mesh } from 'three'
 import { Object3D } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+
 import { Matrix4 } from '../../../math/matrix4'
 import { Vector3 } from '../../../math/vector3'
 import { Vector4 } from '../../../math/vector4'
-
 import { LocalisationRobotModel } from '../darwin_robot/model'
 
 import * as url from './config/nugus.glb'

@@ -11,6 +11,7 @@ import { Vector4 } from '../../math/vector4'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
+
 import { ConfidenceEllipse } from './darwin_robot/model'
 import { LocalisationRobotModel } from './darwin_robot/model'
 import { LocalisationModel } from './model'
@@ -140,5 +141,4 @@ function calculateConfidenceEllipse(xx: number, xy: number, yy: number): Confide
     rotation: Math.atan2(xy, maxEig - yy),
   }
 }
-
 

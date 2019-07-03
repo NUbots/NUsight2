@@ -143,7 +143,7 @@ export class LocalisationRobotModel {
     motors: DarwinMotorSet,
     Hfw: Matrix4,
     confidenceEllipse?: ConfidenceEllipse,
-    ball?: LocalisationRobotBall,
+    ball?: LocalisationRobotBall
   }) {
     this.model = model
     this.name = name

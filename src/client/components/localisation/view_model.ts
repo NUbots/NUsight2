@@ -6,10 +6,10 @@ import { SphereGeometry } from 'three'
 import { HemisphereLight } from 'three'
 import { PointLight } from 'three'
 import { Object3D } from 'three'
+
 import { disposableComputed } from '../../base/disposable_computed'
 import { Matrix4 } from '../../math/matrix4'
 import { Vector2 } from '../../math/vector2'
-
 import { Vector3 } from '../../math/vector3'
 import { Vector4 } from '../../math/vector4'
 import { group } from '../three/builders'
@@ -19,10 +19,10 @@ import { scene } from '../three/builders'
 import { perspectiveCamera } from '../three/builders'
 import { Stage } from '../three/three'
 import { Canvas } from '../three/three'
+
 import { ConfidenceEllipseViewModel } from './confidence_ellipse/view_model'
 import { LocalisationRobotBall } from './darwin_robot/model'
 import { LocalisationRobotModel } from './darwin_robot/model'
-
 import { FieldViewModel } from './field/view_model'
 import { LocalisationModel } from './model'
 import { NUgusViewModel } from './nugus_robot/view_model'

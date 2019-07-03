@@ -3,6 +3,7 @@ import { computed } from 'mobx'
 import * as THREE from 'three'
 import { Color } from 'three'
 import { CircleGeometry } from 'three'
+
 import { disposableComputed } from '../../../base/disposable_computed'
 import { Matrix4 } from '../../../math/matrix4'
 import { Quaternion } from '../../../math/quaternion'

@@ -24,7 +24,7 @@ function createModel(animate?: 'animate') {
   model.confidenceEllipse = {
     scaleX: 0.2,
     scaleY: 0.3,
-    rotation: Math.PI/8,
+    rotation: Math.PI / 8,
   }
   const viewModel = RobotViewModel.of(model)
   animate && reaction(

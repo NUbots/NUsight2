@@ -1,7 +1,7 @@
 .robot {
   box-sizing: border-box;
   display: flex;
-  min-width: 248px;
+  min-width: 256px;
 }
 
 .robot:hover {
@@ -60,8 +60,11 @@
 }
 
 .dataTable {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-column-gap: 8px;
+  grid-row-gap: 8px;
   border: none;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
@@ -69,13 +72,8 @@
 
 .dataCell {
   box-sizing: border-box;
-  width: 50%;
-  padding-right: 8px;
+  width: 100%;
   text-align: left;
-}
-
-.dataCell:nth-child(2):not(:last-child) {
-  margin-bottom: 8px;
 }
 
 .dataLabel {

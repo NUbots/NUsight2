@@ -10,8 +10,8 @@ import { StatusIndicator } from '../status_indicator/view'
 
 import DropdownIcon from './dropdown.svg'
 import { formatSI } from './format-si'
-import * as style from './style.css'
 import { RobotLabelModel } from './model'
+import * as style from './style.css'
 
 export type RobotLabelProps = {
   robot: RobotModel
@@ -23,7 +23,7 @@ export const RobotLabel = observer((props: RobotLabelProps) => {
   const model = RobotLabelModel.of(props.robot)
 
   const toggleRobot = (robot: RobotModel) => () => selectRobot(robot)
-  const toggleStats = action(() => { model.statsOpen = !model.statsOpen })
+  const toggleStats = action(() => model.statsOpen = !model.statsOpen)
 
   const dropdownButtonClassNames = classNames(style.statsDropdownButton, {
     [style.statsDropdownButtonOpen]: model.statsOpen,

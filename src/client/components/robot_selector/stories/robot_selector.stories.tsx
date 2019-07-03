@@ -1,11 +1,11 @@
 import { action } from '@storybook/addon-actions'
 import { storiesOf } from '@storybook/react'
-import { action as mobxAction, observable } from 'mobx'
-import { observer } from 'mobx-react'
+import { action as mobxAction, observable, reaction } from 'mobx'
+import { disposeOnUnmount, observer } from 'mobx-react'
+import { now } from 'mobx-utils'
 import * as React from 'react'
 
-import { BrowserSystemClock } from '../../../../client/time/browser_clock'
-import { CancelTimer, Clock } from '../../../../shared/time/clock'
+import { SeededRandom } from '../../../../shared/base/random/seeded_random'
 import { RobotNetworkStatsModel } from '../../../network/model'
 import { RobotModel } from '../../robot/model'
 import { RobotSelector } from '../view'
@@ -78,11 +78,10 @@ function getRobots(): RobotModel[] {
   ]
 }
 
+const random = SeededRandom.of('random-stats')
 
 @observer
 export class UpdatingStatsStory extends React.Component<{ robots: RobotModel[] }> {
-  cancelUpdateInterval?: CancelTimer
-
   render() {
     const { robots } = this.props
 
@@ -98,27 +97,20 @@ export class UpdatingStatsStory extends React.Component<{ robots: RobotModel[] }
       .filter(robotModel => robotModel.connected)
       .forEach(robotModel => {
         const stats = RobotNetworkStatsModel.of(robotModel)
-        const packets = randomIntBetween(1, 3)
+        const packets = random.integer(1, 3)
         stats.packets += packets
         stats.packetsPerSecond.update(packets)
-        const bytes = randomIntBetween(1, 2e3)
+        const bytes = random.integer(1, 2e3)
         stats.bytes += bytes
         stats.bytesPerSecond.update(bytes)
       })
   }
 
   componentDidMount() {
-    this.cancelUpdateInterval = BrowserSystemClock.setInterval(this.updateStats, 0.5)
+    disposeOnUnmount(this, reaction(
+      () => now('frame'),
+      this.updateStats,
+      { fireImmediately: true },
+    ))
   }
-
-  componentWillUnmount() {
-    if (this.cancelUpdateInterval) {
-      this.cancelUpdateInterval()
-      this.cancelUpdateInterval = undefined
-    }
-  }
-}
-
-function randomIntBetween(min: number, max: number) {
-  return Math.floor(Math.random() * max) + min
 }

@@ -43,7 +43,7 @@
   cursor: pointer;
   flex-shrink: 0;
   height: 50px;
-  padding: 0 1em;
+  padding: 0 1em 0 0.5em;
 }
 
 .statsDropdownButton:hover,

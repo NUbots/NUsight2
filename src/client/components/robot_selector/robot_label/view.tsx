@@ -23,10 +23,10 @@ export const RobotLabel = observer((props: RobotLabelProps) => {
   const model = RobotLabelModel.of(props.robot)
 
   const toggleRobot = (robot: RobotModel) => () => selectRobot(robot)
-  const toggleStats = action(() => { model.showStats = !model.showStats })
+  const toggleStats = action(() => { model.statsOpen = !model.statsOpen })
 
   const dropdownButtonClassNames = classNames(style.statsDropdownButton, {
-    [style.statsDropdownButtonOpen]: model.showStats,
+    [style.statsDropdownButtonOpen]: model.statsOpen,
   })
 
   return <>
@@ -45,7 +45,7 @@ export const RobotLabel = observer((props: RobotLabelProps) => {
         <DropdownIcon />
       </button>
     </div>
-    <Collapsible open={model.showStats} className={style.dataTable}>
+    <Collapsible open={model.statsOpen} className={style.dataTable}>
       <div className={style.dataCell}>
         <div className={style.dataLabel}>Packets</div>
         <div className={style.dataValue}>{

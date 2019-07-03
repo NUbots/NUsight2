@@ -11,6 +11,7 @@ import { Message, Simulator } from '../simulator'
 import { periodic } from './periodic'
 import Sensors = message.input.Sensors
 import Field = message.localisation.Field
+import Ball = message.localisation.Ball
 
 // export const DARWIN_HIP_TO_FOOT = 0.2465
 export const NUGUS_HIP_TO_FOOT = 0.479
@@ -35,6 +36,7 @@ export class SensorsSimulator extends Simulator {
   start() {
     return autorun(() => {
       this.send(this.sensors)
+      this.send(this.ball)
       this.send(this.field)
     })
   }
@@ -89,6 +91,28 @@ export class SensorsSimulator extends Simulator {
     const message = { messageType, buffer }
 
     return message
+  }
+
+  get ball(): Message {
+    return {
+      messageType: 'message.localisation.Ball',
+      buffer: Ball.encode({
+        position: {
+          x: 0,
+          y: 0,
+        },
+        covariance: {
+          x: {
+            x: 0.02,
+            // y: -0.009,
+          },
+          y: {
+            y: 0.03,
+            // y: 0.01,
+          },
+        },
+      }).finish(),
+    }
   }
 
   get field(): Message {

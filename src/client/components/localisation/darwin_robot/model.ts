@@ -4,6 +4,7 @@ import { computed } from 'mobx'
 import { memoize } from '../../../base/memoize'
 import { Matrix4 } from '../../../math/matrix4'
 import { Quaternion } from '../../../math/quaternion'
+import { Vector2 } from '../../../math/vector2'
 import { Vector3 } from '../../../math/vector3'
 import { RobotModel } from '../../robot/model'
 
@@ -117,6 +118,11 @@ export interface ConfidenceEllipse {
   readonly rotation: number
 }
 
+export interface LocalisationRobotBall {
+  position: Vector2,
+  confidenceEllipse: ConfidenceEllipse
+}
+
 export class LocalisationRobotModel {
   @observable private model: RobotModel
   @observable name: string
@@ -126,8 +132,9 @@ export class LocalisationRobotModel {
   @observable motors: DarwinMotorSet
   @observable Hfw: Matrix4
   @observable confidenceEllipse?: ConfidenceEllipse
+  @observable ball?: LocalisationRobotBall
 
-  constructor({ model, name, color, rWTt, Rwt, motors, Hfw, confidenceEllipse }: {
+  constructor({ model, name, color, rWTt, Rwt, motors, Hfw, confidenceEllipse, ball }: {
     model: RobotModel,
     name: string,
     color?: string,
@@ -136,6 +143,7 @@ export class LocalisationRobotModel {
     motors: DarwinMotorSet,
     Hfw: Matrix4,
     confidenceEllipse?: ConfidenceEllipse,
+    ball?: LocalisationRobotBall,
   }) {
     this.model = model
     this.name = name
@@ -145,6 +153,7 @@ export class LocalisationRobotModel {
     this.motors = motors
     this.Hfw = Hfw
     this.confidenceEllipse = confidenceEllipse
+    this.ball = ball
   }
 
   static of = memoize((model: RobotModel): LocalisationRobotModel => {

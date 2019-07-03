@@ -6,6 +6,7 @@ import { Vector3 } from 'three'
 import { message } from '../../../shared/proto/messages'
 import { Imat4 } from '../../../shared/proto/messages'
 import { Matrix4 } from '../../math/matrix4'
+import { Vector2 } from '../../math/vector2'
 import { Vector4 } from '../../math/vector4'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
@@ -14,6 +15,7 @@ import { ConfidenceEllipse } from './darwin_robot/model'
 import { LocalisationRobotModel } from './darwin_robot/model'
 import { LocalisationModel } from './model'
 import Sensors = message.input.Sensors
+import Ball = message.localisation.Ball
 import Field = message.localisation.Field
 
 export class LocalisationNetwork {
@@ -21,6 +23,7 @@ export class LocalisationNetwork {
               private model: LocalisationModel) {
     this.network.on(Sensors, this.onSensors)
     this.network.on(Field, this.onField)
+    this.network.on(Ball, this.onBall)
   }
 
   static of(nusightNetwork: NUsightNetwork, model: LocalisationModel): LocalisationNetwork {
@@ -64,20 +67,28 @@ export class LocalisationNetwork {
 
   @action
   private onField = (robotModel: RobotModel, field: Field) => {
-    const ellipse = calculateConfidenceEllipse(
+    const robot = LocalisationRobotModel.of(robotModel)
+    robot.confidenceEllipse = calculateConfidenceEllipse(
       field.covariance!.x!.x!,
       field.covariance!.x!.y!,
       field.covariance!.y!.y!,
     )
-    const robot = LocalisationRobotModel.of(robotModel)
-    robot.confidenceEllipse = {
-      scaleX: ellipse.scaleX,
-      scaleY: ellipse.scaleY,
-      rotation: ellipse.rotation,
-    }
     robot.Hfw = fromThreeMatrix4(new THREE.Matrix4()
       .makeTranslation(field.position!.x!, field.position!.y!, 0)
       .multiply(new THREE.Matrix4().makeRotationZ(field.position!.z!)))
+  }
+
+  @action
+  private onBall = (robotModel: RobotModel, ball: Ball) => {
+    const robot = LocalisationRobotModel.of(robotModel)
+    robot.ball = {
+      position: Vector2.from(ball.position),
+      confidenceEllipse: calculateConfidenceEllipse(
+        ball.covariance!.x!.x!,
+        ball.covariance!.x!.y!,
+        ball.covariance!.y!.y!,
+      ),
+    }
   }
 }
 

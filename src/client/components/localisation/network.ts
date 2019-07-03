@@ -36,8 +36,8 @@ export class LocalisationNetwork {
   private onSensors = (robotModel: RobotModel, sensors: Sensors) => {
     const robot = LocalisationRobotModel.of(robotModel)
 
-    const { translation: rWTt, rotation: Rwt } = decompose(new THREE.Matrix4().getInverse(fromProtoMat44(sensors.Htw!)))
-    robot.rWTt.set(rWTt.x, rWTt.y, rWTt.z)
+    const { translation: rTWw, rotation: Rwt } = decompose(new THREE.Matrix4().getInverse(fromProtoMat44(sensors.Htw!)))
+    robot.rTWw.set(rTWw.x, rTWw.y, rTWw.z)
     robot.Rwt.set(Rwt.x, Rwt.y, Rwt.z, Rwt.w)
 
     robot.motors.rightShoulderPitch.angle = sensors.servo[0].presentPosition!
@@ -102,8 +102,8 @@ function fromThreeMatrix4(mat4: THREE.Matrix4): Matrix4 {
   return new Matrix4(
     new Vector4(mat4.elements[0], mat4.elements[1], mat4.elements[2], mat4.elements[3]),
     new Vector4(mat4.elements[4], mat4.elements[5], mat4.elements[6], mat4.elements[7]),
-    new Vector4(mat4.elements[8], mat4.elements[9], mat4.elements[10], mat4.elements[10]),
-    new Vector4(mat4.elements[11], mat4.elements[12], mat4.elements[13], mat4.elements[14]),
+    new Vector4(mat4.elements[8], mat4.elements[9], mat4.elements[10], mat4.elements[11]),
+    new Vector4(mat4.elements[12], mat4.elements[13], mat4.elements[14], mat4.elements[15]),
   )
 }
 

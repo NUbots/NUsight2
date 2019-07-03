@@ -121,7 +121,7 @@ export class LocalisationRobotModel {
   @observable private model: RobotModel
   @observable name: string
   @observable color?: string
-  @observable rWTt: Vector3 // Torso to world translation in torso space.
+  @observable rTWw: Vector3 // World to torso translation in world space.
   @observable Rwt: Quaternion // Torso to world rotation.
   @observable motors: DarwinMotorSet
   @observable Hfw: Matrix4
@@ -140,7 +140,7 @@ export class LocalisationRobotModel {
     this.model = model
     this.name = name
     this.color = color
-    this.rWTt = rWTt
+    this.rTWw = rWTt
     this.Rwt = Rwt
     this.motors = motors
     this.Hfw = Hfw

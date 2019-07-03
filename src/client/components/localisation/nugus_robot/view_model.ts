@@ -1,12 +1,15 @@
 import { computed } from 'mobx'
+import * as THREE from 'three'
 import { lazyObservable } from 'mobx-utils'
 import { createTransformer } from 'mobx-utils'
 import { Euler } from 'three'
 import { Quaternion } from 'three'
-import { Matrix4 } from 'three'
 import { Mesh } from 'three'
 import { Object3D } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { Matrix4 } from '../../../math/matrix4'
+import { Vector3 } from '../../../math/vector3'
+import { Vector4 } from '../../../math/vector4'
 
 import { LocalisationRobotModel } from '../darwin_robot/model'
 
@@ -31,9 +34,7 @@ export class NUgusViewModel {
     // TODO (Annable): Baking the offsets into the model geometries would be ideal.
     const PI = Math.PI
     const PI_2 = PI / 2
-    robot.position.x = this.model.rWTt.x
-    robot.position.y = this.model.rWTt.y
-    robot.position.z = this.model.rWTt.z
+    robot.position.copy(toThreeVector3(this.model.rTWw).applyMatrix4(toThreeMatrix4(this.model.Hfw)))
     const rotation = new Quaternion(this.model.Rwt.x, this.model.Rwt.y, this.model.Rwt.z, this.model.Rwt.w)
     rotation.multiply(new Quaternion().setFromEuler(new Euler(PI_2, 0, 0)))
     robot.setRotationFromQuaternion(rotation)
@@ -71,7 +72,7 @@ export class NUgusViewModel {
   private static robotObjectBase = lazyObservable<Object3D | undefined>(sink => {
     new GLTFLoader().load(url, gltf => {
       // TODO (Annable): Baking this rotation into the model geometry would be ideal.
-      findMesh(gltf.scene, 'Head').geometry.applyMatrix(new Matrix4().makeRotationY(-Math.PI / 2))
+      findMesh(gltf.scene, 'Head').geometry.applyMatrix(new THREE.Matrix4().makeRotationY(-Math.PI / 2))
       sink(findMesh(gltf.scene, 'Torso'))
     })
   })
@@ -88,4 +89,30 @@ const findMesh = (root: Object3D, name: string): Mesh => {
     throw new Error()
   }
   return object
+}
+
+function toThreeMatrix4(mat4: Matrix4): THREE.Matrix4 {
+  return new THREE.Matrix4().set(
+    mat4.x.x, mat4.y.x, mat4.z.x, mat4.t.x,
+    mat4.x.y, mat4.y.y, mat4.z.y, mat4.t.y,
+    mat4.x.z, mat4.y.z, mat4.z.z, mat4.t.z,
+    mat4.x.t, mat4.y.t, mat4.z.t, mat4.t.t,
+  )
+}
+
+function fromThreeMatrix4(mat4: THREE.Matrix4): Matrix4 {
+  return new Matrix4(
+    new Vector4(mat4.elements[0], mat4.elements[1], mat4.elements[2], mat4.elements[3]),
+    new Vector4(mat4.elements[4], mat4.elements[5], mat4.elements[6], mat4.elements[7]),
+    new Vector4(mat4.elements[8], mat4.elements[9], mat4.elements[10], mat4.elements[11]),
+    new Vector4(mat4.elements[12], mat4.elements[13], mat4.elements[14], mat4.elements[15]),
+  )
+}
+
+function toThreeVector3(vec3: Vector3): THREE.Vector3 {
+  return new THREE.Vector3(vec3.x, vec3.y, vec3.z)
+}
+
+function fromThreeVector3(vec3: THREE.Vector3): Vector3 {
+  return new Vector3(vec3.x, vec3.y, vec3.z)
 }

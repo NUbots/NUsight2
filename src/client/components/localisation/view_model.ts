@@ -10,7 +10,6 @@ import { perspectiveCamera } from '../three/builders'
 import { Stage } from '../three/three'
 import { Canvas } from '../three/three'
 import { ConfidenceEllipseViewModel } from './confidence_ellipse/view_model'
-import { ConfidenceEllipse } from './darwin_robot/model'
 import { LocalisationRobotModel } from './darwin_robot/model'
 
 import { FieldViewModel } from './field/view_model'
@@ -74,13 +73,14 @@ export class LocalisationViewModel {
 
   private get fieldConfidenceEllpises(): Object3D[] {
     return this.model.robots
-      .map(robotModel => robotModel.confidenceEllipse && this.getRobotConfidenceEllpise(robotModel.confidenceEllipse))
+      .filter(robotModel => robotModel.visible)
+      .map(robotModel => this.getRobotConfidenceEllpise(robotModel))
       .filter(exists)
       .map(viewModel => viewModel.confidenceEllipse.get())
   }
 
-  private getRobotConfidenceEllpise = createTransformer((confidenceEllipse: ConfidenceEllipse) => {
-    return ConfidenceEllipseViewModel.of(confidenceEllipse)
+  private getRobotConfidenceEllpise = createTransformer((robotModel: LocalisationRobotModel) => {
+    return robotModel.confidenceEllipse && ConfidenceEllipseViewModel.of(robotModel.confidenceEllipse, robotModel)
   })
 
   @computed

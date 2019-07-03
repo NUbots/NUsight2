@@ -53,6 +53,9 @@ export class SkyboxViewModel {
       },
       side: BackSide,
     })
+    mat.polygonOffset = true
+    mat.polygonOffsetFactor = -1
+    mat.polygonOffsetUnits = 1
 
     const mesh = new Mesh(geo, mat)
     mesh.name = 'skyboxSky'
@@ -66,8 +69,6 @@ export class SkyboxViewModel {
     const groundMat = new MeshBasicMaterial({ color: '#3d7926' })
     const ground = new Mesh(groundGeo, groundMat)
     ground.name = 'skyboxGround'
-    ground.position.z = -0.01
-
     return ground
   }
 

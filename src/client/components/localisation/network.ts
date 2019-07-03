@@ -1,15 +1,15 @@
 import { action } from 'mobx'
-import { ComputedValue } from 'mobx/lib/core/computedvalue'
-import { Matrix4 } from 'three'
+import * as THREE from 'three'
 import { Quaternion } from 'three'
 import { Vector3 } from 'three'
 
 import { message } from '../../../shared/proto/messages'
 import { Imat4 } from '../../../shared/proto/messages'
+import { Matrix4 } from '../../math/matrix4'
+import { Vector4 } from '../../math/vector4'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
-import { ConfidenceEllipseViewModel } from './confidence_ellipse/view_model'
 import { ConfidenceEllipse } from './darwin_robot/model'
 import { LocalisationRobotModel } from './darwin_robot/model'
 import { LocalisationModel } from './model'
@@ -36,7 +36,7 @@ export class LocalisationNetwork {
   private onSensors = (robotModel: RobotModel, sensors: Sensors) => {
     const robot = LocalisationRobotModel.of(robotModel)
 
-    const { translation: rWTt, rotation: Rwt } = decompose(new Matrix4().getInverse(fromProtoMat44(sensors.Htw!)))
+    const { translation: rWTt, rotation: Rwt } = decompose(new THREE.Matrix4().getInverse(fromProtoMat44(sensors.Htw!)))
     robot.rWTt.set(rWTt.x, rWTt.y, rWTt.z)
     robot.Rwt.set(Rwt.x, Rwt.y, Rwt.z, Rwt.w)
 
@@ -75,10 +75,13 @@ export class LocalisationNetwork {
       scaleY: ellipse.scaleY,
       rotation: ellipse.rotation,
     }
+    robot.Hfw = fromThreeMatrix4(new THREE.Matrix4()
+      .makeTranslation(field.position!.x!, field.position!.y!, 0)
+      .multiply(new THREE.Matrix4().makeRotationZ(field.position!.z!)))
   }
 }
 
-function decompose(m: Matrix4): { translation: Vector3, rotation: Quaternion, scale: Vector3 } {
+function decompose(m: THREE.Matrix4): { translation: Vector3, rotation: Quaternion, scale: Vector3 } {
   const translation = new Vector3()
   const rotation = new Quaternion()
   const scale = new Vector3()
@@ -86,12 +89,21 @@ function decompose(m: Matrix4): { translation: Vector3, rotation: Quaternion, sc
   return { translation, rotation, scale }
 }
 
-function fromProtoMat44(m: Imat4): Matrix4 {
-  return new Matrix4().set(
+function fromProtoMat44(m: Imat4): THREE.Matrix4 {
+  return new THREE.Matrix4().set(
     m!.x!.x!, m!.y!.x!, m!.z!.x!, m!.t!.x!,
     m!.x!.y!, m!.y!.y!, m!.z!.y!, m!.t!.y!,
     m!.x!.z!, m!.y!.z!, m!.z!.z!, m!.t!.z!,
     m!.x!.t!, m!.y!.t!, m!.z!.t!, m!.t!.t!,
+  )
+}
+
+function fromThreeMatrix4(mat4: THREE.Matrix4): Matrix4 {
+  return new Matrix4(
+    new Vector4(mat4.elements[0], mat4.elements[1], mat4.elements[2], mat4.elements[3]),
+    new Vector4(mat4.elements[4], mat4.elements[5], mat4.elements[6], mat4.elements[7]),
+    new Vector4(mat4.elements[8], mat4.elements[9], mat4.elements[10], mat4.elements[10]),
+    new Vector4(mat4.elements[11], mat4.elements[12], mat4.elements[13], mat4.elements[14]),
   )
 }
 

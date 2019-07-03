@@ -2,6 +2,7 @@ import { observable } from 'mobx'
 import { computed } from 'mobx'
 
 import { memoize } from '../../../base/memoize'
+import { Matrix4 } from '../../../math/matrix4'
 import { Quaternion } from '../../../math/quaternion'
 import { Vector3 } from '../../../math/vector3'
 import { RobotModel } from '../../robot/model'
@@ -123,16 +124,17 @@ export class LocalisationRobotModel {
   @observable rWTt: Vector3 // Torso to world translation in torso space.
   @observable Rwt: Quaternion // Torso to world rotation.
   @observable motors: DarwinMotorSet
+  @observable Hfw: Matrix4
   @observable confidenceEllipse?: ConfidenceEllipse
 
-
-  constructor({ model, name, color, rWTt, Rwt, motors, confidenceEllipse }: {
+  constructor({ model, name, color, rWTt, Rwt, motors, Hfw, confidenceEllipse }: {
     model: RobotModel,
     name: string,
     color?: string,
     rWTt: Vector3,
     Rwt: Quaternion,
     motors: DarwinMotorSet,
+    Hfw: Matrix4,
     confidenceEllipse?: ConfidenceEllipse,
   }) {
     this.model = model
@@ -141,6 +143,7 @@ export class LocalisationRobotModel {
     this.rWTt = rWTt
     this.Rwt = Rwt
     this.motors = motors
+    this.Hfw = Hfw
     this.confidenceEllipse = confidenceEllipse
   }
 
@@ -151,6 +154,7 @@ export class LocalisationRobotModel {
       rWTt: Vector3.of(),
       Rwt: Quaternion.of(),
       motors: DarwinMotorSet.of(),
+      Hfw: Matrix4.of(),
     })
   })
 

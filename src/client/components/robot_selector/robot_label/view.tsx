@@ -11,7 +11,7 @@ import { StatusIndicator } from '../status_indicator/view'
 import DropdownIcon from './dropdown.svg'
 import { formatSI } from './format-si'
 import * as style from './style.css'
-import { RobotLabelViewModel } from './view_model'
+import { RobotLabelModel } from './model'
 
 export type RobotLabelProps = {
   robot: RobotModel
@@ -20,13 +20,13 @@ export type RobotLabelProps = {
 
 export const RobotLabel = observer((props: RobotLabelProps) => {
   const { robot, selectRobot } = props
-  const viewModel = RobotLabelViewModel.of(props.robot)
+  const model = RobotLabelModel.of(props.robot)
 
   const toggleRobot = (robot: RobotModel) => () => selectRobot(robot)
-  const toggleStats = action(() => { viewModel.statsOpen = !viewModel.statsOpen })
+  const toggleStats = action(() => { model.showStats = !model.showStats })
 
   const dropdownButtonClassNames = classNames(style.statsDropdownButton, {
-    [style.statsDropdownButtonOpen]: viewModel.statsOpen,
+    [style.statsDropdownButtonOpen]: model.showStats,
   })
 
   return <>
@@ -45,29 +45,29 @@ export const RobotLabel = observer((props: RobotLabelProps) => {
         <DropdownIcon />
       </button>
     </div>
-    <Collapsible open={viewModel.statsOpen} className={style.dataTable}>
+    <Collapsible open={model.showStats} className={style.dataTable}>
       <div className={style.dataCell}>
         <div className={style.dataLabel}>Packets</div>
         <div className={style.dataValue}>{
-          formatSI(viewModel.stats.packets)
+          formatSI(model.stats.packets)
         }</div>
       </div>
       <div className={style.dataCell}>
         <div className={style.dataLabel}>Packets/s</div>
         <div className={style.dataValue}>{
-          formatSI(viewModel.stats.packetsPerSecond.rate)
+          formatSI(model.stats.packetsPerSecond.rate)
         }</div>
       </div>
       <div className={style.dataCell}>
         <div className={style.dataLabel}>Bytes</div>
         <div className={style.dataValue}>{
-          formatSI(viewModel.stats.bytes)
+          formatSI(model.stats.bytes)
         }</div>
       </div>
       <div className={style.dataCell}>
         <div className={style.dataLabel}>Bytes/s</div>
         <div className={style.dataValue}>{
-          formatSI(viewModel.stats.bytesPerSecond.rate)
+          formatSI(model.stats.bytesPerSecond.rate)
         }</div>
       </div>
     </Collapsible>

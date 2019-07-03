@@ -5,14 +5,14 @@ import { createTransformer } from 'mobx-utils'
 import { RobotNetworkStatsModel } from '../../../network/model'
 import { RobotModel } from '../../robot/model'
 
-export class RobotLabelViewModel {
-  @observable statsOpen = false
+export class RobotLabelModel {
+  @observable showStats = false
 
   constructor(private robotModel: RobotModel) {
   }
 
-  static of = createTransformer((robotModel: RobotModel): RobotLabelViewModel => {
-    return new RobotLabelViewModel(robotModel)
+  static of = createTransformer((robotModel: RobotModel): RobotLabelModel => {
+    return new RobotLabelModel(robotModel)
   })
 
   @computed

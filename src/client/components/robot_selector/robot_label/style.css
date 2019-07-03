@@ -1,14 +1,20 @@
 .robot {
   box-sizing: border-box;
   display: flex;
-  align-items: center;
-  padding: 0 1em;
-  height: 50px;
   min-width: 248px;
 }
 
 .robot:hover {
   background-color: #eee;
+}
+
+.robotLabel {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  height: 50px;
+  padding: 0;
+  padding-left: 1em;
   cursor: pointer;
 }
 
@@ -16,7 +22,7 @@
   margin-right: 0.75em;
 }
 
-.robotLabel {
+.robotName {
   margin-right: auto;
   white-space: nowrap;
 }
@@ -28,26 +34,28 @@
   border-right: 1px solid #ddd;
 }
 
-.robotDropdownButton {
+.statsDropdownButton {
   appearance: none;
   background: none;
   border: none;
   color: #888;
   outline: none;
-  margin-right: -0.5em;
   cursor: pointer;
+  flex-shrink: 0;
+  height: 50px;
+  padding: 0 1em;
 }
 
-.robotDropdownButton:hover,
-.robotDropdownButton:focus {
+.statsDropdownButton:hover,
+.statsDropdownButton:focus {
   color: #1197d3;
 }
 
-.robotDropdownButton svg {
+.statsDropdownButton svg {
   transition: transform 0.3s ease;
 }
 
-.robotDropdownButtonOpen svg {
+.statsDropdownButtonOpen svg {
   transform: rotate(-180deg);
 }
 

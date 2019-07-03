@@ -1,4 +1,5 @@
 import { computed } from 'mobx'
+import { createTransformer } from 'mobx-utils'
 import { HemisphereLight } from 'three'
 import { PointLight } from 'three'
 import { Object3D } from 'three'
@@ -8,6 +9,9 @@ import { scene } from '../three/builders'
 import { perspectiveCamera } from '../three/builders'
 import { Stage } from '../three/three'
 import { Canvas } from '../three/three'
+import { ConfidenceEllipseViewModel } from './confidence_ellipse/view_model'
+import { ConfidenceEllipse } from './darwin_robot/model'
+import { LocalisationRobotModel } from './darwin_robot/model'
 
 import { FieldViewModel } from './field/view_model'
 import { LocalisationModel } from './model'
@@ -48,6 +52,7 @@ export class LocalisationViewModel {
   private readonly scene = scene(() => ({
     children: [
       ...this.robots,
+      ...this.fieldConfidenceEllipses,
       this.field,
       this.skybox,
       this.hemisphereLight,
@@ -67,6 +72,17 @@ export class LocalisationViewModel {
       .map(robotModel => NUgusViewModel.of(robotModel).robot)
   }
 
+  private get fieldConfidenceEllipses(): Object3D[] {
+    return this.model.robots
+      .map(robotModel => robotModel.confidenceEllipse && this.getRobotConfidenceEllpise(robotModel.confidenceEllipse))
+      .filter(exists)
+      .map(viewModel => viewModel.confidenceEllipse.get())
+  }
+
+  private getRobotConfidenceEllpise = createTransformer((confidenceEllipse: ConfidenceEllipse) => {
+    return ConfidenceEllipseViewModel.of(confidenceEllipse)
+  })
+
   @computed
   private get hemisphereLight(): HemisphereLight {
     return new HemisphereLight('#fff', '#fff', 0.6)
@@ -83,4 +99,8 @@ export class LocalisationViewModel {
     light.position.set(this.model.camera.position.x, this.model.camera.position.y, this.model.camera.position.z)
     return light
   }
+}
+
+function exists<T>(t: T | undefined | null): t is T {
+  return t != null;
 }

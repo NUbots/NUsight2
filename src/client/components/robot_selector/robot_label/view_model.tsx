@@ -2,7 +2,7 @@ import { observable } from 'mobx'
 import { computed } from 'mobx'
 import { createTransformer } from 'mobx-utils'
 
-import { RobotNetworkStatsModel } from '../../../network/robot_network_stats_model'
+import { RobotNetworkStatsModel } from '../../../network/model'
 import { RobotModel } from '../../robot/model'
 
 export class RobotLabelViewModel {

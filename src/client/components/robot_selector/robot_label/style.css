@@ -35,6 +35,7 @@
   color: #888;
   outline: none;
   margin-right: -0.5em;
+  cursor: pointer;
 }
 
 .robotDropdownButton:hover,

@@ -10,7 +10,7 @@ import { RobotModel } from '../components/robot/model'
 import { WebSocketProxyNUClearNetClient } from '../nuclearnet/web_socket_proxy_nuclearnet_client'
 
 import { MessageTypePath } from './message_type_names'
-import { RobotNetworkStatsModel } from './robot_network_stats_model'
+import { RobotNetworkStatsModel } from './model'
 
 /**
  * This class is intended to handle NUsight-specific networking. It handles the subscription of NUClearNet messages and

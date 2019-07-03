@@ -36,22 +36,8 @@ export class ConfidenceEllipseViewModel {
 
   @computed
   get ellipsePosition() {
-    // debugger
-    const rWTw = toThreeVector3(this.robot.rTWw);//.applyQuaternion(toThreeQuaternion(this.robot.Rwt))
-    // rWTw.multiplyScalar(-1)
-    const rTFf = rWTw.applyMatrix4(toThreeMatrix4(this.robot.Hfw))
+    const rTFf = toThreeVector3(this.robot.rTWw).applyMatrix4(toThreeMatrix4(this.robot.Hfw))
     return new Vector3(rTFf.x, rTFf.y, 0)
-    // Htw * Hwf
-    // world -> field
-    // Htf
-
-    // Hfw * Rwt * rWTt
-
-    // Rwt * rWTt -> rWTw
-    // Hfw * rWTw -> r
-
-    // rTFf with z = 0
-    // return new Vector3(0.5, 0, 0)
   }
 
   readonly ellipseMaterial = meshBasicMaterial(() => ({

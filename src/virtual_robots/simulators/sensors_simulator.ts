@@ -103,11 +103,11 @@ export class SensorsSimulator extends Simulator {
         covariance: {
           x: {
             x: 0.02,
-            y: -0.009,
+            // y: -0.009,
           },
           y: {
-            x: -0.009,
-            y: 0.01,
+            y: 0.03,
+            // y: 0.01,
           },
         },
       }).finish(),

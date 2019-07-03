@@ -1,4 +1,5 @@
 import { action } from 'mobx'
+import { ComputedValue } from 'mobx/lib/core/computedvalue'
 import { Matrix4 } from 'three'
 import { Quaternion } from 'three'
 import { Vector3 } from 'three'
@@ -8,6 +9,7 @@ import { Imat4 } from '../../../shared/proto/messages'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
+import { ConfidenceEllipseViewModel } from './confidence_ellipse/view_model'
 import { ConfidenceEllipse } from './darwin_robot/model'
 import { LocalisationRobotModel } from './darwin_robot/model'
 import { LocalisationModel } from './model'
@@ -60,13 +62,19 @@ export class LocalisationNetwork {
     robot.motors.headTilt.angle = sensors.servo[19].presentPosition!
   }
 
+  @action
   private onField = (robotModel: RobotModel, field: Field) => {
     const ellipse = calculateConfidenceEllipse(
       field.covariance!.x!.x!,
       field.covariance!.x!.y!,
       field.covariance!.y!.y!,
     )
-    console.log(ellipse)
+    const robot = LocalisationRobotModel.of(robotModel)
+    robot.confidenceEllipse = {
+      scaleX: ellipse.scaleX,
+      scaleY: ellipse.scaleY,
+      rotation: ellipse.rotation,
+    }
   }
 }
 

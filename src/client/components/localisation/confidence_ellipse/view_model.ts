@@ -1,3 +1,4 @@
+import { IComputedValue } from 'mobx'
 import { computed } from 'mobx'
 import * as THREE from 'three'
 import { Color } from 'three'
@@ -14,12 +15,13 @@ import { ConfidenceEllipse } from '../darwin_robot/model'
 export class ConfidenceEllipseViewModel {
   constructor(
     private readonly model: ConfidenceEllipse,
+    private readonly position: IComputedValue<Vector3>,
     private readonly robot: LocalisationRobotModel,
   ) {
   }
 
-  static of(model: ConfidenceEllipse, robot: LocalisationRobotModel) {
-    return new ConfidenceEllipseViewModel(model, robot)
+  static of(model: ConfidenceEllipse, position: IComputedValue<Vector3>, robot: LocalisationRobotModel) {
+    return new ConfidenceEllipseViewModel(model, position, robot)
   }
 
   readonly confidenceEllipse = mesh(() => ({
@@ -36,7 +38,7 @@ export class ConfidenceEllipseViewModel {
 
   @computed
   get ellipsePosition() {
-    const rTFf = toThreeVector3(this.robot.rTWw).applyMatrix4(toThreeMatrix4(this.robot.Hfw))
+    const rTFf = toThreeVector3(this.position.get()).applyMatrix4(toThreeMatrix4(this.robot.Hfw))
     return new Vector3(rTFf.x, rTFf.y, 0)
   }
 

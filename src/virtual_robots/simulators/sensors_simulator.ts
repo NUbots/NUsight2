@@ -94,20 +94,26 @@ export class SensorsSimulator extends Simulator {
   }
 
   get ball(): Message {
+    const time = periodic(60)
+    const t = time * 5 + this.robotIndex
+    const angle = this.robotIndex * (2 * Math.PI) / this.numRobots + time / 40
+    const distance = Math.cos(time + 4 * this.robotIndex) * 0.2 + 0.3
+    const x = distance * Math.cos(angle)
+    const y = distance * Math.sin(angle)
     return {
       messageType: 'message.localisation.Ball',
       buffer: Ball.encode({
         position: {
-          x: 0,
-          y: 0,
+          x,
+          y,
         },
         covariance: {
           x: {
-            x: 0.02,
+            x: 0.01,
             // y: -0.009,
           },
           y: {
-            y: 0.03,
+            y: 0.002,
             // y: 0.01,
           },
         },

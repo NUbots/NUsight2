@@ -101,8 +101,16 @@ export class LocalisationViewModel {
 
   }
 
-  private getRobotConfidenceEllpise = createTransformer((robotModel: LocalisationRobotModel) => {
-    return robotModel.confidenceEllipse && ConfidenceEllipseViewModel.of(robotModel.confidenceEllipse, robotModel)
+  private readonly getRobotConfidenceEllpise = createTransformer((robotModel: LocalisationRobotModel) => {
+    return robotModel.confidenceEllipse && ConfidenceEllipseViewModel.of(
+      robotModel.confidenceEllipse,
+      this.getRobotConfidenceEllipsePosition(robotModel),
+      robotModel,
+    )
+  })
+
+  private readonly getRobotConfidenceEllipsePosition = createTransformer((robotModel: LocalisationRobotModel) => {
+    return computed(() => robotModel.rTWw)
   })
 
   private getRobotBall = createTransformer((robotModel: LocalisationRobotModel) => {
@@ -147,7 +155,16 @@ class BallViewModel {
 
   @computed
   private get confidenceEllipse() {
-    return ConfidenceEllipseViewModel.of(this.ballModel.confidenceEllipse, this.robotModel)
+    return ConfidenceEllipseViewModel.of(
+      this.ballModel.confidenceEllipse,
+      this.confidenceEllipsePosition,
+      this.robotModel,
+      )
+  }
+
+  @computed
+  private get confidenceEllipsePosition() {
+    return computed(() => new Vector3(this.ballModel.position.x, this.ballModel.position.y, 0.095))
   }
 
   readonly sphere = mesh(() => ({

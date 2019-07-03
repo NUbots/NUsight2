@@ -95,7 +95,7 @@ export const orthographicCamera = createUpdatableComputed(
 
 type MeshOpts = {
   geometry: Geometry,
-  material: Material | Material[]
+  material: Material | Material[],
 }
 
 export const mesh = createUpdatableComputed(
@@ -108,13 +108,19 @@ export const mesh = createUpdatableComputed(
 )
 
 type MeshBasicMaterialOpts = {
-  color: Color
+  color: Color,
+  polygonOffset?: boolean,
+  polygonOffsetFactor?: number,
+  polygonOffsetUnits?: number,
 }
 
 export const meshBasicMaterial = createUpdatableComputed(
   (opts: MeshBasicMaterialOpts) => new MeshBasicMaterial(),
   (mesh, opts) => {
     mesh.color = opts.color
+    mesh.polygonOffset = opts.polygonOffset != null ? opts.polygonOffset : false
+    mesh.polygonOffsetFactor = opts.polygonOffsetFactor != null ? opts.polygonOffsetFactor : 0
+    mesh.polygonOffsetUnits = opts.polygonOffsetUnits != null ? opts.polygonOffsetUnits : 0
     mesh.needsUpdate = true
   },
   mesh => mesh.dispose(),

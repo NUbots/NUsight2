@@ -48,9 +48,7 @@ export class FieldViewModel {
 
   @computed
   private get fieldLines() {
-    const fieldLines = new Mesh(this.fieldLinesGeometry, this.fieldLinesMaterial)
-    fieldLines.position.z = 0.001
-    return fieldLines
+    return new Mesh(this.fieldLinesGeometry, this.fieldLinesMaterial)
   }
 
   @computed
@@ -117,7 +115,11 @@ export class FieldViewModel {
 
   @computed
   private get fieldLinesMaterial() {
-    return new MeshBasicMaterial({ color: this.model.lineColor })
+    const mesh = new MeshBasicMaterial({ color: this.model.lineColor })
+    mesh.polygonOffset = true
+    mesh.polygonOffsetFactor = -1
+    mesh.polygonOffsetUnits = 1
+    return mesh
   }
 
   private buildRectangle(x: number, y: number, w: number, h: number, lw: number) {

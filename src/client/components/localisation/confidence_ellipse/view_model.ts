@@ -27,6 +27,9 @@ export class ConfidenceEllipseViewModel {
 
   readonly ellipseMaterial = meshBasicMaterial(() => ({
     color: new Color('purple'),
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: 1,
   }))
 
   readonly ellipseGeometry = disposableComputed(() => new CircleGeometry(1, 50))

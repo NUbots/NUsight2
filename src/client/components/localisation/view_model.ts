@@ -52,7 +52,7 @@ export class LocalisationViewModel {
   private readonly scene = scene(() => ({
     children: [
       ...this.robots,
-      ...this.fieldConfidenceEllipses,
+      ...this.fieldConfidenceEllpises,
       this.field,
       this.skybox,
       this.hemisphereLight,
@@ -72,7 +72,7 @@ export class LocalisationViewModel {
       .map(robotModel => NUgusViewModel.of(robotModel).robot)
   }
 
-  private get fieldConfidenceEllipses(): Object3D[] {
+  private get fieldConfidenceEllpises(): Object3D[] {
     return this.model.robots
       .map(robotModel => robotModel.confidenceEllipse && this.getRobotConfidenceEllpise(robotModel.confidenceEllipse))
       .filter(exists)

@@ -8,15 +8,17 @@ import { Imat4 } from '../../../shared/proto/messages'
 import { Network } from '../../network/network'
 import { NUsightNetwork } from '../../network/nusight_network'
 import { RobotModel } from '../robot/model'
-
+import { ConfidenceEllipse } from './darwin_robot/model'
 import { LocalisationRobotModel } from './darwin_robot/model'
 import { LocalisationModel } from './model'
 import Sensors = message.input.Sensors
+import Field = message.localisation.Field
 
 export class LocalisationNetwork {
   constructor(private network: Network,
               private model: LocalisationModel) {
     this.network.on(Sensors, this.onSensors)
+    this.network.on(Field, this.onField)
   }
 
   static of(nusightNetwork: NUsightNetwork, model: LocalisationModel): LocalisationNetwork {
@@ -57,6 +59,15 @@ export class LocalisationNetwork {
     robot.motors.headPan.angle = sensors.servo[18].presentPosition!
     robot.motors.headTilt.angle = sensors.servo[19].presentPosition!
   }
+
+  private onField = (robotModel: RobotModel, field: Field) => {
+    const ellipse = calculateConfidenceEllipse(
+      field.covariance!.x!.x!,
+      field.covariance!.x!.y!,
+      field.covariance!.y!.y!,
+    )
+    console.log(ellipse)
+  }
 }
 
 function decompose(m: Matrix4): { translation: Vector3, rotation: Quaternion, scale: Vector3 } {
@@ -75,3 +86,28 @@ function fromProtoMat44(m: Imat4): Matrix4 {
     m!.x!.t!, m!.y!.t!, m!.z!.t!, m!.t!.t!,
   )
 }
+
+/**
+ * Based on http://www.math.harvard.edu/archive/21b_fall_04/exhibits/2dmatrices/index.html
+ * and http://www.visiondummy.com/2014/04/draw-error-ellipse-representing-covariance-matrix/
+ */
+function calculateConfidenceEllipse(xx: number, xy: number, yy: number): ConfidenceEllipse {
+  const scalefactor = 2.4477 // for 99% confidence.
+
+  const trace = xx + yy
+  const det = xx * yy - xy * xy
+
+  const Eig1 = trace / 2 + Math.sqrt(trace * trace / 4 - det)
+  const Eig2 = trace / 2 - Math.sqrt(trace * trace / 4 - det)
+
+  const maxEig = Math.max(Eig1, Eig2)
+  const minEig = Math.min(Eig1, Eig2)
+
+  return {
+    scaleX: Math.sqrt(maxEig) * scalefactor,
+    scaleY: Math.sqrt(minEig) * scalefactor,
+    rotation: Math.atan2(xy, maxEig - yy),
+  }
+}
+
+

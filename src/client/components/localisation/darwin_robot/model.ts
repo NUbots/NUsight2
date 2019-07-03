@@ -110,6 +110,12 @@ export class DarwinMotorSet {
   }
 }
 
+export interface ConfidenceEllipse {
+  readonly scaleX: number,
+  readonly scaleY: number,
+  readonly rotation: number
+}
+
 export class LocalisationRobotModel {
   @observable private model: RobotModel
   @observable name: string
@@ -117,14 +123,17 @@ export class LocalisationRobotModel {
   @observable rWTt: Vector3 // Torso to world translation in torso space.
   @observable Rwt: Quaternion // Torso to world rotation.
   @observable motors: DarwinMotorSet
+  @observable confidenceEllipse?: ConfidenceEllipse
 
-  constructor({ model, name, color, rWTt, Rwt, motors }: {
+
+  constructor({ model, name, color, rWTt, Rwt, motors, confidenceEllipse }: {
     model: RobotModel,
     name: string,
     color?: string,
     rWTt: Vector3,
     Rwt: Quaternion,
-    motors: DarwinMotorSet
+    motors: DarwinMotorSet,
+    confidenceEllipse?: ConfidenceEllipse,
   }) {
     this.model = model
     this.name = name
@@ -132,6 +141,7 @@ export class LocalisationRobotModel {
     this.rWTt = rWTt
     this.Rwt = Rwt
     this.motors = motors
+    this.confidenceEllipse = confidenceEllipse
   }
 
   static of = memoize((model: RobotModel): LocalisationRobotModel => {

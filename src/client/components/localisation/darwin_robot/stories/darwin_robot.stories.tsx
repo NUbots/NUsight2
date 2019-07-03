@@ -21,6 +21,11 @@ function createModel(animate?: 'animate') {
     port: 1234,
   })
   const model = LocalisationRobotModel.of(robotModel)
+  model.confidenceEllipse = {
+    scaleX: 0.2,
+    scaleY: 0.3,
+    rotation: Math.PI/8,
+  }
   const viewModel = RobotViewModel.of(model)
   animate && reaction(
     () => 2 * Math.PI * now('frame') / 1000,

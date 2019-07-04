@@ -19,16 +19,19 @@ export const FileBrowser = observer((props: FileBrowserProps) => {
 
   return <div>
     { model.rootNode.children.length === 0 && <div className={style.placeholder}>No files</div> }
-    { model.rootNode.children.map((node, i) => (
-      <FileTreeNode
-        key={i}
-        model={model}
-        controller={controller}
-        node={node}
-        level={0}
-        animate={props.animate}
-        onSelect={props.onSelect}
-      />
-    )) }
+    { model.rootNode.children
+        .sort(controller.sortNodes)
+        .map((node, i) => (
+          <FileTreeNode
+            key={i}
+            model={model}
+            controller={controller}
+            node={node}
+            level={0}
+            animate={props.animate}
+            onSelect={props.onSelect}
+          />
+        ))
+    }
   </div>
 })

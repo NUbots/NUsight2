@@ -45,6 +45,9 @@ storiesOf('components.file_tree', module)
 function getFiles(): File[] {
   return [
     {
+      path: 'TopLevelFile.yaml',
+    },
+    {
       path: 'scripts/igus1/Stand.yaml',
     },
     {
@@ -79,9 +82,6 @@ function getFiles(): File[] {
     },
     {
       path: 'config/igus2/WalkEngine.yaml',
-    },
-    {
-      path: 'TopLevelFile.yaml',
     },
     {
       path: 'AnotherTopLevelFile.yaml',

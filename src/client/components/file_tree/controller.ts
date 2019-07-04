@@ -18,4 +18,20 @@ export class FileTreeController {
   selectNode(node: TreeNode) {
     this.model.selectedNode = node
   }
+
+  sortNodes(a: TreeNode, b: TreeNode) {
+    if (a.leaf) {
+      if (b.leaf) {
+        return a.label.localeCompare(b.label)
+      } else {
+        return 1
+      }
+    } else {
+      if (b.leaf) {
+        return -1
+      } else {
+        return a.label.localeCompare(b.label)
+      }
+    }
+  }
 }

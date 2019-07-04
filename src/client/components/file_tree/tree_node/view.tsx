@@ -75,7 +75,7 @@ export const FileTreeNode = observer((props: FileTreeNodeProps) => {
         </div>
 
         <Collapsible open={node.expanded} className={style.nodeChildren} animate={animate}>
-          { children.map((node, i) =>
+          { children.sort(controller.sortNodes).map((node, i) =>
               <FileTreeNode
                 key={i}
                 model={model}

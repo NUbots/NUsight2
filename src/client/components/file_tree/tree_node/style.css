@@ -1,0 +1,84 @@
+.node {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nodeHeader {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  padding: 4px 8px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: normal;
+}
+
+.nodeHeader:hover {
+  background-color: #EEE;
+  color: #1197d3;
+}
+
+.nodeHeader:hover .icon {
+  color: #1197d3;
+}
+
+.nodeHeaderSelected,
+.nodeHeaderSelected:hover {
+  background-color: #1197d3;
+  color: white;
+}
+
+.nodeHeaderSelected .icon,
+.nodeHeaderSelected:hover .icon {
+  color: white;
+}
+
+.icon {
+  color: #757575;
+}
+
+.dropdownIcon {
+  width: 18px;
+  height: 18px;
+  margin-right: 4px;
+}
+
+.dropdownIcon svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.dropdownIconExpanded {
+  transform: rotate(90deg);
+}
+
+.dropdownIconAnimate {
+  transition: transform 0.2s ease;
+}
+
+.nodeIcon {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+}
+
+.nodeIcon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.nodeLabel {
+  flex-grow: 1;
+  line-height: 1;
+}
+
+.nodeChildren {
+  padding: 0;
+  margin: 0;
+  border: none;
+}

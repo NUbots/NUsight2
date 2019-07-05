@@ -71,7 +71,7 @@ void main() {
   // Correct for OpenGL coordinate system and aspect ratio
   // Focal length is * 2 since the width of the "image" is -1 to 1 (width of 2.0)
   vec2 pos = project((Hcw * vec4(position, 0)).xyz, 2.0 * focalLength, centre, projection)
-             * vec2(-1.0, * viewSize.x / viewSize.y);
+             * vec2(-1.0, viewSize.x / viewSize.y);
 
   vBall        = ball;
   vGoal        = goal;

@@ -1,20 +1,22 @@
 import * as bounds from 'binary-search-bounds'
-import { autorun } from 'mobx'
 import { observable } from 'mobx'
 import { computed } from 'mobx'
+import { autorun } from 'mobx'
 import { createTransformer } from 'mobx-utils'
-import { InterleavedBuffer, InterleavedBufferAttribute, Object3D } from 'three'
+import { InterleavedBuffer, InterleavedBufferAttribute, Matrix4, Object3D, Vector3 } from 'three'
 import { RawShaderMaterial } from 'three'
-import { Float32BufferAttribute } from 'three'
+import { Vector2 } from 'three'
 import { Scene } from 'three'
 import { WebGLRenderer } from 'three'
 import { Mesh } from 'three'
 import { BufferGeometry } from 'three'
 import { Camera } from 'three'
 import { OrthographicCamera } from 'three'
-import { Vector2 } from 'three'
+import { Float32BufferAttribute } from 'three'
 
 import { ImageDecoder } from '../../../image_decoder/image_decoder'
+import { Matrix4 as Matrix4Model } from '../../../math/matrix4'
+import { Vector3 as Vector3Model } from '../../../math/vector3'
 
 import { CameraModel } from './model'
 import { VisualMesh } from './model'
@@ -83,8 +85,18 @@ export class CameraViewModel {
 
   private visualMesh = createTransformer((mesh: VisualMesh): Object3D => {
     const meshMaterial = this.meshMaterial
-    meshMaterial.uniforms.image.value = this.decoder.texture
-    meshMaterial.uniforms.dimensions.value = new Vector2(this.model.image!.width, this.model.image!.height)
+    const { centre, focalLength, projection } = this.model.image!.lens
+    meshMaterial.uniforms = {
+      image: { value: this.decoder.texture },
+      dimensions: { value: new Vector2(this.model.image!.width, this.model.image!.height) },
+      Hcw: { value: this.model.image ? toThreeMatrix4(this.model.image.Hcw) : new Matrix4() },
+      focalLength: { value: focalLength },
+      centre: { value: new Vector2(centre.x, centre.y) },
+      projection: { value: projection },
+      k: { value: mesh.k },
+      r: { value: mesh.r },
+      h: { value: mesh.h },
+    }
 
     // The UV mapped mesh
     const m = new Mesh(this.meshGeometry(mesh), meshMaterial)
@@ -100,37 +112,15 @@ export class CameraViewModel {
     return new RawShaderMaterial({
       vertexShader: meshVertexShader,
       fragmentShader: meshFragmentShader,
-      uniforms: {
-        image: { type: 't' },
-        dimensions: { value: new Vector2() },
-      },
     })
   }
 
   private meshGeometry = createTransformer((mesh: VisualMesh): BufferGeometry => {
 
-    const { rows, indices, neighbours, coordinates, classifications } = mesh
-
-    const nElem = coordinates.length / 2
-
-    // Cumulative sum so we can work out which row our segments are on
-    const cRows = rows.reduce((acc, v, i) => {
-      acc.push(acc[i] + v)
-      return acc
-    }, [0])
-
-    // Calculate our position
-    const position = ([] as number[]).concat(...indices.map(i => {
-      // Which ring we are on as a value between 0 and 1
-      const idx = bounds.le(cRows, i)
-      const phi = idx / rows.length
-      // How far around the ring we are as a value between 0 and 1
-      const theta = (i - cRows[idx]) / rows[idx]
-      return [phi, theta]
-    }))
-
+    const { neighbours, rays, classifications } = mesh
 
     // Calculate our triangle indexes
+    const nElem = rays.length / 3
     const triangles = []
     for (let i = 0; i < nElem; i++) {
       const ni = i * 6
@@ -144,13 +134,11 @@ export class CameraViewModel {
       }
     }
 
-    // Calculate our uv for mapping images
-    const uvs = coordinates
-
     const geometry = new BufferGeometry()
     geometry.setIndex(triangles)
-    geometry.addAttribute('position', new Float32BufferAttribute(position, 2))
-    geometry.addAttribute('uv', new Float32BufferAttribute(uvs, 2))
+    geometry.addAttribute('position', new Float32BufferAttribute(rays, 3))
+
+    // TODO need Hcw and lens parameters
 
     // Read each class into a separate attribute
     const buffer = new InterleavedBuffer(
@@ -168,4 +156,17 @@ export class CameraViewModel {
     return geometry
   }, (geometry?: BufferGeometry) => geometry && geometry.dispose())
 
+}
+
+function toThreeMatrix4(mat4: Matrix4Model): Matrix4 {
+  return new Matrix4().set(
+    mat4.x.x, mat4.x.y, mat4.x.z, mat4.x.t,
+    mat4.y.x, mat4.y.y, mat4.y.z, mat4.y.t,
+    mat4.z.x, mat4.z.y, mat4.z.z, mat4.z.t,
+    mat4.t.x, mat4.t.y, mat4.t.z, mat4.t.t,
+  )
+}
+
+function toThreeVector3(vec3: Vector3Model): Vector3 {
+  return new Vector3(vec3.x, vec3.y, vec3.z)
 }

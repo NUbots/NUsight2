@@ -44,6 +44,7 @@ export class Three extends Component<{
       stages => {
         if (stages instanceof Array) {
           disposeStages()
+          // Create individual reactions for each stage, so they may react and re-render independently.
           disposeStages = compose(stages.map(stage => autorun(
             () => this.renderStage(stage.get()),
             { scheduler: requestAnimationFrame },

@@ -44,7 +44,7 @@ export class Three extends Component<{
       stages => {
         if (stages instanceof Array) {
           disposeStages()
-          disposeStages = compose(...stages.map(stage => autorun(
+          disposeStages = compose(stages.map(stage => autorun(
             () => this.renderStage(stage.get()),
             { scheduler: requestAnimationFrame },
           )))
@@ -122,7 +122,7 @@ export class Three extends Component<{
   }
 }
 
-function compose(...fns: Array<() => void>): () => void {
+function compose(fns: Array<() => void>): () => void {
   return () => {
     for (const fn of fns) {
       fn()

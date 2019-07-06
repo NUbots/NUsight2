@@ -70,10 +70,10 @@ export const scene = createUpdatableComputed(
 
 export const group = createUpdatableComputed(
   (opts: Object3DOpts) => new Object3D(),
-  (scene, opts) => {
-    scene.remove(...scene.children)
-    opts.children && scene.add(...opts.children)
-    updateObject3D(scene, opts)
+  (group, opts) => {
+    group.remove(...group.children)
+    opts.children && group.add(...opts.children)
+    updateObject3D(group, opts)
   },
 )
 
@@ -146,12 +146,12 @@ const defaultColor = new Color(0xffffff)
 const defaultCombine = MultiplyOperation
 export const meshBasicMaterial = createUpdatableComputed(
   (opts: MeshBasicMaterialOpts) => new MeshBasicMaterial(),
-  (mesh, opts) => {
-    mesh.color = opts.color || defaultColor
-    mesh.combine = opts.combine || defaultCombine
-    mesh.map = opts.map || null
-    mesh.transparent = opts.transparent != null ? opts.transparent : false
-    mesh.needsUpdate = true
+  (material, opts) => {
+    material.color = opts.color || defaultColor
+    material.combine = opts.combine || defaultCombine
+    material.map = opts.map || null
+    material.transparent = opts.transparent != null ? opts.transparent : false
+    material.needsUpdate = true
   },
   mesh => mesh.dispose(),
 )
@@ -293,27 +293,27 @@ function updateTexture(texture: Texture, opts: TextureOpts) {
   texture.minFilter = opts.minFilter || LinearFilter
 }
 
-type BoxOpts = { width: number, height: number, depth: number }
+type BoxGeometryOpts = { width: number, height: number, depth: number }
 
 export const boxGeometry = createUpdatableComputed(
-  (opts: BoxOpts) => new BoxGeometry(opts.width, opts.height, opts.depth),
-  (box, opts) => {
-    const { width, height, depth } = box.parameters
+  (opts: BoxGeometryOpts) => new BoxGeometry(opts.width, opts.height, opts.depth),
+  (geometry, opts) => {
+    const { width, height, depth } = geometry.parameters
     if (opts.width !== width || opts.height !== height || opts.depth !== depth) {
-      box.copy(new BoxGeometry(opts.width, opts.height, opts.depth))
+      geometry.copy(new BoxGeometry(opts.width, opts.height, opts.depth))
     }
   },
   box => box.dispose(),
 )
 
-type PlaneOpts = { width: number, height: number }
+type PlaneGeometryOpts = { width: number, height: number }
 
 export const planeGeometry = createUpdatableComputed(
-  (opts: PlaneOpts) => new PlaneGeometry(opts.width, opts.height),
-  (plane, opts) => {
-    const { width, height } = plane.parameters
+  (opts: PlaneGeometryOpts) => new PlaneGeometry(opts.width, opts.height),
+  (geometry, opts) => {
+    const { width, height } = geometry.parameters
     if (opts.width !== width || opts.height !== height) {
-      plane.copy(new PlaneGeometry(opts.width, opts.height))
+      geometry.copy(new PlaneGeometry(opts.width, opts.height))
     }
   },
   plane => plane.dispose(),

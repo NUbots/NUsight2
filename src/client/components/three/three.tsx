@@ -122,10 +122,9 @@ export class Three extends Component<{
   }
 }
 
-function compose(fns: Array<() => void>): () => void {
-  return () => {
-    for (const fn of fns) {
-      fn()
-    }
+/** Take an array of functions and return a function that calls them all. */
+const compose = (fns: Array<() => void>): () => void => () => {
+  for (const fn of fns) {
+    fn()
   }
 }

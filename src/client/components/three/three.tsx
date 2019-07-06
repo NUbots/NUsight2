@@ -38,22 +38,22 @@ export class Three extends Component<{
     this.props.clearColor && this.renderer.setClearColor(this.props.clearColor)
     const stages = this.props.stage!(this.canvas)
     // TODO (Annable): Extract this and add unit tests.
-    let dispose: () => void = () => undefined
+    let disposeStages: () => void = () => undefined
     disposeOnUnmount(this, reaction(
       () => stages.get(),
       stages => {
-        dispose()
         if (stages instanceof Array) {
-          dispose = compose(...stages.map(stage => autorun(
+          disposeStages()
+          disposeStages = compose(...stages.map(stage => autorun(
             () => this.renderStage(stage.get()),
             { scheduler: requestAnimationFrame },
           )))
+          disposeOnUnmount(this, disposeStages)
         } else {
-          dispose = autorun(() => this.renderStage(stages), { scheduler: requestAnimationFrame })
+          this.renderStage(stages)
         }
-        disposeOnUnmount(this, dispose)
       },
-      { fireImmediately: true },
+      { fireImmediately: true, scheduler: requestAnimationFrame },
     ))
   }
 

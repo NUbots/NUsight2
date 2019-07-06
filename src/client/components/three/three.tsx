@@ -1,3 +1,4 @@
+import { reaction } from 'mobx'
 import { IComputedValue } from 'mobx'
 import { observable } from 'mobx'
 import { action } from 'mobx'
@@ -8,17 +9,20 @@ import { MouseEvent } from 'react'
 import * as React from 'react'
 import { Component } from 'react'
 import ReactResizeDetector from 'react-resize-detector'
+import { Color } from 'three'
+import { WebGLRenderTarget } from 'three'
 import { WebGLRenderer } from 'three'
 import { Scene } from 'three'
 import { Camera } from 'three'
 
 import * as styles from './styles.css'
 
-export type Stage = { scene: Scene, camera: Camera }
+export type Stage = { scene: Scene, camera: Camera, target?: WebGLRenderTarget }
 export type Canvas = { width: number, height: number }
 
 export class Three extends Component<{
-  stage(canvas: Canvas): IComputedValue<Stage>,
+  stage(canvas: Canvas): IComputedValue<Stage | Array<IComputedValue<Stage>>>,
+  clearColor?: Color,
   onClick?({ button }: { button: number }): void
   onMouseDown?(x: number, y: number): void
   onMouseMove?(x: number, y: number): void
@@ -31,8 +35,26 @@ export class Three extends Component<{
 
   componentDidMount() {
     this.renderer = new WebGLRenderer({ canvas: this.ref!, antialias: true })
-    const stage = this.props.stage(this.canvas)
-    disposeOnUnmount(this, autorun(() => this.renderStage(stage.get()), { scheduler: requestAnimationFrame }))
+    this.props.clearColor && this.renderer.setClearColor(this.props.clearColor)
+    const stages = this.props.stage!(this.canvas)
+    // TODO (Annable): Extract this and add unit tests.
+    let dispose: () => void = () => undefined
+    disposeOnUnmount(this, reaction(
+      () => stages.get(),
+      stages => {
+        dispose()
+        if (stages instanceof Array) {
+          dispose = compose(...stages.map(stage => autorun(
+            () => this.renderStage(stage.get()),
+            { scheduler: requestAnimationFrame },
+          )))
+        } else {
+          dispose = autorun(() => this.renderStage(stages), { scheduler: requestAnimationFrame })
+        }
+        disposeOnUnmount(this, dispose)
+      },
+      { fireImmediately: true },
+    ))
   }
 
   componentWillUnmount() {
@@ -64,8 +86,13 @@ export class Three extends Component<{
   }
 
   private renderStage(stage: Stage) {
-    this.renderer!.setSize(this.canvas.width, this.canvas.height, false)
-    this.renderer!.render(stage.scene, stage.camera)
+    if (!this.renderer) {
+      throw new Error()
+    }
+    this.renderer.setSize(this.canvas.width, this.canvas.height, false)
+    this.renderer.setRenderTarget(stage.target || null)
+    this.renderer.render(stage.scene, stage.camera)
+    this.renderer.setRenderTarget(null)
   }
 
   @action.bound
@@ -92,5 +119,13 @@ export class Three extends Component<{
 
   private onWheel = (e: WheelEvent<HTMLCanvasElement>) => {
     this.props.onWheel && this.props.onWheel(e.deltaY, () => e.preventDefault())
+  }
+}
+
+function compose(...fns: Array<() => void>): () => void {
+  return () => {
+    for (const fn of fns) {
+      fn()
+    }
   }
 }

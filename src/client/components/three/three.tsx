@@ -67,14 +67,16 @@ export class Three extends Component<{
           disposeOnUnmount(this, dispose)
         },
         { fireImmediately: true },
-      ), reaction(
+      ),
+      reaction(
         () => objectFit(this.containerSize, this.props.objectFit),
         debounce(80, action(({ width, height }: { width: number, height: number }) => {
           this.canvas.width = width
           this.canvas.height = height
         })),
         { fireImmediately: true },
-      )])
+      ),
+    ])
   }
 
   componentWillUnmount() {

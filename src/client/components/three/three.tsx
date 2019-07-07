@@ -22,7 +22,6 @@ import * as styles from './styles.css'
 
 export type Stage = { scene: Scene, camera: Camera, target?: WebGLRenderTarget }
 export type Canvas = { width: number, height: number }
-export type ObjectFit = { type: 'fill' } | { type: 'contain' | 'cover', aspect: number }
 
 @observer
 export class Three extends Component<{
@@ -150,6 +149,8 @@ const compose = (fns: Array<() => void>): () => void => () => {
     fn()
   }
 }
+
+export type ObjectFit = { type: 'fill' } | { type: 'contain' | 'cover', aspect: number }
 
 export function objectFit(
   container: { width: number, height: number },

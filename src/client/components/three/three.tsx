@@ -150,7 +150,12 @@ const compose = (fns: Array<() => void>): () => void => () => {
   }
 }
 
-export type ObjectFit = { type: 'fill' } | { type: 'contain' | 'cover', aspect: number }
+// Based on the object-fit CSS property: https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit
+export type ObjectFit
+  // Stretch content to fill entire container.
+  = { type: 'fill' }
+  // Either cover the container with content, or contain the content in the container, while maintaining aspect ratio.
+  | { type: 'contain' | 'cover', aspect: number }
 
 export function objectFit(
   container: { width: number, height: number },

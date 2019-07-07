@@ -9,27 +9,27 @@ describe('objectFit', () => {
   })
 
   describe('contain', () => {
-    it('square content contains portrait container', () => {
+    it('portrait container contains square content', () => {
       expect(objectFit({ width: 10, height: 20 }, { type: 'contain', aspect: 1 })).toEqual({ width: 10, height: 10 })
     })
 
-    it('square content contains landscape container', () => {
+    it('landscape container contains square content ', () => {
       expect(objectFit({ width: 20, height: 10 }, { type: 'contain', aspect: 1 })).toEqual({ width: 10, height: 10 })
     })
 
-    it('portrait content contains portrait container', () => {
+    it('portrait container contains portrait content', () => {
       expect(objectFit({ width: 10, height: 20 }, { type: 'contain', aspect: 2 })).toEqual({ width: 10, height: 20 })
     })
 
-    it('portrait content contains landscape container', () => {
+    it('landscape container contains portrait content', () => {
       expect(objectFit({ width: 20, height: 10 }, { type: 'contain', aspect: 2 })).toEqual({ width: 5, height: 10 })
     })
 
-    it('landscape content contains portrait container', () => {
+    it('portrait container contains landscape content', () => {
       expect(objectFit({ width: 10, height: 20 }, { type: 'contain', aspect: 0.5 })).toEqual({ width: 10, height: 5 })
     })
 
-    it('landscape content contains landscape container', () => {
+    it('landscape container contains landscape content', () => {
       expect(objectFit({ width: 20, height: 10 }, { type: 'contain', aspect: 0.5 })).toEqual({ width: 20, height: 10 })
     })
   })
@@ -47,7 +47,7 @@ describe('objectFit', () => {
       expect(objectFit({ width: 10, height: 20 }, { type: 'cover', aspect: 2 })).toEqual({ width: 10, height: 20 })
     })
 
-    it('portrait content contains landscape container', () => {
+    it('portrait content covers landscape container', () => {
       expect(objectFit({ width: 20, height: 10 }, { type: 'cover', aspect: 2 })).toEqual({ width: 20, height: 40 })
     })
 
@@ -55,7 +55,7 @@ describe('objectFit', () => {
       expect(objectFit({ width: 10, height: 20 }, { type: 'cover', aspect: 0.5 })).toEqual({ width: 40, height: 20 })
     })
 
-    it('landscape content contains landscape container', () => {
+    it('landscape content covers landscape container', () => {
       expect(objectFit({ width: 20, height: 10 }, { type: 'cover', aspect: 0.5 })).toEqual({ width: 20, height: 10 })
     })
   })

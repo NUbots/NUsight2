@@ -54,9 +54,9 @@ export interface BinaryAckPacket {
 }
 
 export type Packet = ConnectPacket |
-                     DisconnectPacket |
-                     EventPacket |
-                     AckPacket |
-                     ErrorPacket |
-                     BinaryEventPacket |
-                     BinaryAckPacket
+  DisconnectPacket |
+  EventPacket |
+  AckPacket |
+  ErrorPacket |
+  BinaryEventPacket |
+  BinaryAckPacket

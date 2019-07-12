@@ -1,18 +1,18 @@
-import * as classnames from 'classnames'
+import classnames from 'classnames'
 import { autorun } from 'mobx'
 import { IReactionDisposer } from 'mobx'
 import { observer } from 'mobx-react'
 import { ChangeEvent } from 'react'
 import { Component } from 'react'
 import { MouseEvent } from 'react'
-import * as React from 'react'
+import React from 'react'
 
 import { CheckedState } from '../model'
 import { TreeNodeModel } from '../model'
 
 import IconChevronDown from './chevron_down.svg'
 import IconChevronRight from './chevron_right.svg'
-import * as style from './style.css'
+import style from './style.css'
 
 export interface TreeNodeProps {
   node: TreeNodeModel

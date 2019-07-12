@@ -1,4 +1,4 @@
-import classnames from 'classnames'
+import classNames from 'classnames'
 import { autorun } from 'mobx'
 import { IReactionDisposer } from 'mobx'
 import { observer } from 'mobx-react'
@@ -50,7 +50,7 @@ export class TreeNode extends Component<TreeNodeProps> {
     const children = this.props.node.children
     const hasChildren = children.length > 0
     const level = this.props.level || 0
-    const classes = classnames(style.treenode)
+    const classes = classNames(style.treenode)
     const renderLabel = this.props.renderLabel
 
     // Using inline paddingLeft to indent so that the hover and selected background indicators

@@ -1,15 +1,15 @@
-import * as classNames from 'classnames'
+import classNames from 'classnames'
 import { observable } from 'mobx'
 import { action } from 'mobx'
 import { observer } from 'mobx-react'
-import * as React from 'react'
+import React from 'react'
 import { Component } from 'react'
 import ReactResizeDetector from 'react-resize-detector'
 
 import { Transform } from '../math/transform'
 
 import { RendererProps } from './renderer_props'
-import * as style from './style.css'
+import style from './style.css'
 import { Group } from './svg/group'
 import { toSvgTransform } from './svg/rendering'
 
@@ -23,7 +23,7 @@ export class SVGRenderer extends Component<RendererProps> {
     const cam = this.resolution.inverse().then(camera)
     return (
       <div className={classNames(className, style.container)}>
-        <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
+        <ReactResizeDetector handleWidth handleHeight onResize={this.onResize}/>
         <svg className={style.container}>
           <g transform={toSvgTransform(cam)}>
             <Group model={scene} world={cam}/>

@@ -1,9 +1,9 @@
-import * as classNames from 'classnames'
+import classNames from 'classnames'
 import { action } from 'mobx'
 import { observer } from 'mobx-react'
-import * as React from 'react'
+import React from 'react'
 
-import * as style from './style.css'
+import style from './style.css'
 import { Option } from './view'
 
 export type SelectOptionProps = {
@@ -21,7 +21,7 @@ export class SelectOption extends React.Component<SelectOptionProps> {
     return <div
       className={classNames([className, style.option, isSelected ? style.optionSelected : ''])}
       onClick={this.onSelect}
-    >{ option.label }</div>
+    >{option.label}</div>
   }
 
   @action.bound

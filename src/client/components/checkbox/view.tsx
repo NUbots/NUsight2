@@ -1,14 +1,15 @@
-import * as classNames from 'classnames'
-import * as React from 'react'
+import classNames from 'classnames'
+import React from 'react'
 import { ChangeEvent } from 'react'
 import { StatelessComponent } from 'react'
 
 import CheckIcon from './check.svg'
-import * as style from './style.css'
+import style from './style.css'
 
 export interface CheckboxProps {
   checked: boolean
   disabled?: boolean
+
   onChange(event: ChangeEvent<HTMLInputElement>): void
 }
 
@@ -30,9 +31,9 @@ export const Checkbox: StatelessComponent<CheckboxProps> = (props: CheckboxProps
              className={style.nativeControl}
              checked={checked}
              disabled={disabled}
-             onChange={onChange} />
+             onChange={onChange}/>
       <span className={backgroundClassName}>
-        <CheckIcon className={checkIconClassName} />
+        <CheckIcon className={checkIconClassName}/>
       </span>
     </span>
   )

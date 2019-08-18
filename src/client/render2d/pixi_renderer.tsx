@@ -1,4 +1,4 @@
-import * as classNames from 'classnames'
+import classNames from 'classnames'
 import { IReactionDisposer } from 'mobx'
 import { observable } from 'mobx'
 import { action } from 'mobx'
@@ -8,7 +8,7 @@ import { WebGLRenderer } from 'pixi.js'
 import { CanvasRenderer } from 'pixi.js'
 import { Container } from 'pixi.js'
 import { autoDetectRenderer } from 'pixi.js'
-import * as React from 'react'
+import React from 'react'
 import { Component } from 'react'
 import ReactResizeDetector from 'react-resize-detector'
 
@@ -16,7 +16,7 @@ import { Transform } from '../math/transform'
 
 import { pixiObject } from './pixi/rendering'
 import { RendererProps } from './renderer_props'
-import * as style from './style.css'
+import style from './style.css'
 
 @observer
 export class PixiRenderer extends Component<RendererProps> {
@@ -47,7 +47,7 @@ export class PixiRenderer extends Component<RendererProps> {
   render() {
     return (
       <div className={classNames(this.props.className, style.container)}>
-        <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
+        <ReactResizeDetector handleWidth handleHeight onResize={this.onResize}/>
         <canvas
           className={style.container}
           width={-this.resolution.translate.x * 2}

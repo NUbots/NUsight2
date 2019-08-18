@@ -1,10 +1,10 @@
-import * as classNames from 'classnames'
-import * as React from 'react'
+import classNames from 'classnames'
+import React from 'react'
 import { ReactNode } from 'react'
 import { MouseEvent } from 'react'
 import { StatelessComponent } from 'react'
 
-import * as style from './style.css'
+import style from './style.css'
 
 export interface DropdownProps {
   children: ReactNode
@@ -14,7 +14,9 @@ export interface DropdownProps {
   isFullwidth?: boolean
   dropdownPosition?: 'left' | 'right'
   dropDirection?: 'up' | 'down'
+
   onRef?(dropdown: HTMLDivElement): void
+
   onToggleClick?(event: MouseEvent<HTMLSpanElement>): void
 }
 
@@ -31,9 +33,9 @@ export const Dropdown: StatelessComponent<DropdownProps> = (props: DropdownProps
         {props.dropdownToggle}
       </span>
       {props.isOpen &&
-        <div className={dropdownMenuClassName}>
-          {props.children}
-        </div>
+      <div className={dropdownMenuClassName}>
+        {props.children}
+      </div>
       }
     </div>
   )

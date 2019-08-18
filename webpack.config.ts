@@ -1,8 +1,8 @@
-import * as CopyWebpackPlugin from 'copy-webpack-plugin'
-import * as ExtractTextPlugin from 'extract-text-webpack-plugin'
-import * as HtmlWebpackPlugin from 'html-webpack-plugin'
-import * as path from 'path'
-import * as webpack from 'webpack'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import path from 'path'
+import webpack from 'webpack'
 
 const isProduction = process.argv.indexOf('-p') >= 0
 const isContinuousIntegration = process.argv.indexOf('--ci') >= 0
@@ -15,10 +15,7 @@ const config: webpack.Configuration = {
   context: sourcePath,
   devtool: isContinuousIntegration ? false : isProduction ? 'source-map' : 'eval-source-map',
   entry: {
-    main: [
-      './client/main.tsx',
-      ...(isProduction ? [] : ['webpack-hot-middleware/client?reload=true']),
-    ],
+    main: './client/main.tsx',
   },
   output: {
     path: outPath,
@@ -43,16 +40,13 @@ const config: webpack.Configuration = {
         exclude: [
           path.resolve(__dirname, 'node_modules'),
         ],
-        use: [{
-          loader: 'awesome-typescript-loader',
+        use: {
+          loader: 'ts-loader',
           options: {
-            useBabel: true,
-            useCache: true,
-            forceIsolatedModules: true,
+            onlyCompileBundledFiles: true,
             transpileOnly,
-            babelCore: '@babel/core',
           },
-        }],
+        },
       },
       // local css
       {
@@ -99,21 +93,20 @@ const config: webpack.Configuration = {
         ],
         use: ['style-loader', 'css-loader'],
       },
+      { test: /\.file.svg$/, use: 'url-loader' },
       {
         test: /\.svg$/,
-        use: [
-          'babel-loader',
-          {
-            loader: 'react-svg-loader',
-            query: {
-              svgo: {
-                // svgo options
-                plugins: [{ removeTitle: true }],
-                floatPrecision: 2,
-              },
+        exclude: /\.file.svg$/,
+        use: {
+          loader: 'react-svg-loader',
+          query: {
+            svgo: {
+              // svgo options
+              plugins: [{ removeTitle: true }],
+              floatPrecision: 2,
             },
           },
-        ],
+        },
       },
       // static assets
       { test: /\.html$/, use: 'html-loader' },
@@ -150,7 +143,6 @@ const config: webpack.Configuration = {
       filename: 'index.html',
       chunks: ['main'],
     }),
-    ...(isProduction ? [] : [new webpack.HotModuleReplacementPlugin()]),
   ] as any as webpack.Plugin[],
   node: {
     // workaround for webpack-dev-server issue

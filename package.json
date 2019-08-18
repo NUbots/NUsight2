@@ -36,8 +36,7 @@
     "clean": "yarn clean:dist && yarn clean:coverage",
     "clean:dist": "rimraf dist",
     "clean:coverage": "rimraf coverage",
-    "heroku-postbuild": "yarn build && yarn storybook:build",
-    "prepush": "yarn tslint"
+    "heroku-postbuild": "yarn build && yarn storybook:build"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
@@ -147,5 +146,10 @@
     "throttle-debounce": "^2.1.0",
     "worker-loader": "^2.0.0",
     "xxhashjs": "^0.2.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn tslint"
+    }
   }
 }

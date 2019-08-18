@@ -2196,10 +2196,10 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
-"@types/pixi.js@^4.8.6":
-  version "4.8.6"
-  resolved "https://registry.yarnpkg.com/@types/pixi.js/-/pixi.js-4.8.6.tgz#c9bb6844cf581024f6bee07feb1538b37c0429ba"
-  integrity sha512-70PcmzoHG723nMLx7OzMM7xoH8EnJfVVQmh1WQgXGaXdU9ygq3VlsXLRt/g6Z124abKDvmzg3hfRpA8CvBp2eA==
+"@types/pixi.js@^4.8.8":
+  version "4.8.8"
+  resolved "https://registry.yarnpkg.com/@types/pixi.js/-/pixi.js-4.8.8.tgz#48af24a4d8e4bf4735f6819fef04536522d6ea1b"
+  integrity sha512-5wmLnmL3foK/rqYMrrEM/3DxEwvwxJaP73RyqY8aMqq8zUm6CBlmc+12RIBH6iR/RHqU76XL238vWWJV1IN/zw==
 
 "@types/prop-types@*":
   version "15.5.8"

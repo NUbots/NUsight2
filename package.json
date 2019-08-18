@@ -57,7 +57,7 @@
     "@types/jest": "^23.3.10",
     "@types/minimist": "^1.2.0",
     "@types/node": "^12.7.2",
-    "@types/pixi.js": "^4.8.6",
+    "@types/pixi.js": "^4.8.8",
     "@types/react": "16.9.2",
     "@types/react-color": "^3.0.1",
     "@types/react-dom": "^16.8.5",

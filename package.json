@@ -78,7 +78,7 @@
     "babel-loader": "^8.0.6",
     "caniuse-lite": "^1.0.30000989",
     "copy-webpack-plugin": "^5.0.4",
-    "css-loader": "^2.1.1",
+    "css-loader": "^3.2.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "4.0.0",
     "html-loader": "0.5.5",

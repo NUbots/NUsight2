@@ -25,14 +25,10 @@ varying vec2 vUv;
 
 // TODO(trent) these should be moved into a separate GLSL file once there is a decent #include system
 vec3 unprojectEquidistant(vec2 point, float f, vec2 c) {
-  float r = length(point + c);
+  vec2 p = point + c;
+  float r = length(p);
   float theta = r / f;
-  vec3 s = vec3(
-    cos(theta),
-    sin(theta) * point.x / r,
-    sin(theta) * point.y / r
-  );
-  return normalize(s);
+  return vec3(cos(theta), sin(theta) * p / r);
 }
 
 vec2 projectEquidistant(vec3 ray, float f, vec2 c) {
@@ -49,14 +45,10 @@ vec2 projectEquidistant(vec3 ray, float f, vec2 c) {
 }
 
 vec3 unprojectEquisolid(vec2 point, float f, vec2 c) {
-  float r = length(point + c);
+  vec2 p = point + c;
+  float r = length(p);
   float theta = 2.0 * asin(r / (2.0 * f));
-  vec3 s = vec3(
-    cos(theta),
-    sin(theta) * point.x / r,
-    sin(theta) * point.y / r
-  );
-  return normalize(s);
+  return vec3(cos(theta), sin(theta) * p / r);
 }
 
 vec2 projectEquisolid(vec3 ray, float f, vec2 c) {
@@ -128,7 +120,7 @@ void main() {
   float gradient = dot(axis, start);
 
   // Project it into the world space
-  vec3 cam = unproject(screenPoint, focalLength * viewSize.x, centre, projection);
+  vec3 cam = unproject(screenPoint, focalLength * viewSize.x, centre * viewSize.x, projection);
 
   // Rotate the axis vector towards the screen point by the angle to gradient
   // This gives the closest point on the curve
@@ -146,7 +138,7 @@ void main() {
   nearestPoint = value > range && value - range < (M_PI * 2.0 - range) * 0.5 ? end : nearestPoint;
 
   // When we project this back onto the image we get the nearest pixel
-  vec2 nearestPixel = project(nearestPoint, focalLength * viewSize.x, centre, projection);
+  vec2 nearestPixel = project(nearestPoint, focalLength * viewSize.x, centre * viewSize.x, projection);
 
   // We get the distance from us to the nearest pixel and smoothstep to make a line
   float pixelDistance = length(screenPoint - nearestPixel);

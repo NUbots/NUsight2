@@ -218,8 +218,16 @@ void main() {
   // Get the gradient of the curve we are drawing
   float gradient = dot(axis, start);
 
+  // The focal length and image centre are stored as normalised coordinates where they are divided by the width of the image
+  // This allows them to survive resizing of the canvas we are drawing on as they will always be accurate so long as no cropping occurs
+  // However to get actual pixel coordinates and to draw lines with pixel distance we have to  unormalise the focal length and centre coordinates
+  // so that they to correspond to the pixel coordinates for our view size
+  float f = focalLength * viewSize.x;
+  vec2 c = centre * viewSize.x;
+
   // Project it into the world space
-  vec3 cam = unproject(screenPoint, focalLength * viewSize.x, centre * viewSize.x, projection);
+  // The focal length and image centre are normalized by
+  vec3 cam = unproject(screenPoint, f, c, projection);
 
   // Rotate the axis vector towards the screen point by the angle to gradient
   // This gives the closest point on the curve
@@ -237,7 +245,7 @@ void main() {
   nearestPoint = value > range && value - range < (M_PI * 2.0 - range) * 0.5 ? end : nearestPoint;
 
   // When we project this back onto the image we get the nearest pixel
-  vec2 nearestPixel = project(nearestPoint, focalLength * viewSize.x, centre * viewSize.x, projection);
+  vec2 nearestPixel = project(nearestPoint, f, c, projection);
 
   // We get the distance from us to the nearest pixel and smoothstep to make a line
   float pixelDistance = length(screenPoint - nearestPixel);

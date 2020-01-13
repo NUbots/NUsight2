@@ -61,7 +61,7 @@ export class VisionSimulator extends Simulator {
         lens: {
           projection: Projection.RECTILINEAR,
           focalLength: 712,
-          fov: { x: 1, y: 1 },
+          fov: 1,
         },
       }).finish(),
     }

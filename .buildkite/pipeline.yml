@@ -6,6 +6,7 @@ steps:
     plugins:
       - docker#v3.5.0:
           image: "node:13"
+          propagate-uid-gid: true
 
   - label: Check code with tslint
     command:
@@ -14,6 +15,7 @@ steps:
     plugins:
       - docker#v3.5.0:
           image: "node:13"
+          propagate-uid-gid: true
 
   - label: Test code
     command:
@@ -22,3 +24,4 @@ steps:
     plugins:
       - docker#v3.5.0:
           image: "node:13"
+          propagate-uid-gid: true

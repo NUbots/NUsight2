@@ -1,0 +1,24 @@
+steps:
+  - label: Build code
+    command:
+      - yarn
+      - yarn build:ci
+    plugins:
+      - docker#v3.5.0:
+          image: "node:13"
+
+  - label: Check code with tslint
+    command:
+      - yarn
+      - yarn tslint
+    plugins:
+      - docker#v3.5.0:
+          image: "node:13"
+
+  - label: Test code
+    command:
+      - yarn
+      - yarn test:ci
+    plugins:
+      - docker#v3.5.0:
+          image: "node:13"

@@ -9,8 +9,6 @@ steps:
           propagate-uid-gid: true
           environment:
             - "HOME=/workdir"
-            - "YARN_CACHE_FOLDER=/workdir"
-            - "YARN_GLOBAL_FOLDER=/workdir"
 
   - label: Check code with tslint
     command:
@@ -22,8 +20,6 @@ steps:
           propagate-uid-gid: true
           environment:
             - "HOME=/workdir"
-            - "YARN_CACHE_FOLDER=/workdir"
-            - "YARN_GLOBAL_FOLDER=/workdir"
 
   - label: Test code
     command:
@@ -35,5 +31,3 @@ steps:
           propagate-uid-gid: true
           environment:
             - "HOME=/workdir"
-            - "YARN_CACHE_FOLDER=/workdir"
-            - "YARN_GLOBAL_FOLDER=/workdir"

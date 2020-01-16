@@ -7,7 +7,8 @@ steps:
       - docker#v3.5.0:
           image: "node:13"
           propagate-uid-gid: true
-          tmpfs: ['/usr/local']
+          environment:
+            - "YARN_CACHE_FOLDER=/workdir"
 
   - label: Check code with tslint
     command:
@@ -17,7 +18,8 @@ steps:
       - docker#v3.5.0:
           image: "node:13"
           propagate-uid-gid: true
-          tmpfs: ['/usr/local']
+          environment:
+            - "YARN_CACHE_FOLDER=/workdir"
 
   - label: Test code
     command:
@@ -27,4 +29,5 @@ steps:
       - docker#v3.5.0:
           image: "node:13"
           propagate-uid-gid: true
-          tmpfs: ['/usr/local']
+          environment:
+            - "YARN_CACHE_FOLDER=/workdir"

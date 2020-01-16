@@ -7,6 +7,7 @@ steps:
       - docker#v3.5.0:
           image: "node:13"
           propagate-uid-gid: true
+          tmpfs: ['/usr/local']
 
   - label: Check code with tslint
     command:
@@ -16,6 +17,7 @@ steps:
       - docker#v3.5.0:
           image: "node:13"
           propagate-uid-gid: true
+          tmpfs: ['/usr/local']
 
   - label: Test code
     command:
@@ -25,3 +27,4 @@ steps:
       - docker#v3.5.0:
           image: "node:13"
           propagate-uid-gid: true
+          tmpfs: ['/usr/local']

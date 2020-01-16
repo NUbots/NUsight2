@@ -4,7 +4,7 @@ steps:
       - yarn
       - yarn build:ci
     plugins:
-      - danthorpe/cache#v1.0.0:
+      - danthorpe/cache#master:
           rsync_storage: '/tmp/buildkite-cache'
           cache_key: "v1-cache-{{ checksum 'yarn.lock' }}"
           paths: [ "node_modules/" ]

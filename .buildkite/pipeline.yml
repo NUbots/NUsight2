@@ -4,10 +4,6 @@ steps:
       - yarn
       - yarn build:ci
     plugins:
-      - danthorpe/cache#master:
-          rsync_storage: '/tmp/buildkite-cache'
-          cache_key: "v1-cache-{{ checksum 'yarn.lock' }}"
-          paths: [ "node_modules/" ]
       - docker#v3.5.0:
           image: "node:13"
           propagate-uid-gid: true

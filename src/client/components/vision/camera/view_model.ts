@@ -234,7 +234,7 @@ export class CameraViewModel {
       viewSize: { value: new Vector2(this.viewWidth, this.viewHeight) },
       focalLength: { value: focalLength },
       centre: { value: new Vector2(centre.x, centre.y) },
-      kP: { value: new Vector2(kP.x, kP.y)},
+      kP: { value: new Vector2(kP.x, kP.y) },
       projection: { value: projection },
     }
     const lines = new Mesh(this.meshGeometry(mesh), material)
@@ -296,8 +296,8 @@ export class CameraViewModel {
       viewSize: { value: new Vector2(this.viewWidth, this.viewHeight) },
       focalLength: { value: focalLength },
       centre: { value: new Vector2(centre.x, centre.y) },
-      kU: { value: new Vector2(kU.x, kU.y)},
-      kP: { value: new Vector2(kP.x, kP.y)},
+      kU: { value: new Vector2(kU.x, kU.y) },
+      kP: { value: new Vector2(kP.x, kP.y) },
       projection: { value: projection },
       axis: { value: axis },
       start: { value: start },

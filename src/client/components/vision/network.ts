@@ -44,7 +44,7 @@ export class VisionNetwork {
   private onImage = (robotModel: RobotModel, image: Image | CompressedImage) => {
     const robot = VisionRobotModel.of(robotModel)
     const { cameraId, name, dimensions, format, data, Hcw } = image
-    const { projection, focalLength, centre } = image!.lens!
+    const { projection, focalLength, centre, kU, kP } = image!.lens!
 
     let camera = robot.cameras.get(cameraId)
     if (!camera) {
@@ -60,6 +60,8 @@ export class VisionNetwork {
         projection: projection || 0,
         focalLength: focalLength!,
         centre: Vector2.from(centre),
+        kU: Vector2.from(kU),
+        kP: Vector2.from(kP),
       },
       Hcw: Matrix4.from(Hcw),
     }

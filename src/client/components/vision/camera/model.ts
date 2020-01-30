@@ -26,6 +26,8 @@ export interface VisionImage extends Image {
     readonly projection: number
     readonly focalLength: number
     readonly centre: Vector2
+    readonly kU: Vector2
+    readonly kP: Vector2
   }
 }
 

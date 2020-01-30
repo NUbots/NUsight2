@@ -7,6 +7,7 @@ uniform vec2 viewSize;
 uniform mat4 Hcw;
 uniform float focalLength;
 uniform vec2 centre;
+uniform vec2 kP;
 uniform int projection;
 
 attribute vec3 position;
@@ -28,50 +29,79 @@ varying float vEnvironment;
 #define EQUISOLID_PROJECTION 3
 
 // TODO(trent) these should be moved into a separate GLSL file once there is a decent #include system
-vec2 projectEquidistant(vec3 ray, float f, vec2 c) {
-  // Calculate some intermediates
+
+/**
+ * Given an angle from the optical axis of the lens, calcululate the distance from the optical centre of the lens using
+ * an equidistant projection.
+ *
+ * @param theta the angle between the optical axis to the point
+ * @param f     the focal length of the lens
+ *
+ * @return the distance from the optical centre when the point is projected onto the screen
+ */
+float equidistantR(float theta, float f) {
+  return f * theta;
+}
+
+/**
+ * Given an angle from the optical axis of the lens, calcululate the distance from the optical centre of the lens using
+ * an equisolid projection.
+ *
+ * @param theta the angle between the optical axis to the point
+ * @param f     the focal length of the lens
+ *
+ * @return the distance from the optical centre when the point is projected onto the screen
+ */
+float equisolidR(float theta, float f) {
+  return 2.0 * f * sin(theta * 0.5);
+}
+
+
+/**
+ * Given an angle from the optical axis of the lens, calcululate the distance from the optical centre of the lens using
+ * a rectilinear projection.
+ *
+ * @param theta the angle between the optical axis to the point
+ * @param f     the focal length of the lens
+ *
+ * @return the distance from the optical centre when the point is projected onto the screen
+ */
+float rectilinearR(float theta, float f) {
+  return f * tan(theta);
+}
+
+
+/**
+ * Projects the camera ray measured in coordinate system where x is forward down the camera axis, y is to the
+ * left and z is up. The output coordinate system is one where the origin is the centre of the image, x is to the
+ * left and y is up.
+ *
+ * @param ray        the ray to project to pixel coordinates
+ * @param f          the focal length to use in the projection
+ * @param c          the offset from the centre of the image to the optical centre lens
+ * @param k          the distortion coefficents for the lens model
+ * @param projection the type of projection to use
+ *
+ * @return the position of the pixel measured as a fraction of the image width
+ */
+vec2 project(vec3 ray, float f, vec2 c, vec2 k, int projection) {
   float theta     = acos(ray.x);
-  float r         = f * theta;
   float rSinTheta = 1.0 / sqrt(1.0 - ray.x * ray.x);
-
-  // Work out our pixel coordinates as a 0 centred image with x to the left and y up (screen space)
-  vec2 screen = ray.x >= 1.0 ? vec2(0) : vec2(r * ray.y * rSinTheta, r * ray.z * rSinTheta);
-
-  // Then apply the offset to the centre of our lens
-  return screen - c;
-}
-
-vec2 projectEquisolid(vec3 ray, float f, vec2 c) {
-  // Calculate some intermediates
-  float theta     = acos(ray.x);
-  float r         = 2.0 * f * sin(theta * 0.5);
-  float rSinTheta = 1.0 / sqrt(1.0 - ray.x * ray.x);
-
-  // Work out our pixel coordinates as a 0 centred image with x to the left and y up (screen space)
-  vec2 screen = ray.x >= 1.0 ? vec2(0) : vec2(r * ray.y * rSinTheta, r * ray.z * rSinTheta);
-
-  // Then apply the offset to the centre of our lens
-  return screen - c;
-}
-
-vec2 projectRectilinear(vec3 ray, float f, vec2 c) {
-  float rx = 1.0 / ray.x;
-  return vec2(f * ray.y * rx, f * ray.z * rx) - c;
-}
-
-vec2 project(vec3 ray, float f, vec2 c, int projection) {
-  if (projection == RECTILINEAR_PROJECTION) return projectRectilinear(ray, f, c);
-  if (projection == EQUIDISTANT_PROJECTION) return projectEquidistant(ray, f, c);
-  if (projection == EQUISOLID_PROJECTION) return projectEquisolid(ray, f, c);
-  return vec2(0);
+  float r         = 0.0;
+  if (projection == RECTILINEAR_PROJECTION) r = rectilinearR(theta, f);
+  if (projection == EQUIDISTANT_PROJECTION) r = equidistantR(theta, f);
+  if (projection == EQUISOLID_PROJECTION) r = equisolidR(theta, f);
+  float r_d = r / (1.0 + k.x * r * r + k.y * r * r * r * r);
+  vec2 p    = ray.x >= 1.0 ? vec2(0) : vec2(r_d * ray.y * rSinTheta, r_d * ray.z * rSinTheta);
+  return p - c;
 }
 
 void main() {
   // Rotate vector into camera space and project into image space
   // Correct for OpenGL coordinate system and aspect ratio
   // Focal length is * 2 since the width of the "image" is -1 to 1 (width of 2.0)
-  vec2 pos = project((Hcw * vec4(position, 0)).xyz, 2.0 * focalLength, centre, projection)
-             * vec2(-1.0, viewSize.x / viewSize.y);
+  vec2 pos = project((Hcw * vec4(position, 0)).xyz, focalLength, centre, kP, projection)
+             * vec2(-1.0, viewSize.x / viewSize.y) * 2;
 
   vBall        = ball;
   vGoal        = goal;

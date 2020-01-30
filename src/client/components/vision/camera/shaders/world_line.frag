@@ -7,6 +7,8 @@ uniform vec2 viewSize;
 uniform float focalLength;
 uniform int projection;
 uniform vec2 centre;
+uniform vec2 kP;
+uniform vec2 kU;
 
 // Line parameters
 uniform vec3 axis;
@@ -26,151 +28,130 @@ varying vec2 vUv;
 // TODO(trent) these should be moved into a separate GLSL file once there is a decent #include system
 
 /**
- * Unprojects a pixel coordinate into a unit vector.
- * This version unprojects using the equidistant model.
+ * Given a radius from the optical centre of a projection, calculate the angle that is made from the optical axis to the
+ * point using an equidistant projection.
  *
- * @param point the pixel coordinate to
- * @param f     the focal length to use in the projection
- * @param c     the offset from the centre of the image to the optical centre lens. i.e. the offset to where the centre of the lens projection is
-
- * @return the unit vector that corresponds to the provided pixel
+ * @param r the radius from the optical centre of the image
+ * @param f the focal length of the lens
+ *
+ * @return the angle from the optical axis to this point
  */
-vec3 unprojectEquidistant(vec2 point, float f, vec2 c) {
-  vec2 p = point + c;
-  float r = length(p);
-  float theta = r / f;
-  return vec3(cos(theta), sin(theta) * p / r);
+float equidistantTheta(float r, float f) {
+  return r / f;
 }
 
 /**
-  * Projects the camera ray measured in coordinate system where x is forward down the camera axis, y is to the
-  * left and z is up. The output coordinate system is one where the origin is the centre of the image, x is to the
-  * left and y is up. This version projects using the equidistant model.
-  *
-  * @param ray   the ray to project to pixel coordinates
-  * @param f     the focal length to use in the projection
-  * @param c     the offset from the centre of the image to the optical centre lens. i.e. the offset to where the centre of the lens projection is
-  *
-  * @return  the position of the pixel on the screen
-  */
-vec2 projectEquidistant(vec3 ray, float f, vec2 c) {
-  // Calculate some intermediates
+ * Given an angle from the optical axis of the lens, calcululate the distance from the optical centre of the lens using
+ * an equidistant projection.
+ *
+ * @param theta the angle between the optical axis to the point
+ * @param f     the focal length of the lens
+ *
+ * @return the distance from the optical centre when the point is projected onto the screen
+ */
+float equidistantR(float theta, float f) {
+  return f * theta;
+}
+
+/**
+ * Given a radius from the optical centre of a projection, calculate the angle that is made from the optical axis to the
+ * point using an equisolid projection.
+ *
+ * @param r the radius from the optical centre of the image
+ * @param f the focal length of the lens
+ *
+ * @return the angle from the optical axis to this point
+ */
+float equisolidTheta(float r, float f) {
+  return 2.0 * asin(r / (2.0 * f));
+}
+
+/**
+ * Given an angle from the optical axis of the lens, calcululate the distance from the optical centre of the lens using
+ * an equisolid projection.
+ *
+ * @param theta the angle between the optical axis to the point
+ * @param f     the focal length of the lens
+ *
+ * @return the distance from the optical centre when the point is projected onto the screen
+ */
+float equisolidR(float theta, float f) {
+  return 2.0 * f * sin(theta * 0.5);
+}
+
+/**
+ * Given a radius from the optical centre of a projection, calculate the angle that is made from the optical axis to the
+ * point using a rectilinear projection.
+ *
+ * @param r the radius from the optical centre of the image
+ * @param f the focal length of the lens
+ *
+ * @return the angle from the optical axis to this point
+ */
+float rectilinearTheta(float r, float f) {
+  return atan(r / f);
+}
+
+/**
+ * Given an angle from the optical axis of the lens, calcululate the distance from the optical centre of the lens using
+ * a rectilinear projection.
+ *
+ * @param theta the angle between the optical axis to the point
+ * @param f     the focal length of the lens
+ *
+ * @return the distance from the optical centre when the point is projected onto the screen
+ */
+float rectilinearR(float theta, float f) {
+  return f * tan(theta);
+}
+
+/**
+ * Unprojects a pixel coordinate into a unit vector. The input coordinate system is one where the origin is the centre
+ * of the image, x is to the left and y is up. The output unit vector is measured as a ray measured in coordinate system
+ * where x is forward down the camera axis, y is to the left and z is up
+ *
+ * @param point      the pixel coordinate to unproject back to a unit vector
+ * @param f          the focal length to use in the projection
+ * @param c          the offset from the centre of the image to the optical centre lens
+ * @param k          the distortion coefficents for the lens model
+ * @param projection the type of projection to use
+
+ * @return the unit vector that corresponds to the provided pixel
+ */
+vec3 unproject(vec2 point, float f, vec2 c, vec2 k, int projection) {
+  vec2 p      = point + c;
+  float r_d   = length(p);
+  float r     = r_d / (1.0 + k.x * r_d * r_d + k.y * r_d * r_d * r_d * r_d);
+  float theta = 0.0;
+  if (projection == RECTILINEAR_PROJECTION) theta = rectilinearTheta(r, f);
+  if (projection == EQUIDISTANT_PROJECTION) theta = equidistantTheta(r, f);
+  if (projection == EQUISOLID_PROJECTION) theta = equisolidTheta(r, f);
+  return vec3(cos(theta), sin(theta) * p / r_d);
+}
+
+/**
+ * Projects the camera ray measured in coordinate system where x is forward down the camera axis, y is to the
+ * left and z is up. The output coordinate system is one where the origin is the centre of the image, x is to the
+ * left and y is up.
+ *
+ * @param ray        the ray to project to pixel coordinates
+ * @param f          the focal length to use in the projection
+ * @param c          the offset from the centre of the image to the optical centre lens
+ * @param k          the distortion coefficents for the lens model
+ * @param projection the type of projection to use
+ *
+ * @return the position of the pixel measured as a fraction of the image width
+ */
+vec2 project(vec3 ray, float f, vec2 c, vec2 k, int projection) {
   float theta     = acos(ray.x);
-  float r         = f * theta;
   float rSinTheta = 1.0 / sqrt(1.0 - ray.x * ray.x);
-
-  // Work out our pixel coordinates as a 0 centred image with x to the left and y up (screen space)
-  vec2 screen = ray.x >= 1.0 ? vec2(0) : vec2(r * ray.y * rSinTheta, r * ray.z * rSinTheta);
-
-  // Then apply the offset to the centre of our lens
-  return screen - c;
-}
-
-/**
- * Unprojects a pixel coordinate into a unit vector.
- * This version unprojects using the equisolid model.
- *
- * @param point the pixel coordinate to
- * @param f     the focal length to use in the projection
- * @param c     the offset from the centre of the image to the optical centre lens. i.e. the offset to where the centre of the lens projection is
-
- * @return the unit vector that corresponds to the provided pixel
- */
-vec3 unprojectEquisolid(vec2 point, float f, vec2 c) {
-  vec2 p = point + c;
-  float r = length(p);
-  float theta = 2.0 * asin(r / (2.0 * f));
-  return vec3(cos(theta), sin(theta) * p / r);
-}
-
-/**
-  * Projects the camera ray measured in coordinate system where x is forward down the camera axis, y is to the
-  * left and z is up. The output coordinate system is one where the origin is the centre of the image, x is to the
-  * left and y is up. This version projects using the equisolid model.
-  *
-  * @param ray   the ray to project to pixel coordinates
-  * @param f     the focal length to use in the projection
-  * @param c     the offset from the centre of the image to the optical centre lens. i.e. the offset to where the centre of the lens projection is
-  *
-  * @return  the position of the pixel measured as a fraction of the image width
-  */
-vec2 projectEquisolid(vec3 ray, float f, vec2 c) {
-  // Calculate some intermediates
-  float theta     = acos(ray.x);
-  float r         = 2.0 * f * sin(theta * 0.5);
-  float rSinTheta = 1.0 / sqrt(1.0 - ray.x * ray.x);
-
-  // Work out our pixel coordinates as a 0 centred image with x to the left and y up (screen space)
-  vec2 screen = ray.x >= 1.0 ? vec2(0) : vec2(r * ray.y * rSinTheta, r * ray.z * rSinTheta);
-
-  // Then apply the offset to the centre of our lens
-  return screen - c;
-}
-
-/**
- * Unprojects a pixel coordinate into a unit vector.
- * This version unprojects using the recitlinear (webcam) model.
- *
- * @param point the pixel coordinate to
- * @param f     the focal length to use in the projection
- * @param c     the offset from the centre of the image to the optical centre lens. i.e. the offset to where the centre of the lens projection is
-
- * @return the unit vector that corresponds to the provided pixel
- */
-vec3 unprojectRectilinear(vec2 point, float f, vec2 c) {
-  return normalize(vec3(f, point + c));
-}
-
-/**
-  * Projects the camera ray measured in coordinate system where x is forward down the camera axis, y is to the
-  * left and z is up. The output coordinate system is one where the origin is the centre of the image, x is to the
-  * left and y is up. This version projects using the rectilinear (normal webcam) model.
-  *
-  * @param ray   the ray to project to pixel coordinates
-  * @param f     the focal length to use in the projection
-  * @param c     the offset from the centre of the image to the optical centre lens. i.e. the offset to where the centre of the lens projection is
-  *
-  * @return  the position of the pixel measured as a fraction of the image width
-  */
-vec2 projectRectilinear(vec3 ray, float f, vec2 c) {
-  float rx = 1.0 / ray.x;
-  return vec2(f * ray.y * rx, f * ray.z * rx) - c;
-}
-
-/**
- * Unprojects a pixel coordinate into a unit vector.
- * This version works out which projection to use based on the projection parameter.
- *
- * @param point the pixel coordinate to
- * @param f     the focal length to use in the projection
- * @param c     the offset from the centre of the image to the optical centre lens. i.e. the offset to where the centre of the lens projection is
-
- * @return the unit vector that corresponds to the provided pixel
- */
-vec3 unproject(vec2 point, float f, vec2 c, int projection) {
-  if (projection == RECTILINEAR_PROJECTION) return unprojectRectilinear(point, f, c);
-  if (projection == EQUIDISTANT_PROJECTION) return unprojectEquidistant(point, f, c);
-  if (projection == EQUISOLID_PROJECTION) return unprojectEquisolid(point, f, c);
-  return vec3(0);
-}
-
-/**
-  * Projects the camera ray measured in coordinate system where x is forward down the camera axis, y is to the
-  * left and z is up. The output coordinate system is one where the origin is the centre of the image, x is to the
-  * left and y is up. This version works out which projection to use based on the projection parameter.
-  *
-  * @param ray        the ray to project to pixel coordinates
-  * @param f     the focal length to use in the projection
-  * @param c          the offset from the centre of the image to the optical centre lens. i.e. the offset to where the centre of the lens projection is
-  * @param projection the type of projection to use
-  *
-  * @return  the position of the pixel measured as a fraction of the image width
-  */
-vec2 project(vec3 ray, float f, vec2 c, int projection) {
-  if (projection == RECTILINEAR_PROJECTION) return projectRectilinear(ray, f, c);
-  if (projection == EQUIDISTANT_PROJECTION) return projectEquidistant(ray, f, c);
-  if (projection == EQUISOLID_PROJECTION) return projectEquisolid(ray, f, c);
-  return vec2(0);
+  float r         = 0.0;
+  if (projection == RECTILINEAR_PROJECTION) r = rectilinearR(theta, f);
+  if (projection == EQUIDISTANT_PROJECTION) r = equidistantR(theta, f);
+  if (projection == EQUISOLID_PROJECTION) r = equisolidR(theta, f);
+  float r_d = r / (1.0 + k.x * r * r + k.y * r * r * r * r);
+  vec2 p    = ray.x >= 1.0 ? vec2(0) : vec2(r_d * ray.y * rSinTheta, r_d * ray.z * rSinTheta);
+  return p - c;
 }
 
 /**
@@ -197,10 +178,10 @@ float angleAround(vec3 axis, vec3 start, vec3 end) {
 
   // Put start and end in the plane of axis
   vec3 aStart = normalize(cross(axis, start));
-  vec3 aEnd = normalize(cross(axis, end));
+  vec3 aEnd   = normalize(cross(axis, end));
 
-  float x = dot(aStart, aEnd); // cos(theta)
-  float y = dot(axis, cross(aStart, aEnd)); // sin(theta)
+  float x = dot(aStart, aEnd);               // cos(theta)
+  float y = dot(axis, cross(aStart, aEnd));  // sin(theta)
 
   // sin(theta)/cos(theta) = tan(theta)
   float theta = atan(y, x);
@@ -212,44 +193,42 @@ float angleAround(vec3 axis, vec3 start, vec3 end) {
 
 void main() {
 
-  // Get our position on the screen in pixel coordinates
-  vec2 screenPoint = vec2(0.5 - vUv.x, vUv.y - 0.5) * viewSize;
+  // Get our position on the screen
+  vec2 point = vec2(0.5 - vUv.x, vUv.y - 0.5);
 
   // Get the gradient of the curve we are drawing
   float gradient = dot(axis, start);
 
-  // The focal length and image centre are stored as normalised coordinates where they are divided by the width of the image
-  // This allows them to survive resizing of the canvas we are drawing on as they will always be accurate so long as no cropping occurs
-  // However to get actual pixel coordinates and to draw lines with pixel distance we have to  unormalise the focal length and centre coordinates
-  // so that they to correspond to the pixel coordinates for our view size
-  float f = focalLength * viewSize.x;
-  vec2 c = centre * viewSize.x;
-
   // Project it into the world space
-  // The focal length and image centre are normalized by
-  vec3 cam = unproject(screenPoint, f, c, projection);
+  vec3 cam = unproject(point, focalLength, centre, kU, projection);
 
   // Rotate the axis vector towards the screen point by the angle to gradient
   // This gives the closest point on the curve
-  vec3 nearestPoint = rotateByAxisAngle(axis, normalize(cross(axis, cam)), acos(gradient));
+  vec3 nearestRay = rotateByAxisAngle(axis, normalize(cross(axis, cam)), acos(gradient));
 
   // Work out if we are in range
   float range = angleAround(axis, start, end);
-  float value = angleAround(axis, start, nearestPoint);
+  float value = angleAround(axis, start, nearestRay);
 
   // start == end means do the whole circle
   range = all(equal(start, end)) ? 2.0 * M_PI : range;
 
   // If we are past the start or end, snap to start/end
-  nearestPoint = value > range && value - range > (M_PI * 2.0 - range) * 0.5 ? start : nearestPoint;
-  nearestPoint = value > range && value - range < (M_PI * 2.0 - range) * 0.5 ? end : nearestPoint;
+  nearestRay = value > range && value - range > (M_PI * 2.0 - range) * 0.5 ? start : nearestRay;
+  nearestRay = value > range && value - range < (M_PI * 2.0 - range) * 0.5 ? end : nearestRay;
 
   // When we project this back onto the image we get the nearest pixel
-  vec2 nearestPixel = project(nearestPoint, f, c, projection);
+  vec2 closestPoint = project(nearestRay, focalLength, centre, kP, projection);
 
   // We get the distance from us to the nearest pixel and smoothstep to make a line
-  float pixelDistance = length(screenPoint - nearestPixel);
-  float alpha = smoothstep(0.0, lineWidth * 0.5, lineWidth * 0.5 - pixelDistance);
+  // For all the previous calculations we are using normalised pixel coordinates where the coordinate is divided by
+  // the width of the image. This ensures that any calculation we do is independent of the resolution that we are
+  // displaying the image at. However when we actually want to caculate a distance that is in pixels, we must multiply
+  // the coordinates by our horizontal resolution. Once we have multiplied by this resolution we will get a value in
+  // pixels relative to the resolution that we are displaying at.
+  float pixelDistance = length(point - closestPoint) * viewSize.x;
+  float alpha         = smoothstep(0.0, lineWidth * 0.5, lineWidth * 0.5 - pixelDistance);
 
   gl_FragColor = vec4(colour.rgb, colour.a * alpha);
 }
+

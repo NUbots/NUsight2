@@ -124,8 +124,8 @@ vec3 unproject(vec2 point, float f, vec2 c, vec2 k, int projection) {
   float r     = r_d / (1.0 + k.x * r_d * r_d + k.y * r_d * r_d * r_d * r_d);
   float theta = 0.0;
   if (projection == RECTILINEAR_PROJECTION) theta = rectilinearTheta(r, f);
-  if (projection == EQUIDISTANT_PROJECTION) theta = equidistantTheta(r, f);
-  if (projection == EQUISOLID_PROJECTION) theta = equisolidTheta(r, f);
+  else if (projection == EQUIDISTANT_PROJECTION) theta = equidistantTheta(r, f);
+  else if (projection == EQUISOLID_PROJECTION) theta = equisolidTheta(r, f);
   return vec3(cos(theta), sin(theta) * p / r_d);
 }
 
@@ -147,8 +147,8 @@ vec2 project(vec3 ray, float f, vec2 c, vec2 k, int projection) {
   float rSinTheta = 1.0 / sqrt(1.0 - ray.x * ray.x);
   float r         = 0.0;
   if (projection == RECTILINEAR_PROJECTION) r = rectilinearR(theta, f);
-  if (projection == EQUIDISTANT_PROJECTION) r = equidistantR(theta, f);
-  if (projection == EQUISOLID_PROJECTION) r = equisolidR(theta, f);
+  else if (projection == EQUIDISTANT_PROJECTION) r = equidistantR(theta, f);
+  else if (projection == EQUISOLID_PROJECTION) r = equisolidR(theta, f);
   float r_d = r / (1.0 + k.x * r * r + k.y * r * r * r * r);
   vec2 p    = ray.x >= 1.0 ? vec2(0) : vec2(r_d * ray.y * rSinTheta, r_d * ray.z * rSinTheta);
   return p - c;

@@ -160,6 +160,8 @@ vec2 project(vec3 ray, float f, vec2 c, vec2 k, int projection) {
  * @param v       the vector to rotate
  * @param e       the axis to rotate around
  * @param theta   the angle to rotate by
+ *
+ * @return the input vector rotated around e by theta
  */
 vec3 rotateByAxisAngle(vec3 v, vec3 e, float theta) {
   return cos(theta) * v + sin(theta) * cross(e, v) + (1.0 - cos(theta)) * (dot(e, v)) * e;
@@ -193,8 +195,8 @@ float angleAround(vec3 axis, vec3 start, vec3 end) {
 
 void main() {
 
-  // Get our position on the screen
-  vec2 point = vec2(0.5 - vUv.x, vUv.y - 0.5);
+  // Get our position on the screen in normalised coordinates
+  vec2 point = vec2(0.5 - vUv.x, vUv.y - 0.5) * vec2(1.0, viewSize.y / viewSize.x);
 
   // Get the gradient of the curve we are drawing
   float gradient = dot(axis, start);

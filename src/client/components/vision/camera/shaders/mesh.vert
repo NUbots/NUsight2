@@ -99,9 +99,9 @@ vec2 project(vec3 ray, float f, vec2 c, vec2 k, int projection) {
 void main() {
   // Rotate vector into camera space and project into image space
   // Correct for OpenGL coordinate system and aspect ratio
-  // Focal length is * 2 since the width of the "image" is -1 to 1 (width of 2.0)
+  // Multiply by 2.0 to get a coordinate since the width of the "image (the camera planes)" is -1 to 1 (width of 2.0)
   vec2 pos = project((Hcw * vec4(position, 0)).xyz, focalLength, centre, kP, projection)
-             * vec2(-1.0, viewSize.x / viewSize.y) * 2;
+             * vec2(-1.0, viewSize.x / viewSize.y) * 2.0;
 
   vBall        = ball;
   vGoal        = goal;

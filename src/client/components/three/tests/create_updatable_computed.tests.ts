@@ -1,3 +1,4 @@
+import { computed } from 'mobx'
 import { observe } from 'mobx'
 import { observable } from 'mobx'
 
@@ -55,23 +56,24 @@ describe('createUpdatableComputed', () => {
   })
 
   it('returns computed value', () => {
-    const triangle = viewModel.triangle.get()
+    const triangle = viewModel.triangle()
     expect(triangle).toBeInstanceOf(Triangle)
     expect(triangle.color).toBe('red')
   })
 
   it('caches computed value', () => {
-    expect(viewModel.triangle.get()).toBe(viewModel.triangle.get())
+    expect(viewModel.triangle()).toBe(viewModel.triangle())
   })
 
   it('maintains reference as its updated', () => {
-    const dispose = observe(viewModel.triangle, onChange)
+    const expr = computed(viewModel.triangle, { equals: () => false })
+    const dispose = observe(expr, onChange)
 
-    const firstTriangle = viewModel.triangle.get()
+    const firstTriangle = viewModel.triangle()
     model.color = 'green'
     expect(firstTriangle.color).toBe('green')
 
-    const secondTriangle = viewModel.triangle.get()
+    const secondTriangle = viewModel.triangle()
     model.color = 'blue'
     expect(secondTriangle.color).toBe('blue')
 
@@ -81,8 +83,9 @@ describe('createUpdatableComputed', () => {
   })
 
   it('does not dispose when updated', () => {
-    const dispose = observe(viewModel.triangle, onChange)
-    const triangle = viewModel.triangle.get()
+    const expr = computed(viewModel.triangle, { equals: () => false })
+    const dispose = observe(expr, onChange)
+    const triangle = viewModel.triangle()
     model.color = 'green'
     expect(triangle.color).toBe('green')
     expect(triangle.disposed).toBe(false)
@@ -91,8 +94,9 @@ describe('createUpdatableComputed', () => {
   })
 
   it('disposes when no longer observed', () => {
-    const dispose = observe(viewModel.triangle, onChange)
-    const triangle = viewModel.triangle.get()
+    const expr = computed(viewModel.triangle, { equals: () => false })
+    const dispose = observe(expr, onChange)
+    const triangle = viewModel.triangle()
     dispose()
     expect(triangle.disposed).toBe(true)
   })

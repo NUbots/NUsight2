@@ -27,7 +27,7 @@ export class LocalisationViewModel {
 
   @computed
   get stage(): Stage {
-    return { camera: this.camera.get(), scene: this.scene.get() }
+    return { camera: this.camera(), scene: this.scene() }
   }
 
   private readonly camera = perspectiveCamera(() => ({

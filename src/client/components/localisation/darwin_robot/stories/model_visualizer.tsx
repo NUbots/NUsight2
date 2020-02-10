@@ -14,7 +14,7 @@ import { Canvas } from '../../../three/three'
 import { Three } from '../../../three/three'
 
 export class ModelVisualiser extends Component<{
-  model: () => Object3D,
+  model(): Object3D;
   cameraPosition: Vector3
 }> {
   render() {

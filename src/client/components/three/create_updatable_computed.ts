@@ -8,8 +8,8 @@ export const createUpdatableComputed = <T, O>(
   update: (instance: T, opts: O) => void,
   dispose?: (instance: T) => void,
 ) => {
-  return <D extends Array<unknown>>(getOpts: (...deps: D) => O): (...deps: D) => T => {
-    let box = observable.box<T | undefined>(undefined, { equals: () => false, deep: false })
+  return <D extends unknown[]>(getOpts: (...deps: D) => O): (...deps: D) => T => {
+    const box = observable.box<T | undefined>(undefined, { equals: () => false, deep: false })
     onBecomeUnobserved(box, () => {
       const instance = box.get()
       if (instance != null) {

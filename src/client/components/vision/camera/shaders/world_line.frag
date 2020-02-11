@@ -7,8 +7,7 @@ uniform vec2 viewSize;
 uniform float focalLength;
 uniform int projection;
 uniform vec2 centre;
-uniform vec2 kP;
-uniform vec2 kU;
+uniform vec2 k;
 
 // Line parameters
 uniform vec3 axis;
@@ -26,6 +25,83 @@ varying vec2 vUv;
 #define EQUISOLID_PROJECTION 3
 
 // TODO(trent) these should be moved into a separate GLSL file once there is a decent #include system
+/**
+ * Takes an undistorted radial distance from the optical axis and computes and applies an inverse distortion
+ *
+ * @param r the radius to undistort
+ * @param k the undistortion coefficents
+ *
+ * @return an distortion radius
+ */
+float distort(float r, vec2 k) {
+  // Uses the math from the paper
+  // An Exact Formula for Calculating Inverse Radial Lens Distortions
+  // https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4934233/pdf/sensors-16-00807.pdf
+
+  // Extract constants
+  float k1 = k.x;
+  float k2 = k.y;
+
+  // Compute powers
+  float k1_2 = k1 * k1;
+  float k1_3 = k1_2 * k1;
+  float k1_4 = k1_3 * k1;
+  float k1_5 = k1_4 * k1;
+  float k1_6 = k1_5 * k1;
+  float k1_7 = k1_6 * k1;
+  float k1_8 = k1_7 * k1;
+  float k1_9 = k1_8 * k1;
+
+  float k2_2 = k2 * k2;
+  float k2_3 = k2_2 * k2;
+  float k2_4 = k2_3 * k2;
+
+  // These terms have been stripped back to only include k1 and k2
+  // if more are needed in the future go and get them from the original paper
+  // TODO if performance ever becomes an issue, this can be precomputed for the same k values
+  // clang-format off
+  float b1 = -k1;
+  float b2 = 3.0*k1_2 - k2;
+  float b3 = -12.0*k1_3 + 8.0*k1*k2;
+  float b4 = 55.0*k1_4 - 55.0*k1_2*k2 + 5.0*k2_2;
+  float b5 = -273.0*k1_5 + 364.0*k1_3*k2 - 78.0*k1*k2_2;
+  float b6 = 1428.0*k1_6 - 2380.0*k1_4*k2 + 840.0*k1_2*k2_2 - 35.0*k2_3;
+  float b7 = -7752.0*k1_7 + 15504.0*k1_5*k2 - 7752.0*k1_3*k2_2 + 816.0*k1*k2_3;
+  float b8 = 43263.0*k1_8 - 100947.0*k1_6*k2 + 65835.0*k1_4*k2_2 - 11970.0*k1_2*k2_3 + 285.0*k2_4;
+  float b9 = -246675.0*k1_9 + 657800.0*k1_7*k2 - 531300.0*k1_5*k2_2 + 141680.0*k1_3*k2_3 - 8855.0*k1*k2_4;
+  // clang-format on
+
+  // Perform the undistortion
+  float r2  = r * r;
+  float r4  = r2 * r2;
+  float r8  = r4 * r4;
+  float r16 = r8 * r8;
+  return r
+          * (1.0                 //
+            + b1 * r2            //
+            + b2 * r4            //
+            + b3 * r4 * r2       //
+            + b4 * r8            //
+            + b5 * r8 * r2       //
+            + b6 * r8 * r4       //
+            + b7 * r8 * r4 * r2  //
+            + b8 * r16           //
+            + b9 * r16 * r2      //
+          );
+}
+
+/**
+ * Takes a distorted radial distance from the optical axis and applies the polynomial distortion coefficents to undistort it
+ *
+ * @param r the radius to undistort
+ * @param k the undistortion coefficents
+ *
+ * @return an undistorted radius
+ */
+float undistort(float r, vec2 k) {
+  // These parenthesis are important as they allow the compiler to optimise further
+  return r * (1.0 + k.x * (r * r) + k.y * (r * r) * (r * r));
+}
 
 /**
  * Given a radius from the optical centre of a projection, calculate the angle that is made from the optical axis to the
@@ -120,13 +196,13 @@ float rectilinearR(float theta, float f) {
  */
 vec3 unproject(vec2 point, float f, vec2 c, vec2 k, int projection) {
   vec2 p      = point + c;
-  float r_d   = length(p);
-  float r     = r_d / (1.0 + k.x * r_d * r_d + k.y * r_d * r_d * r_d * r_d);
+  float rD    = length(p);
+  float rU    = undistort(rD, k);
   float theta = 0.0;
-  if (projection == RECTILINEAR_PROJECTION) theta = rectilinearTheta(r, f);
-  else if (projection == EQUIDISTANT_PROJECTION) theta = equidistantTheta(r, f);
-  else if (projection == EQUISOLID_PROJECTION) theta = equisolidTheta(r, f);
-  return vec3(cos(theta), sin(theta) * p / r_d);
+  if (projection == RECTILINEAR_PROJECTION) theta = rectilinearTheta(rU, f);
+  else if (projection == EQUIDISTANT_PROJECTION) theta = equidistantTheta(rU, f);
+  else if (projection == EQUISOLID_PROJECTION) theta = equisolidTheta(rU, f);
+  return vec3(cos(theta), sin(theta) * p / rD);
 }
 
 /**
@@ -145,12 +221,12 @@ vec3 unproject(vec2 point, float f, vec2 c, vec2 k, int projection) {
 vec2 project(vec3 ray, float f, vec2 c, vec2 k, int projection) {
   float theta     = acos(ray.x);
   float rSinTheta = 1.0 / sqrt(1.0 - ray.x * ray.x);
-  float r         = 0.0;
-  if (projection == RECTILINEAR_PROJECTION) r = rectilinearR(theta, f);
-  else if (projection == EQUIDISTANT_PROJECTION) r = equidistantR(theta, f);
-  else if (projection == EQUISOLID_PROJECTION) r = equisolidR(theta, f);
-  float r_d = r / (1.0 + k.x * r * r + k.y * r * r * r * r);
-  vec2 p    = ray.x >= 1.0 ? vec2(0) : vec2(r_d * ray.y * rSinTheta, r_d * ray.z * rSinTheta);
+  float rU         = 0.0;
+  if (projection == RECTILINEAR_PROJECTION) rU = rectilinearR(theta, f);
+  else if (projection == EQUIDISTANT_PROJECTION) rU = equidistantR(theta, f);
+  else if (projection == EQUISOLID_PROJECTION) rU = equisolidR(theta, f);
+  float rD = distort(rU, k);
+  vec2 p   = ray.x >= 1.0 ? vec2(0) : vec2(rD * ray.y * rSinTheta, rD * ray.z * rSinTheta);
   return p - c;
 }
 
@@ -202,7 +278,7 @@ void main() {
   float gradient = dot(axis, start);
 
   // Project it into the world space
-  vec3 cam = unproject(point, focalLength, centre, kU, projection);
+  vec3 cam = unproject(point, focalLength, centre, k, projection);
 
   // Rotate the axis vector towards the screen point by the angle to gradient
   // This gives the closest point on the curve
@@ -220,7 +296,8 @@ void main() {
   nearestRay = value > range && value - range < (M_PI * 2.0 - range) * 0.5 ? end : nearestRay;
 
   // When we project this back onto the image we get the nearest pixel
-  vec2 closestPoint = project(nearestRay, focalLength, centre, kP, projection);
+  vec2 closestPoint = project(nearestRay, focalLength, centre, k, projection);
+  vec2 unPoint = project(cam, focalLength, centre, k, projection);
 
   // We get the distance from us to the nearest pixel and smoothstep to make a line
   // For all the previous calculations we are using normalised pixel coordinates where the coordinate is divided by
@@ -228,7 +305,7 @@ void main() {
   // displaying the image at. However when we actually want to caculate a distance that is in pixels, we must multiply
   // the coordinates by our horizontal resolution. Once we have multiplied by this resolution we will get a value in
   // pixels relative to the resolution that we are displaying at.
-  float pixelDistance = length(point - closestPoint) * viewSize.x;
+  float pixelDistance = length(unPoint - closestPoint) * viewSize.x;
   float alpha         = smoothstep(0.0, lineWidth * 0.5, lineWidth * 0.5 - pixelDistance);
 
   gl_FragColor = vec4(colour.rgb, colour.a * alpha);

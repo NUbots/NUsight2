@@ -7,7 +7,7 @@ uniform vec2 viewSize;
 uniform mat4 Hcw;
 uniform float focalLength;
 uniform vec2 centre;
-uniform vec2 kP;
+uniform vec3 k;
 uniform int projection;
 
 attribute vec3 position;
@@ -29,6 +29,19 @@ varying float vEnvironment;
 #define EQUISOLID_PROJECTION 3
 
 // TODO(trent) these should be moved into a separate GLSL file once there is a decent #include system
+
+/**
+ * Takes a distorted radial distance from the optical axis and applies the polynomial distortion coefficents to undistort it
+ *
+ * @param r the radius to undistort
+ * @param k the undistortion coefficents
+ *
+ * @return an undistorted radius
+ */
+float undistort(float r, vec2 k) {
+  // These parenthesis are important as they allow the compiler to optimise further
+  return r * (1.0 + k.x * (r * r) + k.y * (r * r) * (r * r));
+}
 
 /**
  * Given an angle from the optical axis of the lens, calcululate the distance from the optical centre of the lens using
@@ -70,7 +83,6 @@ float rectilinearR(float theta, float f) {
   return f * tan(theta);
 }
 
-
 /**
  * Projects the camera ray measured in coordinate system where x is forward down the camera axis, y is to the
  * left and z is up. The output coordinate system is one where the origin is the centre of the image, x is to the
@@ -87,12 +99,12 @@ float rectilinearR(float theta, float f) {
 vec2 project(vec3 ray, float f, vec2 c, vec2 k, int projection) {
   float theta     = acos(ray.x);
   float rSinTheta = 1.0 / sqrt(1.0 - ray.x * ray.x);
-  float r         = 0.0;
-  if (projection == RECTILINEAR_PROJECTION) r = rectilinearR(theta, f);
-  else if (projection == EQUIDISTANT_PROJECTION) r = equidistantR(theta, f);
-  else if (projection == EQUISOLID_PROJECTION) r = equisolidR(theta, f);
-  float r_d = r / (1.0 + k.x * r * r + k.y * r * r * r * r);
-  vec2 p    = ray.x >= 1.0 ? vec2(0) : vec2(r_d * ray.y * rSinTheta, r_d * ray.z * rSinTheta);
+  float rU         = 0.0;
+  if (projection == RECTILINEAR_PROJECTION) rU = rectilinearR(theta, f);
+  else if (projection == EQUIDISTANT_PROJECTION) rU = equidistantR(theta, f);
+  else if (projection == EQUISOLID_PROJECTION) rU = equisolidR(theta, f);
+  float rD = distort(rU, k);
+  vec2 p   = ray.x >= 1.0 ? vec2(0) : vec2(rD * ray.y * rSinTheta, rD * ray.z * rSinTheta);
   return p - c;
 }
 

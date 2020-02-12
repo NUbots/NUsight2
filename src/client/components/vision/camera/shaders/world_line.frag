@@ -37,57 +37,24 @@ float distort(float r, vec2 k) {
   // Uses the math from the paper
   // An Exact Formula for Calculating Inverse Radial Lens Distortions
   // https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4934233/pdf/sensors-16-00807.pdf
-
-  // Extract constants
-  float k1 = k.x;
-  float k2 = k.y;
-
-  // Compute powers
-  float k1_2 = k1 * k1;
-  float k1_3 = k1_2 * k1;
-  float k1_4 = k1_3 * k1;
-  float k1_5 = k1_4 * k1;
-  float k1_6 = k1_5 * k1;
-  float k1_7 = k1_6 * k1;
-  float k1_8 = k1_7 * k1;
-  float k1_9 = k1_8 * k1;
-
-  float k2_2 = k2 * k2;
-  float k2_3 = k2_2 * k2;
-  float k2_4 = k2_3 * k2;
-
-  // These terms have been stripped back to only include k1 and k2
+  // These terms have been stripped back to only include k1 and k2 and only uses the first 4 terms
   // if more are needed in the future go and get them from the original paper
   // TODO if performance ever becomes an issue, this can be precomputed for the same k values
-  // clang-format off
-  float b1 = -k1;
-  float b2 = 3.0*k1_2 - k2;
-  float b3 = -12.0*k1_3 + 8.0*k1*k2;
-  float b4 = 55.0*k1_4 - 55.0*k1_2*k2 + 5.0*k2_2;
-  float b5 = -273.0*k1_5 + 364.0*k1_3*k2 - 78.0*k1*k2_2;
-  float b6 = 1428.0*k1_6 - 2380.0*k1_4*k2 + 840.0*k1_2*k2_2 - 35.0*k2_3;
-  float b7 = -7752.0*k1_7 + 15504.0*k1_5*k2 - 7752.0*k1_3*k2_2 + 816.0*k1*k2_3;
-  float b8 = 43263.0*k1_8 - 100947.0*k1_6*k2 + 65835.0*k1_4*k2_2 - 11970.0*k1_2*k2_3 + 285.0*k2_4;
-  float b9 = -246675.0*k1_9 + 657800.0*k1_7*k2 - 531300.0*k1_5*k2_2 + 141680.0*k1_3*k2_3 - 8855.0*k1*k2_4;
-  // clang-format on
+  const Scalar b1 = -k.x;
+  const Scalar b2 = 3.0 * (k.x * k.x) - k.y;
+  const Scalar b3 = -12.0 * (k.x * k.x) * k.x + 8.0 * k.x * k.y;
+  const Scalar b4 = 55.0 * (k.x * k.x) * (k.x * k.x) - 55.0 * (k.x * k.x) * k.y + 5.0 * (k.y * k.y);
 
-  // Perform the undistortion
-  float r2  = r * r;
-  float r4  = r2 * r2;
-  float r8  = r4 * r4;
-  float r16 = r8 * r8;
+  // These parenthesis are important as they allow the compiler to optimise further
+  // Since floating point multiplication is not commutative r * r * r * r != (r * r) * (r * r)
+  // This means that the first needs 3 multiplication operations while the second needs only 2
   return r
-          * (1.0                 //
-            + b1 * r2            //
-            + b2 * r4            //
-            + b3 * r4 * r2       //
-            + b4 * r8            //
-            + b5 * r8 * r2       //
-            + b6 * r8 * r4       //
-            + b7 * r8 * r4 * r2  //
-            + b8 * r16           //
-            + b9 * r16 * r2      //
-          );
+         * (1.0                                               //
+            + b1 * (r * r)                                    //
+            + b2 * ((r * r) * (r * r))                        //
+            + b3 * ((r * r) * (r * r)) * (r * r)              //
+            + b4 * ((r * r) * (r * r)) * ((r * r) * (r * r))  //
+         );
 }
 
 /**

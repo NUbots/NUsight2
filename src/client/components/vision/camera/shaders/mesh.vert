@@ -40,6 +40,8 @@ varying float vEnvironment;
  */
 float undistort(float r, vec2 k) {
   // These parenthesis are important as they allow the compiler to optimise further
+  // Since floating point multiplication is not commutative r * r * r * r != (r * r) * (r * r)
+  // This means that the first needs 3 multiplication operations while the second needs only 2
   return r * (1.0 + k.x * (r * r) + k.y * (r * r) * (r * r));
 }
 

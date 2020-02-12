@@ -1,10 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "--- Storing :yarn: cache"
+echo "--- :yarn::arrow_heading_down::card_file_box:"
 
 # Calculate the path to where we store the cache
 cache_path=${BUILDKITE_BUILD_PATH}/cache/${BUILDKITE_ORGANIZATION_SLUG}/${BUILDKITE_PIPELINE_SLUG}/$(sha1sum ${BUILDKITE_BUILD_CHECKOUT_PATH}/yarn.lock | cut -f 1 -d' ')
+echo "Storing cache at ${cache_path}"
 
 # If we have a cache, load it
 mkdir -p ${cache_path}

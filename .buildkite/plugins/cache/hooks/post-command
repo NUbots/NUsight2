@@ -8,4 +8,4 @@ cache_path=${BUILDKITE_BUILD_PATH}/cache/${BUILDKITE_ORGANIZATION_SLUG}/${BUILDK
 
 # If we have a cache, load it
 mkdir -p ${cache_path}
-rsync -a ${BUILDKITE_BUILD_CHECKOUT_PATH}/.cache ${BUILDKITE_BUILD_CHECKOUT_PATH}/node_modules ${cache_path}
+rsync -av ${BUILDKITE_BUILD_CHECKOUT_PATH}/.cache ${BUILDKITE_BUILD_CHECKOUT_PATH}/node_modules ${cache_path}

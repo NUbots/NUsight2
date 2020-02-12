@@ -4,12 +4,13 @@ set -euo pipefail
 echo "--- Loading :yarn: cache"
 
 # Calculate the path to where we store the cache
-cache_path=${BUILDKITE_BUILD_PATH}/cache/${BUILDKITE_ORGANIZATION_SLUG}/${BUILDKITE_PIPELINE_SLUG}/$(sha1sum ${BUILDKITE_BUILD_CHECKOUT_PATH}/yarn.lock | cut -f 1 -d' ')
+cache_path="${BUILDKITE_BUILD_PATH}/cache/${BUILDKITE_ORGANIZATION_SLUG}/${BUILDKITE_PIPELINE_SLUG}/$(sha1sum ${BUILDKITE_BUILD_CHECKOUT_PATH}/yarn.lock | cut -f 1 -d' ')"
+echo "looking for cache at ${cache_path}"
 
 # If we have a cache, load it
 if [ -d ${cache_path} ]; then
     echo "Loading yarn cache"
-    rsync -a ${cache_path}/.cache ${cache_path}/node_modules ${BUILDKITE_BUILD_CHECKOUT_PATH}
+    rsync -av ${cache_path}/.cache ${cache_path}/node_modules ${BUILDKITE_BUILD_CHECKOUT_PATH}
 else
     echo "^^^ +++"
     echo "No cache was found"

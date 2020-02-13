@@ -1,6 +1,7 @@
-import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 import * as path from 'path'
+import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import webpack from 'webpack'
 import { getClientConfig } from '../../webpack.config'
 
@@ -22,6 +23,7 @@ export default ({ config: storybookConfig }: { config: webpack.Configuration }) 
       ...(config.plugins || []).filter(p => !(
           p instanceof HtmlWebpackPlugin // Storybook handles page generation.
           || p instanceof CopyWebpackPlugin // Avoids overwriting index.html.
+          || p instanceof ProgressBarPlugin // Storybook already has a progress plugin.
         ),
       ),
     ],

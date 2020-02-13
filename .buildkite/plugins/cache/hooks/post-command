@@ -11,4 +11,4 @@ echo "Storing cache at ${cache_path}"
 mkdir -p ${cache_path}
 rsync -a ${BUILDKITE_BUILD_CHECKOUT_PATH}/.cache ${BUILDKITE_BUILD_CHECKOUT_PATH}/node_modules ${cache_path}
 
-echo "done"
+echo "Done!"

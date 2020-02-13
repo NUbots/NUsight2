@@ -2,6 +2,7 @@ import { action } from 'mobx'
 
 import { message } from '../../../shared/proto/messages'
 import { toSeconds } from '../../../shared/time/timestamp'
+import { fourcc } from '../../image_decoder/fourcc'
 import { Matrix4 } from '../../math/matrix4'
 import { Vector2 } from '../../math/vector2'
 import { Vector3 } from '../../math/vector3'
@@ -12,7 +13,7 @@ import { RobotModel } from '../robot/model'
 
 import { CameraModel } from './camera/model'
 import { VisionRobotModel } from './model'
-import Image = message.input.Image
+import RawImage = message.input.Image
 import CompressedImage = message.output.CompressedImage
 import Balls = message.vision.Balls
 import Goal = message.vision.Goal
@@ -23,7 +24,7 @@ import VisualMesh = message.vision.VisualMesh
 export class VisionNetwork {
 
   constructor(private network: Network) {
-    this.network.on(Image, this.onImage)
+    this.network.on(RawImage, this.onImage)
     this.network.on(CompressedImage, this.onImage)
     this.network.on(VisualMesh, this.onMesh)
     this.network.on(Balls, this.onBalls)
@@ -40,29 +41,33 @@ export class VisionNetwork {
     this.network.off()
   }
 
-  @action
-  private onImage = (robotModel: RobotModel, image: Image | CompressedImage) => {
+  private onImage = (robotModel: RobotModel, image: RawImage | CompressedImage) => {
     const robot = VisionRobotModel.of(robotModel)
     const { cameraId, name, dimensions, format, data, Hcw } = image
     const { projection, focalLength, centre } = image!.lens!
 
     let camera = robot.cameras.get(cameraId)
     if (!camera) {
-      camera = CameraModel.of(robot, { id: cameraId, name })
+      camera = CameraModel.of({ id: cameraId, name })
       robot.cameras.set(cameraId, camera)
     }
-    // console.log(Matrix4.from(Hcw).toString())
-    camera.image = {
-      width: dimensions!.x!,
-      height: dimensions!.y!,
-      format,
-      data,
-      lens: {
-        projection: projection || 0,
-        focalLength: focalLength!,
-        centre: Vector2.from(centre),
-      },
-      Hcw: Matrix4.from(Hcw),
+    if (fourcc('JPEG') === format) {
+      jpegBufferToImage(data).then(action((image: HTMLImageElement) => {
+        if (!camera) {
+          throw new Error()
+        }
+        camera.image = {
+          width: dimensions!.x!,
+          height: dimensions!.y!,
+          image: { type: 'element', element: image, format },
+          lens: {
+            projection: projection || 0,
+            focalLength: focalLength!,
+            centre: Vector2.from(centre),
+          },
+          Hcw: Matrix4.from(Hcw),
+        }
+      }))
     }
     camera.name = name
   }
@@ -74,7 +79,7 @@ export class VisionNetwork {
 
     let camera = robot.cameras.get(cameraId)
     if (!camera) {
-      camera = CameraModel.of(robot, { id: cameraId, name })
+      camera = CameraModel.of({ id: cameraId, name })
       robot.cameras.set(cameraId, camera)
     }
 
@@ -92,7 +97,7 @@ export class VisionNetwork {
     const { cameraId, timestamp, Hcw, balls } = packet
     let camera = robot.cameras.get(cameraId)
     if (!camera) {
-      camera = CameraModel.of(robot, { id: cameraId, name })
+      camera = CameraModel.of({ id: cameraId, name })
       robot.cameras.set(cameraId, camera)
     }
     camera.balls = balls.map(ball => ({
@@ -102,6 +107,7 @@ export class VisionNetwork {
         axis: Vector3.from(ball.cone!.axis),
         radius: ball.cone!.radius!,
       },
+      distance: Math.abs(ball.measurements![0].rBCc!.x!),
       colour: Vector4.from(ball.colour),
     }))
   }
@@ -112,7 +118,7 @@ export class VisionNetwork {
     const { cameraId, timestamp, Hcw, goals } = packet
     let camera = robot.cameras.get(cameraId)
     if (!camera) {
-      camera = CameraModel.of(robot, { id: cameraId, name })
+      camera = CameraModel.of({ id: cameraId, name })
       robot.cameras.set(cameraId, camera)
     }
     camera.goals = goals.map(goal => ({
@@ -122,6 +128,7 @@ export class VisionNetwork {
       post: {
         top: Vector3.from(goal.post!.top),
         bottom: Vector3.from(goal.post!.bottom),
+        distance: goal.post!.distance!,
       },
     }))
   }
@@ -132,7 +139,7 @@ export class VisionNetwork {
     const { horizon, Hcw, cameraId } = packet
     let camera = robot.cameras.get(cameraId)
     if (!camera) {
-      camera = CameraModel.of(robot, { id: cameraId, name })
+      camera = CameraModel.of({ id: cameraId, name })
       robot.cameras.set(cameraId, camera)
     }
     camera.greenhorizon = {
@@ -140,4 +147,21 @@ export class VisionNetwork {
       Hcw: Matrix4.from(Hcw),
     }
   }
+}
+
+async function jpegBufferToImage(buffer: ArrayBuffer): Promise<HTMLImageElement> {
+  const blob = new Blob([buffer], { type: 'image/jpeg' })
+  const url = window.URL.createObjectURL(blob)
+  const image = await loadImage(url)
+  window.URL.revokeObjectURL(url)
+  return image
+}
+
+async function loadImage(url: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new Image()
+    image.onload = () => resolve(image)
+    image.onerror = () => reject()
+    image.src = url
+  })
 }

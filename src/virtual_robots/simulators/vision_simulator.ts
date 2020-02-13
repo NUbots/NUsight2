@@ -4,6 +4,7 @@ import { Vector3 } from 'three'
 import { Matrix4 } from 'three'
 
 import { fourcc } from '../../client/image_decoder/fourcc'
+import { FieldDimensions } from '../../shared/field/dimensions'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
 import { Imat4 } from '../../shared/proto/messages'
 import { message } from '../../shared/proto/messages'
@@ -25,6 +26,7 @@ import image9 from './images/9.jpg'
 import { periodic } from './periodic'
 import CompressedImage = message.output.CompressedImage
 import Projection = message.output.CompressedImage.Lens.Projection
+import MeasurementType = message.vision.Ball.MeasurementType
 import Balls = message.vision.Balls
 import Side = message.vision.Goal.Side
 import Goals = message.vision.Goals
@@ -91,7 +93,10 @@ export class VisionSimulator extends Simulator {
             axis,
             gradient: Math.cos(Math.PI / 16 * (Math.cos(2 * Math.PI * t) / 5 + 1)),
           },
-          measurements: [],
+          measurements: [{
+            type: MeasurementType.WIDTH_BASED,
+            rBCc: new Vector3(1, 0, 0),
+          }],
         }],
       }).finish(),
     }
@@ -101,6 +106,7 @@ export class VisionSimulator extends Simulator {
     const time = periodic(10)
     const t = time / 10
     const Hcw = new Matrix4().makeRotationZ(2 * Math.PI * t)
+    const { goalCrossbarHeight } = FieldDimensions.postYear2017()
     return {
       messageType: 'message.vision.Goals',
       buffer: Goals.encode({
@@ -110,22 +116,25 @@ export class VisionSimulator extends Simulator {
         goals: [{
           side: Side.RIGHT,
           post: {
-            top: new Vector3(10, -2, 2).normalize(),
-            bottom: new Vector3(10, -2, -2).normalize(),
+            top: new Vector3(5, -1, goalCrossbarHeight / 2).normalize(),
+            bottom: new Vector3(5, -1, -goalCrossbarHeight / 2).normalize(),
+            distance: new Vector3(5, -1, -goalCrossbarHeight / 2).length(),
           },
           measurements: [],
         }, {
           side: Side.LEFT,
           post: {
-            top: new Vector3(10, 2, 2).normalize(),
-            bottom: new Vector3(10, 2, -2).normalize(),
+            top: new Vector3(5, 1, goalCrossbarHeight / 2).normalize(),
+            bottom: new Vector3(5, 1, -goalCrossbarHeight / 2).normalize(),
+            distance: new Vector3(5, 1, -goalCrossbarHeight / 2).length(),
           },
           measurements: [],
         }, {
           side: Side.UNKNOWN_SIDE,
           post: {
-            top: new Vector3(10, 0, 2).normalize(),
-            bottom: new Vector3(10, 0, -2).normalize(),
+            top: new Vector3(5, 0, goalCrossbarHeight / 2).normalize(),
+            bottom: new Vector3(5, 0, -goalCrossbarHeight / 2).normalize(),
+            distance: new Vector3(5, 0, -goalCrossbarHeight / 2).length(),
           },
           measurements: [],
         }],

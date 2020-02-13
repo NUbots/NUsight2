@@ -10,7 +10,7 @@ import { PlaneGeometry } from 'three'
 
 import { disposableComputed } from '../../../base/disposable_computed'
 import { dataTexture } from '../../three/builders'
-import { shaderMaterial } from '../../three/builders'
+import { shader } from '../../three/builders'
 import { imageTexture } from '../../three/builders'
 import { mesh } from '../../three/builders'
 import { scene } from '../../three/builders'
@@ -57,7 +57,7 @@ export class ClassifiedImageViewModel {
     return geometry
   })
 
-  private readonly material = shaderMaterial(() => ({
+  private readonly material = shader(() => ({
     vertexShader,
     fragmentShader,
     uniforms: {

@@ -11,7 +11,7 @@ import { Texture } from 'three'
 import { disposableComputed } from '../../../base/disposable_computed'
 import { Vector3 } from '../../../math/vector3'
 import { dataTexture } from '../../three/builders'
-import { shaderMaterial } from '../../three/builders'
+import { shader } from '../../three/builders'
 import { perspectiveCamera } from '../../three/builders'
 import { scene } from '../../three/builders'
 import { Stage } from '../../three/three'
@@ -90,7 +90,7 @@ export class VisualizerViewModel {
     return geometry
   }
 
-  private readonly planeMaterial = shaderMaterial(() => ({
+  private readonly planeMaterial = shader(() => ({
     vertexShader,
     fragmentShader,
     uniforms: {

@@ -115,8 +115,11 @@ export class CameraViewModel {
     const Hwc = new Matrix4().getInverse(toThreeMatrix4(m.Hcw))
     const imageHcw = this.model.image ? toThreeMatrix4(this.model.image.Hcw) : new Matrix4()
     const Hcc = imageHcw.multiply(Hwc)
+    const ballHcw = m.Hcw.toThree()
+    const translation = new Vector3(ballHcw.elements[12], ballHcw.elements[13], ballHcw.elements[14])
+    const distance = translation.length()
     return this.makeCone({
-      axis: toThreeVector3(m.cone.axis).applyMatrix4(Hcc),
+      axis: m.cone.axis.toThree().multiplyScalar(distance).applyMatrix4(Hcc).normalize(),
       gradient: m.cone.radius,
       colour: toThreeVector4(m.colour),
       lineWidth: 10,

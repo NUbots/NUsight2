@@ -1,8 +1,9 @@
+import { autorun } from 'mobx'
+import { comparer } from 'mobx'
 import { reaction } from 'mobx'
 import { IComputedValue } from 'mobx'
 import { observable } from 'mobx'
 import { action } from 'mobx'
-import { autorun } from 'mobx'
 import { disposeOnUnmount } from 'mobx-react'
 import { observer } from 'mobx-react'
 import { WheelEvent } from 'react'
@@ -26,7 +27,7 @@ export type Canvas = { width: number, height: number }
 @observer
 export class Three extends Component<{
   stage(canvas: Canvas): IComputedValue<Stage | Array<() => Stage>>,
-  objectFit: ObjectFit,
+  objectFit?: ObjectFit,
   clearColor?: Color,
   onClick?({ button }: { button: number }): void
   onMouseDown?(x: number, y: number): void
@@ -40,7 +41,7 @@ export class Three extends Component<{
   private renderer?: WebGLRenderer
 
   static defaultProps = {
-    objectFit: { type: 'fill' },
+    objectFit: { type: 'fill' as const },
   }
 
   componentDidMount() {
@@ -53,22 +54,34 @@ export class Three extends Component<{
       reaction(
         () => stages.get(),
         stages => {
-          dispose()
           if (stages instanceof Array) {
+            dispose()
             // Create individual reactions for each stage, so they may react and re-render independently.
             dispose = compose(stages.map(stage => autorun(
               () => this.renderStage(stage()),
               { scheduler: requestAnimationFrame },
             )))
+            disposeOnUnmount(this, dispose)
           } else {
-            dispose = autorun(() => this.renderStage(stages), { scheduler: requestAnimationFrame })
+            this.renderStage(stages)
           }
-          disposeOnUnmount(this, dispose)
         },
-        { fireImmediately: true },
+        {
+          fireImmediately: true,
+          scheduler: requestAnimationFrame,
+          equals: (a: Stage | Array<IComputedValue<Stage>>, b: Stage | Array<IComputedValue<Stage>>) => {
+            if (!(a instanceof Array) !== !(b instanceof Array)) {
+              return false
+            } else if (a instanceof Array && b instanceof Array) {
+              return comparer.structural(a, b)
+            } else {
+              return false
+            }
+          },
+        },
       ),
       reaction(
-        () => objectFit(this.containerSize, this.props.objectFit),
+        () => objectFit(this.containerSize, this.props.objectFit || Three.defaultProps.objectFit),
         debounce(80, action(({ width, height }: { width: number, height: number }) => {
           this.canvas.width = width
           this.canvas.height = height
@@ -83,7 +96,7 @@ export class Three extends Component<{
   }
 
   render() {
-    const { objectFit } = this.props
+    const { objectFit = Three.defaultProps.objectFit } = this.props
     return <Measure bounds onResize={this.onResize} innerRef={this.setRef}>
       {({ measureRef }) => <canvas
         ref={measureRef}

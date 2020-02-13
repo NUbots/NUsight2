@@ -68,7 +68,11 @@ class RenderTargetHarness extends React.Component<{ animate?: boolean }> {
     const innerBoxTexture = () => innerBoxRenderTarget().texture
     const innerBoxViewModel = OrangeBoxViewModel.of(this.model, robotTexture, innerBoxRenderTarget)
     const viewModel = WhiteBoxViewModel.of(canvas, this.model, innerBoxTexture)
-    return computed(() => [robotViewModel.stage, innerBoxViewModel.stage, viewModel.stage])
+    return computed(() => [
+      robotViewModel.stage,
+      innerBoxViewModel.stage,
+      viewModel.stage,
+    ])
   }
 
   @action.bound

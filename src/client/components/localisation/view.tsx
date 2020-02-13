@@ -58,7 +58,7 @@ export class LocalisationView extends React.Component<LocalisationViewProps> {
   }
 
   private stage = (canvas: Canvas) => computed(() => [
-    LocalisationViewModel.of(canvas, this.props.model).stage,
+    computed(() => LocalisationViewModel.of(canvas, this.props.model).stage(), { equals: () => false }),
   ])
 
   requestPointerLock() {

@@ -62,7 +62,7 @@ export class CameraModel {
     image: true,
     compass: true,
     horizon: true,
-    visualmesh: true,
+    visualmesh: false,
     greenhorizon: true,
     balls: true,
     goals: true,

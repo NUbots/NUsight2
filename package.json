@@ -90,8 +90,6 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.9.0",
     "jest-css-modules": "^2.1.0",
-    "memfs": "^3.0.4",
-    "memory-fs": "^0.5.0",
     "nodemon": "^1.19.1",
     "postcss": "^7.0.17",
     "postcss-browser-reporter": "^0.6.0",

@@ -1,4 +1,5 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 import * as path from 'path'
 import webpack from 'webpack'
 import { getClientConfig } from '../../webpack.config'
@@ -20,7 +21,7 @@ export default ({ config: storybookConfig }: { config: webpack.Configuration }) 
       ...storybookConfig.plugins || [],
       ...(config.plugins || []).filter(p => !(
           p instanceof HtmlWebpackPlugin // Storybook handles page generation.
-          || p instanceof webpack.HotModuleReplacementPlugin // Already included in the default storybook plugins.
+          || p instanceof CopyWebpackPlugin // Avoids overwriting index.html.
         ),
       ),
     ],

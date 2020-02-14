@@ -51,7 +51,7 @@ export class Vector4 {
     return new Vector4(this.x - v.x, this.y - v.y, this.z - v.z, this.t - v.t)
   }
 
-  vec3() {
+  vec3(): Vector3 {
     return new Vector3(this.x, this.y, this.z)
   }
 

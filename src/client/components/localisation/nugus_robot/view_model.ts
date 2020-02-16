@@ -71,7 +71,7 @@ export class NUgusViewModel {
   private static robotObjectBase = lazyObservable<Object3D | undefined>(sink => {
     new GLTFLoader().load(url, gltf => {
       // TODO (Annable): Baking this rotation into the model geometry would be ideal.
-      findMesh(gltf.scene, 'Head').geometry.applyMatrix4(new Matrix4().makeRotationY(-Math.PI / 2))
+      findMesh(gltf.scene, 'Head').geometry.applyMatrix(new Matrix4().makeRotationY(-Math.PI / 2))
       sink(findMesh(gltf.scene, 'Torso'))
     })
   })

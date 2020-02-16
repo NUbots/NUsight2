@@ -142,14 +142,14 @@ export class FieldViewModel {
   private buildHorizontalLine(x1: number, x2: number, y: number, width: number) {
     const length = x2 - x1
     const hLine = new PlaneGeometry(length, width)
-    hLine.applyMatrix4(new Matrix4().makeTranslation(x1 + length * 0.5, y, 0))
+    hLine.applyMatrix(new Matrix4().makeTranslation(x1 + length * 0.5, y, 0))
     return hLine
   }
 
   private buildVerticalLine(y1: number, y2: number, x: number, width: number) {
     const length = y2 - y1
     const vLine = new PlaneGeometry(width, length)
-    vLine.applyMatrix4(new Matrix4().makeTranslation(x, y1 + length * 0.5, 0))
+    vLine.applyMatrix(new Matrix4().makeTranslation(x, y1 + length * 0.5, 0))
     return vLine
   }
 }

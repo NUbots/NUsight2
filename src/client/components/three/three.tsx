@@ -127,15 +127,18 @@ export class Three extends Component<{
   }
 
   private onMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
-    this.props.onMouseDown && this.props.onMouseDown(e.nativeEvent.layerX, e.nativeEvent.layerY)
+    // TODO: Remove deprecated layerX
+    this.props.onMouseDown && this.props.onMouseDown((e.nativeEvent as any).layerX, (e.nativeEvent as any).layerY)
   }
 
   private onMouseMove = (e: MouseEvent<HTMLCanvasElement>) => {
-    this.props.onMouseMove && this.props.onMouseMove(e.nativeEvent.layerX, e.nativeEvent.layerY)
+    // TODO: Remove deprecated layerX
+    this.props.onMouseMove && this.props.onMouseMove((e.nativeEvent as any).layerX, (e.nativeEvent as any).layerY)
   }
 
   private onMouseUp = (e: MouseEvent<HTMLCanvasElement>) => {
-    this.props.onMouseUp && this.props.onMouseUp(e.nativeEvent.layerX, e.nativeEvent.layerY)
+    // TODO: Remove deprecated layerX
+    this.props.onMouseUp && this.props.onMouseUp((e.nativeEvent as any).layerX, (e.nativeEvent as any).layerY)
   }
 
   private onWheel = (e: WheelEvent<HTMLCanvasElement>) => {

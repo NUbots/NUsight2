@@ -1,4 +1,4 @@
-import * as SocketIO from 'socket.io-client'
+import SocketIO from 'socket.io-client'
 
 import * as NUClearNetProxyParser from '../../shared/nuclearnet/nuclearnet_proxy_parser'
 
@@ -98,3 +98,5 @@ addEventListener('message', (e: MessageEvent) => {
       break
   }
 })
+
+export default {} as any as new() => Worker

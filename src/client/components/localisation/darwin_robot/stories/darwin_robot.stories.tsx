@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/react'
 import { computed } from 'mobx'
 import { reaction } from 'mobx'
 import { now } from 'mobx-utils'
-import * as React from 'react'
+import React from 'react'
 
 import { Vector3 } from '../../../../math/vector3'
 import { RobotModel } from '../../../robot/model'
@@ -27,7 +27,7 @@ function createModel(animate?: 'animate') {
     t => simulateWalk(model, t),
     { fireImmediately: true },
   )
-  return computed(() => viewModel.robot)
+  return () => viewModel.robot
 }
 
 const cameraPosition = new Vector3(0.3, 0.4, 0.4)

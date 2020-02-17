@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react'
-import * as React from 'react'
+import React from 'react'
 import { Component } from 'react'
 import { ComponentType } from 'react'
 
@@ -8,7 +8,7 @@ import { DashboardModel } from './model'
 import { DashboardNetwork } from './network'
 import { RobotPanel } from './robot_panel/view'
 import { RobotPanelViewModel } from './robot_panel/view_model'
-import * as style from './style.css'
+import style from './style.css'
 
 export type DashboardProps = {
   controller: DashboardController
@@ -32,9 +32,9 @@ export class Dashboard extends Component<DashboardProps> {
       <div className={style.page}>
         <Menu>
           <ul className={style.menu}>
-              <li className={style.menuItem}>
-                <button className={style.menuButton} onClick={this.onToggleOrientationClick}>Flip Orientation</button>
-              </li>
+            <li className={style.menuItem}>
+              <button className={style.menuButton} onClick={this.onToggleOrientationClick}>Flip Orientation</button>
+            </li>
           </ul>
         </Menu>
         <div className={style.dashboard}>

@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react'
-import * as React from 'react'
+import React from 'react'
 
 import { dropdownContainer } from '../dropdown_container/view'
 import { Switch } from '../switch/view'
 
 import MenuIcon from './menu_icon.svg'
-import * as style from './style.css'
+import style from './style.css'
 
 export type SwitchesMenuOption = {
   label: string
@@ -22,7 +22,7 @@ export const SwitchesMenu = observer((props: SwitchesMenuProps) => {
   const { options } = props
   const dropdownToggle = (
     <button className={style.button}>
-      <MenuIcon />
+      <MenuIcon/>
     </button>
   )
   return (
@@ -30,15 +30,15 @@ export const SwitchesMenu = observer((props: SwitchesMenuProps) => {
       <EnhancedDropdown dropdownToggle={dropdownToggle} dropdownPosition={props.dropdownMenuPosition}>
         <div className={style.options}>
           {options.length === 0 &&
-            <div className={style.empty}>
-              No options
-            </div>
+          <div className={style.empty}>
+            No options
+          </div>
           }
           {options.map(option => {
             return (
               <label key={option.label} className={style.option}>
                 <span className={style.optionLabel}>{option.label}</span>
-                <Switch on={option.enabled} onChange={option.toggle} />
+                <Switch on={option.enabled} onChange={option.toggle}/>
               </label>
             )
           })}

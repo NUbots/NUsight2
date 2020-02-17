@@ -3,7 +3,7 @@ import { computed } from 'mobx'
 import { disposeOnUnmount } from 'mobx-react'
 import { observer } from 'mobx-react'
 import { now } from 'mobx-utils'
-import * as React from 'react'
+import React from 'react'
 import { ComponentType } from 'react'
 
 import { Canvas } from '../three/three'
@@ -13,7 +13,7 @@ import { LocalisationController } from './controller'
 import { LocalisationModel } from './model'
 import { ViewMode } from './model'
 import { LocalisationNetwork } from './network'
-import * as style from './style.css'
+import style from './style.css'
 import { LocalisationViewModel } from './view_model'
 
 type LocalisationViewProps = {
@@ -49,20 +49,17 @@ export class LocalisationView extends React.Component<LocalisationViewProps> {
     return (
       <div className={style.localisation}>
         <LocalisationMenuBar menu={this.props.menu} onHawkEyeClick={this.onHawkEyeClick}/>
-        <div className={style.localisation__canvasContainer}>
-          <div className={style.localisation__canvasInnerContainer}>
-            <Three ref={this.canvas} onClick={this.onClick} stage={this.stage}/>
-          </div>
+        <div className={style.localisation__canvas}>
+          <Three ref={this.canvas} onClick={this.onClick} stage={this.stage}/>
         </div>
         <StatusBar model={this.props.model}/>
       </div>
     )
   }
 
-  private stage = (canvas: Canvas) => {
-    const viewModel = LocalisationViewModel.of(canvas, this.props.model)
-    return computed(() => viewModel.stage)
-  }
+  private stage = (canvas: Canvas) => computed(() => [
+    LocalisationViewModel.of(canvas, this.props.model).stage,
+  ])
 
   requestPointerLock() {
     this.canvas.current!.requestPointerLock()

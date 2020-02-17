@@ -7,7 +7,7 @@ import { disposeOnUnmount } from 'mobx-react'
 import { createTransformer } from 'mobx-utils'
 import { now } from 'mobx-utils'
 import { Component } from 'react'
-import * as React from 'react'
+import React from 'react'
 import { Color } from 'three'
 import { Geometry } from 'three'
 import { PointLight } from 'three'
@@ -68,8 +68,8 @@ class BoxVisualiser extends Component<{ animate?: boolean }> {
     const n = this.model.boxes.length
     this.model.boxes.forEach((box, i) => {
       const position = Vector2.fromPolar(1, i * 2 * Math.PI / n + t)
-      box.position.set(position.x, position.y, 0)
-      box.rotation.set(Math.cos(3 * t + i), Math.cos(5 * t + i), Math.cos(7 * t + i))
+      box.position = new Vector3(position.x, position.y, 0)
+      box.rotation = new Vector3(Math.cos(3 * t + i), Math.cos(5 * t + i), Math.cos(7 * t + i))
     })
   }
 }
@@ -80,13 +80,13 @@ class ViewModel {
 
   @computed
   get stage(): Stage {
-    return { camera: this.camera.get(), scene: this.scene.get() }
+    return { camera: this.camera(), scene: this.scene() }
   }
 
   @computed
   private get light(): Light {
     const light = new PointLight()
-    light.position.copy(this.camera.get().position)
+    light.position.copy(this.camera().position)
     return light
   }
 
@@ -100,7 +100,7 @@ class ViewModel {
 
   private scene = scene(() => ({
     children: [
-      ...this.boxes.map(boxViewModel => boxViewModel.box.get()),
+      ...this.boxes.map(boxViewModel => boxViewModel.box()),
       this.light,
     ],
   }))
@@ -127,7 +127,7 @@ class BoxViewModel {
 
   readonly box = mesh(() => ({
     geometry: BoxViewModel.geometry.get(),
-    material: this.material.get(),
+    material: this.material(),
     position: this.model.position,
     rotation: this.model.rotation,
     scale: Vector3.fromScalar(this.model.size),

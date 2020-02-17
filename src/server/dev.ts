@@ -1,15 +1,15 @@
-import * as compression from 'compression'
-import * as history from 'connect-history-api-fallback'
-import * as express from 'express'
-import * as http from 'http'
-import * as minimist from 'minimist'
-import * as favicon from 'serve-favicon'
-import * as sio from 'socket.io'
-import * as webpack from 'webpack'
-import * as webpackDevMiddleware from 'webpack-dev-middleware'
-import * as webpackHotMiddleware from 'webpack-hot-middleware'
+import compression from 'compression'
+import history from 'connect-history-api-fallback'
+import express from 'express'
+import http from 'http'
+import minimist from 'minimist'
+import favicon from 'serve-favicon'
+import sio from 'socket.io'
+import webpack from 'webpack'
+import webpackDevMiddleware from 'webpack-dev-middleware'
 
-import webpackConfig from '../../webpack.config'
+import { getClientConfig } from '../../webpack.config'
+import faviconPath from '../assets/favicon.ico'
 import * as NUClearNetProxyParser from '../shared/nuclearnet/nuclearnet_proxy_parser'
 import { VirtualRobots } from '../virtual_robots/virtual_robots'
 
@@ -20,9 +20,13 @@ import { FakeNUClearNetClient } from './nuclearnet/fake_nuclearnet_client'
 import { WebSocketProxyNUClearNetServer } from './nuclearnet/web_socket_proxy_nuclearnet_server'
 import { WebSocketServer } from './nuclearnet/web_socket_server'
 
-const compiler = webpack(webpackConfig)
-
 const args = minimist(process.argv.slice(2))
+const compiler = webpack(getClientConfig({
+  mode: 'development',
+  context: args.context || undefined,
+  transpileOnly: args.t || args.transpileOnly || false,
+}))
+
 const withVirtualRobots = args['virtual-robots'] || false
 const nbsFile = args.play
 const nuclearnetAddress = args.address || '10.1.255.255'
@@ -52,8 +56,7 @@ app.use(compression())
 app.use(devMiddleware)
 app.use(history())
 app.use(devMiddleware)
-app.use(webpackHotMiddleware(compiler))
-app.use(favicon(`${__dirname}/../assets/favicon.ico`))
+app.use(favicon(faviconPath))
 
 const port = process.env.PORT || 3000
 server.listen(port, () => {

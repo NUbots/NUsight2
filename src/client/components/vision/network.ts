@@ -15,10 +15,10 @@ import { VisionRobotModel } from './model'
 import Image = message.input.Image
 import CompressedImage = message.output.CompressedImage
 import Balls = message.vision.Balls
-import Goals = message.vision.Goals
 import Goal = message.vision.Goal
-import VisualMesh = message.vision.VisualMesh
+import Goals = message.vision.Goals
 import GreenHorizon = message.vision.GreenHorizon
+import VisualMesh = message.vision.VisualMesh
 
 export class VisionNetwork {
 
@@ -44,7 +44,7 @@ export class VisionNetwork {
   private onImage = (robotModel: RobotModel, image: Image | CompressedImage) => {
     const robot = VisionRobotModel.of(robotModel)
     const { cameraId, name, dimensions, format, data, Hcw } = image
-    const { projection, focalLength, centre } = image!.lens!
+    const { projection, focalLength, centre, k } = image!.lens!
 
     let camera = robot.cameras.get(cameraId)
     if (!camera) {
@@ -58,8 +58,9 @@ export class VisionNetwork {
       data,
       lens: {
         projection: projection || 0,
-        focalLength: focalLength! / dimensions!.x!,
+        focalLength: focalLength!,
         centre: Vector2.from(centre),
+        k: Vector2.from(k),
       },
       Hcw: Matrix4.from(Hcw),
     }
@@ -69,7 +70,7 @@ export class VisionNetwork {
   @action
   private onMesh(robotModel: RobotModel, packet: VisualMesh) {
     const robot = VisionRobotModel.of(robotModel)
-    const { cameraId, neighbourhood, coordinates, classifications } = packet
+    const { cameraId, neighbourhood, rays, classifications } = packet
 
     let camera = robot.cameras.get(cameraId)
     if (!camera) {
@@ -80,7 +81,7 @@ export class VisionNetwork {
     // We don't need to know phi, just how many items are in each ring
     camera.visualmesh = {
       neighbours: neighbourhood!.v!,
-      coordinates: coordinates!.v!,
+      rays: rays!.v!,
       classifications: { dim: classifications!.rows!, values: classifications!.v! },
     }
   }

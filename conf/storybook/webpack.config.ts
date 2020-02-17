@@ -1,8 +1,16 @@
-import * as HtmlWebpackPlugin from 'html-webpack-plugin'
-import * as webpack from 'webpack'
-import config from '../../webpack.config'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import * as path from 'path'
+import ProgressBarPlugin from 'progress-bar-webpack-plugin'
+import webpack from 'webpack'
+import { getClientConfig } from '../../webpack.config'
 
 export default ({ config: storybookConfig }: { config: webpack.Configuration }) => {
+  const config = getClientConfig({
+    mode: 'development',
+    context: path.resolve(path.join(__dirname, '..', '..', 'src')),
+    sourceMap: 'eval-source-map',
+  })
   return {
     ...config,
     ...storybookConfig,
@@ -14,7 +22,8 @@ export default ({ config: storybookConfig }: { config: webpack.Configuration }) 
       ...storybookConfig.plugins || [],
       ...(config.plugins || []).filter(p => !(
           p instanceof HtmlWebpackPlugin // Storybook handles page generation.
-          || p instanceof webpack.HotModuleReplacementPlugin // Already included in the default storybook plugins.
+          || p instanceof CopyWebpackPlugin // Avoids overwriting index.html.
+          || p instanceof ProgressBarPlugin // Storybook already has a progress plugin.
         ),
       ),
     ],

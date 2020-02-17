@@ -2,7 +2,7 @@ import { action } from '@storybook/addon-actions'
 import { storiesOf } from '@storybook/react'
 import { action as mobxAction, observable } from 'mobx'
 import { observer } from 'mobx-react'
-import * as React from 'react'
+import React from 'react'
 
 import { SwitchesMenu, SwitchesMenuOption } from '../view'
 
@@ -13,10 +13,10 @@ const actions = {
 storiesOf('components.switches_menu', module)
   .addDecorator(story => <div style={{ maxWidth: '350px' }}>{story()}</div>)
   .add('renders empty', () => {
-    return <SwitchesMenu options={[]} />
+    return <SwitchesMenu options={[]}/>
   })
   .add('renders with options', () => {
-    return <SwitchesMenu options={getOptions()} />
+    return <SwitchesMenu options={getOptions()}/>
   })
   .add('dropdown right', () => {
     const style = { backgroundColor: '#eee', display: 'flex', justifyContent: 'flex-end' }
@@ -39,9 +39,9 @@ storiesOf('components.switches_menu', module)
         }
       }),
     })
-    const Component = observer(() => <SwitchesMenu options={model.options} />)
+    const Component = observer(() => <SwitchesMenu options={model.options}/>)
 
-    return <Component />
+    return <Component/>
   })
 
 function getOptions(): SwitchesMenuOption[] {

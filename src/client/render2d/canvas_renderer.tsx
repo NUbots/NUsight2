@@ -1,19 +1,20 @@
-import * as classNames from 'classnames'
+import classNames from 'classnames'
 import { IReactionDisposer } from 'mobx'
 import { observable } from 'mobx'
 import { action } from 'mobx'
 import { autorun } from 'mobx'
 import { observer } from 'mobx-react'
-import * as React from 'react'
+import React from 'react'
 import { Component } from 'react'
 import ReactResizeDetector from 'react-resize-detector'
 
 import { Transform } from '../math/transform'
+import { Vector2 } from '../math/vector2'
 
 import { renderObject2d } from './canvas/rendering'
 import { applyTransform } from './canvas/rendering'
 import { RendererProps } from './renderer_props'
-import * as style from './style.css'
+import style from './style.css'
 
 @observer
 export class CanvasRenderer extends Component<RendererProps> {
@@ -38,7 +39,7 @@ export class CanvasRenderer extends Component<RendererProps> {
   render() {
     return (
       <div className={classNames(this.props.className, style.container)}>
-        <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
+        <ReactResizeDetector handleWidth handleHeight onResize={this.onResize}/>
         <canvas
           className={style.container}
           width={-this.resolution.translate.x * 2}
@@ -75,21 +76,17 @@ export class CanvasRenderer extends Component<RendererProps> {
     height *= devicePixelRatio
 
     // Translate to the center
-    this.resolution.translate.x = -width * 0.5
-    this.resolution.translate.y = -height * 0.5
+    const translate = Vector2.of(-width * 0.5, -height * 0.5)
 
     // If we have an aspect ratio, use it to scale the canvas to unit size
     if (this.props.aspectRatio !== undefined) {
 
       const canvasAspect = width / height
       const scale = canvasAspect < this.props.aspectRatio ? 1 / width : 1 / (height * this.props.aspectRatio)
-
       // Scale to fit
-      this.resolution.scale.x = scale
-      this.resolution.scale.y = scale
+      this.resolution = Transform.of({ scale: { x: scale, y: scale }, translate })
     } else {
-      this.resolution.scale.x = 1 / width
-      this.resolution.scale.y = 1 / height
+      this.resolution = Transform.of({ scale: { x: 1 / width, y: 1 / height }, translate })
     }
   }
 }

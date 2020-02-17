@@ -1,6 +1,5 @@
-import * as Emitter from 'component-emitter'
+import Emitter from 'component-emitter'
 import { NUClearNetPacket } from 'nuclearnet.js'
-import { NUClearNetPeer } from 'nuclearnet.js'
 import { NUClearNetSend } from 'nuclearnet.js'
 
 import { Packet } from './nuclearnet_proxy_parser_socketio'
@@ -23,6 +22,7 @@ export class Encoder {
   encode(packet: Packet, callback: (wire: any[]) => void) {
     switch (packet.type) {
       case TYPES.EVENT:
+      case TYPES.BINARY_EVENT:
 
         const { nsp, data: [eventName] } = packet
 

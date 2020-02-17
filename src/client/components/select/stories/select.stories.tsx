@@ -2,7 +2,7 @@ import { action } from '@storybook/addon-actions'
 import { storiesOf } from '@storybook/react'
 import { action as mobxAction, observable } from 'mobx'
 import { observer } from 'mobx-react'
-import * as React from 'react'
+import React from 'react'
 
 import { Option, Select } from '../view'
 
@@ -59,7 +59,7 @@ storiesOf('components.select', module)
       options={options}
       onChange={actions.onChange}
       placeholder='Select a color...'
-      icon={<Icon />}
+      icon={<Icon/>}
     />
   })
   .add('interactive', () => {
@@ -74,10 +74,10 @@ storiesOf('components.select', module)
       selectedOption={model.selectedOption}
       onChange={onChange}
       placeholder='Select a color...'
-      icon={<Icon />}
+      icon={<Icon/>}
     />)
 
-    return <Component />
+    return <Component/>
   })
 
 function getOptions(): Option[] {

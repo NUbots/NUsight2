@@ -5,11 +5,9 @@ import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
-import * as NUClearNetProxyParser from '../../shared/nuclearnet/nuclearnet_proxy_parser'
 
-import { DirectWebSocketClient } from './direct_web_socket_client'
-import { WebSocketClient } from './web_socket_client'
 import { WebWorkerWebSocketClient } from './webworker_web_socket_client'
+import { WebSocketClient } from './web_socket_client'
 
 type PacketListener = (packet: NUClearNetPacket, ack?: () => void) => void
 

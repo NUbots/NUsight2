@@ -1,21 +1,21 @@
-import { computed } from 'mobx'
-import { observable } from 'mobx'
+import * as THREE from 'three'
 
 import { Vector3 } from './vector3'
 
 export class Matrix3 {
-  @observable x: Vector3
-  @observable y: Vector3
-  @observable z: Vector3
-
-  constructor(x: Vector3, y: Vector3, z: Vector3) {
-    this.x = x
-    this.y = y
-    this.z = z
+  constructor(
+    readonly x: Vector3,
+    readonly y: Vector3,
+    readonly z: Vector3,
+  ) {
   }
 
   static of() {
-    return new Matrix3(new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1))
+    return new Matrix3(
+      new Vector3(1, 0, 0),
+      new Vector3(0, 1, 0),
+      new Vector3(0, 0, 1),
+    )
   }
 
   static from(mat?: {
@@ -29,25 +29,33 @@ export class Matrix3 {
     return new Matrix3(Vector3.from(mat.x), Vector3.from(mat.y), Vector3.from(mat.z))
   }
 
-  @computed get trace(): number {
+  get trace(): number {
     return this.x.x + this.y.y + this.z.z
   }
 
-  set(x: Vector3, y: Vector3, z: Vector3): Matrix3 {
-    this.x = x
-    this.y = y
-    this.z = z
-    return this
+  static fromThree(mat4: THREE.Matrix3) {
+    return new Matrix3(
+      new Vector3(mat4.elements[0], mat4.elements[1], mat4.elements[2]),
+      new Vector3(mat4.elements[3], mat4.elements[4], mat4.elements[5]),
+      new Vector3(mat4.elements[6], mat4.elements[7], mat4.elements[8]),
+    )
   }
 
-  clone(): Matrix3 {
-    return new Matrix3(this.x.clone(), this.y.clone(), this.z.clone())
+  toThree(): THREE.Matrix3 {
+    return new THREE.Matrix3().set(
+      this.x.x, this.y.x, this.z.x,
+      this.x.y, this.y.y, this.z.y,
+      this.x.z, this.y.z, this.z.z,
+    )
   }
 
-  copy(m: Matrix3): Matrix3 {
-    this.x.copy(m.x)
-    this.y.copy(m.y)
-    this.z.copy(m.z)
-    return this
+  toString() {
+    return [
+      `${format(this.x.x)} ${format(this.y.x)} ${format(this.z.x)}`,
+      `${format(this.x.y)} ${format(this.y.y)} ${format(this.z.y)}`,
+      `${format(this.x.z)} ${format(this.y.z)} ${format(this.z.z)}`,
+    ].join('\n')
   }
 }
+
+const format = (x: number) => x.toFixed(2).padStart(7)

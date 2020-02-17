@@ -16,7 +16,7 @@ export interface GreenHorizon {
 
 export interface VisualMesh {
   readonly neighbours: number[]
-  readonly coordinates: number[]
+  readonly rays: number[]
   readonly classifications: { dim: number, values: number[] }
 }
 
@@ -26,6 +26,7 @@ export interface VisionImage extends Image {
     readonly projection: number
     readonly focalLength: number
     readonly centre: Vector2
+    readonly k: Vector2 // The distortion coefficents
   }
 }
 

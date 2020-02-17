@@ -1,4 +1,4 @@
-import * as SocketIO from 'socket.io'
+import SocketIO from 'socket.io'
 
 /**
  * The thinnest wrapper possible around the Socket IO server interface. This exists to assist testing
@@ -14,11 +14,14 @@ export class WebSocketServer {
     return new WebSocketServer(server)
   }
 
-  onConnection(cb: (socket: WebSocket) => void) {
-    this.sioServer.on('connection', (socket: SocketIO.Socket) => {
+  onConnection(cb: (socket: WebSocket) => void): () => void {
+    const listener = (socket: SocketIO.Socket) => {
       const webSocket = WebSocket.of(socket)
       cb(webSocket)
-    })
+    }
+    this.sioServer.on('connection', listener)
+    // The cast is necessary as the SocketIO typescript definitions do not include the removeListener method.
+    return () => (this.sioServer as any).removeListener('connection', listener)
   }
 }
 

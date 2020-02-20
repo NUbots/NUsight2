@@ -8,10 +8,10 @@ import { ImageViewModel } from '../image_view/view_model'
 
 import { BallsViewModel } from './balls'
 import { CompassViewModel } from './compass'
+import { DistanceViewModel } from './distance'
 import { GoalsViewModel } from './goals'
 import { GreenHorizonViewModel } from './greenhorizon'
 import { HorizonViewModel } from './horizon'
-import { DistanceViewModel } from './distance'
 import { CameraModel } from './model'
 
 export class CameraViewModel {

@@ -1,5 +1,5 @@
 /**
- * Represents an error which should never occur within type system.
+ * Represents an error which should never occur within the type system.
  *
  * Most often used for ensuring exhaustive switch cases at compile-time. e.g.
  *

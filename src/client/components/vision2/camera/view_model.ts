@@ -11,6 +11,7 @@ import { CompassViewModel } from './compass'
 import { GoalsViewModel } from './goals'
 import { GreenHorizonViewModel } from './greenhorizon'
 import { HorizonViewModel } from './horizon'
+import { DistanceViewModel } from './distance'
 import { CameraModel } from './model'
 
 export class CameraViewModel {
@@ -43,6 +44,7 @@ export class CameraViewModel {
       this.image.image(),
       this.compass.compass(),
       this.horizon.horizon(),
+      this.distance.distance(),
       this.greenhorizon?.greenhorizon(),
       this.balls?.balls(),
       this.goals?.goals(),
@@ -57,6 +59,11 @@ export class CameraViewModel {
   @computed
   private get horizon(): HorizonViewModel {
     return HorizonViewModel.of(this.canvas, this.model.params)
+  }
+
+  @computed
+  private get distance(): DistanceViewModel {
+    return DistanceViewModel.of(this.canvas, this.model.params)
   }
 
   @computed

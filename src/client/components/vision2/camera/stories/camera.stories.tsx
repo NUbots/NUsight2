@@ -36,7 +36,8 @@ async function fakeCameraModel(): Promise<CameraModel> {
     .premultiply(new THREE.Matrix4().makeTranslation(1, 2, 0.8)),
   )
   const Hwc = Matrix4.fromThree(new THREE.Matrix4().getInverse(Hcw.toThree()))
-  const focalLength = 412.507218876
+  const viewSize = Vector2.of(image.width, image.height)
+  const focalLength = 193 / viewSize.x
   return CameraModel.of({
     id: 0,
     name: 'Fake Camera',
@@ -45,27 +46,27 @@ async function fakeCameraModel(): Promise<CameraModel> {
       Hcw,
       lens: {
         projection: Projection.EQUIDISTANT,
-        focalLength: focalLength / 1280,
+        focalLength,
       },
     }),
     greenhorizon: new GreenHorizon({
       horizon: [
-        new Vector2(80, 550),
-        new Vector2(530, 290),
-        new Vector2(900, 350),
-        new Vector2(1150, 500),
-        new Vector2(1210, 710),
-        new Vector2(950, 1010),
-        new Vector2(250, 900),
-        new Vector2(80, 550),
-      ].map(p => screenToWorldRay(p, focalLength, Hwc)),
+        new Vector2(38, 258),
+        new Vector2(248, 136),
+        new Vector2(422, 164),
+        new Vector2(539, 234),
+        new Vector2(567, 333),
+        new Vector2(445, 473),
+        new Vector2(117, 422),
+        new Vector2(38, 258),
+      ].map(p => screenToWorldRay(p, viewSize, focalLength, Hwc)),
       Hcw,
     }),
     balls: [{
       timestamp: 0,
       Hcw,
       cone: {
-        axis: unprojectEquidistant(new Vector2(417, 647), focalLength),
+        axis: unprojectEquidistant(new Vector2(195, 303), viewSize, focalLength),
         radius: 0.105,
       },
       distance: 1,
@@ -76,8 +77,8 @@ async function fakeCameraModel(): Promise<CameraModel> {
       Hcw,
       side: 'left',
       post: {
-        top: unprojectEquidistant(new Vector2(135, 320), focalLength),
-        bottom: unprojectEquidistant(new Vector2(170, 465), focalLength),
+        top: unprojectEquidistant(new Vector2(63, 150), viewSize, focalLength),
+        bottom: unprojectEquidistant(new Vector2(80, 218), viewSize, focalLength),
         distance: 4,
       },
     }, {
@@ -85,8 +86,8 @@ async function fakeCameraModel(): Promise<CameraModel> {
       Hcw,
       side: 'right',
       post: {
-        top: unprojectEquidistant(new Vector2(420, 145), focalLength),
-        bottom: unprojectEquidistant(new Vector2(420, 325), focalLength),
+        top: unprojectEquidistant(new Vector2(197, 68), viewSize, focalLength),
+        bottom: unprojectEquidistant(new Vector2(197, 152), viewSize, focalLength),
         distance: 4.5,
       },
     }],
@@ -108,19 +109,19 @@ async function loadImage(url: string): Promise<HTMLImageElement> {
   })
 }
 
-function screenToWorldRay(screenPoint: Vector2, focalLength: number, Hwc: Matrix4) {
-  const rFCc = unprojectEquidistant(screenPoint, focalLength)
+function screenToWorldRay(screenPoint: Vector2, viewSize: Vector2, focalLength: number, Hwc: Matrix4) {
+  const rFCc = unprojectEquidistant(screenPoint, viewSize, focalLength)
   const Rwc = new THREE.Matrix4().extractRotation(Hwc.toThree())
   return Vector3.fromThree(rFCc.toThree().applyMatrix4(Rwc)) // rFCw
 }
 
-function unprojectEquidistant(point: Vector2, focalLength: number): Vector3 {
-  const offset = new Vector2(1280 / 2, 1024 / 2).subtract(point) // TODO
-  const r = offset.length
+function unprojectEquidistant(point: Vector2, viewSize: Vector2, focalLength: number): Vector3 {
+  const p = new Vector2(viewSize.x / 2, viewSize.y / 2).subtract(point).divideScalar(viewSize.x)
+  const r = p.length
   const theta = r / focalLength
   return new Vector3(
     Math.cos(theta),
-    r !== 0 ? Math.sin(theta) * offset.x / r : 0,
-    r !== 0 ? Math.sin(theta) * offset.y / r : 0,
+    r !== 0 ? Math.sin(theta) * p.x / r : 0,
+    r !== 0 ? Math.sin(theta) * p.y / r : 0,
   ).normalize()
 }

@@ -7,35 +7,32 @@ import { Vector4 } from '../../../math/vector4'
 import { group } from '../../three/builders'
 import { Canvas } from '../../three/three'
 
+import { LineProjection } from './line_projection'
 import { GreenHorizon } from './model'
 import { CameraParams } from './model'
-import { WorldLine } from './world_line'
-import { coneSegment } from './world_line'
 
 export class GreenHorizonViewModel {
   constructor(
     private readonly greenHorizon: GreenHorizon,
     private readonly params: CameraParams,
-    private readonly worldLine: WorldLine,
+    private readonly lineProjection: LineProjection,
   ) {
   }
 
   static of(canvas: Canvas, greenHorizon: GreenHorizon, params: CameraParams): GreenHorizonViewModel {
-    return new GreenHorizonViewModel(greenHorizon, params, WorldLine.of(canvas, params.lens))
+    return new GreenHorizonViewModel(greenHorizon, params, LineProjection.of(canvas, params.lens))
   }
 
   readonly greenhorizon = group(() => ({
     children: this.greenHorizon.horizon.map((_, index) => {
       // For n given rays there are n - 1 line segments between them.
-      return index >= 1 ? this.worldLine.planeSegment(this.segment(index)) : undefined
+      return index >= 1 ? this.lineProjection.planeSegment({
+        start: this.rays[index - 1],
+        end: this.rays[index],
+        color: new Vector4(0, 0.8, 0, 0.8),
+        lineWidth: 10,
+      }) : undefined
     }),
-  }))
-
-  private readonly segment = coneSegment((index: number) => ({
-    start: this.rays[index - 1],
-    end: this.rays[index],
-    color: new Vector4(0, 0.8, 0, 0.8),
-    lineWidth: 10,
   }))
 
   @computed
@@ -46,7 +43,10 @@ export class GreenHorizonViewModel {
     // shifted perspective, and the green horizon would look incorrectly offset on screen.
     //
     // We transform the rays by using the Hcw from the green horizon measurement and the Hcw from the camera image
-    // measurement, and effectively remap the rays to the perspective of the new camera image.
+    // measurement. We firstly project the rays down to the ground using the height from the green horizon Hcw
+    // We then transform the ground points into world space by adding the translation to that camera.
+    // Once we have ground points in the world space, we use any Hcw matrix to transform them to that camera's view.
+    // This effectively remaps the rays to the perspective of the new camera image.
 
     const { horizon, Hcw: greenHorizonHcw } = this.greenHorizon
     const imageHcw = this.params.Hcw

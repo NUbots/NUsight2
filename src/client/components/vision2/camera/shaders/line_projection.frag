@@ -24,7 +24,6 @@ varying vec2 vUv;
 #define EQUIDISTANT_PROJECTION 2
 #define EQUISOLID_PROJECTION 3
 
-// TODO(trent) these should be moved into a separate GLSL file once there is a decent #include system
 /**
  * Takes an undistorted radial distance from the optical axis and computes and applies an inverse distortion
  *

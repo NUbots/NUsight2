@@ -32,8 +32,6 @@ export class DistanceViewModel {
 
   @computed
   private get height() : number {
-    const m = new THREE.Matrix4()
-    this.params.Hcw.toThree().getInverse(m)
-    return m.elements[15]
+    return new THREE.Matrix4().getInverse(this.params.Hcw.toThree()).elements[15]
   }
 }

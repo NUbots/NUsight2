@@ -14,7 +14,7 @@ import fragmentShader from './shaders/line_projection.frag'
 import vertexShader from './shaders/line_projection.vert'
 
 export interface ConeSegment {
-  /** The camera space central axis of the cone. Only needed for a plane if the start and end are (anti-)parallel. */
+  /** The camera space central axis of the cone. */
   axis: Vector3,
   /** The camera space vector pointing to the start of the segment. */
   start: Vector3,
@@ -49,7 +49,7 @@ export class LineProjection {
   planeSegment(segment: { axis?: Vector3, start: Vector3, end: Vector3, color?: Vector4, lineWidth?: number }) {
     return this.coneSegment({
       ...segment,
-      axis: Vector3.fromThree(
+      axis: segment.axis ?? Vector3.fromThree(
         new THREE.Vector3().crossVectors(
           segment.start.toThree(),
           segment.end.toThree(),

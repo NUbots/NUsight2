@@ -21,12 +21,12 @@ export class DistanceViewModel {
   }
 
   readonly distance = group(() => ({
-    children: range(25).map((v, i) => (
+    children: range(40).map((v, i) => (
         this.lineProjection.cone({
           axis: this.params.Hcw.z.vec3().multiplyScalar(-1),
-          radius: Math.cos(Math.atan(((i + 1) * 0.2) / this.height)),
-          color: new Vector4(1, 1, 1, (i + 1) % 5 ? 0.5 : 1),
-          lineWidth: (i + 1) % 5 ? 2 : 3,
+          radius: Math.cos(Math.atan(((i + 1)*0.25) / this.height)),
+          color: new Vector4(1, 1, 1, (i + 1) % 4 ? 0.2 : 0.4),
+          lineWidth: (i + 1) % 4 ? 2 : 3,
         }))),
   }))
 

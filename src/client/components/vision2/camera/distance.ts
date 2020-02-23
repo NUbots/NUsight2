@@ -21,7 +21,7 @@ export class DistanceViewModel {
     lineProjection: LineProjection,
     majorStep: number,
     minorLines: number,
-    maxDistance: number,
+    maxDistance: number
   }) {
     this.params = params
     this.lineProjection = lineProjection

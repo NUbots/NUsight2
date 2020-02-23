@@ -1,7 +1,6 @@
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import * as path from 'path'
-import ProgressBarPlugin from 'progress-bar-webpack-plugin'
 import webpack from 'webpack'
 import { getClientConfig } from '../../webpack.config'
 

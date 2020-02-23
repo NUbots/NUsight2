@@ -47,23 +47,12 @@ export class Matrix4 {
   }
 
   toThree(): THREE.Matrix4 {
+    // prettier-ignore
     return new THREE.Matrix4().set(
-      this.x.x,
-      this.y.x,
-      this.z.x,
-      this.t.x,
-      this.x.y,
-      this.y.y,
-      this.z.y,
-      this.t.y,
-      this.x.z,
-      this.y.z,
-      this.z.z,
-      this.t.z,
-      this.x.t,
-      this.y.t,
-      this.z.t,
-      this.t.t,
+      this.x.x, this.y.x, this.z.x, this.t.x,
+      this.x.y, this.y.y, this.z.y, this.t.y,
+      this.x.z, this.y.z, this.z.z, this.t.z,
+      this.x.t, this.y.t, this.z.t, this.t.t,
     )
   }
 

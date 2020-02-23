@@ -35,16 +35,11 @@ export class Matrix3 {
   }
 
   toThree(): THREE.Matrix3 {
+    // prettier-ignore
     return new THREE.Matrix3().set(
-      this.x.x,
-      this.y.x,
-      this.z.x,
-      this.x.y,
-      this.y.y,
-      this.z.y,
-      this.x.z,
-      this.y.z,
-      this.z.z,
+      this.x.x, this.y.x, this.z.x,
+      this.x.y, this.y.y, this.z.y,
+      this.x.z, this.y.z, this.z.z,
     )
   }
 

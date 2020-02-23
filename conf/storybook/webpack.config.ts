@@ -23,7 +23,6 @@ export default ({ config: storybookConfig }: { config: webpack.Configuration }) 
       ...(config.plugins || []).filter(p => !(
           p instanceof HtmlWebpackPlugin // Storybook handles page generation.
           || p instanceof CopyWebpackPlugin // Avoids overwriting index.html.
-          || p instanceof ProgressBarPlugin // Storybook already has a progress plugin.
         ),
       ),
     ],

@@ -12,6 +12,10 @@ import { GridLayout } from '../grid_layout'
 import styles from './styles.css'
 import useInterval from '@use-it/interval'
 
+const imageWidth = 600
+const imageHeight = 480
+const aspectRatio = imageHeight / imageWidth
+
 storiesOf('components.vision2.grid_layout', module)
   .addDecorator(fullscreen)
   .addDecorator(withKnobs)
@@ -19,10 +23,10 @@ storiesOf('components.vision2.grid_layout', module)
     const numItems = number('Items', 2)
     const subItems = number('Sub-items', 1)
     return (
-      <GridLayout itemAspectRatio={0.8}>
+      <GridLayout itemAspectRatio={aspectRatio}>
         {range(numItems).map(i => (
           <div key={i} className={styles.item} style={{ backgroundColor: 'red' }}>
-            <GridLayout itemAspectRatio={0.8}>
+            <GridLayout itemAspectRatio={aspectRatio}>
               {range(subItems).map(i => (
                 <div key={i} className={styles.item}>
                   <img className={styles.image} src={images} style={{ objectFit: 'contain' }} />
@@ -51,10 +55,10 @@ storiesOf('components.vision2.grid_layout', module)
             boxSizing: 'border-box',
           }}
         >
-          <GridLayout itemAspectRatio={0.8}>
+          <GridLayout itemAspectRatio={aspectRatio}>
             {range(numItems).map(i => (
               <div key={i} className={styles.item} style={{ backgroundColor: 'red' }}>
-                <GridLayout itemAspectRatio={0.8}>
+                <GridLayout itemAspectRatio={aspectRatio}>
                   {range(subItems).map(i => (
                     <div key={i} className={styles.item}>
                       <img className={styles.image} src={images} style={{ objectFit: 'contain' }} />

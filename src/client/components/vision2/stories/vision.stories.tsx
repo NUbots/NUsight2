@@ -2,7 +2,9 @@ import { storiesOf } from '@storybook/react'
 import React from 'react'
 import { Matrix4 } from '../../../math/matrix4'
 import { NUsightNetwork } from '../../../network/nusight_network'
+import { AppController } from '../../app/controller'
 import { AppModel } from '../../app/model'
+import { withRobotSelectorMenuBar } from '../../menu_bar/view'
 import { RobotModel } from '../../robot/model'
 import { fullscreen } from '../../storybook/fullscreen'
 import { Projection } from '../camera/model'
@@ -97,7 +99,8 @@ storiesOf('components.vision2.layout', module)
     const controller = VisionController.of()
     const nusightNetwork = NUsightNetwork.of(appModel)
     const network = VisionNetwork.of(nusightNetwork)
-    const Menu = () => <div>Fake Menu</div>
+    const appController = AppController.of()
+    const Menu = withRobotSelectorMenuBar(appModel.robots, appController.toggleRobotEnabled)
     const CameraView = (props: CameraViewProps) => (
       <div
         style={{

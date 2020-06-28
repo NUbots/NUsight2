@@ -12,21 +12,15 @@ import { VisionController } from './controller'
 import { GridLayout } from './grid_layout/grid_layout'
 
 import { VisionModel } from './model'
-import { VisionNetwork } from './network'
 import styles from './styles.css'
 
 @observer
 export class VisionView extends Component<{
   controller: VisionController
   model: VisionModel
-  network: VisionNetwork
   Menu: ComponentType
   CameraView: ComponentType<CameraViewProps>
 }> {
-  componentWillUnmount() {
-    this.props.network.destroy()
-  }
-
   render() {
     const {
       model: { selectedRobot, robots },

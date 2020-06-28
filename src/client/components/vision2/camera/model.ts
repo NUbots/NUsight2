@@ -87,8 +87,8 @@ export class CameraModel {
     this.params.copy(that.params)
     this.greenhorizon =
       (that.greenhorizon && this.greenhorizon?.copy(that.greenhorizon)) || that.greenhorizon
-    this.balls = that.balls // TODO: deep copy?
-    this.goals = that.goals // TODO: deep copy?
+    this.balls = that.balls
+    this.goals = that.goals
     return this
   }
 }

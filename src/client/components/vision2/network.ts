@@ -46,7 +46,7 @@ export class VisionNetwork {
   ) => {
     const robot = VisionRobotModel.of(robotModel)
     const { cameraId, name, dimensions, format, data, Hcw } = image
-    const { projection, focalLength, centre } = image!.lens!
+    const { projection, focalLength, centre } = image?.lens!
 
     const element = await jpegBufferToImage(data)
 
@@ -88,10 +88,10 @@ export class VisionNetwork {
       timestamp: toSeconds(timestamp),
       Hcw: Matrix4.from(Hcw),
       cone: {
-        axis: Vector3.from(ball.cone!.axis),
-        radius: ball.cone!.radius!,
+        axis: Vector3.from(ball.cone?.axis),
+        radius: ball.cone?.radius!,
       },
-      distance: Math.abs(ball.measurements?.[0].rBCc!.x!),
+      distance: Math.abs(ball.measurements?.[0].rBCc?.x!),
       colour: Vector4.from(ball.colour),
     }))
   }
@@ -114,9 +114,9 @@ export class VisionNetwork {
           ? 'right'
           : 'unknown',
       post: {
-        top: Vector3.from(goal.post!.top),
-        bottom: Vector3.from(goal.post!.bottom),
-        distance: goal.post!.distance!,
+        top: Vector3.from(goal.post?.top),
+        bottom: Vector3.from(goal.post?.bottom),
+        distance: goal.post?.distance!,
       },
     }))
   }

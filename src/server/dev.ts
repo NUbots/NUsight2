@@ -71,7 +71,7 @@ function init() {
     const virtualRobots = VirtualRobots.of({
       fakeNetworking: true,
       nuclearnetAddress,
-      numRobots: 3,
+      numRobots: 5,
     })
     virtualRobots.start()
   }

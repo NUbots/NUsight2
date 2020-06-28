@@ -116,12 +116,5 @@ storiesOf('components.vision2.layout', module)
       </div>
     )
     const controller = VisionController.of()
-    return (
-      <VisionView
-        controller={controller}
-        model={model}
-        Menu={Menu}
-        CameraView={CameraView}
-      />
-    )
+    return <VisionView controller={controller} model={model} Menu={Menu} CameraView={CameraView} />
   })

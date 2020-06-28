@@ -82,7 +82,7 @@ export class VisionSimulator extends Simulator {
           dimensions: { x: 712, y: 463 },
           data,
           cameraId,
-          name: 'Virtual Camera',
+          name: `Virtual Camera #${cameraId}`,
           timestamp: toTimestamp(time),
           Hcw: toProtoMat44(Hcw),
           lens: {

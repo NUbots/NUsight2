@@ -36,7 +36,7 @@ export class VisionNetwork {
     return new VisionNetwork(network)
   }
 
-  destroy() {
+  destroy = () => {
     this.network.off()
   }
 

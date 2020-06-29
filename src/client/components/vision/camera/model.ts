@@ -157,6 +157,8 @@ export enum Projection {
 }
 
 export interface VisualMesh {
+  /** The world to camera transform, at the time the visual mesh was measured. */
+  readonly Hcw: Matrix4
   readonly neighbours: number[]
   readonly rays: number[]
   readonly classifications: { dim: number; values: number[] }

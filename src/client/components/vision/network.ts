@@ -81,12 +81,13 @@ export class VisionNetwork {
   @action
   onMesh(robotModel: RobotModel, packet: message.vision.VisualMesh) {
     const robot = VisionRobotModel.of(robotModel)
-    const { cameraId, neighbourhood, rays, classifications } = packet
+    const { cameraId, neighbourhood, rays, classifications, Hcw } = packet
     const camera = robot.cameras.get(cameraId)
     if (!camera) {
       return
     }
     camera.visualmesh = {
+      Hcw: Matrix4.from(Hcw),
       neighbours: neighbourhood?.v!,
       rays: rays?.v!,
       classifications: { dim: classifications?.rows!, values: classifications?.v! },

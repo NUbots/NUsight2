@@ -44,7 +44,7 @@ export class VisualMeshViewModel {
       }
     }
     const buffer = new THREE.InterleavedBuffer(
-      classifications.values.slice(0, -classifications.dim),
+      new Float32Array(classifications.values.slice(0, -classifications.dim)),
       classifications.dim,
     )
 

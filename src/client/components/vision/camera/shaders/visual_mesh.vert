@@ -4,6 +4,7 @@ precision lowp int;
 uniform mat4 projectionMatrix;
 uniform mat4 modelViewMatrix;
 uniform vec2 viewSize;
+uniform mat4 Hcw;
 uniform float focalLength;
 uniform vec2 centre;
 uniform vec2 k;
@@ -130,7 +131,7 @@ void main() {
   // Rotate vector into camera space and project into image space
   // Correct for OpenGL coordinate system and aspect ratio
   // Multiply by 2.0 to get a coordinate since the width of the "image (the camera planes)" is -1 to 1 (width of 2.0)
-  vec2 pos = project(position, focalLength, centre, k, projection)
+  vec2 pos = project((Hcw * vec4(position, 0)).xyz, focalLength, centre, k, projection)
              * vec2(-1.0, viewSize.x / viewSize.y) * 2.0;
 
   vBall        = ball;

@@ -381,14 +381,14 @@ export const interleavedBuffer = createUpdatableComputed(
   buffer => (buffer.needsUpdate = true),
 )
 
-type BufferedGeometryOpts = {
+type BufferGeometryOpts = {
   index: BufferAttribute | number[]
   attributes: { name: string; buffer: BufferAttribute | InterleavedBufferAttribute }[]
 }
 
 export const bufferGeometry = createUpdatableComputed(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  (opts: BufferedGeometryOpts) => new BufferGeometry(),
+  (opts: BufferGeometryOpts) => new BufferGeometry(),
   (geometry, opts) => {
     geometry.setIndex(opts.index)
     for (const [name] of Object.entries(geometry.attributes)) {

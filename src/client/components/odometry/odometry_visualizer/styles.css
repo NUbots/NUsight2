@@ -22,7 +22,10 @@
   padding: 16px;
   border-radius: 8px;
   border: 2px solid rgba(255, 255, 255, 0.5);
-  flex-gap: 8px;
+}
+
+.item:not(:last-child) {
+  margin-right: 8px;
 }
 
 .color {

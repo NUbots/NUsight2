@@ -1,3 +1,4 @@
+import styles from './styles.css'
 import { action } from 'mobx'
 import { computed } from 'mobx'
 import React from 'react'
@@ -12,13 +13,21 @@ export class OdometryVisualizer extends React.Component<{ model: OdometryVisuali
 
   render() {
     return (
-      <Three
-        stage={this.stage}
-        onWheel={this.onWheel}
-        onMouseDown={this.onMouseDown}
-        onMouseMove={this.onMouseMove}
-        onMouseUp={this.onMouseUp}
-      />
+      <div className={styles.visualizer}>
+        <Three
+          stage={this.stage}
+          onWheel={this.onWheel}
+          onMouseDown={this.onMouseDown}
+          onMouseMove={this.onMouseMove}
+          onMouseUp={this.onMouseUp}
+        />
+        <div className={styles.legend}>
+          <div className={styles.item}>
+            <div className={styles.color} style={{ backgroundColor: 'white' }} />
+            <span>Accelerometer</span>
+          </div>
+        </div>
+      </div>
     )
   }
 

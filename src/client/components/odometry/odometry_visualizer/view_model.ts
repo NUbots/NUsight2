@@ -1,6 +1,5 @@
 import { computed } from 'mobx'
 import * as THREE from 'three'
-import { Matrix4 } from '../../../math/matrix4'
 import { Vector3 } from '../../../math/vector3'
 import { group } from '../../three/builders'
 import { scene } from '../../three/builders'
@@ -45,16 +44,25 @@ export class OdometryVisualizerViewModel {
   }
 
   private readonly scene = scene(() => ({
-    children: [this.basis(this.model.Hwt), this.floor()],
+    children: [this.torso(), this.floor()],
   }))
 
-  private readonly basis = group((mat4: Matrix4) => ({
+  private readonly torso = group(() => ({
     position: this.rTWw,
-    rotation: Vector3.fromThree(new THREE.Euler().setFromRotationMatrix(mat4.toThree())),
+    rotation: Vector3.fromThree(new THREE.Euler().setFromRotationMatrix(this.model.Hwt.toThree())),
+    children: [this.basis(), this.accelerometer()],
+  }))
+
+  private readonly basis = group(() => ({
     children: [
       new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), undefined, 1, 0xff0000),
       new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), undefined, 1, 0x00ff00),
       new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), undefined, 1, 0x0000ff),
+    ],
+  }))
+
+  private readonly accelerometer = group(() => ({
+    children: [
       new THREE.ArrowHelper(
         this.model.accelerometer.normalize().toThree(),
         undefined,

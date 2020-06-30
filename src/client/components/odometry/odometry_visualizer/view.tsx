@@ -26,7 +26,7 @@ export class OdometryVisualizer extends React.Component<{ model: OdometryVisuali
             <div className={styles.color} style={{ backgroundColor: 'red' }} />
             <div className={styles.color} style={{ backgroundColor: 'green' }} />
             <div className={styles.color} style={{ backgroundColor: 'blue' }} />
-            <span>Htw</span>
+            <span>Hwt</span>
           </div>
           <div className={styles.item}>
             <div className={styles.color} style={{ backgroundColor: 'white' }} />

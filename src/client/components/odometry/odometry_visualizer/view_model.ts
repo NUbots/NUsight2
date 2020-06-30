@@ -56,7 +56,7 @@ export class OdometryVisualizerViewModel {
       new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), undefined, 1, 0x00ff00),
       new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), undefined, 1, 0x0000ff),
       new THREE.ArrowHelper(
-        this.model.accelerometer.toThree(),
+        this.model.accelerometer.normalize().toThree(),
         undefined,
         this.model.accelerometer.length / 9.8,
         0xffffff,

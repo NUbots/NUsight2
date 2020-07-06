@@ -216,8 +216,8 @@ class PacketProcessor {
             // Update our performance tracking information
             stats.active -= 1
             if (processingTime != null) {
+              // https://en.wikipedia.org/wiki/Exponential_smoothing
               const n = 10
-              // https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average
               stats.processingTime = (stats.processingTime * n + processingTime) / (n + 1)
             }
             isDone = true

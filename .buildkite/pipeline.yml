@@ -7,6 +7,7 @@ steps:
       - ./.buildkite/plugins/cache: ~
       - docker#v3.5.0:
           image: "node:12"
+          always-pull: true
           propagate-uid-gid: true
           environment:
             - "HOME=/workdir"
@@ -19,6 +20,7 @@ steps:
       - ./.buildkite/plugins/cache: ~
       - docker#v3.5.0:
           image: "node:12"
+          always-pull: true
           propagate-uid-gid: true
           environment:
             - "HOME=/workdir"
@@ -31,6 +33,7 @@ steps:
       - ./.buildkite/plugins/cache: ~
       - docker#v3.5.0:
           image: "node:12"
+          always-pull: true
           propagate-uid-gid: true
           environment:
             - "HOME=/workdir"
@@ -43,6 +46,7 @@ steps:
       - ./.buildkite/plugins/cache: ~
       - docker#v3.5.0:
           image: "node:12"
+          always-pull: true
           propagate-uid-gid: true
           environment:
             - "HOME=/workdir"

@@ -160,7 +160,6 @@ class WebSocketServerClient {
 
 type NetStats = {
   active: number
-  latency: number
   processingTime: number
   lastSent: number
 }
@@ -212,23 +211,18 @@ class PacketProcessor {
         let isDone = false
         const stats = this.getStatsForEvent(key)
         stats.active++
-        const start = this.clock.performanceNow()
         const done = (processingTime?: number) => {
           if (!isDone) {
             // Update our performance tracking information
             stats.active -= 1
             if (processingTime != null) {
-              // Calculate network latency
-              const latency = this.clock.performanceNow() - start
               const n = stats.active
-              stats.latency = (stats.latency * n + latency) / (n + 1)
               stats.processingTime = (stats.processingTime * n + processingTime) / (n + 1)
             }
             isDone = true
             this.maybeSendNextPacket()
           }
         }
-        // this.socket.volatileSend(event, packet, done)
         this.socket.send(event, packet, done)
         stats.lastSent = this.clock.performanceNow()
         this.clock.setTimeout(done, this.timeout)
@@ -238,15 +232,14 @@ class PacketProcessor {
 
   private canSendEvent(event: string): boolean {
     const stats = this.getStatsForEvent(event)
-    const maxRate = stats.processingTime / stats.latency
     const timeSince = this.clock.performanceNow() - stats.lastSent
-    return timeSince >= maxRate
+    return timeSince >= stats.processingTime
   }
 
   private getStatsForEvent(event: string): NetStats {
     let stats = this.netstatsByEvent.get(event)
     if (!stats) {
-      stats = { active: 0, latency: 1, processingTime: 0.1, lastSent: 0 }
+      stats = { active: 0, processingTime: 0.1, lastSent: 0 }
       this.netstatsByEvent.set(event, stats)
     }
     return stats

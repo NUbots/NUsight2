@@ -162,11 +162,11 @@ type NetStats = {
   active: number
   latency: number
   processingTime: number
+  lastSent: number
 }
 
 class PacketProcessor {
   private readonly netstatsByEvent = new Map<string, NetStats>()
-  private readonly lastSentByEvent = new Map<string, number>()
 
   // The number of seconds before giving up on an acknowledge
   private readonly timeout: number
@@ -204,45 +204,49 @@ class PacketProcessor {
 
   private maybeSendNextPacket() {
     const next = this.queue.pop()
-    if (next && this.canSendEvent(next.event)) {
+    if (next) {
       const { event, packet } = next
-      let isDone = false
-      const stats = this.getStatsForEvent(event)
-      stats.active++
-      const start = this.clock.performanceNow()
-      const done = (processingTime?: number) => {
-        if (!isDone) {
-          // Update our performance tracking information
-          stats.active -= 1
-          if (processingTime != null) {
-            // Calculate network latency
-            const latency = this.clock.performanceNow() - start
-            const n = stats.active
-            stats.latency = (stats.latency * n + latency) / (n + 1)
-            stats.processingTime = (stats.processingTime * n + processingTime) / (n + 1)
+      const key = `${event}:${packet.peer.name}:${packet.peer.address}:${packet.peer.port}`
+      if (this.canSendEvent(key)) {
+        const { event, packet } = next
+        let isDone = false
+        const stats = this.getStatsForEvent(key)
+        stats.active++
+        const start = this.clock.performanceNow()
+        const done = (processingTime?: number) => {
+          if (!isDone) {
+            // Update our performance tracking information
+            stats.active -= 1
+            if (processingTime != null) {
+              // Calculate network latency
+              const latency = this.clock.performanceNow() - start
+              const n = stats.active
+              stats.latency = (stats.latency * n + latency) / (n + 1)
+              stats.processingTime = (stats.processingTime * n + processingTime) / (n + 1)
+            }
+            isDone = true
+            this.maybeSendNextPacket()
           }
-          isDone = true
-          this.maybeSendNextPacket()
         }
+        // this.socket.volatileSend(event, packet, done)
+        this.socket.send(event, packet, done)
+        stats.lastSent = this.clock.performanceNow()
+        this.clock.setTimeout(done, this.timeout)
       }
-      this.socket.volatileSend(event, packet, done)
-      this.lastSentByEvent.set(event, this.clock.performanceNow())
-      this.clock.setTimeout(done, this.timeout)
     }
   }
 
   private canSendEvent(event: string): boolean {
     const stats = this.getStatsForEvent(event)
     const maxRate = stats.processingTime / stats.latency
-    const lastSent = this.lastSentByEvent.get(event) ?? 0
-    const timeSince = this.clock.performanceNow() - lastSent
+    const timeSince = this.clock.performanceNow() - stats.lastSent
     return timeSince >= maxRate
   }
 
   private getStatsForEvent(event: string): NetStats {
     let stats = this.netstatsByEvent.get(event)
     if (!stats) {
-      stats = { active: 0, latency: 1, processingTime: 0.1 }
+      stats = { active: 0, latency: 1, processingTime: 0.1, lastSent: 0 }
       this.netstatsByEvent.set(event, stats)
     }
     return stats

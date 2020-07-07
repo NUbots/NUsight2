@@ -119,7 +119,7 @@ export class ChartNetwork {
 
   @action
   private onSensorData = (robotModel: RobotModel, sensorData: Sensors) => {
-    const { accelerometer, gyroscope, battery, voltage, button, led, servo, leftFootDown, rightFootDown } = sensorData
+    const { accelerometer, gyroscope, battery, voltage, button, led, servo, feet } = sensorData
     const timestamp = sensorData.timestamp!
 
     if (accelerometer) {
@@ -183,14 +183,14 @@ export class ChartNetwork {
     }
 
     this.onDataPoint(robotModel, new DataPoint({
-      label: 'Sensor/Foot Down/Left',
-      value: [leftFootDown ? 1 : 0],
+      label: 'Sensor/Foot Down/Right',
+      value: [feet[0].down ? 1 : 0],
       timestamp,
     }))
 
     this.onDataPoint(robotModel, new DataPoint({
-      label: 'Sensor/Foot Down/Right',
-      value: [rightFootDown ? 1 : 0],
+      label: 'Sensor/Foot Down/Left',
+      value: [feet[1].down ? 1 : 0],
       timestamp,
     }))
 

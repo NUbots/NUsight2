@@ -1,7 +1,7 @@
 import Emitter from 'component-emitter'
 
-import { WebSocketClient } from './web_socket_client'
 import WebSocketWorker from './webworker_web_socket_client.worker'
+import { WebSocketClient } from './web_socket_client'
 
 export class WebWorkerWebSocketClient extends Emitter implements WebSocketClient {
   constructor(private worker: Worker) {
@@ -20,9 +20,7 @@ export class WebWorkerWebSocketClient extends Emitter implements WebSocketClient
   }
 
   private handleMessage = (e: MessageEvent) => {
-
     const args = e.data.args.map((v: any) => {
-
       // If this is a webworker callback we need to remap it into a function
       if (typeof v._webworkerCallback === 'number') {
         return (...args: any[]) => {

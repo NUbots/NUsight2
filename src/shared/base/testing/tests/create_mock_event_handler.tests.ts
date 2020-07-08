@@ -4,7 +4,7 @@ import { createMockInstance } from '../create_mock_instance'
 describe('createMockEventHandler', () => {
   it('calls all registered callbacks when a mock event is fired', () => {
     const testMock = createMockInstance(TestClass)
-    const onTestEvent = createMockEventHandler<TestEventListener>()
+    const onTestEvent = createMockEventHandler<Parameters<TestEventListener>>()
     testMock.onTestEvent = onTestEvent
 
     // Setup event listeners.
@@ -32,8 +32,8 @@ describe('createMockEventHandler', () => {
 type TestEventListener = (str: string, num: number) => void
 
 class TestClass {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onTestEvent(callback: TestEventListener): () => void {
-    return () => {
-    }
+    return () => {}
   }
 }

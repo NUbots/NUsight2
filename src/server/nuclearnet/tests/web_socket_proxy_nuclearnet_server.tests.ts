@@ -10,19 +10,21 @@ import Mocked = jest.Mocked
 
 describe('WebSocketProxyNUClearNetServer', () => {
   let webSocketServer: Mocked<WebSocketServer>
-  let onClientConnection: MockEventHandler<(socket: WebSocket) => void>
+  let onClientConnection: MockEventHandler<[WebSocket]>
   let nuclearnetServer: FakeNUClearNetServer
   let nuclearnetClient: FakeNUClearNetClient
-  let server: WebSocketProxyNUClearNetServer
 
   beforeEach(() => {
     webSocketServer = createMockInstance(WebSocketServer)
-    onClientConnection = createMockEventHandler<(socket: WebSocket) => void>()
+    onClientConnection = createMockEventHandler<[WebSocket]>()
     webSocketServer.onConnection = onClientConnection
     nuclearnetServer = new FakeNUClearNetServer()
     nuclearnetClient = new FakeNUClearNetClient(nuclearnetServer)
     nuclearnetClient.connect({ name: 'bob' })
-    server = new WebSocketProxyNUClearNetServer(webSocketServer, nuclearnetClient, '10.1.255.255')
+    new WebSocketProxyNUClearNetServer(webSocketServer, nuclearnetClient, {
+      name: 'test',
+      address: '10.1.255.255',
+    })
   })
 
   it('listens to new connections', () => {
@@ -36,9 +38,12 @@ describe('WebSocketProxyNUClearNetServer', () => {
     const alice = new FakeNUClearNetClient(nuclearnetServer)
     alice.connect({ name: 'alice' })
 
-    expect(webSocket.send).toHaveBeenLastCalledWith('nuclear_join', expect.objectContaining({
-      name: 'alice',
-    }))
+    expect(webSocket.send).toHaveBeenLastCalledWith(
+      'nuclear_join',
+      expect.objectContaining({
+        name: 'alice',
+      }),
+    )
   })
 
   it('forwards NUClearNet network leave events to socket', () => {
@@ -49,8 +54,11 @@ describe('WebSocketProxyNUClearNetServer', () => {
     const disconnect = alice.connect({ name: 'alice' })
     disconnect()
 
-    expect(webSocket.send).toHaveBeenLastCalledWith('nuclear_leave', expect.objectContaining({
-      name: 'alice',
-    }))
+    expect(webSocket.send).toHaveBeenLastCalledWith(
+      'nuclear_leave',
+      expect.objectContaining({
+        name: 'alice',
+      }),
+    )
   })
 })

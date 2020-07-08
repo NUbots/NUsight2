@@ -1,8 +1,12 @@
 import bindings from 'bindings'
 import { EventEmitter } from 'events'
 import fs from 'fs'
+import * as path from 'path'
 
-const MMapNBSPlayer = bindings('nbs_player') as MMapNBSPlayerConstructor
+const MMapNBSPlayer = bindings({
+  bindings: 'nbs_player',
+  module_root: path.join(__dirname, '..'),
+} as any) as MMapNBSPlayerConstructor
 
 export type NBSPacket = {
   timestamp: number
@@ -11,7 +15,6 @@ export type NBSPacket = {
 }
 
 export class NBSPlayer {
-
   private readonly player: MMapNBSPlayer
   private readonly emitter: EventEmitter = new EventEmitter()
 
@@ -71,8 +74,10 @@ export class NBSPlayer {
   }
 }
 
-type MMapNBSPlayerConstructor
-  = new(file: string, cb: (timestamp?: number, hash?: Buffer, payload?: Buffer) => void) => MMapNBSPlayer
+type MMapNBSPlayerConstructor = new (
+  file: string,
+  cb: (timestamp?: number, hash?: Buffer, payload?: Buffer) => void,
+) => MMapNBSPlayer
 
 interface MMapNBSPlayer {
   play(): void
@@ -85,4 +90,3 @@ interface MMapNBSPlayer {
 
   seek(timestamp: number): void
 }
-

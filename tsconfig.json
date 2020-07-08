@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "esModuleInterop": true,
     "sourceMap": true,
-    "target": "ES2017",
+    "target": "ES2019",
     "jsx": "react",
     "skipLibCheck": true,
     "module": "commonjs",
@@ -17,6 +18,7 @@
       "ES2016",
       "ES2017",
       "ES2018",
+      "ES2019",
       "dom",
       "webworker"
     ],

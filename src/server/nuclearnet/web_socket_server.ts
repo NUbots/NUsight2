@@ -7,31 +7,37 @@ import SocketIO from 'socket.io'
  * There should never be enough logic in here that it needs any testing.
  */
 export class WebSocketServer {
-  constructor(private sioServer: SocketIO.Server | SocketIO.Namespace) {
-  }
+  constructor(private sioServer: SocketIO.Server | SocketIO.Namespace) {}
 
   static of(server: SocketIO.Server | SocketIO.Namespace) {
     return new WebSocketServer(server)
   }
 
-  onConnection(cb: (socket: WebSocket) => void) {
-    this.sioServer.on('connection', (socket: SocketIO.Socket) => {
+  onConnection(cb: (socket: WebSocket) => void): () => void {
+    const listener = (socket: SocketIO.Socket) => {
       const webSocket = WebSocket.of(socket)
       cb(webSocket)
-    })
+    }
+    this.sioServer.on('connection', listener)
+    // The cast is necessary as the SocketIO typescript definitions do not include the removeListener method.
+    return () => (this.sioServer as any).removeListener('connection', listener)
   }
 }
 
 export class WebSocket {
-  constructor(private sioSocket: SocketIO.Socket) {
-  }
+  constructor(private sioSocket: SocketIO.Socket) {}
 
   static of(socket: SocketIO.Socket) {
     return new WebSocket(socket)
   }
 
-  on(event: string, cb: (...args: any[]) => void) {
+  onDisconnect(cb: (reason: string) => void) {
+    return this.on('disconnect', cb)
+  }
+
+  on(event: string, cb: (...args: any[]) => void): () => void {
     this.sioSocket.on(event, cb)
+    return () => this.sioSocket.off(event, cb)
   }
 
   send(event: string, ...args: any[]) {

@@ -1,21 +1,19 @@
-import { observable } from 'mobx'
-
 export type Rotate = number
-export type Scale = { x: number, y: number }
-export type Translate = { x: number, y: number }
+export type Scale = { readonly x: number; readonly y: number }
+export type Translate = { readonly x: number; readonly y: number }
 
 export type TransformOpts = {
-  anticlockwise: boolean
-  rotate: Rotate
-  scale: Scale
-  translate: Translate
+  readonly anticlockwise: boolean
+  readonly rotate: Rotate
+  readonly scale: Scale
+  readonly translate: Translate
 }
 
 export class Transform {
-  @observable anticlockwise: boolean
-  @observable rotate: Rotate
-  @observable scale: Scale
-  @observable translate: Translate
+  readonly anticlockwise: boolean
+  readonly rotate: Rotate
+  readonly scale: Scale
+  readonly translate: Translate
 
   constructor(opts: TransformOpts) {
     this.anticlockwise = opts.anticlockwise
@@ -25,17 +23,21 @@ export class Transform {
   }
 
   static of({
-              anticlockwise = true,
-              rotate = 0,
-              scale = { x: 1, y: 1 },
-              translate = { x: 0, y: 0 },
-            }: Partial<Transform> = {}): Transform {
+    anticlockwise = true,
+    rotate = 0,
+    scale = { x: 1, y: 1 },
+    translate = { x: 0, y: 0 },
+  }: Partial<Transform> = {}): Transform {
     return new Transform({
       anticlockwise,
       rotate,
       scale,
       translate,
     })
+  }
+
+  static translate(x: number, y: number): Transform {
+    return Transform.of({ translate: { x, y } })
   }
 
   then(transform: Transform): Transform {
@@ -48,59 +50,42 @@ export class Transform {
     const cosTheta = Math.cos(theta)
     const sinTheta = Math.sin(theta)
 
-    const rotationMatrix = [
-      cosTheta, -sinTheta,
-      sinTheta, cosTheta,
-    ]
+    const rotationMatrix = [cosTheta, -sinTheta, sinTheta, cosTheta]
 
-    this.scale.x *= scale.x
-    this.scale.y *= scale.y
-    this.rotate += rotate * (anticlockwise === this.anticlockwise ? 1 : -1)
-
-    const x = translate.x
-    const y = translate.y
-
-    this.translate.x += scaleX * (x * rotationMatrix[0] + y * rotationMatrix[1])
-    this.translate.y += scaleY * (x * rotationMatrix[2] + y * rotationMatrix[3])
-
-    return this
+    return new Transform({
+      anticlockwise: this.anticlockwise,
+      rotate: this.rotate + rotate * (anticlockwise === this.anticlockwise ? 1 : -1),
+      scale: {
+        x: this.scale.x * scale.x,
+        y: this.scale.y * scale.y,
+      },
+      translate: {
+        x:
+          this.translate.x +
+          scaleX * (translate.x * rotationMatrix[0] + translate.y * rotationMatrix[1]),
+        y:
+          this.translate.y +
+          scaleY * (translate.x * rotationMatrix[2] + translate.y * rotationMatrix[3]),
+      },
+    })
   }
 
   inverse(): Transform {
     return new Transform({
       anticlockwise: this.anticlockwise,
-      scale: { x: 1 / this.scale.x, y: 1 / this.scale.y },
       rotate: -this.rotate,
+      scale: { x: 1 / this.scale.x, y: 1 / this.scale.y },
       translate: { x: -this.translate.x, y: -this.translate.y },
     })
   }
 
   isIdentity(): boolean {
-    return this.scale.x === 1
-      && this.scale.y === 1
-      && this.translate.x === 0
-      && this.translate.y === 0
-      && this.rotate === 0
-  }
-
-  clone(): Transform {
-    return new Transform({
-      anticlockwise: this.anticlockwise,
-      rotate: this.rotate,
-      scale: {
-        x: this.scale.x,
-        y: this.scale.y,
-      },
-      translate: {
-        x: this.translate.x,
-        y: this.translate.y,
-      },
-    })
-  }
-
-  setTranslate(x: number, y: number): Transform {
-    this.translate.x = x
-    this.translate.y = y
-    return this
+    return (
+      this.scale.x === 1 &&
+      this.scale.y === 1 &&
+      this.translate.x === 0 &&
+      this.translate.y === 0 &&
+      this.rotate === 0
+    )
   }
 }

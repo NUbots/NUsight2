@@ -17,41 +17,32 @@ import { Shape } from '../../../render2d/object/shape'
 import { DashboardRobotModel } from './model'
 
 export class DashboardRobotViewModel {
-  constructor(private model: DashboardRobotModel) {
-  }
+  constructor(private model: DashboardRobotModel) {}
 
-  static of = createTransformer((model: DashboardRobotModel): DashboardRobotViewModel => {
-    return new DashboardRobotViewModel(model)
-  })
+  static of = createTransformer(
+    (model: DashboardRobotModel): DashboardRobotViewModel => {
+      return new DashboardRobotViewModel(model)
+    },
+  )
 
   @computed
   get robot(): Group {
     return Group.of({
-      children: [
-        this.fieldSpaceGroup,
-        this.robotSpaceGroup,
-      ],
+      children: [this.fieldSpaceGroup, this.robotSpaceGroup],
     })
   }
 
   @computed
   get fieldSpaceGroup() {
     return Group.of({
-      children: [
-        this.ballSight,
-        this.kickTarget,
-        this.ball,
-      ],
+      children: [this.ballSight, this.kickTarget, this.ball],
     })
   }
 
   @computed
   get robotSpaceGroup() {
     return Group.of({
-      children: [
-        this.walkCommand,
-        this.robotMarker,
-      ],
+      children: [this.walkCommand, this.robotMarker],
       transform: Transform.of({
         rotate: this.model.robotPosition.z,
         translate: {
@@ -67,7 +58,7 @@ export class DashboardRobotViewModel {
     const t = 2
     const translation = Vector2.from(this.model.walkCommand)
     const rotation = this.model.walkCommand.z
-    const radius = translation.length / (Math.abs(rotation) + 1E-10)
+    const radius = translation.length / (Math.abs(rotation) + 1e-10)
     const origin = Vector2.of(-translation.y, translation.x).divideScalar(rotation)
     const arcLength = rotation * t
     const angle = Math.atan2(translation.y / rotation, translation.x / rotation) - Math.PI / 2
@@ -108,7 +99,7 @@ export class DashboardRobotViewModel {
     return Shape.of(
       LineGeometry.of({
         origin: Vector2.from(this.model.robotPosition),
-        target: this.model.ballPosition.clone(),
+        target: this.model.ballPosition,
       }),
       LineAppearance.of({
         stroke: { width: 0.025, color: this.model.ballSightColor },
@@ -119,14 +110,14 @@ export class DashboardRobotViewModel {
   @computed
   private get kickTarget() {
     const origin = this.model.ballPosition
-    const difference = this.model.kickTarget.clone().subtract(origin)
+    const difference = this.model.kickTarget.subtract(origin)
     return Shape.of(
       ArrowGeometry.of({
-        direction: difference.clone().normalize(),
+        direction: difference.normalize(),
         headLength: 0.3,
         headWidth: 0.15,
         length: difference.length,
-        origin: origin.clone(),
+        origin,
         width: 0.025,
       }),
       BasicAppearance.of({

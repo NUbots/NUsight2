@@ -6,12 +6,12 @@ import { Geometry } from './geometry'
 import { Shape } from './shape'
 
 export type GroupOpts = {
-  children: Array<Group | Shape<Geometry>>
+  children: (Group | Shape<Geometry>)[]
   transform: Transform
 }
 
 export class Group {
-  @observable children: Array<Group | Shape<Geometry>>
+  @observable children: (Group | Shape<Geometry>)[]
   @observable transform: Transform
 
   constructor(opts: GroupOpts) {
@@ -19,10 +19,7 @@ export class Group {
     this.transform = opts.transform
   }
 
-  static of({
-              children = [],
-              transform = Transform.of(),
-            }: Partial<GroupOpts> = {}): Group {
+  static of({ children = [], transform = Transform.of() }: Partial<GroupOpts> = {}): Group {
     return new Group({
       children,
       transform,

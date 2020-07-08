@@ -1,3 +1,10 @@
+import { InterleavedBufferAttribute } from 'three'
+import { BufferAttribute } from 'three'
+import { LinearMipMapLinearFilter } from 'three'
+import { NearestFilter } from 'three'
+import { InterleavedBuffer } from 'three'
+import { RawShaderMaterial } from 'three'
+import { BufferGeometry } from 'three'
 import { PlaneGeometry } from 'three'
 import { PointLight } from 'three'
 import { AmbientLight } from 'three'
@@ -35,17 +42,18 @@ import { Vector3 } from '../../math/vector3'
 import { createUpdatableComputed } from './create_updatable_computed'
 
 type Object3DOpts = {
-  position?: Vector3,
-  rotation?: Vector3,
-  rotationOrder?: string,
-  scale?: Vector3,
-  up?: Vector3,
-  children?: Object3D[]
+  position?: Vector3
+  rotation?: Vector3
+  rotationOrder?: string
+  scale?: Vector3
+  up?: Vector3
+  children?: (Object3D | false | undefined)[]
+  frustumCulled?: false
 }
 
 export type StageOpts = {
-  scene: Scene,
-  camera: Camera,
+  scene: Scene
+  camera: Camera
   target?: WebGLRenderTarget
 }
 
@@ -59,33 +67,40 @@ export const stage = createUpdatableComputed(
 )
 
 export const scene = createUpdatableComputed(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (opts: Object3DOpts) => new Scene(),
   (scene, opts) => {
     scene.remove(...scene.children)
-    opts.children && scene.add(...opts.children)
+    const children = opts.children && opts.children.filter(truthy)
+    children && children.length && scene.add(...children)
     updateObject3D(scene, opts)
   },
   scene => scene.dispose(),
 )
 
 export const group = createUpdatableComputed(
-  (opts: Object3DOpts) => new Object3D(),
+  (opts: Object3DOpts | undefined) => opts && new Object3D(),
   (group, opts) => {
+    if (!group || !opts) {
+      return
+    }
     group.remove(...group.children)
-    opts.children && group.add(...opts.children)
+    const children = opts.children && opts.children.filter(truthy)
+    children && children.length && group.add(...children)
     updateObject3D(group, opts)
   },
 )
 
 type PerspectiveCameraOpts = {
-  fov: number,
-  aspect: number,
-  near: number,
-  far: number,
+  fov: number
+  aspect: number
+  near: number
+  far: number
   lookAt?: Vector3
 }
 
 export const perspectiveCamera = createUpdatableComputed(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (opts: PerspectiveCameraOpts & Object3DOpts) => new PerspectiveCamera(),
   (camera, opts) => {
     camera.fov = opts.fov
@@ -99,16 +114,17 @@ export const perspectiveCamera = createUpdatableComputed(
 )
 
 type OrthographicCameraOpts = {
-  left: number,
-  right: number,
-  top: number,
-  bottom: number,
-  near: number,
+  left: number
+  right: number
+  top: number
+  bottom: number
+  near: number
   far: number
 }
 
 export const orthographicCamera = createUpdatableComputed(
-  (opts: OrthographicCameraOpts & Object3DOpts) => new OrthographicCamera(opts.left, opts.right, opts.top, opts.bottom),
+  (opts: OrthographicCameraOpts & Object3DOpts) =>
+    new OrthographicCamera(opts.left, opts.right, opts.top, opts.bottom),
   (camera, opts) => {
     camera.left = opts.left
     camera.right = opts.right
@@ -121,13 +137,13 @@ export const orthographicCamera = createUpdatableComputed(
   },
 )
 
-type MeshOpts = {
-  geometry: Geometry,
+type MeshOpts = Object3DOpts & {
+  geometry: Geometry | BufferGeometry
   material: Material | Material[]
 }
 
 export const mesh = createUpdatableComputed(
-  (opts: MeshOpts & Object3DOpts) => new Mesh(opts.geometry, opts.material),
+  (opts: MeshOpts) => new Mesh(opts.geometry, opts.material),
   (mesh, opts) => {
     mesh.geometry = opts.geometry
     mesh.material = opts.material
@@ -135,16 +151,23 @@ export const mesh = createUpdatableComputed(
   },
 )
 
-type MeshBasicMaterialOpts = {
-  color?: Color,
-  map?: Texture,
-  transparent?: boolean,
+type MaterialOpts = {
+  depthTest?: boolean
+  depthWrite?: boolean
+  transparent?: boolean
+}
+
+type MeshBasicMaterialOpts = MaterialOpts & {
+  color?: Color
+  map?: Texture
+  transparent?: boolean
   combine?: Combine
 }
 
 const defaultColor = new Color(0xffffff)
 const defaultCombine = MultiplyOperation
 export const meshBasicMaterial = createUpdatableComputed(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (opts: MeshBasicMaterialOpts) => new MeshBasicMaterial(),
   (material, opts) => {
     material.color = opts.color || defaultColor
@@ -156,44 +179,72 @@ export const meshBasicMaterial = createUpdatableComputed(
   mesh => mesh.dispose(),
 )
 
-type MeshPhongMaterialOpts = {
-  color?: Color,
-  map?: Texture,
-  transparent?: boolean
+type MeshPhongMaterialOpts = MaterialOpts & {
+  color?: Color
+  map?: Texture
 }
 
 export const meshPhongMaterial = createUpdatableComputed(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (opts: MeshPhongMaterialOpts) => new MeshPhongMaterial(),
   (material, opts) => {
     material.color = opts.color || defaultColor
     material.map = opts.map || null
-    material.transparent = opts.transparent != null ? opts.transparent : false
+    updateMaterial(material, opts)
     material.needsUpdate = true
   },
   material => material.dispose(),
 )
 
-type ShaderMaterialOpts = {
+type ShaderOpts = {
   vertexShader: string
   fragmentShader: string
-  uniforms: { [uniform: string]: { value: any } }
 }
 
-export const shaderMaterial = createUpdatableComputed(
-  (opts: ShaderMaterialOpts) => new ShaderMaterial(opts),
+export const shader = createUpdatableComputed(
+  (opts: ShaderOpts) => new ShaderMaterial(opts),
   (material, opts) => {
     material.vertexShader = opts.vertexShader
     material.fragmentShader = opts.fragmentShader
-    for (const key of Object.keys(opts.uniforms)) {
-      material.uniforms[key] = opts.uniforms[key]
-    }
-    material.needsUpdate = true
   },
   material => material.dispose(),
 )
 
-type TypedArray
-  = Int8Array
+export const rawShader = createUpdatableComputed(
+  (opts: ShaderOpts) => new RawShaderMaterial(opts),
+  (material, opts) => {
+    material.vertexShader = opts.vertexShader
+    material.fragmentShader = opts.fragmentShader
+  },
+  material => material.dispose(),
+)
+
+type ShaderMaterialOpts = MaterialOpts & {
+  shader(): ShaderMaterial | RawShaderMaterial
+  uniforms?: { [uniform: string]: { value: any } }
+}
+
+export const shaderMaterial = createUpdatableComputed(
+  (opts: ShaderMaterialOpts) => opts.shader().clone(),
+  (material, opts) => {
+    if (opts.uniforms) {
+      for (const key of Object.keys(opts.uniforms)) {
+        material.uniforms[key] = opts.uniforms[key]
+      }
+    }
+    updateMaterial(material, opts)
+    material.needsUpdate = true
+  },
+)
+
+function updateMaterial(object: Material, opts: MaterialOpts) {
+  object.depthTest = opts.depthTest != null ? opts.depthTest : true
+  object.depthWrite = opts.depthWrite != null ? opts.depthWrite : true
+  object.transparent = opts.transparent != null ? opts.transparent : false
+}
+
+type TypedArray =
+  | Int8Array
   | Uint8Array
   | Uint8ClampedArray
   | Int16Array
@@ -204,48 +255,48 @@ type TypedArray
   | Float64Array
 
 type DataTextureOpts = {
-  data: TypedArray,
-  width: number,
-  height: number,
-  format: PixelFormat,
-  type: TextureDataType,
-  mapping: Mapping,
-  wrapS: Wrapping,
-  wrapT: Wrapping,
-  magFilter: TextureFilter,
-  minFilter: TextureFilter,
-  flipY: boolean
+  data: TypedArray
+  width: number
+  height: number
+  format?: PixelFormat
+  type?: TextureDataType
+  mapping?: Mapping
+  wrapS?: Wrapping
+  wrapT?: Wrapping
+  magFilter?: TextureFilter
+  minFilter?: TextureFilter
+  flipY?: boolean
 }
 
 export const dataTexture = createUpdatableComputed(
   (opts: DataTextureOpts) => new DataTexture(opts.data, opts.width, opts.height),
   (texture, opts) => {
-    texture.format = opts.format
-    texture.type = opts.type
-    texture.mapping = opts.mapping
-    texture.wrapS = opts.wrapS
-    texture.wrapT = opts.wrapT
-    texture.magFilter = opts.magFilter
-    texture.minFilter = opts.minFilter
-    texture.flipY = opts.flipY
+    texture.format = opts.format != null ? opts.format : RGBAFormat
+    texture.type = opts.type != null ? opts.type : UnsignedByteType
+    texture.mapping = opts.mapping != null ? opts.mapping : Texture.DEFAULT_MAPPING
+    texture.wrapS = opts.wrapS != null ? opts.wrapS : ClampToEdgeWrapping
+    texture.wrapT = opts.wrapT != null ? opts.wrapT : ClampToEdgeWrapping
+    texture.magFilter = opts.magFilter != null ? opts.magFilter : NearestFilter
+    texture.minFilter = opts.minFilter != null ? opts.minFilter : LinearMipMapLinearFilter
+    texture.flipY = opts.flipY != null ? opts.flipY : false
     texture.needsUpdate = true
   },
   texture => texture.dispose(),
 )
 
 type TextureOpts = {
-  format?: PixelFormat,
-  type?: TextureDataType,
-  wrapS?: Wrapping,
-  wrapT?: Wrapping,
-  magFilter?: TextureFilter,
+  format?: PixelFormat
+  type?: TextureDataType
+  wrapS?: Wrapping
+  wrapT?: Wrapping
+  magFilter?: TextureFilter
   minFilter?: TextureFilter
 }
 
 type ImageTextureOpts = TextureOpts & {
-  image?: HTMLImageElement,
-  mapping: Mapping,
-  flipY: boolean
+  image?: HTMLImageElement
+  mapping?: Mapping
+  flipY?: boolean
 }
 
 export const imageTexture = createUpdatableComputed(
@@ -256,7 +307,8 @@ export const imageTexture = createUpdatableComputed(
   (texture, opts) => {
     if (texture) {
       texture.image = opts.image
-      texture.flipY = opts.flipY
+      texture.flipY = opts.flipY != null ? opts.flipY : false
+      texture.mapping = opts.mapping != null ? opts.mapping : Texture.DEFAULT_MAPPING
       updateTexture(texture, opts)
       texture.needsUpdate = true
     }
@@ -265,11 +317,11 @@ export const imageTexture = createUpdatableComputed(
 )
 
 type RenderTargetOpts = TextureOpts & {
-  width: number,
-  height: number,
-  anisotropy?: number;
-  depthBuffer?: boolean;
-  stencilBuffer?: boolean;
+  width: number
+  height: number
+  anisotropy?: number
+  depthBuffer?: boolean
+  stencilBuffer?: boolean
 }
 
 export const renderTarget = createUpdatableComputed(
@@ -293,7 +345,7 @@ function updateTexture(texture: Texture, opts: TextureOpts) {
   texture.minFilter = opts.minFilter || LinearFilter
 }
 
-type BoxGeometryOpts = { width: number, height: number, depth: number }
+type BoxGeometryOpts = { width: number; height: number; depth: number }
 
 export const boxGeometry = createUpdatableComputed(
   (opts: BoxGeometryOpts) => new BoxGeometry(opts.width, opts.height, opts.depth),
@@ -306,7 +358,7 @@ export const boxGeometry = createUpdatableComputed(
   box => box.dispose(),
 )
 
-type PlaneGeometryOpts = { width: number, height: number }
+type PlaneGeometryOpts = { width: number; height: number }
 
 export const planeGeometry = createUpdatableComputed(
   (opts: PlaneGeometryOpts) => new PlaneGeometry(opts.width, opts.height),
@@ -319,7 +371,37 @@ export const planeGeometry = createUpdatableComputed(
   plane => plane.dispose(),
 )
 
-type LightOpts = Object3DOpts & { color?: Color, intensity?: number }
+type InterleavedBufferOpts = {
+  buffer: TypedArray
+  stride: number
+}
+
+export const interleavedBuffer = createUpdatableComputed(
+  (opts: InterleavedBufferOpts) => new InterleavedBuffer(opts.buffer, opts.stride),
+  buffer => (buffer.needsUpdate = true),
+)
+
+type BufferGeometryOpts = {
+  index: BufferAttribute | number[]
+  attributes: { name: string; buffer: BufferAttribute | InterleavedBufferAttribute }[]
+}
+
+export const bufferGeometry = createUpdatableComputed(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  (opts: BufferGeometryOpts) => new BufferGeometry(),
+  (geometry, opts) => {
+    geometry.setIndex(opts.index)
+    for (const [name] of Object.entries(geometry.attributes)) {
+      geometry.removeAttribute(name)
+    }
+    for (const { name, buffer } of opts.attributes) {
+      geometry.addAttribute(name, buffer)
+    }
+  },
+  geometry => geometry.dispose(),
+)
+
+type LightOpts = Object3DOpts & { color?: Color; intensity?: number }
 
 export const ambientLight = createUpdatableComputed(
   (opts: LightOpts) => new AmbientLight(opts.color, opts.intensity),
@@ -341,7 +423,13 @@ export const pointLight = createUpdatableComputed(
 
 function updateObject3D(object: Object3D, opts: Object3DOpts) {
   opts.position && object.position.set(opts.position.x, opts.position.y, opts.position.z)
-  opts.rotation && object.rotation.set(opts.rotation.x, opts.rotation.y, opts.rotation.z, opts.rotationOrder)
+  opts.rotation &&
+    object.rotation.set(opts.rotation.x, opts.rotation.y, opts.rotation.z, opts.rotationOrder)
   opts.scale && object.scale.set(opts.scale.x, opts.scale.y, opts.scale.z)
   opts.up && object.up.set(opts.up.x, opts.up.y, opts.up.z)
+  object.frustumCulled = opts.frustumCulled != null ? opts.frustumCulled : true
+}
+
+function truthy<T>(x: T | undefined | null | false): x is T {
+  return !!x
 }

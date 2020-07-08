@@ -40,9 +40,7 @@ const ServoIds = [
 ]
 
 export class ChartNetwork {
-  constructor(private clock: Clock,
-              private network: Network,
-              private model: ChartModel) {
+  constructor(private clock: Clock, private network: Network, private model: ChartModel) {
     this.network.on(DataPoint, this.onDataPoint)
     this.network.on(Sensors, this.onSensorData)
   }
@@ -63,11 +61,14 @@ export class ChartNetwork {
     }
 
     const basePath = [robotModel.name].concat(data.label.split('/'))
-    const keys = data.value.length === 1
-      ? [basePath.pop()]
-      : data.value.length < 5 ? ['x', 'y', 'z', 'w'] : data.value.map((v, i) => `s${i}`)
+    const keys =
+      data.value.length === 1
+        ? [basePath.pop()]
+        : data.value.length < 5
+        ? ['x', 'y', 'z', 'w']
+        : data.value.map((v, i) => `s${i}`)
 
-    const node = basePath.reduce((accumulator: TreeData, p: string, index: number) => {
+    const node = basePath.reduce((accumulator: TreeData, p: string) => {
       if (!accumulator.has(p)) {
         accumulator.set(p, new Map<string, TreeData | DataSeries>())
       }
@@ -100,7 +101,7 @@ export class ChartNetwork {
       // Swap it backward until it's in place (keeping the list sorted)
       for (let i = series.length - 1; i > 0; i--) {
         if (series[i - 1].x > pointTime) {
-          [series[i - 1], series[i]] = [series[i], series[i - 1]]
+          ;[series[i - 1], series[i]] = [series[i], series[i - 1]]
         } else {
           break
         }

@@ -13,33 +13,39 @@ export type RobotSelectorSingleProps = {
   robots: RobotModel[]
   selected?: RobotModel
   dropDirection?: 'up' | 'down'
-  onSelect(robot: RobotModel): void
+  onSelect(robot?: RobotModel): void
 }
 
 @observer
 export class RobotSelectorSingle extends React.Component<RobotSelectorSingleProps> {
   render() {
     const { dropDirection } = this.props
-    return <div className={style.robotSelector}>
-      <Select
-        options={this.options}
-        selectedOption={this.selectedOption}
-        onChange={this.onChange}
-        placeholder='Select a robot...'
-        empty={this.renderEmpty}
-        icon={<RobotIcon/>}
-        dropDirection={dropDirection}
-      />
-    </div>
+    return (
+      <div className={style.robotSelector}>
+        <Select
+          options={this.options}
+          selectedOption={this.selectedOption}
+          onChange={this.onChange}
+          placeholder="Select a robot..."
+          empty={this.renderEmpty}
+          icon={<RobotIcon />}
+          dropDirection={dropDirection}
+        />
+      </div>
+    )
   }
 
   @computed
   private get renderEmpty() {
-    return <div className={style.empty}>
-      <div className={style.emptyIcon}><PlugIcon/></div>
-      <div className={style.emptyTitle}>No connected robots</div>
-      <span className={style.emptyDescription}>Run yarn start:sim to simulate robots</span>
-    </div>
+    return (
+      <div className={style.empty}>
+        <div className={style.emptyIcon}>
+          <PlugIcon />
+        </div>
+        <div className={style.emptyTitle}>No connected robots</div>
+        <span className={style.emptyDescription}>Run yarn start:sim to simulate robots</span>
+      </div>
+    )
   }
 
   @computed

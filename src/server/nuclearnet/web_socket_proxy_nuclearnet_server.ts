@@ -217,56 +217,45 @@ class PacketProcessor {
   private maybeSendNextPacket() {
     const next = this.queue.pop()
     if (next) {
-      // const { event, packet } = next
-      // const key = `${event}:${packet.peer.name}:${packet.peer.address}:${packet.peer.port}`
       if (this.canSendEvent()) {
         const { event, packet } = next
         let isDone = false
-        // const stats = this.getStatsForEvent(key)
-        const stats = this.stats
-        stats.active++
-        stats.bytesSent += packet.payload.length
+        this.stats.active++
+        this.stats.bytesSent += packet.payload.length
         const done = (processingTime?: number) => {
           if (!isDone) {
             // Update our performance tracking information
-            stats.active -= 1
-            stats.bytesAcked += packet.payload.length
+            this.stats.active -= 1
+            this.stats.bytesAcked += packet.payload.length
             if (processingTime != null) {
               // https://en.wikipedia.org/wiki/Exponential_smoothing
               const n = 10
-              stats.processingTime = (stats.processingTime * n + processingTime) / (n + 1)
+              this.stats.processingTime = (this.stats.processingTime * n + processingTime) / (n + 1)
             }
             isDone = true
             this.maybeSendNextPacket()
           }
         }
         this.socket.send(event, packet, done)
-        stats.lastSent = this.clock.performanceNow()
+        this.stats.lastSent = this.clock.performanceNow()
         this.clock.setTimeout(done, this.timeout)
       }
     }
   }
 
   private canSendEvent(): boolean {
-    // const stats = this.getStatsForEvent(event)
-    const stats = this.stats
-    // const timeSince = this.clock.performanceNow() - stats.lastSent
-    // const canProcess = timeSince >= stats.processingTime
-
-    const bytesAhead = stats.bytesSent - stats.bytesAcked
-    const aheadLimit = 1024 * 1024 * 10
-    const aheadRatio = Math.min(1, bytesAhead / aheadLimit)
-    // console.log(bytesAhead, 'ratio', aheadRatio)
-
+    const bytesBehind = this.stats.bytesSent - this.stats.bytesAcked
+    const bytesLow = 1024 * 1024
+    const bytesHigh = 1024 * 1024 * 10
+    const aheadRatio = lerp(bytesBehind, bytesLow, bytesHigh)
     return aheadRatio < Math.random()
   }
+}
 
-  private getStatsForEvent(event: string): NetStats {
-    let stats = this.netstatsByEvent.get(event)
-    if (!stats) {
-      stats = { active: 0, bytesSent: 0, bytesAcked: 0, processingTime: 0.1, lastSent: 0 }
-      this.netstatsByEvent.set(event, stats)
-    }
-    return stats
-  }
+function lerp(x: number, min: number, max: number): number {
+  return clamp((x - min) / (max - min), 0, 1)
+}
+
+function clamp(x: number, min: number, max: number) {
+  return Math.min(Math.max(x, min), max)
 }

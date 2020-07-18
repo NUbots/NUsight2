@@ -161,7 +161,6 @@ class WebSocketServerClient {
 type NetStats = {
   // The total number of packets that are out on the wire.
   active: number
-  processingTime: number
   // The total number of payload bytes sent to the client over the lifetime of the connection.
   bytesSent: number
   // The total number of payload bytes acknowledged from the client over the lifetime of the connection.
@@ -171,12 +170,10 @@ type NetStats = {
 }
 
 class PacketProcessor {
-  private readonly netstatsByEvent = new Map<string, NetStats>()
   private readonly stats: NetStats = {
     active: 0,
     bytesSent: 0,
     bytesAcked: 0,
-    processingTime: 0.1,
     lastSent: 0,
   }
 
@@ -222,16 +219,11 @@ class PacketProcessor {
         let isDone = false
         this.stats.active++
         this.stats.bytesSent += packet.payload.length
-        const done = (processingTime?: number) => {
+        const done = () => {
           if (!isDone) {
             // Update our performance tracking information
             this.stats.active -= 1
             this.stats.bytesAcked += packet.payload.length
-            if (processingTime != null) {
-              // https://en.wikipedia.org/wiki/Exponential_smoothing
-              const n = 10
-              this.stats.processingTime = (this.stats.processingTime * n + processingTime) / (n + 1)
-            }
             isDone = true
             this.maybeSendNextPacket()
           }

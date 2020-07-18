@@ -120,7 +120,7 @@ export class ChartNetwork {
 
   @action
   private onSensorData = (robotModel: RobotModel, sensorData: Sensors) => {
-    const { accelerometer, gyroscope, battery, voltage, button, led, servo, feet } = sensorData
+    const { accelerometer, gyroscope, battery, voltage, button, servo, feet } = sensorData
     const timestamp = sensorData.timestamp!
 
     if (accelerometer) {
@@ -167,27 +167,14 @@ export class ChartNetwork {
       )
     }
 
-    if (led) {
-      this.onDataPoint(
-        robotModel,
-        new DataPoint({
-          label: 'Sensor/LEDs',
-          value: led.map(v => (v ? 1 : 0)),
-          timestamp,
-        }),
-      )
-    }
-
-    if (button) {
-      this.onDataPoint(
-        robotModel,
-        new DataPoint({
-          label: 'Sensor/Buttons',
-          value: button.map(v => (v ? 1 : 0)),
-          timestamp,
-        }),
-      )
-    }
+    this.onDataPoint(
+      robotModel,
+      new DataPoint({
+        label: 'Sensor/Buttons',
+        value: button.map(b => (b.value ? 1 : 0)),
+        timestamp,
+      }),
+    )
 
     if (feet.length == 2) {
       this.onDataPoint(
@@ -210,9 +197,9 @@ export class ChartNetwork {
     }
 
     // Servos
-    if (servo) {
+    if (servo.length) {
       servo.forEach((servo: Sensors.IServo, index: number) => {
-        const name = ServoIds[servo.id! || index]
+        const name = ServoIds[index]
 
         // PID gain
         this.onDataPoint(

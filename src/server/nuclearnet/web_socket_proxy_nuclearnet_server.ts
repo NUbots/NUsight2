@@ -228,7 +228,7 @@ class PacketProcessor {
             this.maybeSendNextPacket()
           }
         }
-        this.socket.send(event, packet, done)
+        this.socket.volatileSend(event, packet, done)
         this.stats.lastSent = this.clock.performanceNow()
         this.clock.setTimeout(done, this.timeout)
       }

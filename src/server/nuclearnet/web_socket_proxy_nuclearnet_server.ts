@@ -254,7 +254,7 @@ class PacketProcessor {
     // const canProcess = timeSince >= stats.processingTime
 
     const bytesAhead = stats.bytesSent - stats.bytesAcked
-    const aheadLimit = 1024 * 10
+    const aheadLimit = 1024 * 1024 * 10
     const aheadRatio = Math.min(1, bytesAhead / aheadLimit)
     // console.log(bytesAhead, 'ratio', aheadRatio)
 

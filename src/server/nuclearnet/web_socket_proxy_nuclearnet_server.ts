@@ -159,13 +159,26 @@ class WebSocketServerClient {
 }
 
 type NetStats = {
+  // The total number of packets that are out on the wire.
   active: number
   processingTime: number
+  // The total number of payload bytes sent to the client over the lifetime of the connection.
+  bytesSent: number
+  // The total number of payload bytes acknowledged from the client over the lifetime of the connection.
+  bytesAcked: number
+  // The timestamp of when the last packet was sent.
   lastSent: number
 }
 
 class PacketProcessor {
   private readonly netstatsByEvent = new Map<string, NetStats>()
+  private readonly stats: NetStats = {
+    active: 0,
+    bytesSent: 0,
+    bytesAcked: 0,
+    processingTime: 0.1,
+    lastSent: 0,
+  }
 
   // The number of seconds before giving up on an acknowledge
   private readonly timeout: number
@@ -204,17 +217,20 @@ class PacketProcessor {
   private maybeSendNextPacket() {
     const next = this.queue.pop()
     if (next) {
-      const { event, packet } = next
-      const key = `${event}:${packet.peer.name}:${packet.peer.address}:${packet.peer.port}`
-      if (this.canSendEvent(key)) {
+      // const { event, packet } = next
+      // const key = `${event}:${packet.peer.name}:${packet.peer.address}:${packet.peer.port}`
+      if (this.canSendEvent()) {
         const { event, packet } = next
         let isDone = false
-        const stats = this.getStatsForEvent(key)
+        // const stats = this.getStatsForEvent(key)
+        const stats = this.stats
         stats.active++
+        stats.bytesSent += packet.payload.length
         const done = (processingTime?: number) => {
           if (!isDone) {
             // Update our performance tracking information
             stats.active -= 1
+            stats.bytesAcked += packet.payload.length
             if (processingTime != null) {
               // https://en.wikipedia.org/wiki/Exponential_smoothing
               const n = 10
@@ -231,16 +247,24 @@ class PacketProcessor {
     }
   }
 
-  private canSendEvent(event: string): boolean {
-    const stats = this.getStatsForEvent(event)
-    const timeSince = this.clock.performanceNow() - stats.lastSent
-    return timeSince >= stats.processingTime
+  private canSendEvent(): boolean {
+    // const stats = this.getStatsForEvent(event)
+    const stats = this.stats
+    // const timeSince = this.clock.performanceNow() - stats.lastSent
+    // const canProcess = timeSince >= stats.processingTime
+
+    const bytesAhead = stats.bytesSent - stats.bytesAcked
+    const aheadLimit = 1024 * 10
+    const aheadRatio = Math.min(1, bytesAhead / aheadLimit)
+    // console.log(bytesAhead, 'ratio', aheadRatio)
+
+    return aheadRatio < Math.random()
   }
 
   private getStatsForEvent(event: string): NetStats {
     let stats = this.netstatsByEvent.get(event)
     if (!stats) {
-      stats = { active: 0, processingTime: 0.1, lastSent: 0 }
+      stats = { active: 0, bytesSent: 0, bytesAcked: 0, processingTime: 0.1, lastSent: 0 }
       this.netstatsByEvent.set(event, stats)
     }
     return stats

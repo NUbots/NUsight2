@@ -189,23 +189,25 @@ export class ChartNetwork {
       )
     }
 
-    this.onDataPoint(
-      robotModel,
-      new DataPoint({
-        label: 'Sensor/Foot Down/Right',
-        value: [feet[0].down ? 1 : 0],
-        timestamp,
-      }),
-    )
+    if (feet.length == 2) {
+      this.onDataPoint(
+        robotModel,
+        new DataPoint({
+          label: 'Sensor/Foot Down/Right',
+          value: [feet[0].down ? 1 : 0],
+          timestamp,
+        }),
+      )
 
-    this.onDataPoint(
-      robotModel,
-      new DataPoint({
-        label: 'Sensor/Foot Down/Left',
-        value: [feet[1].down ? 1 : 0],
-        timestamp,
-      }),
-    )
+      this.onDataPoint(
+        robotModel,
+        new DataPoint({
+          label: 'Sensor/Foot Down/Left',
+          value: [feet[1].down ? 1 : 0],
+          timestamp,
+        }),
+      )
+    }
 
     // Servos
     if (servo) {

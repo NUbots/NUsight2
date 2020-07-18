@@ -239,8 +239,8 @@ class PacketProcessor {
     const bytesBehind = this.stats.bytesSent - this.stats.bytesAcked
     const bytesLow = 1024 * 1024
     const bytesHigh = 1024 * 1024 * 10
-    const aheadRatio = lerp(bytesBehind, bytesLow, bytesHigh)
-    return aheadRatio < Math.random()
+    const behindRatio = lerp(bytesBehind, bytesLow, bytesHigh)
+    return behindRatio < Math.random()
   }
 }
 

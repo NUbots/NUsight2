@@ -14,7 +14,7 @@
     "test:watch": "yarn test --watch",
     "coverage": "yarn test --coverage",
     "coverage:ci": "yarn test:ci --coverage",
-    "eslint": "eslint \"src/**/*.ts{,x}\"",
+    "eslint": "eslint \"src/**/*.ts{,x}\" --cache",
     "eslint:fix": "eslint \"src/**/*.ts{,x}\" --cache --fix",
     "tscheck": "tsc --project tsconfig.test.json",
     "tscheck:watch": "yarn tsc --project tsconfig.test.json --watch",

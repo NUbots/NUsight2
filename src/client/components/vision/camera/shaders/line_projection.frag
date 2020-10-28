@@ -1,6 +1,7 @@
 precision lowp float;
 
-#define M_PI 3.1415926535897932384626433832795
+#define M_PI 3.141592653589793238462643383279502884
+#define M_PI_2 1.570796326794896619231321691639751442
 
 // Lens/projection parameters
 uniform vec2 viewSize;
@@ -24,7 +25,6 @@ varying vec2 vUv;
 #define EQUIDISTANT_PROJECTION 2
 #define EQUISOLID_PROJECTION 3
 
-#define M_PI_2 1.57079632679489661923
 
 /**
  * Takes an undistorted radial distance from the optical axis and computes and applies an inverse distortion

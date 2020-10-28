@@ -24,6 +24,8 @@ varying vec2 vUv;
 #define EQUIDISTANT_PROJECTION 2
 #define EQUISOLID_PROJECTION 3
 
+#define M_PI_2 1.57079632679489661923
+
 /**
  * Takes an undistorted radial distance from the optical axis and computes and applies an inverse distortion
  *
@@ -144,7 +146,7 @@ float rectilinearTheta(float r, float f) {
  * @return the distance from the optical centre when the point is projected onto the screen
  */
 float rectilinearR(float theta, float f) {
-  return f * tan(theta);
+  return f * tan(clamp(theta, 0.0, M_PI_2));
 }
 
 /**

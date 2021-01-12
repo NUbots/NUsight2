@@ -59,7 +59,11 @@ export function getClientConfig({
         // local css
         {
           test: /\.css$/,
-          exclude: [path.resolve(__dirname, 'node_modules')],
+          exclude: [
+            isProduction
+              ? path.resolve(__dirname, 'node_modules')
+              : path.resolve(__dirname, '..', 'node_modules'), // __dirname is `nusight2/dist` in development
+          ],
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
             use: [
@@ -95,7 +99,11 @@ export function getClientConfig({
         */
         {
           test: /\.css$/,
-          include: [path.resolve(__dirname, 'node_modules')],
+          include: [
+            isProduction
+              ? path.resolve(__dirname, 'node_modules')
+              : path.resolve(__dirname, '..', 'node_modules'), // __dirname is `nusight2/dist` in development
+          ],
           use: ['style-loader', 'css-loader'],
         },
         { test: /\.file.svg$/, use: 'url-loader' },

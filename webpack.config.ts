@@ -60,9 +60,9 @@ export function getClientConfig({
         {
           test: /\.css$/,
           exclude: [
-            isProduction
-              ? path.resolve(__dirname, 'node_modules')
-              : path.resolve(__dirname, '..', 'node_modules'), // __dirname is `nusight2/dist` in development
+            __dirname.endsWith(path.sep + 'dist') // __dirname is `[..]/dist` when built server is run in dev
+              ? path.resolve(__dirname, '..', 'node_modules')
+              : path.resolve(__dirname, 'node_modules'),
           ],
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
@@ -100,9 +100,9 @@ export function getClientConfig({
         {
           test: /\.css$/,
           include: [
-            isProduction
-              ? path.resolve(__dirname, 'node_modules')
-              : path.resolve(__dirname, '..', 'node_modules'), // __dirname is `nusight2/dist` in development
+            __dirname.endsWith(path.sep + 'dist') // __dirname is `[..]/dist` when built server is run in dev
+              ? path.resolve(__dirname, '..', 'node_modules')
+              : path.resolve(__dirname, 'node_modules'),
           ],
           use: ['style-loader', 'css-loader'],
         },

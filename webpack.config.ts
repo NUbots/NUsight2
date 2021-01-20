@@ -11,7 +11,7 @@ export type ConfigOptions = {
   context?: string
   sourceMap?: 'source-map' | 'eval-source-map' | false
   transpileOnly?: boolean
-  rootDir: string
+  rootDir?: string
 }
 
 export function getClientConfig({
@@ -19,7 +19,7 @@ export function getClientConfig({
   context,
   sourceMap,
   transpileOnly,
-  rootDir,
+  rootDir = __dirname,
 }: ConfigOptions): webpack.Configuration {
   const isProduction = mode === 'production'
   return {
@@ -166,7 +166,7 @@ export function getServerConfig({
   context,
   sourceMap,
   transpileOnly,
-  rootDir,
+  rootDir = __dirname,
 }: ConfigOptions): webpack.Configuration {
   return {
     mode,

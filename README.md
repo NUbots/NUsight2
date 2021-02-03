@@ -1,3 +1,5 @@
+> NUsight2 has been merged into the NUbots/NUbots repository as a monorepo
+> Future development work will be done there
 # NUsight
 
 [![Build status](https://badge.buildkite.com/b1f06cd8fd82665a45fdd4be65c110b48e96a11dfeeaefc56c.svg)](https://buildkite.com/nubots/nusight2)

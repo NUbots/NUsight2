@@ -1,5 +1,6 @@
-> NUsight2 has been merged into the NUbots/NUbots repository as a monorepo
-> Future development work will be done there
+> As of February 2021, NUsight2 has been merged into the [NUbots/NUbots](https://github.com/NUbots/NUbots) repository, in the [`nusight2`](https://github.com/NUbots/NUbots/tree/master/nusight2) folder.
+> Future development work will be done there.
+
 # NUsight
 
 [![Build status](https://badge.buildkite.com/b1f06cd8fd82665a45fdd4be65c110b48e96a11dfeeaefc56c.svg)](https://buildkite.com/nubots/nusight2)

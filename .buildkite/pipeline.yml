@@ -6,7 +6,8 @@ steps:
     plugins:
       - ./.buildkite/plugins/cache: ~
       - docker#v3.5.0:
-          image: "node:13"
+          image: "node:12"
+          always-pull: true
           propagate-uid-gid: true
           environment:
             - "HOME=/workdir"
@@ -18,19 +19,21 @@ steps:
     plugins:
       - ./.buildkite/plugins/cache: ~
       - docker#v3.5.0:
-          image: "node:13"
+          image: "node:12"
+          always-pull: true
           propagate-uid-gid: true
           environment:
             - "HOME=/workdir"
 
-  - label: Check code with tslint
+  - label: Check code with eslint
     command:
       - yarn
-      - yarn tslint
+      - yarn eslint
     plugins:
       - ./.buildkite/plugins/cache: ~
       - docker#v3.5.0:
-          image: "node:13"
+          image: "node:12"
+          always-pull: true
           propagate-uid-gid: true
           environment:
             - "HOME=/workdir"
@@ -42,7 +45,8 @@ steps:
     plugins:
       - ./.buildkite/plugins/cache: ~
       - docker#v3.5.0:
-          image: "node:13"
+          image: "node:12"
+          always-pull: true
           propagate-uid-gid: true
           environment:
             - "HOME=/workdir"

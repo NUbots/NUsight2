@@ -1,7 +1,7 @@
 import Mock = jest.Mock
 
 export type MockEventHandler<Y extends any[]> = Mock<() => void, [(...args: Y) => void]> & {
-  mockEvent(...args: Y): void;
+  mockEvent(...args: Y): void
 }
 
 // A helper method for triggering event listeners for a mock instance.
@@ -11,13 +11,16 @@ export const createMockEventHandler = <Y extends any[]>(): MockEventHandler<Y> =
   return Object.assign(
     jest.fn((cb: (...args: Y) => void) => {
       listeners.add(cb)
-      return () => listeners.delete(cb)
+      return () => {
+        listeners.delete(cb)
+      }
     }),
     {
-      mockEvent: ((...args: Y) => {
+      mockEvent: (...args: Y) => {
         for (const listener of listeners) {
           listener(...args)
         }
-      }),
-    })
+      },
+    },
+  )
 }

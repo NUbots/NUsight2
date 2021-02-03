@@ -7,13 +7,20 @@ import webpack from 'webpack'
 import nodeExternals from 'webpack-node-externals'
 
 export type ConfigOptions = {
-  mode: 'production' | 'development',
-  context?: string,
-  sourceMap?: 'source-map' | 'eval-source-map' | false,
-  transpileOnly?: boolean,
+  mode: 'production' | 'development'
+  context?: string
+  sourceMap?: 'source-map' | 'eval-source-map' | false
+  transpileOnly?: boolean
+  rootDir?: string
 }
 
-export function getClientConfig({ mode, context, sourceMap, transpileOnly }: ConfigOptions): webpack.Configuration {
+export function getClientConfig({
+  mode,
+  context,
+  sourceMap,
+  transpileOnly,
+  rootDir = __dirname,
+}: ConfigOptions): webpack.Configuration {
   const isProduction = mode === 'production'
   return {
     mode: isProduction ? 'production' : 'development',
@@ -23,7 +30,7 @@ export function getClientConfig({ mode, context, sourceMap, transpileOnly }: Con
       main: './client/main.tsx',
     },
     output: {
-      path: path.join(__dirname, 'dist', 'public'),
+      path: path.join(rootDir, 'dist', 'public'),
       filename: '[name].js',
       publicPath: '/',
       globalObject: 'this',
@@ -42,9 +49,7 @@ export function getClientConfig({ mode, context, sourceMap, transpileOnly }: Con
         // .ts, .tsx
         {
           test: /\.tsx?$/,
-          exclude: [
-            path.resolve(__dirname, 'node_modules'),
-          ],
+          exclude: [path.resolve(rootDir, 'node_modules')],
           use: {
             loader: 'ts-loader',
             options: {
@@ -56,9 +61,7 @@ export function getClientConfig({ mode, context, sourceMap, transpileOnly }: Con
         // local css
         {
           test: /\.css$/,
-          exclude: [
-            path.resolve(__dirname, 'node_modules'),
-          ],
+          exclude: [path.resolve(rootDir, 'node_modules')],
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
             use: [
@@ -94,9 +97,7 @@ export function getClientConfig({ mode, context, sourceMap, transpileOnly }: Con
         */
         {
           test: /\.css$/,
-          include: [
-            path.resolve(__dirname, 'node_modules'),
-          ],
+          include: [path.resolve(rootDir, 'node_modules')],
           use: ['style-loader', 'css-loader'],
         },
         { test: /\.file.svg$/, use: 'url-loader' },
@@ -117,7 +118,7 @@ export function getClientConfig({ mode, context, sourceMap, transpileOnly }: Con
         // static assets
         { test: /\.html$/, use: 'html-loader' },
         { test: /\.png$/, use: 'url-loader?limit=10000' },
-        { test: /\.(jpg|glb)$/, use: 'file-loader' },
+        { test: /\.(jpg|glb|bin)$/, use: 'file-loader' },
         { test: /\.(vert|frag)$/, use: 'raw-loader' },
       ],
     },
@@ -138,8 +139,8 @@ export function getClientConfig({ mode, context, sourceMap, transpileOnly }: Con
         },
       },
     },
-    plugins: [
-      new CopyWebpackPlugin(['assets'], { context }),
+    plugins: ([
+      new CopyWebpackPlugin({ patterns: [{ from: 'assets', context }] }),
       new ExtractTextPlugin({
         filename: 'styles.css',
         disable: !isProduction,
@@ -150,7 +151,7 @@ export function getClientConfig({ mode, context, sourceMap, transpileOnly }: Con
         chunks: ['main'],
       }),
       new ProgressBarPlugin(),
-    ] as any as webpack.Plugin[],
+    ] as any) as webpack.Plugin[],
     node: {
       // workaround for webpack-dev-server issue
       // https://github.com/webpack/webpack-dev-server/issues/60#issuecomment-103411179
@@ -160,17 +161,23 @@ export function getClientConfig({ mode, context, sourceMap, transpileOnly }: Con
   }
 }
 
-export function getServerConfig({ mode, context, sourceMap, transpileOnly }: ConfigOptions): webpack.Configuration {
+export function getServerConfig({
+  mode,
+  context,
+  sourceMap,
+  transpileOnly,
+  rootDir = __dirname,
+}: ConfigOptions): webpack.Configuration {
   return {
     mode,
     devtool: sourceMap,
     context,
     entry: {
-      ...mode === 'production' ? { prod: './server/prod.ts' } : {},
-      ...mode === 'development' ? { dev: './server/dev.ts' } : {},
+      ...(mode === 'production' ? { prod: './server/prod.ts' } : {}),
+      ...(mode === 'development' ? { dev: './server/dev.ts' } : {}),
     },
     output: {
-      path: path.join(__dirname, 'dist'),
+      path: path.join(rootDir, 'dist'),
       filename: '[name].js',
       globalObject: 'this',
     },
@@ -183,9 +190,7 @@ export function getServerConfig({ mode, context, sourceMap, transpileOnly }: Con
       rules: [
         {
           test: /\.ts$/,
-          exclude: [
-            path.resolve(__dirname, 'node_modules'),
-          ],
+          exclude: [path.resolve(rootDir, 'node_modules')],
           use: {
             loader: 'ts-loader',
             options: {
@@ -209,12 +214,10 @@ export function getServerConfig({ mode, context, sourceMap, transpileOnly }: Con
     optimization: {
       minimize: false,
     },
-    plugins: [
-      new ProgressBarPlugin(),
-    ],
+    plugins: [new ProgressBarPlugin()],
     node: {
       __dirname: false,
       __filename: false,
-    }
+    },
   }
 }

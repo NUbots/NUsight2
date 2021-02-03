@@ -146,6 +146,7 @@ float rectilinearTheta(float r, float f) {
  * @return the distance from the optical centre when the point is projected onto the screen
  */
 float rectilinearR(float theta, float f) {
+  // Clamp the angle so we can't get negative R values, which happens if the ray is behind the camera for rectilinear cameras
   return f * tan(clamp(theta, 0.0, M_PI_2));
 }
 
@@ -278,4 +279,3 @@ void main() {
 
   gl_FragColor = vec4(color.rgb, color.a * alpha);
 }
-

@@ -158,11 +158,24 @@ class WebSocketServerClient {
   }
 }
 
-class PacketProcessor {
-  private outgoingPackets: number = 0
+type NetStats = {
+  // The total number of packets that are out on the wire.
+  active: number
+  // The total number of payload bytes sent to the client over the lifetime of the connection.
+  bytesSent: number
+  // The total number of payload bytes acknowledged from the client over the lifetime of the connection.
+  bytesAcked: number
+  // The timestamp of when the last packet was sent.
+  lastSent: number
+}
 
-  // The maximum number of packets to send before receiving acknowledgements.
-  private readonly outgoingLimit: number
+class PacketProcessor {
+  private readonly stats: NetStats = {
+    active: 0,
+    bytesSent: 0,
+    bytesAcked: 0,
+    lastSent: 0,
+  }
 
   // The number of seconds before giving up on an acknowledge
   private readonly timeout: number
@@ -171,9 +184,8 @@ class PacketProcessor {
     private socket: WebSocket,
     private clock: Clock,
     private queue: LruPriorityQueue<string, { event: string; packet: NUClearNetPacket }>,
-    { outgoingLimit, timeout }: { outgoingLimit: number; timeout: number },
+    { timeout }: { timeout: number },
   ) {
-    this.outgoingLimit = outgoingLimit
     this.timeout = timeout
     this.queue = queue
   }
@@ -183,7 +195,7 @@ class PacketProcessor {
       socket,
       NodeSystemClock,
       new LruPriorityQueue({ capacityPerKey: 2 }),
-      { outgoingLimit: 10, timeout: 5 },
+      { timeout: 5 },
     )
   }
 
@@ -200,22 +212,42 @@ class PacketProcessor {
   }
 
   private maybeSendNextPacket() {
-    if (this.outgoingPackets < this.outgoingLimit) {
-      const next = this.queue.pop()
-      if (next) {
+    const next = this.queue.pop()
+    if (next) {
+      if (this.canSendEvent()) {
         const { event, packet } = next
         let isDone = false
+        this.stats.active++
+        this.stats.bytesSent += packet.payload.length
         const done = () => {
           if (!isDone) {
-            this.outgoingPackets--
+            // Update our performance tracking information
+            this.stats.active -= 1
+            this.stats.bytesAcked += packet.payload.length
             isDone = true
             this.maybeSendNextPacket()
           }
         }
-        this.outgoingPackets++
         this.socket.volatileSend(event, packet, done)
+        this.stats.lastSent = this.clock.performanceNow()
         this.clock.setTimeout(done, this.timeout)
       }
     }
   }
+
+  private canSendEvent(): boolean {
+    const bytesBehind = this.stats.bytesSent - this.stats.bytesAcked
+    const bytesLow = 1024 * 1024
+    const bytesHigh = 1024 * 1024 * 10
+    const behindRatio = lerp(bytesBehind, bytesLow, bytesHigh)
+    return behindRatio < Math.random()
+  }
+}
+
+function lerp(x: number, min: number, max: number): number {
+  return clamp((x - min) / (max - min), 0, 1)
+}
+
+function clamp(x: number, min: number, max: number) {
+  return Math.min(Math.max(x, min), max)
 }

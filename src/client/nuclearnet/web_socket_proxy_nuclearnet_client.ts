@@ -5,6 +5,8 @@ import { NUClearNetPacket } from 'nuclearnet.js'
 import { NUClearPacketListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearEventListener } from '../../shared/nuclearnet/nuclearnet_client'
 import { NUClearNetClient } from '../../shared/nuclearnet/nuclearnet_client'
+import { Clock } from '../../shared/time/clock'
+import { BrowserSystemClock } from '../time/browser_clock'
 
 import { WebWorkerWebSocketClient } from './webworker_web_socket_client'
 import { WebSocketClient } from './web_socket_client'
@@ -24,7 +26,7 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
   private leaveListeners: Set<NUClearEventListener>
   private packetListeners: Map<string, Set<{ requestToken: string; listener: PacketListener }>>
 
-  constructor(private socket: WebSocketClient) {
+  constructor(private socket: WebSocketClient, private readonly clock: Clock) {
     this.nextRequestToken = 0
     this.joinListeners = new Set()
     this.leaveListeners = new Set()
@@ -38,6 +40,7 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
         upgrade: false,
         transports: ['websocket'],
       } as any),
+      BrowserSystemClock,
     )
   }
 
@@ -87,9 +90,7 @@ export class WebSocketProxyNUClearNetClient implements NUClearNetClient {
     this.socket.send('listen', event, requestToken)
     const listener = (packet: NUClearNetPacket, ack?: () => void) => {
       cb(packet)
-      if (ack) {
-        ack()
-      }
+      ack?.()
     }
     this.socket.on(event, listener)
 

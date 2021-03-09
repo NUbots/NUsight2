@@ -1,4 +1,5 @@
 import { createMockInstance } from '../../../shared/base/testing/create_mock_instance'
+import { FakeClock } from '../../../shared/time/fake_clock'
 import { DirectWebSocketClient } from '../direct_web_socket_client'
 import { WebSocketProxyNUClearNetClient } from '../web_socket_proxy_nuclearnet_client'
 import Mocked = jest.Mocked
@@ -9,7 +10,7 @@ describe('WebSocketProxyNUClearNetClient', () => {
 
   beforeEach(() => {
     mockWebSocket = createMockInstance(DirectWebSocketClient)
-    client = new WebSocketProxyNUClearNetClient(mockWebSocket)
+    client = new WebSocketProxyNUClearNetClient(mockWebSocket, FakeClock.of())
   })
 
   it('forwards connect calls to socket', () => {

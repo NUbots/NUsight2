@@ -6,6 +6,7 @@ import React from 'react'
 import * as THREE from 'three'
 import { Matrix4 } from '../../../../math/matrix4'
 import { Vector3 } from '../../../../math/vector3'
+import { Vector4 } from '../../../../math/vector4'
 import { fullscreen } from '../../../storybook/fullscreen'
 import { OdometryVisualizerModel } from '../model'
 import { OdometryVisualizer } from '../view'
@@ -19,6 +20,24 @@ class OdometryVisualizerHarness extends React.Component<{ animate?: boolean }> {
   private model = OdometryVisualizerModel.of({
     Hwt: Matrix4.fromThree(new THREE.Matrix4().makeTranslation(0, 0, 1)),
     accelerometer: new Vector3(0, 0, -9.8),
+    leftFoot: {
+      down: true,
+      Hwf: new Matrix4(
+        new Vector4(1, 0, 0, 0),
+        new Vector4(0, 1, 0, 0),
+        new Vector4(0, 0, 1, 0),
+        new Vector4(0, 0.3, 0, 1),
+      ),
+    },
+    rightFoot: {
+      down: true,
+      Hwf: new Matrix4(
+        new Vector4(1, 0, 0, 0),
+        new Vector4(0, 1, 0, 0),
+        new Vector4(0, 0, 1, 0),
+        new Vector4(0, -0.3, 0, 1),
+      ),
+    },
   })
 
   componentDidMount() {
